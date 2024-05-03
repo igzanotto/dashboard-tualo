@@ -1,4 +1,6 @@
 import { sql } from '@vercel/postgres';
+import { createClient } from '@/utils/supabase/server';
+
 import {
   CustomerField,
   CustomersTableType,
@@ -244,3 +246,17 @@ export async function getUser(email: string) {
     throw new Error('Failed to fetch user.');
   }
 }
+
+export async function fetchNotes() {
+  try {
+    const supabase = createClient();
+    const { data: notes } = await supabase.from("notes").select();
+
+    const fetchedNotes = JSON.stringify(notes, null, 2);
+    console.log('Fetched notes:', fetchedNotes);
+    return fetchedNotes
+    } catch (error) {
+      console.error('Failed to fetch notes:', error);
+      throw new Error('Failed to fetch notes.');
+    }
+  }
