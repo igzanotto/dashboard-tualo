@@ -260,3 +260,53 @@ export async function fetchNotes() {
       throw new Error('Failed to fetch notes.');
     }
   }
+
+  export async function fetchReports() {
+    try {
+      const supabase = createClient();
+      const { data: reports, error } = await supabase.from("reports").select();
+  
+      if (error) {
+        throw new Error('Failed to fetch REPORTS.');
+      }
+  
+      return reports;
+    } catch (error) {
+      console.error('Failed to fetch REPORTS:', error);
+      throw new Error('Failed to fetch REPORTS.');
+    }
+    }
+ 
+    export async function addCompany(name:string) {
+      const supabase = createClient();
+      try {
+        const { data:companies, error } = await supabase.from('companies').insert({ name });
+    
+        if (error) {
+          throw error;
+        }
+        
+        console.log('company created:', companies);
+        return companies;
+      } catch (error) {
+        console.error('Failed to add company:', error);
+        throw new Error('Failed to add company.');
+      }
+    }
+
+
+    export async function fetchCompanies() {
+        try {
+          const supabase = createClient();
+          const { data: companies, error } = await supabase.from("companies").select();
+      
+          if (error) {
+            throw new Error('Failed to fetch companies.');
+          }
+      
+          return companies;
+        } catch (error) {
+          console.error('Failed to fetch companies:', error);
+          throw new Error('Failed to fetch companies.');
+        }
+      }
