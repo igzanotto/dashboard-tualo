@@ -12,6 +12,7 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.
@@ -293,7 +294,8 @@ export async function fetchNotes() {
         throw new Error('Failed to add company.');
       }
     }
-
+    
+    
 
     export async function fetchCompanies() {
         try {
