@@ -29,7 +29,10 @@ export async function createInvoice(formData: FormData) {
     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})`;
 
     // clear this cache and trigger a new request to the server for the path to see the new invoice
-    revalidatePath('/dashboard/invoices');
+    revalidatePath('/dashboard/negocios');
 
-    redirect('/dashboard/invoices');
+    redirect('/dashboard/negocios');
 }
+
+
+

@@ -1,39 +1,27 @@
-import { CardWrapper } from '@/app/ui/dashboard/cards';
-import RevenueChart from '@/app/ui/dashboard/revenue-chart';
-import LatestInvoices from '@/app/ui/dashboard/latest-invoices';
+
+import { fetchReports } from '@/app/lib/data';
 import { lusitana } from '@/app/ui/fonts';
-// import { fetchRevenue, fetchLatestInvoices, fetchCardData } from '@/app/lib/data';
-import { Suspense } from 'react';
-import { RevenueChartSkeleton, LatestInvoicesSkeleton, CardSkeleton } from '@/app/ui/skeletons';
 
 export default async function Page() {
-  // const revenue = await fetchRevenue();
-  // const latestInvoices = await fetchLatestInvoices();
-  // const {
-  //   totalPaidInvoices,
-  //   totalPendingInvoices,
-  //   numberOfInvoices,
-  //   numberOfCustomers,
-  // } = await fetchCardData();
+
+  const fetchreports = await fetchReports();
 
   return (
     <main>
       <h1 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
-        Dashboard
+        Reportes
       </h1>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <Suspense fallback={<CardSkeleton />}>
-          <CardWrapper />
-        </Suspense>
-      </div>
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-        <Suspense fallback={<RevenueChartSkeleton />}>
-          <RevenueChart />
-        </Suspense>
-        < Suspense fallback={<LatestInvoicesSkeleton />}>
-          <LatestInvoices />
-        </Suspense>
-      </div>
+      <ul className='flex flex-col gap-4'>
+        {fetchreports.map(report => (
+          <li key={report.id}>
+            <p>ID: {report.id}</p>
+            <p>Fecha de creación: {report.created_at}</p>
+            <p>ID de la empresa: {report.company_id}</p>
+
+          </li>
+        ))}
+      </ul>
+      <button>ola</button>
     </main>
   );
 }
