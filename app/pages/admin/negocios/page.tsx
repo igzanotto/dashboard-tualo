@@ -24,7 +24,7 @@ export default async function Page({
       <div className='flex flex-wrap items-center justify-center gap-4 mt-10'>
         {
           companies.map(company => (
-            <div className='bg-blue-500 p-5 rounded-xl text-white w-[250px] h-[100px] text-center '>
+            <div key={company.id} className='bg-blue-500 p-5 rounded-xl text-white w-[250px] h-[100px] text-center '>
               <p>{company.name}</p>
             </div>
           ))
