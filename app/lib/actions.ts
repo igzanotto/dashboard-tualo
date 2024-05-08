@@ -5,6 +5,7 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
+import { NextRequest } from 'next/server';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -49,6 +50,8 @@ export async function addCompany(name:string) {
     return companies;
   } catch (error) {
     console.error('Failed to add company:', error);
+    revalidatePath("/pages/admin/negocios")
+
     throw new Error('Failed to add company.');
   }
 }
@@ -58,6 +61,7 @@ export async function create (formData:FormData) {
     const company = formData.get("company")
     await addCompany(company as string);
     console.log('Company added successfully!', company);
+    revalidatePath("/pages/admin/negocios")
   } catch (error) {
     console.log(error);
   }

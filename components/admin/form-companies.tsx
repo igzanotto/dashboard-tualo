@@ -6,9 +6,10 @@ import { useRef } from "react";
 import { toast } from "sonner";
 
 
-export default function AddCompanyForm() {
+export default async function AddCompanyForm() {
 
   const formRef = useRef<HTMLFormElement>(null)
+
 
   return (
     <form 
