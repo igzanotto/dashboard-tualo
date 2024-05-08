@@ -36,7 +36,7 @@ export async function createInvoice(formData: FormData) {
     redirect('/dashboard/negocios');
 }
 
-
+// creo que este no se esta usando
 export async function addCompany(name:string) {
   const supabase = createClient();
   try {
@@ -65,4 +65,8 @@ export async function create (formData:FormData) {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function createReport(formData:FormData) {
+  
 }

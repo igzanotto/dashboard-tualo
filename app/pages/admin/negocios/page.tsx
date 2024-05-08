@@ -1,19 +1,20 @@
-
-
 import { fetchCompanies} from '@/app/lib/data';
 import Link from 'next/link';
 
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
-}) {
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
+export default async function Page(
+    // esto todabia no se esta usando pero estaria bueno meterlo para el pagination
+//   {
+//   searchParams,
+// }: {
+//   searchParams?: {
+//     query?: string;
+//     page?: string;
+//   };
+// }
+) {
+  // const query = searchParams?.query || '';
+  // const currentPage = Number(searchParams?.page) || 1;
   const companies = await fetchCompanies()
 
   return (

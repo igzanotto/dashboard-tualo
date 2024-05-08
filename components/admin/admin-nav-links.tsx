@@ -17,6 +17,11 @@ const links = [
     href: '/pages/admin/negocios',
     icon: UserGroupIcon,
   },
+  {
+    name: 'Reportes',
+    href: '/pages/admin/reports',
+    icon: UserGroupIcon,
+  },
   
 ];
 

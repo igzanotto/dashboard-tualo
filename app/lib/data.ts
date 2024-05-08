@@ -1,7 +1,4 @@
-import { sql } from '@vercel/postgres';
 import { createClient } from '@/utils/supabase/server';
-
-
 
   export async function fetchReports() {
     try {
