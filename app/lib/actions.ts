@@ -4,6 +4,8 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { createClient } from '@/utils/supabase/server';
+import { NextRequest } from 'next/server';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -29,7 +31,38 @@ export async function createInvoice(formData: FormData) {
     VALUES (${customerId}, ${amountInCents}, ${status}, ${date})`;
 
     // clear this cache and trigger a new request to the server for the path to see the new invoice
-    revalidatePath('/dashboard/invoices');
+    revalidatePath('/dashboard/negocios');
 
-    redirect('/dashboard/invoices');
+    redirect('/dashboard/negocios');
+}
+
+
+export async function addCompany(name:string) {
+  const supabase = createClient();
+  try {
+    const { data:companies, error } = await supabase.from('companies').insert({ name });
+
+    if (error) {
+      throw error;
+    }
+    
+    console.log('company created:', companies);
+    return companies;
+  } catch (error) {
+    console.error('Failed to add company:', error);
+    revalidatePath("/pages/admin/negocios")
+
+    throw new Error('Failed to add company.');
+  }
+}
+
+export async function create (formData:FormData) {
+  try {
+    const company = formData.get("company")
+    await addCompany(company as string);
+    console.log('Company added successfully!', company);
+    revalidatePath("/pages/admin/negocios")
+  } catch (error) {
+    console.log(error);
+  }
 }
