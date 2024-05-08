@@ -1,7 +1,7 @@
-import '@/app/ui/global.css';
-import { inter } from '@/app/ui/fonts';
+
 import { Metadata } from 'next';
 import { Toaster } from 'sonner';
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Tualo Dashboard",
@@ -15,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`antialiased`}>
         {children}
         <Toaster/>
       </body>
