@@ -278,22 +278,24 @@ export async function fetchNotes() {
     }
     }
  
-    export async function addCompany(name:string) {
-      const supabase = createClient();
-      try {
-        const { data:companies, error } = await supabase.from('companies').insert({ name });
+    // Lo pase a actions
     
-        if (error) {
-          throw error;
-        }
+    // export async function addCompany(name:string) {
+    //   const supabase = createClient();
+    //   try {
+    //     const { data:companies, error } = await supabase.from('companies').insert({ name });
+    
+    //     if (error) {
+    //       throw error;
+    //     }
         
-        console.log('company created:', companies);
-        return companies;
-      } catch (error) {
-        console.error('Failed to add company:', error);
-        throw new Error('Failed to add company.');
-      }
-    }
+    //     console.log('company created:', companies);
+    //     return companies;
+    //   } catch (error) {
+    //     console.error('Failed to add company:', error);
+    //     throw new Error('Failed to add company.');
+    //   }
+    // }
     
     
 

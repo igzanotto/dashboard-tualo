@@ -4,13 +4,65 @@ import {
   KeyIcon,
   ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
-import { ArrowRightIcon } from '@heroicons/react/20/solid';
-import { Button } from './button';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
+import { SubmitButton } from './submit-button';
 
-export default function LoginForm() {
+export default function EmailLoginForm({
+  searchParams,
+}: {
+  searchParams: { message: string };
+}) {
+  const signIn = async (formData: FormData) => {
+    'use server';
+
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const supabase = createClient();
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      return redirect('/login?message=Could not authenticate user');
+    }
+
+    return redirect('/dashboard');
+  };
+
+  const signUp = async (formData: FormData) => {
+    'use server';
+
+    const supabase = createClient();
+    // const origin = headers().get('origin');
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+
+    const { error, data } = await supabase.auth.signUp({
+      email,
+      password,
+      // options: {
+      //   emailRedirectTo: `${origin}/auth/callback`,
+      // },
+    });
+
+    if (error) {
+      console.log(error);
+      return redirect('/login?message=Could not authenticate user');
+    }
+
+    revalidatePath('/', 'layout')
+    redirect('/dashboard');
+  };
+
+
+
+
   return (
     <form className="space-y-3">
-      <div className="flex-1 rounded-lg bg-gray-50 px-6 pb-4 pt-8">
         <h1 className={`${lusitana.className} mb-3 text-2xl`}>
           Please log in to continue.
         </h1>
@@ -55,19 +107,26 @@ export default function LoginForm() {
             </div>
           </div>
         </div>
-        <LoginButton />
-        <div className="flex h-8 items-end space-x-1">
-          {/* Add form errors here */}
-        </div>
-      </div>
+        <SubmitButton
+          formAction={signIn}
+          className="mt-4 w-full"
+          pendingText="Signing In..."
+        >
+          Sign In
+        </SubmitButton>
+        <SubmitButton
+          formAction={signUp}
+          className="mt-4 w-full"
+          pendingText="Signing Up..."
+        >
+          Sign Up
+        </SubmitButton>
+        {searchParams?.message && (
+          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
+            {searchParams.message}
+          </p>
+        )}
     </form>
   );
 }
 
-function LoginButton() {
-  return (
-    <Button className="mt-4 w-full">
-      Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
-    </Button>
-  );
-}

@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { createClient } from '@/utils/supabase/server';
 
 const FormSchema = z.object({
   id: z.string(),
@@ -35,4 +36,29 @@ export async function createInvoice(formData: FormData) {
 }
 
 
+export async function addCompany(name:string) {
+  const supabase = createClient();
+  try {
+    const { data:companies, error } = await supabase.from('companies').insert({ name });
 
+    if (error) {
+      throw error;
+    }
+    
+    console.log('company created:', companies);
+    return companies;
+  } catch (error) {
+    console.error('Failed to add company:', error);
+    throw new Error('Failed to add company.');
+  }
+}
+
+export async function create (formData:FormData) {
+  try {
+    const company = formData.get("company")
+    await addCompany(company as string);
+    console.log('Company added successfully!', company);
+  } catch (error) {
+    console.log(error);
+  }
+}
