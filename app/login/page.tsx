@@ -5,7 +5,7 @@ import { SubmitButton } from '../ui/login/submit-button';
 import { revalidatePath } from 'next/cache';
 import GoogleLoginButton from '../ui/login/GoogleLoginButton';
 
-export default function Login({
+export default function Page({
   searchParams,
 }: {
   searchParams: { message: string };
@@ -17,7 +17,7 @@ export default function Login({
     const password = formData.get('password') as string;
     const supabase = createClient();
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error, data } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
