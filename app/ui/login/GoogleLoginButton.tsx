@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
+import { Button } from "../button";
 
 export default async function GoogleLoginButton() {
 
@@ -30,9 +31,9 @@ export default async function GoogleLoginButton() {
 
   return (
     <form action={handleLogin}>
-      <button className="text-white text-bold bg-blue-500 rounded-md px-4 py-2 text-foreground mb-2" >
+      <Button className="mt-4 w-full">
         Login con google
-      </button>
+      </Button>
     </form>
   );
 }
