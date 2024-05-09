@@ -1,4 +1,4 @@
-import { fetchBuisnesses} from '@/app/lib/data';
+import { fetchBuisnesses } from '@/app/lib/data';
 import Link from 'next/link';
 import {BuildingOfficeIcon} from "@heroicons/react/24/outline"
 
@@ -6,7 +6,7 @@ import {BuildingOfficeIcon} from "@heroicons/react/24/outline"
 export default async function Page({ id }: { id: string }) {
   
   const buisnesses = await fetchBuisnesses()
-
+  
   return (
     <div className="w-full">
       <div className="flex w-full items-center justify-between">
@@ -19,7 +19,6 @@ export default async function Page({ id }: { id: string }) {
               <Link href={`/admin/buisnesses/${buisness.id}`} key={buisness.id} className='flex items-center gap-2'>
                 <BuildingOfficeIcon className='w-7 h-7'/>
                 <p>{buisness.name}</p>
-                
               </Link>
             </div>
           ))

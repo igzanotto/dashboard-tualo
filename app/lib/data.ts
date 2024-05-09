@@ -26,6 +26,43 @@ import { createClient } from '@/utils/supabase/server';
     }
   }
 
+  export async function fetchReportsWithBusinesses() {
+    try {
+      const supabase = createClient();
+  
+      // Obtener los IDs de los negocios
+      const { data: businessIds, error: businessError } = await supabase
+        .from('buisnesses')
+        .select('id');
+  
+      if (businessError) {
+        throw new Error('Failed to fetch business IDs.');
+      }
+  
+      // Extraer los IDs en un array
+      const ids = businessIds.map((business) => business.id);
+  
+      // Consulta principal para obtener los informes con los negocios asociados
+      const { data: reports, error: reportError } = await supabase
+        .from('reports')
+        .select(`
+          *,
+          buisness_id(*)
+        `)
+        .in('buisness_id', ids);
+  
+      if (reportError) {
+        throw new Error('Failed to fetch reports with associated businesses.');
+      }
+      console.log("Reportesss: ", reports);
+      
+      return reports;
+    } catch (error) {
+      console.error('Failed to fetch reports with associated businesses:', error);
+      throw new Error('Failed to fetch reports with associated businesses.');
+    }
+  }
+
 
   export async function fetchBuisnesses() {
       try {
