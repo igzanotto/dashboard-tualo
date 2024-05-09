@@ -2,19 +2,7 @@ import { fetchCompanies} from '@/app/lib/data';
 import Link from 'next/link';
 
 
-export default async function Page(
-    // esto todabia no se esta usando pero estaria bueno meterlo para el pagination
-//   {
-//   searchParams,
-// }: {
-//   searchParams?: {
-//     query?: string;
-//     page?: string;
-//   };
-// }
-) {
-  // const query = searchParams?.query || '';
-  // const currentPage = Number(searchParams?.page) || 1;
+export default async function Page({ id }: { id: string }) {
   const companies = await fetchCompanies()
 
   return (
@@ -25,9 +13,9 @@ export default async function Page(
       <div className='flex flex-wrap items-center justify-center gap-4 mt-10'>
         {
           companies.map(company => (
-            <div key={company.id} className='bg-blue-500 p-5 rounded-xl text-white w-[250px] h-[100px] text-center '>
+            <Link href={`/pages/admin/negocios/${company.id}`} key={company.id} className='bg-blue-500 p-5 rounded-xl text-white w-[250px] h-[100px] text-center '>
               <p>{company.name}</p>
-            </div>
+            </Link>
           ))
         }
         <Link href={"/pages/admin/negocios/create"} className='bg-blue-800 p-5 rounded-xl text-white w-[250px] h-[100px] text-center flex flex-col justify-center gap-2 items-center'>
