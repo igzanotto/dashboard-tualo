@@ -1,10 +1,11 @@
-// import AddReportForm from ...
+import CreateReportForm from "@/components/admin/create-report-form";
+
  
 export default async function Page() {
  
   return (
     <main>
-      {/* <AddReportForm/> */}
+      <CreateReportForm/>
     </main>
   );
 }

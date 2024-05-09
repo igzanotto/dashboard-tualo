@@ -1,5 +1,5 @@
 
-import AddCompanyForm from '@/components/admin/form-companies';
+import AddCompanyForm from '@/components/admin/create_company-form';
  
 export default async function Page() {
  
