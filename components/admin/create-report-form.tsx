@@ -14,13 +14,13 @@ export default function CreateReportForm() {
           />
           <input
             type="text"
-            name="company_resume"
+            name="buisness_resume"
             placeholder="resumen de la empresa"
             className="rounded-xl bg-slate-100 px-2"
           />
           <input
             type="text"
-            name="company_id"
+            name="buisness_id"
             placeholder="id de la empresa"
             className="rounded-xl bg-slate-100 px-2"
           />

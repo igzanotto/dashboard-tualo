@@ -1,9 +1,10 @@
-import { fetchCompanies} from '@/app/lib/data';
+import { fetchBuisnesses} from '@/app/lib/data';
 import Link from 'next/link';
 
 
 export default async function Page({ id }: { id: string }) {
-  const companies = await fetchCompanies()
+  
+  const buisnesses = await fetchBuisnesses()
 
   return (
     <div className="w-full">
@@ -12,9 +13,9 @@ export default async function Page({ id }: { id: string }) {
       </div>
       <div className='flex flex-wrap items-center justify-center gap-4 mt-10'>
         {
-          companies.map(company => (
-            <Link href={`/pages/admin/negocios/${company.id}`} key={company.id} className='bg-blue-500 p-5 rounded-xl text-white w-[250px] h-[100px] text-center '>
-              <p>{company.name}</p>
+          buisnesses.map(buisness => (
+            <Link href={`/admin/buisnesses/${buisness.id}`} key={buisness.id} className='bg-blue-500 p-5 rounded-xl text-white w-[250px] h-[100px] text-center '>
+              <p>{buisness.name}</p>
             </Link>
           ))
         }

@@ -4,29 +4,29 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { z } from 'zod';
 
-const CompanyFormSchema = z.object({
+const BuisnessFormSchema = z.object({
   id: z.number(),
   name: z.string(),
   description: z.string(),
 });
 
-const CreateCompany = CompanyFormSchema.omit({ id: true });
+const CreateBuisness = BuisnessFormSchema.omit({ id: true });
 
-export async function createCompany(formData: FormData) {
-  const { name, description } = CreateCompany.parse({
+export async function createBuisness(formData: FormData) {
+  const { name, description } = CreateBuisness.parse({
     name: formData.get('name'),
     description: formData.get('description'),
   });
 
   const supabase = createClient();
 
-  const { data: companies, error } = await supabase.from('companies').insert({ name, description });
+  const { data: buisnesses, error } = await supabase.from('buisnesses').insert({ name, description });
 
   if (error) {
     throw error;
   }
 
-  // clear this cache and trigger a new request to the server for the path to see the new company
+  // clear this cache and trigger a new request to the server for the path to see the new buisness
   revalidatePath('/admin/buisnesses');
 
   redirect('/admin/buisnesses');
@@ -36,8 +36,8 @@ export async function createCompany(formData: FormData) {
 const ReportFormSchema = z.object({
   id: z.string(),
   month: z.string(),
-  company_resume: z.string(),
-  company_id: z.string(),
+  buisness_resume: z.string(),
+  buisness_id: z.string(),
   goals: z.string(),
   analysis: z.string(),
 });
@@ -45,18 +45,18 @@ const ReportFormSchema = z.object({
 const CreateReport = ReportFormSchema.omit({ id: true });
 
 export async function createReport(formData:FormData) {
-  const { month, company_resume, company_id, goals, analysis } = CreateReport.parse({
+  const { month, buisness_resume, buisness_id, goals, analysis } = CreateReport.parse({
     month: formData.get('month'),
-    company_resume: formData.get('company_resume'),
-    company_id: formData.get('company_id'),
+    buisness_resume: formData.get('buisness_resume'),
+    buisness_id: formData.get('buisness_id'),
     goals: formData.get('goals'),
     analysis: formData.get('analysis'),
   });
-  console.log(month, company_resume, company_id, goals, analysis);
+  console.log(month, buisness_resume, buisness_id, goals, analysis);
 
   const supabase = createClient();
 
-  const { data: reports, error } = await supabase.from('reports').insert({ month, company_resume, company_id, goals, analysis });
+  const { data: reports, error } = await supabase.from('reports').insert({ month, buisness_resume, buisness_id, goals, analysis });
 
   if (error) {
     console.log("error");

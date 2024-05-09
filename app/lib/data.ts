@@ -17,33 +17,33 @@ import { createClient } from '@/utils/supabase/server';
   }
  
 
-  export async function fetchCompanies() {
-      try {
-        const supabase = createClient();
-        const { data: companies, error } = await supabase.from("companies").select();
-    
-        if (error) {
-          throw new Error('Failed to fetch companies.');
+    export async function fetchBuisnesses() {
+        try {
+          const supabase = createClient();
+          const { data: buisnesses, error } = await supabase.from("buisnesses").select();
+      
+          if (error) {
+            throw new Error('Failed to fetch buisnesses.');
+          }
+      
+          return buisnesses;
+        } catch (error) {
+          console.error('Failed to fetch buisnesses:', error);
+          throw new Error('Failed to fetch buisnesses.');
         }
-    
-        return companies;
-      } catch (error) {
-        console.error('Failed to fetch companies:', error);
-        throw new Error('Failed to fetch companies.');
       }
-    }
 
-    export async function fetchCompanyById(companyId:string) {
-      try {
-        const supabase = createClient();
-        const { data: company, error } = await supabase.from("companies").select().eq('id', companyId).single();
-        
-        if (error) {
-          throw new Error('Failed to fetch company.');
+      export async function fetchBusinessById(companyId:string) {
+        try {
+          const supabase = createClient();
+          const { data: company, error } = await supabase.from("buisnesses").select().eq('id', companyId).single();
+          
+          if (error) {
+            throw new Error('Failed to fetch company.');
+          }
+          
+          return company;
+        } catch (error) {
+          console.error('Failed to fetch company:', error);
         }
-        
-        return company;
-      } catch (error) {
-        console.error('Failed to fetch company:', error);
       }
-    }
