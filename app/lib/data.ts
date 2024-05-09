@@ -25,7 +25,7 @@ import { createClient } from '@/utils/supabase/server';
       console.error('Failed to fetch report by id:', error);
     }
   }
- 
+
 
   export async function fetchBuisnesses() {
       try {
