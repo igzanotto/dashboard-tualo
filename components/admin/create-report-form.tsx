@@ -1,29 +1,49 @@
-import { createReport } from "@/app/lib/actions";
+import { createReport } from '@/app/lib/actions';
 
 export default function CreateReportForm() {
-    return (
-        <form action={createReport}>
-            <label>
-                Month:
-                <input type="text" name="month" />
-            </label>
-            <label>
-                Company Resume:
-                <input type="text" name="company_resume" />
-            </label>
-            <label>
-                Company ID:
-                <input type="text" name="company_id" />
-            </label>
-            <label>
-                Goals:
-                <input type="text" name="goals" />
-            </label>
-            <label>
-                Analysis:
-                <input type="text" name="analysis" />
-            </label>
-            <button type="submit">Submit</button>
+  return (
+    <>
+      <div className="mx-auto w-[50%]">
+        <h1>Crear reporte</h1>
+        <form action={createReport} className="flex flex-col gap-4">
+          <input
+            type="text"
+            name="month"
+            placeholder="mes"
+            className="rounded-xl bg-slate-100 px-2"
+          />
+          <input
+            type="text"
+            name="company_resume"
+            placeholder="resumen de la empresa"
+            className="rounded-xl bg-slate-100 px-2"
+          />
+          <input
+            type="text"
+            name="company_id"
+            placeholder="id de la empresa"
+            className="rounded-xl bg-slate-100 px-2"
+          />
+          <input
+            type="text"
+            name="goals"
+            placeholder="metas"
+            className="rounded-xl bg-slate-100 px-2"
+          />
+          <input
+            type="text"
+            name="analysis"
+            placeholder="análisis"
+            className="rounded-xl bg-slate-100 px-2"
+          />
+          <button
+            type="submit"
+            className="rounded-xl bg-blue-500 p-3 text-white"
+          >
+            Agregar negocio
+          </button>
         </form>
-    );
+      </div>
+    </>
+  );
 }
