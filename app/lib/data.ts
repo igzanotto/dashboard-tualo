@@ -17,18 +17,18 @@ import { createClient } from '@/utils/supabase/server';
   }
  
 
-    export async function fetchCompanies() {
+    export async function fetchBuisnesses() {
         try {
           const supabase = createClient();
-          const { data: companies, error } = await supabase.from("companies").select();
+          const { data: buisnesses, error } = await supabase.from("buisnesses").select();
       
           if (error) {
-            throw new Error('Failed to fetch companies.');
+            throw new Error('Failed to fetch buisnesses.');
           }
       
-          return companies;
+          return buisnesses;
         } catch (error) {
-          console.error('Failed to fetch companies:', error);
-          throw new Error('Failed to fetch companies.');
+          console.error('Failed to fetch buisnesses:', error);
+          throw new Error('Failed to fetch buisnesses.');
         }
       }

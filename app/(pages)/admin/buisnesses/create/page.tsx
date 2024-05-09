@@ -1,5 +1,5 @@
 
-import AddCompanyForm from '@/components/admin/create_company-form';
+import AddBuisnessForm from '@/components/admin/create_buisness-form';
  
 export default async function Page() {
  
@@ -15,7 +15,7 @@ export default async function Page() {
           },
         ]}
       /> */}
-      <AddCompanyForm/>
+      <AddBuisnessForm/>
     </main>
   );
 }
