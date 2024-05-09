@@ -28,7 +28,9 @@ export default async function Page({
       <div className="flex w-full items-center justify-between">
         <h1 className={`text-2xl`}>Negocios</h1>
       </div>
-      <Search placeholder="Search invoices..." />
+      <div className='mt-10'>
+        <Search placeholder="Buscar negocios..." />
+      </div>
       <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
         <BusinessTable query={query} currentPage={currentPage} />
       </Suspense>
