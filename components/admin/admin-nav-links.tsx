@@ -14,7 +14,7 @@ import clsx from 'clsx';
 const links = [
   {
     name: 'Negocios',
-    href: '/pages/admin/negocios',
+    href: '/pages/admin/buisnesses',
     icon: UserGroupIcon,
   },
   {
