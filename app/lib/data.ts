@@ -94,3 +94,39 @@ import { createClient } from '@/utils/supabase/server';
         console.error('Failed to fetch company:', error);
       }
     }
+
+
+
+    const ITEMS_PER_PAGE = 6;
+    export async function fetchFilteredBusiness(
+      query: string,
+      currentPage: number
+    ) {
+      const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+    
+      try {
+        const supabase = createClient();
+        const { data: businesses, error } = await supabase
+          .from('buisnesses')
+          .select(
+            `
+            id,
+            name
+          `,
+            { count: 'exact' }
+          )
+          .ilike('name', `%${query}%`)
+          .range(offset, offset + ITEMS_PER_PAGE - 1);
+    
+        if (error) {
+          throw new Error('Failed to fetch businesses.');
+        }
+    
+        console.log("businesses", businesses);
+        
+        return businesses;
+      } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch businesses.');
+      }
+    }

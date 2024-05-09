@@ -68,3 +68,8 @@ export async function createReport(formData:FormData) {
 
   redirect('/admin/reports');
 }
+
+
+export async function searchBusiness(formData:FormData){
+
+}
