@@ -1,6 +1,6 @@
 import { createCompany } from "@/app/lib/actions";
 
-export default async function AddCompanyForm() {
+export default async function CreateCompanyForm() {
 
   return (
     <form action={createCompany}
