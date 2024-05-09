@@ -6,8 +6,8 @@ export default async function BusinessPage({ params }: { params: { id: string } 
     const company = await fetchCompanyById(id)
 
     return(
-        <div>
-            <h1>{company.name}</h1>
+        <div className="flex flex-col gap-3">
+            <h1 className="text-xl md:text-2xl xl:text-5xl">{company.name}</h1>
             <p>{company.description}</p>
         </div>
     )
