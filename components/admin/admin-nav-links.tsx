@@ -14,12 +14,12 @@ import clsx from 'clsx';
 const links = [
   {
     name: 'Negocios',
-    href: '/pages/admin/buisnesses',
+    href: '/admin/buisnesses',
     icon: UserGroupIcon,
   },
   {
     name: 'Reportes',
-    href: '/pages/admin/reports',
+    href: '/admin/reports',
     icon: UserGroupIcon,
   },
   

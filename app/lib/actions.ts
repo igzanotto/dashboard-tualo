@@ -16,9 +16,9 @@ export async function createCompany(formData: FormData) {
   }
 
   // clear this cache and trigger a new request to the server for the path to see the new company
-  revalidatePath('/pages/admin/buisnesses');
+  revalidatePath('/admin/buisnesses');
 
-  redirect('/pages/admin/buisnesses');
+  redirect('/admin/buisnesses');
 }
 
 export async function createReport(formData:FormData) {

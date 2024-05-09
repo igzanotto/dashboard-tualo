@@ -15,7 +15,7 @@ const {
 
 console.log(user);
 if (!user) {
-  return redirect("/pages/login");
+  return redirect("/login");
 }
 return (
   <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
