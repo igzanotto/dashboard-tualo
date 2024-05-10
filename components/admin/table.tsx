@@ -10,6 +10,10 @@ export type BussinesTableProps = {
 export default async function BusinessTable({query, currentPage}:BussinesTableProps) {
   const buisnesses = await fetchFilteredBusiness(query, currentPage)
 
+  if (buisnesses.length === 0) {
+    return ( <div className='mt-6 border-2 border-slate-200 p-2 rounded-xl'><p>No se encontraron resultados para la búsqueda.</p></div>
+    )
+  }
   return (
     <div className="mt-6 flow-root">
         <div className='flex flex-col gap-2 w-full border-1 bg-gray-50 rounded-xl p-4'>
