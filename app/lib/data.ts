@@ -151,3 +151,28 @@ import { createClient } from '@/utils/supabase/server';
         throw new Error('Failed to fetch businesses.');
       }
     }
+
+    export async function fetchBusinessPages(query: string) {
+      try {
+        const supabase = createClient();
+        const { data: buisnesses, error } = await supabase
+          .from('buisnesses')
+          .select(
+            `
+            id,
+            name
+          `,
+            { count: 'exact' }
+          )
+          .ilike('name', `%${query}%`)
+          
+        const count = buisnesses ? buisnesses.length : 0;
+        const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
+        console.log("total pages", totalPages);
+        return totalPages;
+      } catch (error) {
+        console.error('Error:', error);
+        console.log("Salio mal", error);
+        
+      }
+    }
