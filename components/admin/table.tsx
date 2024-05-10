@@ -2,13 +2,12 @@ import { fetchFilteredBusiness} from '@/app/lib/data';
 import { BuildingOfficeIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
-export default async function BusinessTable({
-  query,
-  currentPage,
-}: {
+export type BussinesTableProps = {
   query: string;
   currentPage: number;
-}) {
+};
+
+export default async function BusinessTable({query, currentPage}:BussinesTableProps) {
   const buisnesses = await fetchFilteredBusiness(query, currentPage)
 
   return (

@@ -1,20 +1,41 @@
 import { createClient } from '@/utils/supabase/server';
 
-  export async function fetchReports() {
-    try {
-      const supabase = createClient();
-      const { data: reports, error } = await supabase.from("reports").select();
-  
-      if (error) {
-        throw new Error('Failed to fetch REPORTS.');
+    const REPORTS_PER_PAGE = 6;
+    export async function fetchFilteredReports(
+      query: string,
+      currentPage: number
+    ) {
+      const offset = (currentPage - 1) * REPORTS_PER_PAGE;
+    
+      try {
+        const supabase = createClient();
+        const { data: reports, error } = await supabase
+          .from('reports')
+          .select(
+            `
+            id,
+            month
+          `,
+            { count: 'exact' }
+          )
+          .ilike('month', `%${query}%`)
+          .range(offset, offset + REPORTS_PER_PAGE - 1);
+    
+        if (error) {
+          throw new Error('Failed to fetch reports.');
+        }
+    
+        console.log("reports", reports);
+        
+        return reports;
+      } catch (error) {
+        console.error('Database Error:', error);
+        throw new Error('Failed to fetch reports.');
       }
-  
-      return reports;
-    } catch (error) {
-      console.error('Failed to fetch REPORTS:', error);
-      throw new Error('Failed to fetch REPORTS.');
     }
-  }
+
+
+
 
   export async function fetchReportById(reportId:string) {
     try {
