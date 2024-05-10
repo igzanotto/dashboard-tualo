@@ -12,7 +12,7 @@ export default async function BusinessTable({query, currentPage}:BussinesTablePr
 
   return (
     <div className="mt-6 flow-root">
-        <div className='flex flex-col gap-2 w-full border-1 bg-gray-50 rounded-xl p-4 mt-10'>
+        <div className='flex flex-col gap-2 w-full border-1 bg-gray-50 rounded-xl p-4'>
           {
             buisnesses.map(buisness => (
               <div className='border-2 border-slate-200 p-2 rounded-xl'>

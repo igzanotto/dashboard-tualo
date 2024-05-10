@@ -26,15 +26,17 @@ export default async function Page({searchParams,}: {searchParams?: {  query?: s
         <Search placeholder="Buscar negocios..." />
       </div>
       <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
+        <div className='flex justify-end'>
+          <Link href={"/admin/buisnesses/create"} className='flex items-center bg-blue-800 p-2 rounded-xl text-white gap-2 w-[220px] mt-7'>
+            Agregar nuevo negocio
+            <AddIcon/>
+          </Link>
+        </div>
         <BusinessTable query={query} currentPage={currentPage}/>
       </Suspense>
       <div className="mt-5 flex w-full justify-center">
         <Pagination totalPages={totalPagesOrDefault} />
       </div>
-        <Link href={"/admin/buisnesses/create"} className='flex items-center bg-blue-800 p-2 rounded-xl text-white gap-2 w-[220px] mt-7'>
-          Agregar nuevo negocio
-          <AddIcon/>
-        </Link>
     </div>
   );
 }
