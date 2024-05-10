@@ -14,6 +14,7 @@ import { createClient } from '@/utils/supabase/server';
           .select(
             `
             id,
+            buisness_id,
             month
           `,
             { count: 'exact' }
@@ -24,7 +25,6 @@ import { createClient } from '@/utils/supabase/server';
         if (error) {
           throw new Error('Failed to fetch reports.');
         }
-    
         console.log("reports", reports);
         
         return reports;
@@ -42,6 +42,16 @@ import { createClient } from '@/utils/supabase/server';
       const supabase = createClient();
       const { data: report} = await supabase.from("reports").select().eq('id', reportId).single();    
       return report;
+    } catch (error) {
+      console.error('Failed to fetch report by id:', error);
+    }
+  }
+
+  export async function fetchReportByBuisnessId(reportId:string) {
+    try {
+      const supabase = createClient();
+      const { data: reportByBuisnessId} = await supabase.from("reports").select().eq('buisness_id', reportId).single();  
+      return reportByBuisnessId;
     } catch (error) {
       console.error('Failed to fetch report by id:', error);
     }

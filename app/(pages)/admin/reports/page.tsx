@@ -20,14 +20,14 @@ export default async function Page({searchParams,}: {searchParams?: {query?: str
         <div className='mt-10'>
           <Search placeholder="Buscar negocios..." />
         </div>
-          <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
-            <ReportsTable query={query} currentPage={currentPage}/>
-          </Suspense>
+          {/* <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
+            <ReportsTable query={query} currentPage={currentPage} />
+          </Suspense> */}
           <Link
             href={'/admin/reports/create'}
             className="mt-7 flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white"
           >
-            Agregar nuevo negocio
+            Agregar nuevo reporte
             <AddIcon/>
           </Link>
       </div>
