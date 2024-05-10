@@ -1,5 +1,5 @@
 
-import AddBuisnessForm from '@/components/admin/create_buisness-form';
+import AddBuisnessForm from '@/components/admin/create-buisness-form';
  
 export default async function Page() {
  

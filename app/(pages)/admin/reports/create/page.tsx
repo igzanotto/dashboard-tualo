@@ -20,7 +20,6 @@ export default function Page() {
 
   return (
     <main>
-      <div className="grid grid-cols-2 gap-4">
         <div className="mt-3">
           <h1 className="text-center">Prompt</h1>
           <form onSubmit={handleSubmit}>
@@ -38,60 +37,7 @@ export default function Page() {
             </div>
           </form>
         </div>
-        <div>
-          <div className="mt-3">
-            <h1 className="mt-4 text-center">Resumen empresa</h1>
-            <textarea
-              rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            >
-              {compnyResume}
-            </textarea>
-          </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-          <div className="mt-3">
-          {messages[1] && messages[1].content}
-            <h1 className="text-center">Metas financieras</h1>
-            <textarea
-              rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            >
-              {messages[1] && messages[1].content}
-            </textarea>
-          </div>
-          <div className="mt-3">
-            <h1 className="text-center">Analisis financiero</h1>
-            <textarea
-              rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            >
-              {messages[1] && messages[1].content}
-            </textarea>
-          </div>
-          <div className="mt-3">
-            <h1 className="text-center">Recomendaciones</h1>
-            <textarea
-              rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            >
-              {messages[1] && messages[1].content}
-            </textarea>
-          </div>
-        </div>
-      </div>
+      
 
       {/* <CreateReportForm /> */}
     </main>

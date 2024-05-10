@@ -17,8 +17,8 @@ export default async function Page(){
                         </div>
                     ))
                 }
-                <Link href={"/admin/reports/create"} className='bg-blue-800 p-5 rounded-xl text-white w-[250px] h-[100px] text-center flex flex-col justify-center gap-2 items-center'>
-                    Add new report
+                <Link href={"/admin/reports/generate"} className='bg-blue-800 p-5 rounded-xl text-white w-[250px] h-[100px] text-center flex flex-col justify-center gap-2 items-center'>
+                    Generar nuevo reporte
                 </Link>
             </div>
         </div>
