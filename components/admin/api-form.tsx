@@ -45,9 +45,12 @@ const ApiForm = () => {
           name="text"
           value={formData.text}
           onChange={handleChange}
+          className='border border-gray-400 rounded-md w-full p-2 mt-1'
         />
       </label>
-      <button type="submit">Enviar</button>
+      <button type="submit"
+        className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4'
+      >Enviar</button>
     </form>
   );
 };
