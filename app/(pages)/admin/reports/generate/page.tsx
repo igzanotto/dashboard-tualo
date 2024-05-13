@@ -1,5 +1,6 @@
 'use client';
 
+import ApiForm from '@/components/admin/api-form';
 import CreateReportForm from '@/components/admin/create-report-form';
 import { useChat, useCompletion } from 'ai/react';
 
@@ -15,15 +16,7 @@ export default function Page() {
     <main>
       <div className="mt-3">
         <h1 className="my-3 text-center">Generador de informes</h1>
-        <form onSubmit={handleSubmit}>
-
-        <textarea 
-        rows={4}
-        onChange={handleInputChange}></textarea>
-        <button
-        className='bg-blue-500 text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600'
-        >send</button>
-        </form>
+        <ApiForm/>
         
         {/* <form onSubmit={handleSubmit}>
           <textarea
