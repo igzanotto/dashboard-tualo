@@ -1,13 +1,25 @@
 import SideNav from "@/components/dashboard/sidenav";
+import ReportsTableDashboard from "@/components/dashboard/table-reports";
+import { InvoicesTableSkeleton } from "@/components/skeletons";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
-export default async function Layout({ 
-  children
-}: {
-  children: React.ReactNode;
-}) {
+
+export interface ReportsPageProps {
+  params: {
+    id: string;
+  };
+  searchParams?: {
+    query?: string;
+    page?: string;
+  };
+}
+
+export default async function Layout({ children, searchParams }: { children: React.ReactNode; searchParams?: ReportsPageProps["searchParams"]; }) {
   const supabase = createClient();
+  const query = searchParams?.query || '';
+  const currentPage = Number(searchParams?.page) || 1;
 
 const {
   data: { user },
@@ -22,7 +34,12 @@ return (
     <div className="w-full flex-none md:w-64">
       <SideNav />
     </div>
-    <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+    <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
+      <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
+        <ReportsTableDashboard query={query} currentPage={currentPage}/>
+      </Suspense>
+      {children}
+    </div>
   </div>
 );
 }
