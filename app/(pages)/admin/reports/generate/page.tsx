@@ -1,30 +1,31 @@
 'use client';
 
 import CreateReportForm from '@/components/admin/create-report-form';
-import { useState } from 'react';
-import { useChat } from 'ai/react';
+import { useChat, useCompletion } from 'ai/react';
 
 export default function Page() {
-  const { handleInputChange, input, handleSubmit, messages, isLoading } =
-    useChat();
-  // en teoria se puede modificar la api adonde se ejecuta esto pero no funciona >>
-  // useChat({api: "api/openai"})
+  const { handleInputChange, handleSubmit, messages} = useChat({
+    api: '../../api/chat',
+    initialMessages: [],
+  });
 
-  const [value, setValue] = useState(
-    'voy a darle asesoría financiera a un cliente, vas a ayudarme a hacerla.\nTe voy a dar contexto sobre la empresa y sus metas financieras así como su P&L de los últimos meses.\nCon base en eso, me vas a generar tres entregables:\n\n1. comentarios de las gráficas\n2. highlights y análisis del P&L\n3. recomendaciones estratégicas\n\ntus respuestas deben de ser concisas y el lenguaje que uses debe de ser para gente no-financiera, que sea fácil de entender e interpretar\n\nresponde si si entiendes y podemos empezar',
-  );
-
-  const [compnyResume, setCompanyResume] = useState(
-    messages[1]?.content || 'default company resume',
-  );
-
-  console.log('messages', messages);
+  // console.log('messages', messages);
 
   return (
     <main>
       <div className="mt-3">
         <h1 className="my-3 text-center">Generador de informes</h1>
         <form onSubmit={handleSubmit}>
+
+        <textarea 
+        rows={4}
+        onChange={handleInputChange}></textarea>
+        <button
+        className='bg-blue-500 text-white px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600'
+        >send</button>
+        </form>
+        
+        {/* <form onSubmit={handleSubmit}>
           <textarea
             name="first_message"
             rows={4}
@@ -98,7 +99,8 @@ export default function Page() {
               Generar
             </button>
           </div>
-        </form>
+        </form> */}
+
       </div>
 
       {/* <CreateReportForm /> */}

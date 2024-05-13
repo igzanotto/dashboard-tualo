@@ -18,11 +18,11 @@ export async function POST(req: Request) {
     stream: true,
     messages: [
       { role: 'system', content: 'You are a helpful assistant.' },
-      { role: 'user', content: messages[0].content}
+      { role: 'user', content: "hola, como esta tu perro?"}
     ]
   })
 
-  console.log("response", response)
+  console.log("response", response.choices)
   // const responseText = response.data.choices[0].message.content
 
   // Convert the response into a friendly text-stream
