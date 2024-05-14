@@ -11,7 +11,7 @@ export async function POST(  req: Request
     console.log("texto>>>>", start_prompt, QA_prompt, QA_transcript)
 
     const completion = await openai.chat.completions.create({
-        messages: [{"role": "system", "content": "You are a helpful assistant."},
+        messages: [{"role": "system", "content": "You are a helpful assistant that generates financial reports for S&Bs"},
             {"role": "user", "content": start_prompt},
             {"role": "assistant", "content": "claro!"},
             {"role": "user", "content": QA_prompt},
