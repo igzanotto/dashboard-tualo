@@ -13,9 +13,10 @@ export default async function Layout({
   const { data: admin, error }= await supabase.from('profiles').select('admin').single();
   const isAdmin = admin?.admin;
 
-  // if (!isAdmin) {
-  //   return redirect('/dashboard');
-  // }
+  if (!isAdmin) {
+    return redirect('/dashboard');
+  }
+  
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
       <div className="w-full flex-none md:w-64">

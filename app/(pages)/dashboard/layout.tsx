@@ -25,9 +25,9 @@ const {
   data: { user },
 } = await supabase.auth.getUser();
 
-// if (!user) {
-//   return redirect("/login");
-// }
+if (!user) {
+  return redirect("/login");
+}
 
 return (
   <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
