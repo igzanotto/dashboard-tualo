@@ -63,8 +63,50 @@ export async function createReport(formData:FormData) {
     throw error;
   }
 
+  
   // clear this cache and trigger a new request to the server for the path to see the new report
   revalidatePath('/admin/reports');
 
   redirect('/admin/reports');
+}
+
+
+const ChartFormSchema = z.object({
+  id: z.string(),
+  type: z.string(),
+  description: z.string(),
+  insights: z.string(),
+  report_id: z.string(),
+});
+
+const CreateChart = ChartFormSchema.omit({ id: true });
+
+export async function createChart(formData:FormData) {
+  const { type, description, insights, report_id } = CreateChart.parse({
+    month: formData.get('month'),
+    buisness_resume: formData.get('buisness_resume'),
+    buisness_id: formData.get('buisness_id'),
+    goals: formData.get('goals'),
+    analysis: formData.get('analysis'),
+  });
+  console.log(type, description, insights, report_id);
+
+  const supabase = createClient();
+
+  const { data: chart, error } = await supabase.from('reports').insert({ type, description, insights, report_id });
+
+  if (error) {
+    console.log("error");
+    throw error;
+  }
+  console.log(chart);
+  
+  // clear this cache and trigger a new request to the server for the path to see the new report
+  revalidatePath('/dashbord/reports');
+
+  redirect('/dashbord/reports');
+}
+
+export async function searchBusiness(formData:FormData){
+
 }
