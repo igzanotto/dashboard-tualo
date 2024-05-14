@@ -1,68 +1,75 @@
 'use server';
- 
-import { z } from 'zod';
-import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
-import { NextRequest } from 'next/server';
+import { z } from 'zod';
 
-const FormSchema = z.object({
-  id: z.string(),
-  customerId: z.string(),
-  amount: z.coerce.number(),
-  status: z.enum(['pending', 'paid']),
-  date: z.string(),
+const BuisnessFormSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
 });
- 
-const CreateInvoice = FormSchema.omit({ id: true, date: true });
- 
-export async function createInvoice(formData: FormData) {
-    const { customerId, amount, status } = CreateInvoice.parse({
-        customerId: formData.get('customerId'),
-        amount: formData.get('amount'),
-        status: formData.get('status'),
-    });
-    const amountInCents = amount * 100;
-    const date = new Date().toISOString().split('T')[0];
 
-    await sql`
-    INSERT INTO invoices (customer_id, amount, status, date)
-    VALUES (${customerId}, ${amountInCents}, ${status}, ${date})`;
+const CreateBuisness = BuisnessFormSchema.omit({ id: true });
 
-    // clear this cache and trigger a new request to the server for the path to see the new invoice
-    revalidatePath('/dashboard/negocios');
+export async function createBuisness(formData: FormData) {
+  const { name, description } = CreateBuisness.parse({
+    name: formData.get('name'),
+    description: formData.get('description'),
+  });
 
-    redirect('/dashboard/negocios');
-}
-
-
-export async function addCompany(name:string) {
   const supabase = createClient();
-  try {
-    const { data:companies, error } = await supabase.from('companies').insert({ name });
 
-    if (error) {
-      throw error;
-    }
-    
-    console.log('company created:', companies);
-    return companies;
-  } catch (error) {
-    console.error('Failed to add company:', error);
-    revalidatePath("/pages/admin/negocios")
+  const { data: buisnesses, error } = await supabase.from('buisnesses').insert({ name, description });
 
-    throw new Error('Failed to add company.');
+  if (error) {
+    throw error;
   }
+
+  // clear this cache and trigger a new request to the server for the path to see the new buisness
+  revalidatePath('/admin/buisnesses');
+
+  redirect('/admin/buisnesses');
 }
 
-export async function create (formData:FormData) {
-  try {
-    const company = formData.get("company")
-    await addCompany(company as string);
-    console.log('Company added successfully!', company);
-    revalidatePath("/pages/admin/negocios")
-  } catch (error) {
-    console.log(error);
+
+const ReportFormSchema = z.object({
+  id: z.string(),
+  month: z.string(),
+  buisness_resume: z.string(),
+  buisness_id: z.string(),
+  goals: z.string(),
+  analysis: z.string(),
+});
+
+const CreateReport = ReportFormSchema.omit({ id: true });
+
+export async function createReport(formData:FormData) {
+  const { month, buisness_resume, buisness_id, goals, analysis } = CreateReport.parse({
+    month: formData.get('month'),
+    buisness_resume: formData.get('buisness_resume'),
+    buisness_id: formData.get('buisness_id'),
+    goals: formData.get('goals'),
+    analysis: formData.get('analysis'),
+  });
+  console.log(month, buisness_resume, buisness_id, goals, analysis);
+
+  const supabase = createClient();
+
+  const { data: reports, error } = await supabase.from('reports').insert({ month, buisness_resume, buisness_id, goals, analysis });
+
+  if (error) {
+    console.log("error");
+    throw error;
   }
+
+  // clear this cache and trigger a new request to the server for the path to see the new report
+  revalidatePath('/admin/reports');
+
+  redirect('/admin/reports');
+}
+
+
+export async function searchBusiness(formData:FormData){
+
 }

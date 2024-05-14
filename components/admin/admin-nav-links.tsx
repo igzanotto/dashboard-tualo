@@ -4,6 +4,8 @@ import {
   UserGroupIcon,
   HomeIcon,
   DocumentDuplicateIcon,
+  BuildingOfficeIcon,
+  DocumentIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -14,8 +16,13 @@ import clsx from 'clsx';
 const links = [
   {
     name: 'Negocios',
-    href: '/pages/admin/negocios',
-    icon: UserGroupIcon,
+    href: '/admin/buisnesses',
+    icon: BuildingOfficeIcon,
+  },
+  {
+    name: 'Reportes',
+    href: '/admin/reports',
+    icon: DocumentIcon,
   },
   
 ];

@@ -1,5 +1,5 @@
 
-import AddCompanyForm from '@/components/admin/form-companies';
+import AddBuisnessForm from '@/components/admin/create_buisness-form';
  
 export default async function Page() {
  
@@ -7,15 +7,15 @@ export default async function Page() {
     <main>
       {/* <Breadcrumbs
         breadcrumbs={[
-          { label: 'Invoices', href: '/admin/negocios' },
+          { label: 'Invoices', href: '/admin/buisnesses' },
           {
             label: 'Create Invoice',
-            href: '/admin/negocios/create',
+            href: '/admin/buisnesses/create',
             active: true,
           },
         ]}
       /> */}
-      <AddCompanyForm/>
+      <AddBuisnessForm/>
     </main>
   );
 }
