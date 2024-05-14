@@ -40,8 +40,7 @@ const ApiForm = () => {
     <form onSubmit={handleSubmit}>
       <label>
         Texto:
-        <input
-          type="text"
+        <textarea
           name="text"
           value={formData.text}
           onChange={handleChange}
