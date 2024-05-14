@@ -134,10 +134,7 @@ import { createClient } from '@/utils/supabase/server';
       currentPage: number
     ) {
       const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-    
-      console.log("query", query);
-      console.log("currentPage", currentPage);
-      
+
       try {
         const supabase = createClient();
         const { data: businesses, error } = await supabase
@@ -155,8 +152,6 @@ import { createClient } from '@/utils/supabase/server';
         if (error) {
           throw new Error('Failed to fetch businesses.');
         }
-    
-        console.log("businesses", businesses);
         
         return businesses;
       } catch (error) {

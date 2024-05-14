@@ -9,7 +9,7 @@ import BusinessTable from '@/components/admin/table';
 import Pagination from '@/components/pagination';
 
 
-export default async function Page({searchParams,}: {searchParams?: {  query?: string;  page?: string;}}) {
+export default async function BusinessesPage({searchParams,}: {searchParams?: {  query?: string;  page?: string;}}) {
 
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
