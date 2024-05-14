@@ -25,7 +25,7 @@ import { createClient } from '@/utils/supabase/server';
         if (error) {
           throw new Error('Failed to fetch reports.');
         }
-        console.log("reports", reports);
+        console.log("reports from data", reports);
         
         return reports;
       } catch (error) {
