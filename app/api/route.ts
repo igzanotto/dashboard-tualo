@@ -6,22 +6,39 @@ const openai = new OpenAI({
 
 export async function POST(  req: Request
 ) {
-    const { start_prompt, QA_prompt, QA_transcript } = await req.json()  
+    const { start_prompt, QA_prompt, QA_transcript, QA_close } = await req.json()  
     
-    console.log("texto>>>>", start_prompt, QA_prompt, QA_transcript)
+    try {
+        // Create a chat completion with the provided prompts and transcript
+        const completion = await openai.chat.completions.create({
+            messages: [
+                {role: "system", content: "You are a helpful assistant that generates financial reports for SMBs."},
+                {role: "user", content: start_prompt},
+                {role: "assistant", content: "Sure, let's get started!"},
+                {role: "user", content: QA_prompt + QA_transcript + QA_close},
+            ],
+            model: "gpt-3.5-turbo"
+        });
 
-    const completion = await openai.chat.completions.create({
-        messages: [{"role": "system", "content": "You are a helpful assistant that generates financial reports for S&Bs"},
-            {"role": "user", "content": start_prompt},
-            {"role": "assistant", "content": "claro!"},
-            {"role": "user", "content": QA_prompt},
-            {"role": "assistant", "content": "envialo"},
-            {"role": "user", "content": QA_transcript},],
-        model: "gpt-3.5-turbo",
-        
-      });
-    
-      console.log(completion.choices[0]);
+        // Log the result to the console
+        console.log("Completion result:", completion.choices[0]);
 
-    return new Response("ok")
+        // Respond to the client with the completion text
+        return new Response(JSON.stringify(completion.choices[0].message), {
+            status: 200,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+    } catch (error) {
+        // Handle any errors that occur during the API call
+        console.error("Error generating completion:", error);
+        return new Response(JSON.stringify({ message: "Failed to generate completion" }), {
+            status: 500,
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
     }
+}
