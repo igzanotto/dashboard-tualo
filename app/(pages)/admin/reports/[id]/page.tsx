@@ -11,7 +11,7 @@ export default async function ReportPage({ params }: { params: { id: string } })
   console.log(matchedReport);
   
 
-  const businessName = matchedReport ? matchedReport.buisness_id.name : 'No encontrado';
+  const businessName = matchedReport ? matchedReport.business_id.name : 'No encontrado';
   console.log(businessName);
   
     return (
@@ -26,8 +26,8 @@ export default async function ReportPage({ params }: { params: { id: string } })
         <div className="mt-10 flex flex-col gap-8">
           <div>
             <p className="mb-4 text-4xl">Resumen</p>
-            {report.buisness_resume ? (
-              <p>{report.buisness_resume}</p>
+            {report.business_resume ? (
+              <p>{report.business_resume}</p>
             ) : (
               <p>Vacío</p>
             )}

@@ -1,9 +1,10 @@
-import { createBuisness } from "@/app/lib/actions";
+import { createBusiness } from "@/app/lib/actions";
 
-export default async function CreateBuisnessForm() {
+
+export default async function CreateBusinessForm() {
 
   return (
-    <form action={createBuisness}
+    <form action={createBusiness}
       className='flex flex-col gap-4 w-[100%]'
       >
       <input type="text" name="name" placeholder='Nombre del negocio' className='rounded-xl bg-slate-100 px-2'/>

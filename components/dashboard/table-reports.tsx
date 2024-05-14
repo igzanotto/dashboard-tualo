@@ -6,13 +6,13 @@ import ReportsButton from './reports-buttons';
 type ReportsTableProps = {
     query: string;
     currentPage: number;
-    // buisnessId: string[];
+    // businessId: string[];
   };
   
 
 export default async function ReportsTableDashboard({ query, currentPage}:ReportsTableProps) {
   const reports = await fetchFilteredReports(query, currentPage);
-  //   const filteredReports = reports.filter(report => buisnessId.includes(report.buisness_id));
+  //   const filteredReports = reports.filter(report => businessId.includes(report.business_id));
   
 
   return (

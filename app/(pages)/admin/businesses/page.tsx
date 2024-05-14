@@ -1,4 +1,4 @@
-import { fetchBuisnesses, fetchBusinessPages } from '@/app/lib/data';
+import { fetchBusinesses, fetchBusinessPages } from '@/app/lib/data';
 import Link from 'next/link';
 import {BuildingOfficeIcon} from "@heroicons/react/24/outline"
 import AddIcon from '@/components/icons/AddIcon';
@@ -27,7 +27,7 @@ export default async function Page({searchParams,}: {searchParams?: {  query?: s
       </div>
       <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
         <div className='flex justify-end'>
-          <Link href={"/admin/buisnesses/create"} className='flex items-center bg-blue-800 p-2 rounded-xl text-white gap-2 w-[220px] mt-7'>
+          <Link href={"/admin/businesses/create"} className='flex items-center bg-blue-800 p-2 rounded-xl text-white gap-2 w-[220px] mt-7'>
             Agregar nuevo negocio
             <AddIcon/>
           </Link>
