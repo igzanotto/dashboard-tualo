@@ -1,6 +1,7 @@
 'use client';
 
 import { createReport } from '@/app/lib/actions';
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
 interface FormData {
@@ -11,6 +12,8 @@ interface FormData {
 }
 
 export default function Page() {
+  const buisness_id = useParams().id;
+
   const [formData, setFormData] = useState<FormData>({
     // start_prompt:
     //   'voy a darle asesoría financiera a un cliente, vas a ayudarme a hacerla te voy a dar contexto sobre la empresa y sus metas financieras, así como su P&L de los últimos meses con base en eso, me vas a generar tres entregables: 1. comentarios de las gráficas 2. highlights y análisis del P&L 3. recomendaciones estratégicas tus respuestas deben de ser concisas y el lenguaje que uses debe de ser para gente no-financiera, que sea fácil de entender e interpretar estás de acuerdo?',
@@ -38,7 +41,7 @@ export default function Page() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const buisnessResume = document.getElementById('buisnessResume');
+    const buisness_resume = document.getElementById('buisness_resume');
 
     const response = await fetch('/api', {
       method: 'POST',
@@ -56,11 +59,11 @@ export default function Page() {
     const result = await response.json();
     console.log('Formulario enviado con éxito', result.content);
 
-    if (!buisnessResume) {
+    if (!buisness_resume) {
       return;
     }
 
-    buisnessResume.innerHTML = result.content;
+    buisness_resume.innerHTML = result.content;
   };
 
   return (
@@ -113,13 +116,13 @@ export default function Page() {
           className='text-center mt-5 text-2xl font-bold text-blue-600'
         >Crear nuevo reporte</h2>
         <form action={createReport}>
-          <label htmlFor="buisnessResume" className="mt-3 block">
+          <label htmlFor="buisness_resume" className="mt-3 block">
             Resumen de la empresa
           </label>
           <textarea
             rows={9}
-            id="buisnessResume"
-            name="buisnessResume"
+            id="buisness_resume"
+            name="buisness_resume"
             className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
            <select
@@ -140,6 +143,8 @@ export default function Page() {
             <option value="11">Noviembre</option>
             <option value="12">Diciembre</option>
           </select>
+          <input type="text" name="buisness_id" value={buisness_id} hidden/>
+
           <div className="my-2 flex justify-end">
             <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
               crear en DB
