@@ -1,12 +1,15 @@
 import { createClient } from '@/utils/supabase/server';
 
-    const REPORTS_PER_PAGE = 6;
+    const REPORTS_PER_PAGE = 20;
     export async function fetchFilteredReports(
       query: string,
       currentPage: number
     ) {
       const offset = (currentPage - 1) * REPORTS_PER_PAGE;
     
+      console.log("query", query);
+      console.log("currentPage", currentPage);
+
       try {
         const supabase = createClient();
         const { data: reports, error } = await supabase
@@ -25,7 +28,6 @@ import { createClient } from '@/utils/supabase/server';
         if (error) {
           throw new Error('Failed to fetch reports.');
         }
-        console.log("reports from data", reports);
         
         return reports;
       } catch (error) {

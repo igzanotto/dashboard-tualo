@@ -11,7 +11,7 @@ interface FormData {
   QA_close: string;
 }
 
-export default function Page() {
+export default function CreateReportPage() {
   const business_id = useParams().id;
 
   const [formData, setFormData] = useState<FormData>({
@@ -154,29 +154,4 @@ export default function Page() {
       </div>
     </main>
   );
-}
-
-{
-  /* <textarea
-            name="financial_goals_prompt"
-            className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            autoFocus
-            defaultValue="Le pedí al emprendedor que eligiera la(s) opción(es) que más
-            correspondieran a sus metas actuales desde el punto de vista de las
-            finanzas de su empresa. A continuación su respuesta:"
-          ></textarea>
-          <textarea
-            name="financial_goals_response"
-            className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            autoFocus
-            placeholder=">>> ingresar metas financieras <<<"
-          ></textarea>
-          <textarea
-            name="financial_goals_close"
-            className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            autoFocus
-            defaultValue="si te queda claro, respóndeme solamente con una tabla que resuma lo
-            anterior y pídeme siguientes instrucciones"
-          ></textarea>
-              */
 }
