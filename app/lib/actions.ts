@@ -42,21 +42,21 @@ const ReportFormSchema = z.object({
   analysis: z.string(),
 });
 
-const CreateReport = ReportFormSchema.omit({ id: true });
+const CreateReport = ReportFormSchema.omit({ id: true, goals: true, analysis: true});
 
 export async function createReport(formData:FormData) {
-  const { month, buisness_resume, buisness_id, goals, analysis } = CreateReport.parse({
+  console.log("adentro de createReport")
+  console.log(formData);
+  const { month, buisness_resume, buisness_id } = CreateReport.parse({
     month: formData.get('month'),
     buisness_resume: formData.get('buisness_resume'),
     buisness_id: formData.get('buisness_id'),
-    goals: formData.get('goals'),
-    analysis: formData.get('analysis'),
   });
-  console.log(month, buisness_resume, buisness_id, goals, analysis);
+  console.log(month, buisness_resume, buisness_id);
 
   const supabase = createClient();
 
-  const { data: reports, error } = await supabase.from('reports').insert({ month, buisness_resume, buisness_id, goals, analysis });
+  const { data: reports, error } = await supabase.from('reports').insert({ month, buisness_resume, buisness_id });
 
   if (error) {
     console.log("error");
@@ -65,9 +65,9 @@ export async function createReport(formData:FormData) {
 
   
   // clear this cache and trigger a new request to the server for the path to see the new report
-  revalidatePath('/admin/reports');
+  revalidatePath(`/admin/buisnesses/${buisness_id}`);
 
-  redirect('/admin/reports');
+  redirect(`/admin/buisnesses/${buisness_id}`);
 }
 
 
@@ -85,7 +85,7 @@ export async function createChart(formData:FormData) {
   const { type, description, insights, report_id } = CreateChart.parse({
     month: formData.get('month'),
     buisness_resume: formData.get('buisness_resume'),
-    buisness_id: formData.get('buisness_id'),
+    Risness_id: formData.get('buisness_id'),
     goals: formData.get('goals'),
     analysis: formData.get('analysis'),
   });
