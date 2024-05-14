@@ -1,7 +1,9 @@
-export default function ReportsPage (){
+export default async function ReportsPageDashboard (){
+    
+
     return(
         <div>
-            reports
+            <h1>Mis reportes</h1>
         </div>
     )
 }

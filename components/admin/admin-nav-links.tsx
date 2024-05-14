@@ -4,6 +4,8 @@ import {
   UserGroupIcon,
   HomeIcon,
   DocumentDuplicateIcon,
+  BuildingOfficeIcon,
+  DocumentIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -15,12 +17,12 @@ const links = [
   {
     name: 'Negocios',
     href: '/admin/buisnesses',
-    icon: UserGroupIcon,
+    icon: BuildingOfficeIcon,
   },
   {
     name: 'Reportes',
     href: '/admin/reports',
-    icon: UserGroupIcon,
+    icon: DocumentIcon,
   },
   
 ];
