@@ -1,10 +1,9 @@
-import ReportsPage from "./reports/page";
+import ReportsPageDashboard from "./reports/page";
 
 export default function DashboardPage(){
     return(
         <div>
-            {/* <ReportsPage/> */}
-            <p>holaa</p>
+            <ReportsPageDashboard/>
         </div>
     )
 }

@@ -19,8 +19,8 @@ export default async function BusinessTable({query, currentPage}:BussinesTablePr
         <div className='flex flex-col gap-2 w-full border-1 bg-gray-50 rounded-xl p-4'>
           {
             buisnesses.map(buisness => (
-              <div className='border-2 border-slate-200 p-2 rounded-xl'>
-                <Link href={`/admin/buisnesses/${buisness.id}`} key={buisness.id} className='flex items-center gap-2'>
+              <div key={buisness.id} className='border-2 border-slate-200 p-2 rounded-xl'>
+                <Link href={`/admin/buisnesses/${buisness.id}`} className='flex items-center gap-2'>
                   <BuildingOfficeIcon className='w-7 h-7'/>
                   <p>{buisness.name}</p>
                 </Link>
