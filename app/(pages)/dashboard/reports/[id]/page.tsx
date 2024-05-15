@@ -1,4 +1,5 @@
 import { fetchReportById } from '@/app/lib/data';
+import ChartPL from '@/components/charts/chartPL';
 
 export default async function ReportPage({
   params,
@@ -23,7 +24,7 @@ export default async function ReportPage({
         const secondPart = parts.slice(1).join(':').trim(); // Por si hay más de un ":" en la línea
 
         // Palabras específicas que deben estar en negrita y color negro
-        const boldWords = ["Perfil y Rol", "Industria", "Modelo de Negocio", "Clientes Objetivo", "Gestión Financiera", "Deuda", "Estrés Financiero", "Diferenciación de Ventas", "Comunicación y Marketing", "Necesidades y Mejoras"];
+        const boldWords = ["Perfil y Rol", "Industria", "Modelo de Negocio", "Clientes Objetivo", "Gestión Financiera", "Deuda", "Estrés Financiero", "Diferenciación de Ventas", "Comunicación y Marketing", "Necesidades y Mejoras", "1. Incrementar las Ventas", "2. Mejorar el Flujo de Efectivo", "3. Crecimiento del Negocio", "Noviembre Destaca", "Tendencia Ascendente", "Importancia de Mantener el Ritmo", "Ingresos Crecientes", "Costos Manejables pero con Espacio para Mejora", "Mejora en la Utilidad Neta", "Disminución de Costos en Diciembre", "Incremento en Gastos", "Promedios como Meta"];
 
         // Función para aplicar estilos a las palabras específicas
         const applyStyles = (text: string) => {
@@ -68,17 +69,30 @@ export default async function ReportPage({
       </div>
 
       <div className="mt-10 flex flex-col gap-8">
-        <div className='flex max-2xl:flex-wrap max-2xl:justify-center'>
+        <div className='flex max-2xl:flex-wrap max-2xl:justify-between gap-8'>
+
           <div className='flex flex-col w-[100%]'>
             <p className="mb-4 text-4xl">Resumen</p>
-            <div className='bg-slate-50 rounded-xl p-3 w-max'>
+            <div className='bg-slate-50 rounded-xl p-3 w-full'>
                 {renderTextFromDatabase(report.business_resume)}
             </div>
+
+            <div className='mt-4'>
+              <p className="mb-4 text-4xl">Recomendaciones</p>
+              <div className='bg-slate-50 rounded-xl p-3'>
+              {report.recomendations.map((data:any) => (
+                <div>
+                  {renderTextFromDatabase(`${data.content}`)}
+                </div>
+              ))}
+              </div>
+            </div>
           </div>
-          <div className='flex flex-col w-full gap-8'>
+
+          <div className='flex flex-col gap-8 w-full'>
             <div>
               <p className="mb-4 text-4xl">Metas financieras</p>
-              <div className='bg-slate-50 rounded-xl w-full p-3'>
+              <div className='bg-slate-50 rounded-xl p-3'>
               {renderTextFromDatabase(report.goals)}
               </div>
             </div>
@@ -87,7 +101,7 @@ export default async function ReportPage({
               <div className='flex flex-col gap-10'>
                   {report.charts.map((data:any) => (
                     <div key={data.id} className='bg-slate-50 rounded-xl p-3 w-full '>
-                      <p className='text-2xl'>Grafica: <span className='capitalize font-medium text-black'>{data.type}</span></p>
+                      <p className='text-2xl mb-4'>Grafica: <span className='capitalize font-medium text-black'>{data.type}</span></p>
                       <div className='flex items-start gap-2'>
                         <div className='relative translate-y-0.5' >
                           <svg width={20} height={20} viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect width="48" height="48" fill="white" fill-opacity="0.01"></rect> <path d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z" fill="#2F88FF" stroke="#000000" stroke-width="4" stroke-linejoin="round"></path> <path fill-rule="evenodd" clip-rule="evenodd" d="M24 37C25.3807 37 26.5 35.8807 26.5 34.5C26.5 33.1193 25.3807 32 24 32C22.6193 32 21.5 33.1193 21.5 34.5C21.5 35.8807 22.6193 37 24 37Z" fill="white"></path> <path d="M24 12V28" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
@@ -102,7 +116,11 @@ export default async function ReportPage({
                           suman y las rojas restan, dejando las grises como subtotales.
                         </p>
                       </div>
-                      //**GRAFICOOOOOOOOOOO */
+                      <ChartPL/>
+                      <div className='mt-4'>
+                      
+                      {renderTextFromDatabase(`${data.insights}`)}
+                      </div>
                     </div>
                   ))}
               </div>
