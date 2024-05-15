@@ -1,51 +1,31 @@
 import SideNav from '@/components/dashboard/sidenav';
-import ReportsTableDashboard from '@/components/dashboard/table-reports';
-import { InvoicesTableSkeleton } from '@/components/skeletons';
+import ReportsIndexNavbar from '@/components/dashboard/reports-index-navbar';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import { Suspense } from 'react';
-
-interface ReportsPageProps {
-  params: {
-    id: string;
-  };
-  searchParams?: {
-    query?: string;
-    page?: string;
-  };
-}
 
 export default async function Layout({
   children,
-  searchParams,
 }: {
   children: React.ReactNode;
-  searchParams?: ReportsPageProps['searchParams'];
 }) {
+
   const supabase = createClient();
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  const {data: { user }} = await supabase.auth.getUser();
+  
   if (!user) {
     return redirect('/login');
   }
 
+  const { data }= await supabase.from('profiles').select('business_id').single();
+  const business_id = data?.business_id;
+  
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
       <div className="w-full flex-none md:w-64">
         <SideNav />
       </div>
       <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
-        <Suspense
-          key={query + currentPage}
-          fallback={<InvoicesTableSkeleton />}
-        >
-          <ReportsTableDashboard query={query} currentPage={currentPage} />
-        </Suspense>
+        <ReportsIndexNavbar business_id={business_id} />
         {children}
       </div>
     </div>

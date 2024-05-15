@@ -93,7 +93,6 @@ import { createClient } from '@/utils/supabase/server';
       if (reportError) {
         throw new Error('Failed to fetch reports with associated businesses.');
       }
-      console.log("Reportesss: ", reports);
       
       return reports;
     } catch (error) {
