@@ -48,7 +48,8 @@ import { createClient } from '@/utils/supabase/server';
       .select(`
         *,
         business:business_id (name),
-        charts(type, insights)
+        charts(type, insights),
+        recomendations(content, second, third, fourth)
       `)
       .eq('id', reportId)
       .single();

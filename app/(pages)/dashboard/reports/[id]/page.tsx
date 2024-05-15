@@ -9,6 +9,22 @@ export default async function ReportPage({
   const report = await fetchReportById(id);
   const businessName = report.business.name;
 
+  
+  
+
+  const renderTextFromDatabase = (text: string | undefined) => {
+    if (text) {
+      // Convertir el texto a un array de párrafos separados por saltos de línea
+      const paragraphs = text.split('\n').map((paragraph, index) => (
+        <p key={index}>{paragraph}<br/></p>
+      ));
+      return <>{paragraphs}</>;
+    } else {
+      return <p>Vacío</p>;
+    }
+  };
+
+
   return (
     <div className="flex flex-col gap-3">
       <h1 className={`text-2xl`}>
@@ -21,11 +37,9 @@ export default async function ReportPage({
       <div className="mt-10 flex flex-col gap-8">
         <div>
           <p className="mb-4 text-4xl">Resumen</p>
-          {report.business_resume ? (
-            <p>{report.business_resume}</p>
-          ) : (
-            <p>Vacío</p>
-          )}
+          <div>
+              {renderTextFromDatabase(report.business_resume)}
+          </div>
         </div>
         <div>
           <p className="mb-4 text-4xl">Objetivos</p>
