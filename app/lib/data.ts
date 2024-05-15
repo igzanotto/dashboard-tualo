@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 
-    const REPORTS_PER_PAGE = 20;
+    const REPORTS_PER_PAGE = 5;
     export async function fetchFilteredReports(
       query: string,
       currentPage: number

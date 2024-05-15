@@ -52,24 +52,62 @@ export async function createReport(formData:FormData) {
     business_resume: formData.get('business_resume'),
     business_id: formData.get('business_id'),
   });
-  console.log(month, business_resume, business_id);
+  console.log("data enviada ",month, business_resume, business_id);
 
   const supabase = createClient();
 
-  const { data: reports, error } = await supabase.from('reports').insert({ month, business_resume, business_id });
+  const { data, error } = await supabase
+    .from('reports')
+    .insert([
+      { month: month, business_resume: business_resume, business_id: business_id }
+    ])
+    .select('id');
 
   if (error) {
-    console.log("error");
-    throw error;
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("ID de la fila insertada:", data);
   }
 
-  
-  // clear this cache and trigger a new request to the server for the path to see the new report
-  revalidatePath(`/admin/businesses/${business_id}`);
+  if (!data) {
+    return;
+  }
 
-  redirect(`/admin/businesses/${business_id}`);
+  const report_id = data[0].id;
+
+  redirect(`/admin/reports/${report_id}/build`);
 }
 
+const BuildReport = ReportFormSchema.omit({ month: true, business_id: true, analysis: true, business_resume: true });
+
+export async function buildReport(formData:FormData) {
+  console.log("adentro de createReport")
+  console.log(formData);
+  const { id , goals } = BuildReport.parse({
+    id: formData.get('report_id'),
+    goals: formData.get('goals'),
+  });
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('reports')
+    .update({ goals: goals })
+    .eq('id', id)
+
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("ID de la fila insertada:", data);
+  }
+
+  if (!data) {
+    return;
+  }
+
+  redirect(`/admin/reports/${id}/charts`);
+}
 
 const ChartFormSchema = z.object({
   id: z.string(),
