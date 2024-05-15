@@ -1,12 +1,15 @@
 import { createClient } from '@/utils/supabase/server';
 
-    const REPORTS_PER_PAGE = 6;
+    const REPORTS_PER_PAGE = 5;
     export async function fetchFilteredReports(
       query: string,
       currentPage: number
     ) {
       const offset = (currentPage - 1) * REPORTS_PER_PAGE;
     
+      console.log("query", query);
+      console.log("currentPage", currentPage);
+
       try {
         const supabase = createClient();
         const { data: reports, error } = await supabase
@@ -14,7 +17,7 @@ import { createClient } from '@/utils/supabase/server';
           .select(
             `
             id,
-            buisness_id,
+            business_id,
             month
           `,
             { count: 'exact' }
@@ -25,9 +28,9 @@ import { createClient } from '@/utils/supabase/server';
         if (error) {
           throw new Error('Failed to fetch reports.');
         }
-        console.log("reports", reports);
-        
+  
         return reports;
+        
       } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch reports.');
@@ -47,11 +50,16 @@ import { createClient } from '@/utils/supabase/server';
     }
   }
 
-  export async function fetchReportByBuisnessId(reportId:string) {
+  export async function fetchReportsByBusiness(business_id:string) {
     try {
       const supabase = createClient();
-      const { data: reportByBuisnessId} = await supabase.from("reports").select().eq('buisness_id', reportId).single();  
-      return reportByBuisnessId;
+      const { data: reports, error } = await supabase
+      .from("reports")
+      .select()
+      .eq('business_id', business_id);  
+      
+      return reports
+
     } catch (error) {
       console.error('Failed to fetch report by id:', error);
     }
@@ -63,7 +71,7 @@ import { createClient } from '@/utils/supabase/server';
   
       // Obtener los IDs de los negocios
       const { data: businessIds, error: businessError } = await supabase
-        .from('buisnesses')
+        .from('businesses')
         .select('id');
   
       if (businessError) {
@@ -78,9 +86,9 @@ import { createClient } from '@/utils/supabase/server';
         .from('reports')
         .select(`
           *,
-          buisness_id(*)
+          business_id(*)
         `)
-        .in('buisness_id', ids);
+        .in('business_id', ids);
   
       if (reportError) {
         throw new Error('Failed to fetch reports with associated businesses.');
@@ -95,26 +103,26 @@ import { createClient } from '@/utils/supabase/server';
   }
 
 
-  export async function fetchBuisnesses() {
+  export async function fetchBusinesses() {
       try {
         const supabase = createClient();
-        const { data: buisnesses, error } = await supabase.from("buisnesses").select();
+        const { data: businesses, error } = await supabase.from("businesses").select();
     
         if (error) {
-          throw new Error('Failed to fetch buisnesses.');
+          throw new Error('Failed to fetch businesses.');
         }
     
-        return buisnesses;
+        return businesses;
       } catch (error) {
-        console.error('Failed to fetch buisnesses:', error);
-        throw new Error('Failed to fetch buisnesses.');
+        console.error('Failed to fetch businesses:', error);
+        throw new Error('Failed to fetch businesses.');
       }
     }
 
     export async function fetchBusinessById(companyId:string) {
       try {
         const supabase = createClient();
-        const { data: company, error } = await supabase.from("buisnesses").select().eq('id', companyId).single();
+        const { data: company, error } = await supabase.from("businesses").select().eq('id', companyId).single();
         
         if (error) {
           throw new Error('Failed to fetch company.');
@@ -134,11 +142,11 @@ import { createClient } from '@/utils/supabase/server';
       currentPage: number
     ) {
       const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-    
+
       try {
         const supabase = createClient();
         const { data: businesses, error } = await supabase
-          .from('buisnesses')
+          .from('businesses')
           .select(
             `
             id,
@@ -152,8 +160,6 @@ import { createClient } from '@/utils/supabase/server';
         if (error) {
           throw new Error('Failed to fetch businesses.');
         }
-    
-        console.log("businesses", businesses);
         
         return businesses;
       } catch (error) {
@@ -165,8 +171,8 @@ import { createClient } from '@/utils/supabase/server';
     export async function fetchBusinessPages(query: string) {
       try {
         const supabase = createClient();
-        const { data: buisnesses, error } = await supabase
-          .from('buisnesses')
+        const { data: businesses, error } = await supabase
+          .from('businesses')
           .select(
             `
             id,
@@ -176,7 +182,7 @@ import { createClient } from '@/utils/supabase/server';
           )
           .ilike('name', `%${query}%`)
           
-        const count = buisnesses ? buisnesses.length : 0;
+        const count = businesses ? businesses.length : 0;
         const totalPages = Math.ceil(count / ITEMS_PER_PAGE);
         console.log("total pages", totalPages);
         return totalPages;
