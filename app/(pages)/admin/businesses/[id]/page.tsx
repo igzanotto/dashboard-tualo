@@ -1,4 +1,4 @@
-import { fetchBusinessById, fetchFilteredReports, fetchReportByBusinessId } from "@/app/lib/data";
+import { fetchBusinessById, fetchFilteredReports, fetchReportsByBusiness } from "@/app/lib/data";
 import ReportsTable from "@/components/admin/reports/table";
 import AddIcon from "@/components/icons/AddIcon";
 import { InvoicesTableSkeleton } from "@/components/skeletons";
@@ -17,14 +17,10 @@ interface BusinessPageProps {
   }
 
 export default async function BusinessPage({ params, searchParams }: BusinessPageProps){
-    const id = params.id;
+    const business_id = params.id;
     const query = searchParams?.query || '';
     const currentPage = Number(searchParams?.page) || 1;
-    const business = await fetchBusinessById(id)
-    const reports = await fetchFilteredReports(query, currentPage)
-    
-    const mapsIds = reports.map((rep) => rep.business_id);
-    const matchingIds = mapsIds.filter((mapId) => mapId == id);
+    const business = await fetchBusinessById(business_id)
         
     return(
         <div className="flex flex-col gap-3">
@@ -39,7 +35,7 @@ export default async function BusinessPage({ params, searchParams }: BusinessPag
                     </Link>
                 </div>
                 <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
-                    <ReportsTable query={query} currentPage={currentPage} businessId={matchingIds}/>
+                    <ReportsTable query={query} currentPage={currentPage} business_id={business_id}/>
                 </Suspense>
           </div>
         </div>
