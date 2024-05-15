@@ -1,16 +1,10 @@
-import { fetchReportById, fetchReportsByBusinesses } from "@/app/lib/data";
+import { fetchReportById } from "@/app/lib/data";
 
 export default async function ReportPage({ params }: { params: { id: string } }){
     const id = params.id;
     const report = await fetchReportById(id)
-    const reportsWithBusinesses = await fetchReportsByBusinesses();
-
-    const matchedReport = reportsWithBusinesses.find(idBusiness => idBusiness.id === report.id);
-    console.log(matchedReport);
+    const businessName = report.business.name;
     
-
-    const businessName = matchedReport ? matchedReport.business_id.name : 'No encontrado';
-    console.log(businessName);
     return(
         <div className="flex flex-col gap-3">
         <h1 className={`text-2xl`}>
