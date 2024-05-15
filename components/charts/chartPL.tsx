@@ -1,5 +1,4 @@
 "use client"
-
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
@@ -13,25 +12,48 @@ const ChartPL: React.FC = () => {
       // Get the canvas context
       ctx = chartRef.current.getContext('2d');
 
-      // Sample data[#4C30C5] to-[#39AEFF]
+      // Sample data
+      // const data = {
+      //   labels: ['Venta', 'Venta Total', 'Costo Principal', 'Otros Costos', 'Utilidad Bruta', 'Gastos Principales', 'Otros Gastos', "Utilidad Operativa", 'Gastos Financieros Totales', 'Utilidad Neta'],
+      //   datasets: [{
+      //     label: '# of Votes',
+      //     data: [285.6, 285, 74.6, 28.6, 182.4, 65.7, 22.4, 91.3, 9.4, 81.9],
+          
+          
+      //     backgroundColor: [
+      //       'rgba(76, 48, 197, 0.8)', // #4C30C5
+      //       'rgba(57, 174, 255, 0.8)' // #39AEFF
+      //     ],
+      //     borderColor: [
+      //       'rgba(76, 48, 197, 1)', // #4C30C5
+      //       'rgba(57, 174, 255, 1)' // #39AEFF
+      //     ],
+      //     borderWidth: 1
+      //   }]
+      // };
+      const labels = ['Venta', 'Venta Total', 'Costo Principal', 'Otros Costos', 'Utilidad Bruta', 'Gastos Principales', 'Otros Gastos', "Utilidad Operativa", 'Gastos Financieros Totales', 'Utilidad Neta'];
       const data = {
-        labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3, 10, 5],
-          backgroundColor: [
-            'rgba(76, 48, 197, 0.8)', // #4C30C5
-            'rgba(57, 174, 255, 0.8)' // #39AEFF
-          ],
-          borderColor: [
-            'rgba(76, 48, 197, 1)', // #4C30C5
-            'rgba(57, 174, 255, 1)' // #39AEFF
-          ],
-          borderWidth: 1
-        }]
+        labels: labels,
+        datasets: [
+          {
+            label: 'Venta',
+            data: [285.6],
+            backgroundColor:  '#008f39',
+          },
+          {
+            label: 'Venta Total',
+            data: [285, 260],
+            backgroundColor: '#ff0000',
+          },
+          {
+            label: 'Costo Principal',
+            data: [-74.6],
+            backgroundColor:  '#ff0000',
+          },
+        ]
       };
 
-      // Create a new Chart instance
+      
       const chart = new Chart(ctx!, {
         type: 'bar',
         data: data,
@@ -41,8 +63,23 @@ const ChartPL: React.FC = () => {
             legend: {
               position: 'top',
             },
-            
-          }
+            title: {
+              display: true,
+              text: 'Chart.js Floating Bar Chart'
+            }
+          },
+          // scales: {
+          //   y: {
+          //     min: 0,
+          //     max: 280,
+          //     ticks: {
+          //       stepSize: 40,
+          //       callback: function(value) {
+          //         return '$' + value;
+          //       }
+          //     }
+          //   }
+          // },
         }
       });
 
@@ -55,9 +92,11 @@ const ChartPL: React.FC = () => {
     }
   }, []);
 
-  return <div className='bg-slate-200 p-3 rounded-xl mt-4'>
-    <canvas ref={chartRef} style={{ width: '300px', height: '150px' }}></canvas>
-  </div>;
+  return (
+    <div className='bg-slate-200 p-3 rounded-xl mt-4'>
+      <canvas ref={chartRef} style={{ width: '300px', height: '150px' }}></canvas>
+    </div>
+  );
 };
 
 export default ChartPL;
