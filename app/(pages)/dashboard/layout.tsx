@@ -1,5 +1,5 @@
 import SideNav from '@/components/dashboard/sidenav';
-import ReportsIndexNavbar from '@/components/dashboard/reports-index-navbar';
+import ReportsIndexNavbar from '@/components/reports-index-navbar';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 
