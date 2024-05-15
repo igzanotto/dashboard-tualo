@@ -47,10 +47,12 @@ import { createClient } from '@/utils/supabase/server';
       .from('reports')
       .select(`
         *,
-        business:business_id (name)
-      `) // Selecciona todos los campos de 'reports' y el campo 'name' de la tabla 'businesses' relacionada
+        business:business_id (name),
+        charts(type, insights)
+      `)
       .eq('id', reportId)
       .single();
+      console.log("report>>>>>>", report);
       return report;
     } catch (error) {
       console.error('Failed to fetch report by id:', error);
