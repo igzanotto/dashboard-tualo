@@ -28,8 +28,9 @@ import { createClient } from '@/utils/supabase/server';
         if (error) {
           throw new Error('Failed to fetch reports.');
         }
-        
+  
         return reports;
+        
       } catch (error) {
         console.error('Database Error:', error);
         throw new Error('Failed to fetch reports.');
@@ -49,11 +50,16 @@ import { createClient } from '@/utils/supabase/server';
     }
   }
 
-  export async function fetchReportByBusinessId(reportId:string) {
+  export async function fetchReportsByBusiness(business_id:string) {
     try {
       const supabase = createClient();
-      const { data: reportByBusinessId} = await supabase.from("reports").select().eq('business_id', reportId).single();  
-      return reportByBusinessId;
+      const { data: reports, error } = await supabase
+      .from("reports")
+      .select()
+      .eq('business_id', business_id);  
+      
+      return reports
+
     } catch (error) {
       console.error('Failed to fetch report by id:', error);
     }
