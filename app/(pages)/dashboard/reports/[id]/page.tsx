@@ -1,4 +1,5 @@
 import { fetchReportById } from '@/app/lib/data';
+import MyChart from '@/components/charts/spChart';
 
 export default async function ReportPage({
   params,
@@ -17,6 +18,13 @@ export default async function ReportPage({
       <div>
         <p className="mb-4 text-4xl">{businessName}</p>
       </div>
+
+
+      {/* <div>
+        <p className="mb-4 text-4xl">grafico S&P</p>
+        <MyChart />
+      </div> */}
+
 
       <div className="mt-10 flex flex-col gap-8">
         <div>
