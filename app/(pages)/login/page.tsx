@@ -2,7 +2,7 @@ import EmailLoginForm from "@/components/login/EmailLoginForm";
 import GoogleLoginButton from "@/components/login/GoogleLoginButton";
 
 
-export default function Page({
+export default function LoginPage({
   searchParams,
 }: {
   searchParams: { message: string };
