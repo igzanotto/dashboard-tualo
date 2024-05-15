@@ -49,7 +49,7 @@ import { createClient } from '@/utils/supabase/server';
         *,
         business:business_id (name),
         charts(type, insights),
-        recomendations(content, second, third, fourth)
+        recomendations(content)
       `)
       .eq('id', reportId)
       .single();
