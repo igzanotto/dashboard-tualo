@@ -65,7 +65,7 @@ import { createClient } from '@/utils/supabase/server';
     }
   }
 
-  export async function fetchReportsWithBusinesses() {
+  export async function fetchReportsByBusinesses() {
     try {
       const supabase = createClient();
   

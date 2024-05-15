@@ -1,9 +1,9 @@
-import { fetchReportById, fetchReportsWithBusinesses } from "@/app/lib/data";
+import { fetchReportById, fetchReportsByBusinesses } from "@/app/lib/data";
 
 export default async function ReportPage({ params }: { params: { id: string } }){
     const id = params.id;
     const report = await fetchReportById(id)
-    const reportsWithBusinesses = await fetchReportsWithBusinesses();
+    const reportsWithBusinesses = await fetchReportsByBusinesses();
 
     const matchedReport = reportsWithBusinesses.find(idBusiness => idBusiness.id === report.id);
     console.log(matchedReport);
