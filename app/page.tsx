@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 export default function Page() {
   useEffect(() => {
-    redirect('/login')
+    redirect('/admin')
   }, [])
   
   return (

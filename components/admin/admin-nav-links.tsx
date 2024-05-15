@@ -19,11 +19,6 @@ const links = [
     href: '/admin/businesses',
     icon: BuildingOfficeIcon,
   },
-  {
-    name: 'Reportes',
-    href: '/admin/reports',
-    icon: DocumentIcon,
-  },
   
 ];
 
