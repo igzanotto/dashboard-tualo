@@ -49,7 +49,12 @@ import { createClient } from '@/utils/supabase/server';
         *,
         business:business_id (name),
         charts(type, insights)
+        // charts(
+        //   type,
+        //   insights,
+        //   graphs(*)
       `)
+      
       .eq('id', reportId)
       .single();
       console.log("report>>>>>>", report);
