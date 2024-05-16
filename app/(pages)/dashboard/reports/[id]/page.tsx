@@ -1,5 +1,4 @@
 import { fetchReportById } from '@/app/lib/data';
-import ChartPL from '@/components/charts/chartPL';
 
 export default async function ReportPage({
   params,
@@ -116,7 +115,7 @@ export default async function ReportPage({
                           suman y las rojas restan, dejando las grises como subtotales.
                         </p>
                       </div>
-                      <ChartPL/>
+                      
                       <div className='mt-4'>
                       
                       {renderTextFromDatabase(`${data.insights}`)}
