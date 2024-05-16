@@ -1,4 +1,4 @@
-import {fetchReportsByBusiness} from '@/app/lib/data';
+import {fetchReportsByBusiness} from '@/lib/data';
 import Link from 'next/link';
 
 type ReportsTableProps = {

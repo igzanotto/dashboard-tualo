@@ -1,4 +1,4 @@
-import { createChart } from "@/app/lib/actions";
+import { createChart } from "@/lib/actions";
 
 export default function FormChart(){
     return(

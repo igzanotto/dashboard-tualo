@@ -1,4 +1,4 @@
-import { fetchReportsByBusiness } from '@/app/lib/data';
+import { fetchReportsByBusiness } from '@/lib/data';
 import ReportsButton from './dashboard/reports-buttons';
 
 type ReportsNavbarProps = {

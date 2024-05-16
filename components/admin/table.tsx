@@ -1,4 +1,4 @@
-import { fetchFilteredBusiness} from '@/app/lib/data';
+import { fetchFilteredBusiness} from '@/lib/data';
 import { BuildingOfficeIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 

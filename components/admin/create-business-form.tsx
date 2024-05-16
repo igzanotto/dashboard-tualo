@@ -1,4 +1,4 @@
-import { createBusiness } from "@/app/lib/actions";
+import { createBusiness } from "@/lib/actions";
 
 
 export default async function CreateBusinessForm() {

@@ -1,4 +1,4 @@
-import { fetchReportById } from '@/app/lib/data';
+import { fetchReportById } from '@/lib/data';
 
 export default async function ReportPage({
   params,
