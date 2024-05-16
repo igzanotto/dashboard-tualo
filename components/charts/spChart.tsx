@@ -23,20 +23,31 @@ const MyChart = () => {
 
   const [chartSeries, setChartSeries] = useState([
     {
-      data: [
-        { x: 'Team A', y: [0, 50] },
-        { x: 'Team B', y: [4, 6] },
-        { x: 'Team C', y: [5, 8] },
-        { x: 'Team D', y: [3, 11] }
-      ]
-    },
-    {
-      data: [
-        { x: 'Team A', y: [50, 20] },
-        { x: 'Team B', y: [1, 3] },
-        { x: 'Team C', y: [7, 8] },
-        { x: 'Team D', y: [5, 9] }
-      ]
+      data: [{
+        x: 'TEAM A',
+        y: [0, 96],
+        strokeColor: '#775DD0'
+      },
+      {
+        x: 'TEAM B',
+        y: [96, 78]
+      },
+      {
+        x: 'TEAM C',
+        y: [78, 56]
+      },
+      {
+        x: 'TEAM D',
+        y: [0, 96]
+      },
+      {
+        x: 'TEAM E',
+        y: [96, 78]
+      },
+      {
+        x: 'TEAM F',
+        y: [78, 56]
+      }]
     }
   ]);
 
