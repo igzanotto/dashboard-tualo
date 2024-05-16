@@ -34,7 +34,7 @@ export default async function ReportPage({
 
         return (
           <div key={lineIndex}>
-            {applyStyles(firstPart)}{secondPart && `: ${secondPart}`} <br /> {/* Añadir ":" y segunda parte solo si existe */}
+            {applyStyles(firstPart)}{secondPart && `: ${secondPart}`} <br />
           </div>
         );
       });
