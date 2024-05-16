@@ -24,7 +24,7 @@ export default async function ReportPage({
         const secondPart = parts.slice(1).join(':').trim(); // Por si hay más de un ":" en la línea
 
         // Palabras específicas que deben estar en negrita y color negro
-        const boldWords = ["Perfil y Rol", "Industria", "Modelo de Negocio", "Clientes Objetivo", "Gestión Financiera", "Deuda", "Estrés Financiero", "Diferenciación de Ventas", "Comunicación y Marketing", "Necesidades y Mejoras", "1. Incrementar las Ventas", "2. Mejorar el Flujo de Efectivo", "3. Crecimiento del Negocio", "Noviembre Destaca", "Tendencia Ascendente", "Importancia de Mantener el Ritmo", "Ingresos Crecientes", "Costos Manejables pero con Espacio para Mejora", "Mejora en la Utilidad Neta", "Disminución de Costos en Diciembre", "Incremento en Gastos", "Promedios como Meta"];
+        const boldWords = ["Perfil y Rol", "Industria", "Modelo de Negocio", "Clientes Objetivo", "Gestión Financiera", "Deuda", "Estrés Financiero", "Diferenciación de Ventas", "Comunicación y Marketing", "Necesidades y Mejoras", "1. Incrementar las Ventas", "2. Mejorar el Flujo de Efectivo", "3. Crecimiento del Negocio", "Noviembre Destaca", "Tendencia Ascendente", "Importancia de Mantener el Ritmo", "Ingresos Crecientes", "Costos Manejables pero con Espacio para Mejora", "Mejora en la Utilidad Neta", "Disminución de Costos en Diciembre", "Incremento en Gastos", "Promedios como Meta", "Reduce la Merma, Aumenta las Ganancias 📉", "Breve Descripción", "Justificación", "Cómo Lograrlo", "1.", "2.", "3.", "4.", "Cómo lograrlo"];
 
         // Función para aplicar estilos a las palabras específicas
         const applyStyles = (text: string) => {
@@ -116,7 +116,7 @@ export default async function ReportPage({
                           suman y las rojas restan, dejando las grises como subtotales.
                         </p>
                       </div>
-                      <div className='bg-slate-200 p-4 rounded-xl'>
+                      <div className='bg-slate-200 p-4 rounded-xl my-4'>
                         <MyChart/>
                       </div>
                       <div className='mt-4'>
