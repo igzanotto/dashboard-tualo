@@ -31,7 +31,7 @@ export default function CreateReportPage() {
     QA_close: 'dame una descripcion de lo que crees que podria ser la empresa',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,

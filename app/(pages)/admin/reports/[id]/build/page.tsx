@@ -19,7 +19,7 @@ export default function BuildReportPage() {
     goals_close: 'dame un resumen de esto',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
