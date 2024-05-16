@@ -51,6 +51,7 @@ import { createClient } from '@/utils/supabase/server';
         charts(type, insights),
         recomendations(content)
       `)
+      
       .eq('id', reportId)
       .single();
       console.log("report>>>>>>", report);
