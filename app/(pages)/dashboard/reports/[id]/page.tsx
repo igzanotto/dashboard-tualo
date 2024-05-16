@@ -12,7 +12,7 @@ export default async function ReportPage({
   const renderTextFromDatabase = (text: string | undefined) => {
   if (text) {
     // Dividir el texto en párrafos
-    const paragraphs = text.split('\n');
+    const paragraphs = text.split('\n\n');
     const formattedParagraphs = paragraphs.map((paragraph, index) => {
       // Dividir el párrafo en líneas
       const lines = paragraph.split('\n');
@@ -34,7 +34,7 @@ export default async function ReportPage({
 
         return (
           <div key={lineIndex}>
-            {applyStyles(firstPart)}{secondPart && `: ${secondPart}`} {/* Añadir ":" y segunda parte solo si existe */}
+            {applyStyles(firstPart)}{secondPart && `: ${secondPart}`} <br /> {/* Añadir ":" y segunda parte solo si existe */}
           </div>
         );
       });
