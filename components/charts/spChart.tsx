@@ -23,7 +23,7 @@ const MyChart = () => {
     yaxis: {
       min: 0,
       max: 280,
-      tickAmount: 8, // Ajusta la cantidad de marcas en el eje Y según lo necesites
+      tickAmount: 7, // Ajusta la cantidad de marcas en el eje Y según lo necesites
       labels: {
         formatter: function(val:any) {
           return "$" + val.toFixed(0); // Añade el símbolo de dólar y redondea el valor
