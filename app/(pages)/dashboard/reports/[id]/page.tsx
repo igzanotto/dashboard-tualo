@@ -81,7 +81,7 @@ export default async function ReportPage({
               <p className="mb-4 text-4xl">Recomendaciones</p>
               <div className='bg-slate-50 rounded-xl p-3'>
               {report.recomendations.map((data:any) => (
-                <div>
+                <div key={data.id}>
                   {renderTextFromDatabase(`${data.content}`)}
                 </div>
               ))}
