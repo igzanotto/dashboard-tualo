@@ -1,15 +1,15 @@
 "use client";
 
-
-import React, { useState } from 'react';
 import Chart from 'react-apexcharts';
 
 const MyChart = () => {
-  // Definir estado para opciones del gráfico y datos
-  const [chartOptions, setChartOptions] = useState({
+  const chartOptions = {
     chart: {
       type: 'rangeBar',
-      height: 350
+      height: 350,
+      fill: {
+        colors: ['#F44336', '#E91E63', '#9C27B0']
+      }
     },
     plotOptions: {
       bar: {
@@ -17,71 +17,105 @@ const MyChart = () => {
       }
     },
     dataLabels: {
-      enabled: true
+      enabled: true,
+      enabledOnSeries: undefined,
+      formatter: function (val:any, opts:any) {
+          return ("$" + val)
+      },
+      textAnchor: 'middle',
+      distributed: false,
+      offsetX: 0,
+      offsetY: 0,
+      style: {
+          fontSize: '14px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 'bold',
+          colors: undefined
+      },
+      background: {
+        enabled: true,
+        foreColor: '#fff',
+        padding: 4,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: '#fff',
+        opacity: 0.9,
+        dropShadow: {
+          enabled: false,
+          top: 1,
+          left: 1,
+          blur: 1,
+          color: '#000',
+          opacity: 0.45
+        }
+      },
+      dropShadow: {
+          enabled: false,
+          top: 1,
+          left: 1,
+          blur: 1,
+          color: '#000',
+          opacity: 0.45
+      }
     },
-    // colors: ['#FF5733', '#33FF57', '#7364BE', '#090715'] // Colores personalizados
     yaxis: {
       min: 0,
       max: 280,
-      tickAmount: 8, // Ajusta la cantidad de marcas en el eje Y según lo necesites
+      tickAmount: 7, // Ajusta la cantidad de marcas en el eje Y según lo necesites
       labels: {
         formatter: function(val:any) {
           return "$" + val.toFixed(0); // Añade el símbolo de dólar y redondea el valor
         }
-      }
+      },
     }
-  });
+  };
 
-//   const labels = ['Venta', 'Venta Total', 'Costo Principal', 'Otros Costos', 'Utilidad Bruta', 'Gastos Principales', 
-//   'Otros Gastos', "Utilidad Operativa", 'Gastos Financieros Totales', 'Utilidad Neta'];
-// data: [285.6, 285, 74.6, 28.6, 182.4, 65.7, 22.4, 91.3, 9.4, 81.9]
-
-  const [chartSeries, setChartSeries] = useState([
+  const chartSeries = [{
+    data: [
     {
-      data: [{
-        x: 'Venta',
-        y: [0, 285.6],
-        strokeColor: '#775DD0'
-      },
-      {
-        x: 'Venta Total',
-        y: [0, 285]
-      },
-      {
-        x: 'Costo Principal',
-        y: [285, 74.6]
-      },
-      {
-        x: 'Otros Costos',
-        y: [74.6, 28.6]
-      },
-      {
-        x: 'Utilidad Bruta',
-        y: [0, 182.4]
-      },
-      {
-        x: 'Gastos Principales',
-        y: [182.4, 65.7]
-      },
-      {
-        x: 'Otros Gastos',
-        y: [65.7, 22.4]
-      },
-      {
-        x: "Utilidad Operativa",
-        y: [0, 91.3]
-      },
-      {
-        x: "Gastos Financieros Totales",
-        y: [91.3, 9.4]
-      },
-      {
-        x: "Utilidad Neta",
-        y: [0, 81.9]
-      }
-    ]
+      x: 'Venta',
+      y: [0, 285.6],
+    },
+    {
+      x: 'Venta Total',
+      y: [0, 285]
+    },
+    {
+      x: 'Costo Principal',
+      y: [285.6, 74.6]
+    },
+    {
+      x: 'Otros Costos',
+      y: [74, 28]
+    },
+    {
+      x: 'Utilidad Bruta',
+      y: [0, 182.4]
+    },
+    {
+      x: 'Gastos Principales',
+      y: [182.4, 65.7]
+    },
+    {
+      x: 'Otros Gastos',
+      y: [65.7, 22.4]
+    },
+    {
+      x: "Utilidad Operativa",
+      y: [0, 91.3]
+    },
+    {
+      x: "Gastos Financieros Totales",
+      y: [91.3, 9.4]
+    },
+    {
+      x: "Utilidad Neta",
+      y: [0, 81.9]
     }
-  ]);
+  ]
+  }]
+    
+  
 
   // Renderizar el componente del gráfico
   return (
