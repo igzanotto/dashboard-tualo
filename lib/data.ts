@@ -50,6 +50,7 @@ import { createClient } from '@/utils/supabase/server';
         business:business_id (name),
         charts(type, insights)
       `)
+      
       .eq('id', reportId)
       .single();
 
@@ -59,7 +60,7 @@ import { createClient } from '@/utils/supabase/server';
 
       console.log("report>>>>>>", report);
       return report;
-      
+
     } catch (error) {
       console.error('Failed to fetch report by id:', error);
     }

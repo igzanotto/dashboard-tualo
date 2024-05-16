@@ -1,6 +1,6 @@
 'use client';
 
-import { createReport } from '@/app/lib/actions';
+import { createReport } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
