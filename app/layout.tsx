@@ -1,6 +1,5 @@
 import { Inter, Poppins } from "next/font/google";
 import { Metadata } from 'next';
-import { Toaster } from 'sonner';
 import "./globals.css";
 
 
@@ -22,7 +21,6 @@ export default function RootLayout({
     <html lang="en" className={inter.className}>
       <body className={`antialiased`}>
         {children}
-        <Toaster/>
       </body>
     </html>
   );
