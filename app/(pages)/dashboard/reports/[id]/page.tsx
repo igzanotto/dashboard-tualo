@@ -68,13 +68,6 @@ export default async function ReportPage({
         <p className="mb-4 text-4xl">{report.business.name}</p>
       </div>
 
-
-      {/* <div>
-        <p className="mb-4 text-4xl">grafico S&P</p>
-        <MyChart />
-      </div> */}
-
-
       <div className="mt-10 flex flex-col gap-8">
         <div className='flex max-2xl:flex-wrap max-2xl:justify-between gap-8'>
 
@@ -123,9 +116,10 @@ export default async function ReportPage({
                           suman y las rojas restan, dejando las grises como subtotales.
                         </p>
                       </div>
-                      <MyChart/>
+                      <div className='bg-slate-200 p-4 rounded-xl'>
+                        <MyChart/>
+                      </div>
                       <div className='mt-4'>
-                      
                       {renderTextFromDatabase(`${data.insights}`)}
                       </div>
                     </div>
