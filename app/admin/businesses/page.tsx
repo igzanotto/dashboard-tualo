@@ -1,4 +1,4 @@
-import { fetchBusinesses, fetchBusinessPages } from '@/app/lib/data';
+import { fetchBusinesses, fetchBusinessPages } from '@/lib/data';
 import Link from 'next/link';
 import {BuildingOfficeIcon} from "@heroicons/react/24/outline"
 import AddIcon from '@/components/icons/AddIcon';

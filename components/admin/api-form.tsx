@@ -7,7 +7,7 @@ interface FormData {
 const ApiForm = () => {
   const [formData, setFormData] = useState<FormData>({ text: ''});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
