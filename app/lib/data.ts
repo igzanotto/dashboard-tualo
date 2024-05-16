@@ -43,22 +43,23 @@ import { createClient } from '@/utils/supabase/server';
   export async function fetchReportById(reportId:string) {
     try {
       const supabase = createClient();
-      const { data: report } = await supabase
+      const { data: report, error } = await supabase
       .from('reports')
       .select(`
         *,
         business:business_id (name),
         charts(type, insights)
-        // charts(
-        //   type,
-        //   insights,
-        //   graphs(*)
       `)
-      
       .eq('id', reportId)
       .single();
+
+      if (error) {
+        throw new Error('Failed to fetch report.');
+      }
+
       console.log("report>>>>>>", report);
       return report;
+      
     } catch (error) {
       console.error('Failed to fetch report by id:', error);
     }
