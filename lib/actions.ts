@@ -75,15 +75,15 @@ export async function createReport(formData:FormData) {
 
   const report_id = data[0].id;
 
-  redirect(`/admin/reports/${report_id}/build`);
+  redirect(`/admin/reports/${report_id}/goals`);
 }
 
-const BuildReport = ReportFormSchema.omit({ month: true, business_id: true, analysis: true, business_resume: true });
+const BuildGoalsReport = ReportFormSchema.omit({ month: true, business_id: true, analysis: true, business_resume: true });
 
-export async function buildReport(formData:FormData) {
+export async function buildGoalsReport(formData:FormData) {
   console.log("adentro de createReport")
   console.log(formData);
-  const { id , goals } = BuildReport.parse({
+  const { id , goals } = BuildGoalsReport.parse({
     id: formData.get('report_id'),
     goals: formData.get('goals'),
   });
@@ -94,6 +94,7 @@ export async function buildReport(formData:FormData) {
     .from('reports')
     .update({ goals: goals })
     .eq('id', id)
+    .select('id');
 
 
   if (error) {
@@ -106,7 +107,9 @@ export async function buildReport(formData:FormData) {
     return;
   }
 
-  redirect(`/admin/reports/${id}/charts`);
+  const report_id = data[0].id;
+
+  redirect(`/admin/reports/${report_id}/PL`);
 }
 
 const ChartFormSchema = z.object({
