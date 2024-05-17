@@ -12,51 +12,44 @@ export default async function ReportPage({
 
   
   const renderTextFromDatabase = (text: string | undefined) => {
-  if (text) {
-    // Dividir el texto en párrafos
+    if (!text) {
+      return <p>Vacío</p>;
+    }
+  
+    // Función para aplicar estilos a las palabras específicas
+    const applyStyles = (text: string) => {
+      return <span className="font-bold text-black">{text}</span>;
+    };
+  
+    // Dividir el texto en párrafos y luego en líneas
     const paragraphs = text.split('\n');
     const formattedParagraphs = paragraphs.map((paragraph, index) => {
       // Dividir el párrafo en líneas
       const lines = paragraph.split('\n');
       const formattedLines = lines.map((line, lineIndex) => {
-        // Dividir la línea en dos partes en función de la presencia de los dos puntos
-        const parts = line.split(':');
-        const firstPart = parts[0];
-        const secondPart = parts.slice(1).join(':').trim(); // Por si hay más de un ":" en la línea
-
-        // Palabras específicas que deben estar en negrita y color negro
-        const boldWords = ["Perfil y Rol", "Industria", "Modelo de Negocio", "Clientes Objetivo", "Gestión Financiera", "Deuda", "Estrés Financiero", "Diferenciación de Ventas", "Comunicación y Marketing", "Necesidades y Mejoras", "1. Incrementar las Ventas", "2. Mejorar el Flujo de Efectivo", "3. Crecimiento del Negocio", "Noviembre Destaca", "Tendencia Ascendente", "Importancia de Mantener el Ritmo", "Ingresos Crecientes", "Costos Manejables pero con Espacio para Mejora", "Mejora en la Utilidad Neta", "Disminución de Costos en Diciembre", "Incremento en Gastos", "Promedios como Meta"];
-
-        // Función para aplicar estilos a las palabras específicas
-        const applyStyles = (text: string) => {
-          return boldWords.includes(text.trim()) ?
-            <span className="font-bold text-black">{text}</span> :
-            text;
-        };
-
+        const [firstPart, ...rest] = line.split(':');
+        const secondPart = rest.join(':').trim(); // Por si hay más de un ":" en la línea
+  
         return (
           <div key={lineIndex}>
-            {applyStyles(firstPart)}{secondPart && `: ${secondPart}`} {/* Añadir ":" y segunda parte solo si existe */}
+            {applyStyles(firstPart)}{secondPart && `: ${secondPart}`} <br /> {/* Añadir ":" y segunda parte solo si existe */}
           </div>
         );
       });
-
+  
       return (
         <div key={index}>
           {formattedLines}
         </div>
       );
     });
-
+  
     return (
       <div>
         {formattedParagraphs}
       </div>
     );
-  } else {
-    return <p>Vacío</p>;
-  }
-};
+  };
   
 
 
@@ -68,12 +61,6 @@ export default async function ReportPage({
       <div>
         <p className="mb-4 text-4xl">{report.business.name}</p>
       </div>
-
-
-      {/* <div>
-        <p className="mb-4 text-4xl">grafico S&P</p>
-        <MyChart />
-      </div> */}
 
 
       <div className="mt-10 flex flex-col gap-8">
