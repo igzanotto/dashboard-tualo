@@ -154,33 +154,50 @@ const ChartSchema = z.object({
   description: z.string(),
   insights: z.string(),
   report_id: z.string(),
-  labels_xaxis: z.array(z.string()),  // Define como array de strings
-  data_yaxis: z.array(z.number())
+  labels_xaxis: z.array(z.string()), // Define como array de strings
+  data_yaxis: z.array(z.number())    // Define como array de números
 });
 
-const CreateCharts = ChartFormSchema.omit({ id: true });
+const CreateCharts = ChartSchema.omit({ id: true });
 
-export async function createCharts(formData:FormData) {
-  const { type, insights, report_id, labels_xaxis, data_yaxis } = ChartSchema.parse({
-    type: formData.get('type'),
-    insights: formData.get('insights'),
-    report_id: formData.get('report_id'),
-    labels_xaxis: formData.get('labels_axis'),
-    data_yaxis: formData.get('data_yaxis')
+export async function createCharts(formData: FormData) {
+  const type = formData.get('type') as string | null;
+  const insights = formData.get('insights') as string | null;
+  const report_id = formData.get('report_id') as string | null;
+  const labels_xaxisStr = formData.get('labels_xaxis') as string | null;
+  const data_yaxisStr = formData.get('data_yaxis') as string | null;
+
+  if (!type || !insights || !report_id || !labels_xaxisStr || !data_yaxisStr) {
+    throw new Error("Missing required form data");
+  }
+
+  const labels_xaxis = JSON.parse(labels_xaxisStr);
+  const data_yaxis = JSON.parse(data_yaxisStr);
+
+  const parsedData = ChartSchema.parse({
+    type,
+    insights,
+    report_id,
+    labels_xaxis,
+    data_yaxis
   });
-  console.log(type, insights, report_id, labels_xaxis, data_yaxis);
+
+  console.log(parsedData);
 
   const supabase = createClient();
 
-  const { data: chart, error } = await supabase.from('charts').insert({ type, insights, report_id, labels_xaxis, data_yaxis });
+  const { data: chart, error } = await supabase
+    .from('charts')
+    .insert(parsedData);
 
   if (error) {
-    console.log("error");
+    console.log("error", error);
     throw error;
   }
   console.log(chart);
-  
-  revalidatePath('/dashbord/reports');
 
-  redirect('/dashbord/reports');
+  // Clear cache and trigger a new request to the server for the path to see the new report
+  revalidatePath('/dashboard/reports');
+
+  redirect('/dashboard/reports');
 }
