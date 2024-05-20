@@ -31,6 +31,9 @@ export default async function BusinessesPage({searchParams,}: {searchParams?: { 
             Agregar nuevo negocio
             <AddIcon/>
           </Link>
+          <Link href={"/admin/businesses/create-chart"}>
+            Nuevo gráfico
+          </Link>
         </div>
         <BusinessTable query={query} currentPage={currentPage}/>
       </Suspense>

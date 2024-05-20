@@ -1,4 +1,5 @@
 
+import StackedBar from '@/components/charts/StackedBar';
 import MyChart from '@/components/charts/spChart';
 import { fetchReportById } from '@/lib/data';
 
@@ -124,7 +125,7 @@ export default async function ReportPage({
                           suman y las rojas restan, dejando las grises como subtotales.
                         </p>
                       </div>
-                      <MyChart/>
+                      <StackedBar/>
                       <div className='mt-4'>
                       
                       {renderTextFromDatabase(`${data.insights}`)}

@@ -164,15 +164,15 @@ export async function createCharts(formData: FormData) {
   const type = formData.get('type') as string | null;
   const insights = formData.get('insights') as string | null;
   const report_id = formData.get('report_id') as string | null;
-  const labels_xaxisStr = formData.get('labels_xaxis') as string | null;
-  const data_yaxisStr = formData.get('data_yaxis') as string | null;
+  const labels = formData.get('labels_xaxis') as string | null;
+  const data = formData.get('data_yaxis') as string | null;
 
-  if (!type || !insights || !report_id || !labels_xaxisStr || !data_yaxisStr) {
+  if (!type || !insights || !report_id || !labels || !data) {
     throw new Error("Missing required form data");
   }
 
-  const labels_xaxis = JSON.parse(labels_xaxisStr);
-  const data_yaxis = JSON.parse(data_yaxisStr);
+  const labels_xaxis = JSON.parse(labels);
+  const data_yaxis = JSON.parse(data);
 
   const parsedData = ChartSchema.parse({
     type,
