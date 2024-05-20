@@ -145,6 +145,42 @@ export async function createChart(formData:FormData) {
   redirect('/dashbord/reports');
 }
 
-export async function searchBusiness(formData:FormData){
 
+
+
+const ChartSchema = z.object({
+  id: z.string(),
+  type: z.string(),
+  description: z.string(),
+  insights: z.string(),
+  report_id: z.string(),
+  labels_xaxis: z.array(z.string()),  // Define como array de strings
+  data_yaxis: z.array(z.number())
+});
+
+const CreateCharts = ChartFormSchema.omit({ id: true });
+
+export async function createCharts(formData:FormData) {
+  const { type, insights, report_id, labels_xaxis, data_yaxis } = ChartSchema.parse({
+    type: formData.get('type'),
+    insights: formData.get('insights'),
+    report_id: formData.get('report_id'),
+    labels_xaxis: formData.get('labels_axis'),
+    data_yaxis: formData.get('data_yaxis')
+  });
+  console.log(type, insights, report_id, labels_xaxis, data_yaxis);
+
+  const supabase = createClient();
+
+  const { data: chart, error } = await supabase.from('charts').insert({ type, insights, report_id, labels_xaxis, data_yaxis });
+
+  if (error) {
+    console.log("error");
+    throw error;
+  }
+  console.log(chart);
+  
+  revalidatePath('/dashbord/reports');
+
+  redirect('/dashbord/reports');
 }
