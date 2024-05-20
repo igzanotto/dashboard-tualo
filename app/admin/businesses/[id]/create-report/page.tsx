@@ -27,7 +27,12 @@ export default function CreateReportPage() {
       'voy a darle asesoría financiera a un cliente, vas a ayudarme a hacerla ',
     QA_prompt: 'te voy a pasar la transcriopcion de la entrevista que tuvimos',
     QA_transcript:
-      'de que se trata tu empresa? vendemos ropa, y vendimos 10000 el mes pasado',
+      'de que se trata tu empresa? \
+      vendemos ropa \
+      cuanto vendieron el mes pasado? \
+      vendimos 10000 en poleras y 2000 en pantalones \
+      cuantas personas trabajan en la empresa? \
+      estoy yo con mi socio y otros 3 empleados',
     QA_close: 'dame una descripcion de lo que crees que podria ser la empresa',
   });
 
@@ -69,7 +74,7 @@ export default function CreateReportPage() {
   return (
     <main>
       <div className="mt-3">
-        <h1 className="my-3 text-center">Generador de informes</h1>
+        <h1 className="my-3 text-center">Generador de reportes</h1>
 
         <form onSubmit={handleSubmit}>
           <textarea
@@ -111,41 +116,37 @@ export default function CreateReportPage() {
           </div>
         </form>
 
-
-        <h2
-          className='text-center mt-5 text-2xl font-bold text-blue-600'
-        >Crear nuevo reporte</h2>
+        <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
+          Resumen de la empresa
+        </h2>
         <form action={createReport}>
-          <label htmlFor="business_resume" className="mt-3 block">
-            Resumen de la empresa
-          </label>
           <textarea
             rows={9}
             id="business_resume"
             name="business_resume"
             className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
-           <select
-            name="month"
-            className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-          >
-            <option value="">Seleccione un mes</option>
-            <option value="1">Enero</option>
-            <option value="2">Febrero</option>
-            <option value="3">Marzo</option>
-            <option value="4">Abril</option>
-            <option value="5">Mayo</option>
-            <option value="6">Junio</option>
-            <option value="7">Julio</option>
-            <option value="8">Agosto</option>
-            <option value="9">Septiembre</option>
-            <option value="10">Octubre</option>
-            <option value="11">Noviembre</option>
-            <option value="12">Diciembre</option>
-          </select>
-          <input type="text" name="business_id" value={business_id} hidden/>
 
-          <div className="my-2 flex justify-end">
+          <input type="text" name="business_id" value={business_id} hidden />
+          <div className="space-between my-2 flex items-center justify-around">
+            <select
+              name="month"
+              className="w-1/2 rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+            >
+              <option value="">Seleccione un mes</option>
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </select>
             <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
               crear en DB
             </button>

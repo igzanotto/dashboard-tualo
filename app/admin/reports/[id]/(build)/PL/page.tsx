@@ -57,7 +57,7 @@ export default function BuildReportPage() {
   return (
     <main>
       <div className="mt-3">
-        <h1 className="my-3 text-center">Generador de informes</h1>
+        <h1 className="my-3 text-center">Generador de reportes</h1>
 
         <form onSubmit={handleSubmit}>
           <textarea
