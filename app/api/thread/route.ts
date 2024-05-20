@@ -5,7 +5,7 @@ export async function POST( req: Request) {
 
   try {
     const assistant = await openai.beta.assistants.retrieve(
-      "asst_n21oLmsZikvQGCyntbyQ9kWZ"
+      "asst_eXDbopN5sswZRPH64ed2zvhJ"
     );
 
     const thread = await openai.beta.threads.create();
@@ -26,8 +26,8 @@ export async function POST( req: Request) {
         }
     );
 
-  console.log("run",run);
-
+    console.log("run",run);
+    console.log("threadMessage",threadMessage);
 
     console.log("assistant",assistant);
     console.log("thread", thread);

@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/button';
 import { createReport } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -48,7 +49,7 @@ export default function CreateReportPage() {
 
     const business_resume = document.getElementById('business_resume');
 
-    const response = await fetch('/api/thread', {
+    const response = await fetch('/api/thread/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -71,11 +72,32 @@ export default function CreateReportPage() {
     business_resume.innerHTML = result.content;
   };
 
+  const handleCreateThread = async () => {
+    const response = await fetch('/api/thread/create', {
+      headers: {
+        'Content-Type': 'application/json',
+        method: 'GET',
+      },
+    });
+
+    console.log('response', response.body);
+
+    if (!response.ok) {
+      console.error('Error al enviar el formulario');
+      return;
+    }
+
+    const result = await response.json();
+    console.log('thread y assistant generados con exito', result.content);
+  }
+
   return (
     <main>
       <div className="mt-3">
         <h1 className="my-3 text-center">Generador de reportes</h1>
-
+        <Button onClick={handleCreateThread}>
+         crear thread
+        </Button>
         <form onSubmit={handleSubmit}>
           <textarea
             name="text"
@@ -127,7 +149,7 @@ export default function CreateReportPage() {
             className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
 
-          <input type="text" name="business_id" value={business_id} hidden />
+          <input type="text" name="business_id" defaultValue={business_id} hidden />
           <div className="space-between my-2 flex items-center justify-around">
             <select
               name="month"
