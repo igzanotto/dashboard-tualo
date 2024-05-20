@@ -125,7 +125,7 @@ export default async function ReportPage({
                           suman y las rojas restan, dejando las grises como subtotales.
                         </p>
                       </div>
-                      <StackedBar/>
+                      
                       <div className='mt-4'>
                       
                       {renderTextFromDatabase(`${data.insights}`)}
