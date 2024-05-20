@@ -48,7 +48,7 @@ export default function CreateReportPage() {
 
     const business_resume = document.getElementById('business_resume');
 
-    const response = await fetch('/api', {
+    const response = await fetch('/api/thread', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
