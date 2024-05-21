@@ -6,6 +6,9 @@ const openai = new OpenAI();
 export async function POST(req: Request) {
     const { content, threadId } = await req.json()
 
+    console.log("content>>>>>>>>", content)
+    console.log("threadId>>>>>>>>", threadId)
+
   try {
     const message = await openai.beta.threads.messages.create(
         threadId,

@@ -96,6 +96,30 @@ export default function CreateReportPage() {
     console.log('thread y assistant generados con exito', result.assistant);
   };
 
+  const handleCreateMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const response = await fetch('/api/message/create', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        content: formData.start_prompt + formData.QA_prompt + formData.QA_transcript + formData.QA_close,
+        threadId: threadId,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Error al enviar el formulario');
+      return;
+    }
+
+    const result = await response.json();
+    console.log('Formulario enviado con éxito', result);
+  }
+
   return (
     <main>
       <div className="mt-3">
@@ -136,6 +160,7 @@ export default function CreateReportPage() {
 
           <div className="my-2 flex justify-between">
             <Button onClick={handleCreateThread}>crear thread</Button>
+            <Button onClick={handleCreateMessage}>crear mensaje</Button>
             <input type="text" defaultValue={threadId} name="thread_id"/>
             <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
               Generar
