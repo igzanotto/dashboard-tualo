@@ -103,7 +103,7 @@ export default function CreateReportPage() {
 
         <form onSubmit={handleSubmit}>
           <textarea
-            name="text"
+            name="start_prompt"
             value={formData.start_prompt}
             onChange={handleChange}
             className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"

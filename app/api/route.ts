@@ -4,11 +4,8 @@ const openai = new OpenAI
 
 export async function POST(  req: Request
 ) {
-    const { start_prompt, QA_prompt, QA_transcript, QA_close, thread_id } = await req.json()  
-
-    console.log("Received request with start_prompt:", start_prompt);
-
-
+    const { start_prompt, QA_prompt, QA_transcript, QA_close } = await req.json()  
+    
     try {
         // Create a chat completion with the provided prompts and transcript
         const completion = await openai.chat.completions.create({
