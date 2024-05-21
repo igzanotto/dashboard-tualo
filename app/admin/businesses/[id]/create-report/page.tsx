@@ -75,12 +75,10 @@ export default function CreateReportPage() {
   const handleCreateThread = async () => {
     const response = await fetch('/api/thread/create', {
       headers: {
-        'Content-Type': 'application/json',
+        Accept: 'application/json',
         method: 'GET',
       },
     });
-
-    console.log('response', response.body);
 
     if (!response.ok) {
       console.error('Error al enviar el formulario');
@@ -88,7 +86,7 @@ export default function CreateReportPage() {
     }
 
     const result = await response.json();
-    console.log('thread y assistant generados con exito', result.content);
+    console.log('thread y assistant generados con exito', result.assistant);
   }
 
   return (
