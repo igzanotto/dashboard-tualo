@@ -37,6 +37,8 @@ export default function CreateReportPage() {
     QA_close: 'dame una descripcion de lo que crees que podria ser la empresa',
   });
 
+  const [threadId, setThreadId] = useState('');
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
@@ -49,7 +51,7 @@ export default function CreateReportPage() {
 
     const business_resume = document.getElementById('business_resume');
 
-    const response = await fetch('/api/thread/create', {
+    const response = await fetch('/api', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -72,7 +74,9 @@ export default function CreateReportPage() {
     business_resume.innerHTML = result.content;
   };
 
-  const handleCreateThread = async () => {
+  const handleCreateThread = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     const response = await fetch('/api/thread/create', {
       headers: {
         Accept: 'application/json',
@@ -86,16 +90,17 @@ export default function CreateReportPage() {
     }
 
     const result = await response.json();
+
+    setThreadId(result.thread.id);
+
     console.log('thread y assistant generados con exito', result.assistant);
-  }
+  };
 
   return (
     <main>
       <div className="mt-3">
         <h1 className="my-3 text-center">Generador de reportes</h1>
-        <Button onClick={handleCreateThread}>
-         crear thread
-        </Button>
+
         <form onSubmit={handleSubmit}>
           <textarea
             name="text"
@@ -129,7 +134,9 @@ export default function CreateReportPage() {
             autoFocus
           />
 
-          <div className="my-2 flex justify-end">
+          <div className="my-2 flex justify-between">
+            <Button onClick={handleCreateThread}>crear thread</Button>
+            <input type="text" defaultValue={threadId} name="thread_id"/>
             <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
               Generar
             </button>
@@ -147,7 +154,12 @@ export default function CreateReportPage() {
             className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
 
-          <input type="text" name="business_id" defaultValue={business_id} hidden />
+          <input
+            type="text"
+            name="business_id"
+            defaultValue={business_id}
+            hidden
+          />
           <div className="space-between my-2 flex items-center justify-around">
             <select
               name="month"
