@@ -4,6 +4,7 @@ import AddIcon from "@/components/icons/AddIcon";
 import { InvoicesTableSkeleton } from "@/components/skeletons";
 import Link from "next/link";
 import { Suspense } from "react";
+import ChartIcon from "@/components/icons/ChartIcon";
 
 
 interface BusinessPageProps {
@@ -29,10 +30,12 @@ export default async function BusinessPage({ params, searchParams }: BusinessPag
           <div className="flex flex-col mt-10">
                 <div className="flex items-center justify-between mb-4">
                     <p className="text-2xl">Reportes de {business.name}</p>
+                   
                     <Link href={`/admin/businesses/${business.id}/create-report`} className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white">
-                        Agregar nuevo reporte
-                        <AddIcon/>
+                      Agregar nuevo reporte
+                      <AddIcon/>
                     </Link>
+                    
                 </div>
                 <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
                     <ReportsTable query={query} currentPage={currentPage} business_id={business_id}/>

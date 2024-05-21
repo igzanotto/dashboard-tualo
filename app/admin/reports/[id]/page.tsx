@@ -1,4 +1,6 @@
+import ChartIcon from '@/components/icons/ChartIcon';
 import { fetchReportById } from '@/lib/data';
+import Link from 'next/link';
 
 export default async function ReportPage({
   params,
@@ -14,8 +16,12 @@ export default async function ReportPage({
       <h1 className={`text-2xl`}>
         Reporte de <span className="capitalize">{report.month}</span>
       </h1>
-      <div>
+      <div className='flex items-center justify-between'>
         <p className="mb-4 text-4xl">{businessName}</p>
+        <Link href={"/admin/businesses/create-chart"} className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white justify-center">
+          Generar gráfico
+          <ChartIcon/>
+        </Link>
       </div>
 
       <div className="mt-10 flex flex-col gap-8">
