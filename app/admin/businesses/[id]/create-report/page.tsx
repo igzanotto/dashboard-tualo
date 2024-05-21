@@ -93,7 +93,7 @@ export default function CreateReportPage() {
 
     setThreadId(result.thread.id);
 
-    console.log('thread y assistant generados con exito', result.assistant);
+    console.log('thread generados con exito', result);
   };
 
   const handleCreateMessage = async (e: React.FormEvent) => {
@@ -112,13 +112,37 @@ export default function CreateReportPage() {
     });
 
     if (!response.ok) {
-      console.error('Error al enviar el formulario');
+      console.error('Error al agregar menssage al thread');
       return;
     }
 
     const result = await response.json();
-    console.log('Formulario enviado con éxito', result);
+    console.log('message creado con exito', result);
   }
+
+  const handleCreateRun = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const response = await fetch('/api/run/create', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        threadId: threadId,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Error al crear RUN');
+      return;
+    }
+
+    const result = await response.json();
+    console.log('Run creado con exito', result);
+  }
+
 
   return (
     <main>
@@ -161,6 +185,7 @@ export default function CreateReportPage() {
           <div className="my-2 flex justify-between">
             <Button onClick={handleCreateThread}>crear thread</Button>
             <Button onClick={handleCreateMessage}>crear mensaje</Button>
+            <Button onClick={handleCreateRun}>crear Run</Button>
             <input type="text" defaultValue={threadId} name="thread_id"/>
             <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
               Generar

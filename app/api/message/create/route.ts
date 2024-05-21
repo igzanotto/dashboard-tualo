@@ -6,11 +6,8 @@ const openai = new OpenAI();
 export async function POST(req: Request) {
     const { content, threadId } = await req.json()
 
-    console.log("content>>>>>>>>", content)
-    console.log("threadId>>>>>>>>", threadId)
-
   try {
-    const message = await openai.beta.threads.messages.create(
+    const threadMessage = await openai.beta.threads.messages.create(
         threadId,
         {
           role: "user",
@@ -18,9 +15,9 @@ export async function POST(req: Request) {
         }
       );
 
-      console.log("message>>>>>>>>", message)
+      console.log("threadMmessage>>>>>>>>", threadMessage)
       
-    return NextResponse.json({ message: message });
+    return NextResponse.json({ message: threadMessage });
    
   } catch (error) {
     // Handle any errors that occur during the API call
