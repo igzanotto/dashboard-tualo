@@ -151,3 +151,21 @@ export async function createChart(formData:FormData) {
 export async function searchBusiness(formData:FormData){
 
 }
+
+export async function addThreadToBusiness(thread_id: string, business_id: string) {
+  const supabase = createClient();
+
+  console.log("thread_id", thread_id);
+  console.log("business_id", business_id);
+
+  const { data, error } = await supabase
+    .from('businesses')
+    .update({ thread_id: thread_id })
+    .eq('id', business_id);
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("thread guardado en negocio");
+  }
+}

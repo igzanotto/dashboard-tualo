@@ -14,6 +14,7 @@ interface FormData {
 
 export default function CreateReportPage() {
   const business_id = useParams().id;
+  console.log('business_id', business_id);
 
   const [formData, setFormData] = useState<FormData>({
     // start_prompt:
@@ -46,42 +47,18 @@ export default function CreateReportPage() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const business_resume = document.getElementById('business_resume');
-
-    const response = await fetch('/api', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (!response.ok) {
-      console.error('Error al enviar el formulario');
-      return;
-    }
-
-    const result = await response.json();
-    console.log('Formulario enviado con éxito', result.content);
-
-    if (!business_resume) {
-      return;
-    }
-
-    business_resume.innerHTML = result.content;
-  };
-
   const handleCreateThread = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const response = await fetch('/api/thread/create', {
+      method: 'POST',
       headers: {
         Accept: 'application/json',
-        method: 'GET',
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        business_id: business_id,
+      }),
     });
 
     if (!response.ok) {
