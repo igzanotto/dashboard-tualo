@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/button';
 import { createReport } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -36,6 +37,8 @@ export default function CreateReportPage() {
     QA_close: 'dame una descripcion de lo que crees que podria ser la empresa',
   });
 
+  const [threadId, setThreadId] = useState('');
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
@@ -71,14 +74,114 @@ export default function CreateReportPage() {
     business_resume.innerHTML = result.content;
   };
 
+  const handleCreateThread = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const response = await fetch('/api/thread/create', {
+      headers: {
+        Accept: 'application/json',
+        method: 'GET',
+      },
+    });
+
+    if (!response.ok) {
+      console.error('Error al enviar el formulario');
+      return;
+    }
+
+    const result = await response.json();
+
+    setThreadId(result.thread.id);
+
+    console.log('thread generados con exito', result);
+  };
+
+  const handleCreateMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const response = await fetch('/api/message/create', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        content: formData.start_prompt + formData.QA_prompt + formData.QA_transcript + formData.QA_close,
+        threadId: threadId,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Error al agregar menssage al thread');
+      return;
+    }
+
+    const result = await response.json();
+    console.log('message creado con exito', result);
+  }
+
+  const handleCreateRun = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const response = await fetch('/api/run/create', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        threadId: threadId,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Error al crear RUN');
+      return;
+    }
+
+    const result = await response.json();
+    console.log('Run creado con exito', result);
+  }
+
+  const handleRetrieveThread = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const business_resume = document.getElementById('business_resume');
+
+    const response = await fetch(`/api/thread/retrieve?threadId=${threadId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+     
+    });
+
+    if (!response.ok) {
+      console.error('Error al obtener mensajes');
+      return;
+    }
+
+    const result = await response.json();
+    console.log('Mensajes obtenidos con exito',  result);
+
+    const responseBusinessResume = result.messagesData[1].content
+
+    if (!business_resume) {
+      return;
+    }
+
+    business_resume.innerHTML = responseBusinessResume;
+  }
+
+
   return (
     <main>
       <div className="mt-3">
         <h1 className="my-3 text-center">Generador de reportes</h1>
 
-        <form onSubmit={handleSubmit}>
+       
           <textarea
-            name="text"
+            name="start_prompt"
             value={formData.start_prompt}
             onChange={handleChange}
             className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -109,12 +212,15 @@ export default function CreateReportPage() {
             autoFocus
           />
 
-          <div className="my-2 flex justify-end">
-            <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
-              Generar
-            </button>
+          <div className="my-2 flex justify-between">
+            <Button onClick={handleCreateThread}>crear thread</Button>
+            <Button onClick={handleCreateMessage}>crear mensaje</Button>
+            <Button onClick={handleCreateRun}>crear Run</Button>
+            <Button onClick={handleRetrieveThread}>obtener mensajes</Button>
+            <input type="text" defaultValue={threadId} name="thread_id"/>
+           
           </div>
-        </form>
+       
 
         <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
           Resumen de la empresa
@@ -127,7 +233,12 @@ export default function CreateReportPage() {
             className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
 
-          <input type="text" name="business_id" value={business_id} hidden />
+          <input
+            type="text"
+            name="business_id"
+            defaultValue={business_id}
+            hidden
+          />
           <div className="space-between my-2 flex items-center justify-around">
             <select
               name="month"
