@@ -193,7 +193,8 @@ export default function CreateReportPage() {
             <Button onClick={handleCreateThread}>crear thread</Button>
             <Button onClick={handleCreateMessage}>crear mensaje</Button>
             <Button onClick={handleCreateRun}>crear Run</Button>
-            <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>           
+            <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>      
+            <input type="text" defaultValue={threadId} name="thread_id"/>  
           </div>
        
 

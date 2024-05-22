@@ -14,7 +14,7 @@ interface FormData {
 
 export default function BuildReportPage() {
   const report_id = useParams().id;
-  const thread_id = fetchBusinessThreadId(report_id as string);
+  // const thread_id = fetchBusinessThreadId(report_id as string);
 
   const [formData, setFormData] = useState<FormData>({
     goals_prompt:
@@ -140,9 +140,9 @@ export default function BuildReportPage() {
           />
 
           <div className="my-2 flex justify-between">
-            <Button onClick={handleCreateMessage}>crear mensaje</Button>
+            {/* <Button onClick={handleCreateMessage}>crear mensaje</Button>
             <Button onClick={handleCreateRun}>crear Run</Button>
-            <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>           
+            <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>            */}
           </div>
         </div>
 

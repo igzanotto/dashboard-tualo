@@ -3,10 +3,10 @@ import { fetchReportById } from '@/lib/data';
 export default async function ReportPage({
   params,
 }: {
-  params: { id: string };
+  params: { report_id: string };
 }) {
-  const id = params.id;
-  const report = await fetchReportById(id);
+  
+  const report = await fetchReportById(params.report_id);
   const businessName = report.business.name;
 
   return (

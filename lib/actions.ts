@@ -75,7 +75,7 @@ export async function createReport(formData:FormData) {
 
   const report_id = data[0].id;
 
-  redirect(`/admin/reports/${report_id}/goals`);
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/goals`);
 }
 
 const BuildGoalsReport = ReportFormSchema.omit({ month: true, business_id: true, analysis: true, business_resume: true });
