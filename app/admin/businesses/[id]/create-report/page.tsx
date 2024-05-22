@@ -120,7 +120,7 @@ export default function CreateReportPage() {
     console.log('Run creado con exito', result);
   }
 
-  const handleRetrieveThread = async (e: React.FormEvent) => {
+  const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
     e.preventDefault();
     const business_resume = document.getElementById('business_resume');
 
@@ -193,9 +193,7 @@ export default function CreateReportPage() {
             <Button onClick={handleCreateThread}>crear thread</Button>
             <Button onClick={handleCreateMessage}>crear mensaje</Button>
             <Button onClick={handleCreateRun}>crear Run</Button>
-            <Button onClick={handleRetrieveThread}>obtener mensajes</Button>
-            <input type="text" defaultValue={threadId} name="thread_id"/>
-           
+            <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>           
           </div>
        
 

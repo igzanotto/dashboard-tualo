@@ -129,20 +129,20 @@ import { createClient } from '@/utils/supabase/server';
       }
     }
 
-    export async function fetchBusinessById(companyId:string) {
-      try {
-        const supabase = createClient();
-        const { data: company, error } = await supabase.from("businesses").select().eq('id', companyId).single();
-        
-        if (error) {
-          throw new Error('Failed to fetch company.');
-        }
-        
-        return company;
-      } catch (error) {
-        console.error('Failed to fetch company:', error);
-      }
+export async function fetchBusinessById(companyId: string) {
+  try {
+    const supabase = createClient();
+    const { data: company, error } = await supabase.from("businesses").select().eq('id', companyId).single();
+    
+    if (error) {
+      throw new Error('Failed to fetch company.');
     }
+    
+    return company;
+  } catch (error) {
+    console.error('Failed to fetch company:', error);
+  }
+}
 
 
 
@@ -202,3 +202,25 @@ import { createClient } from '@/utils/supabase/server';
         
       }
     }
+
+    export async function fetchBusinessThreadId(businessId:string) { 
+      try {
+        const supabase = createClient();
+        const { data: thread, error } = await supabase
+          .from('businesses')
+          .select('thread_id')
+          .eq('id', businessId)
+          .single();
+
+        if (error) {
+          throw new Error('Failed to fetch thread ID.');
+        }
+        return thread;
+      }
+      catch (error) {
+        console.error('Failed to fetch thread ID:', error);
+      }
+    }
+          
+
+     
