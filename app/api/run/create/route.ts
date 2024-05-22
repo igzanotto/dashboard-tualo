@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 const openai = new OpenAI();
 
-export async function GET(req: Request) {
+export async function POST(req: Request) {
     const { threadId } = await req.json()
     const assistant_id = "asst_eXDbopN5sswZRPH64ed2zvhJ"
 
