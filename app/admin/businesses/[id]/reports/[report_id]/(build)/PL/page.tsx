@@ -1,6 +1,6 @@
 'use client';
 
-import { createReport } from '@/lib/actions';
+import { buildPLReport } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
@@ -57,7 +57,7 @@ export default function BuildReportPage() {
   return (
     <main>
       <div className="mt-3">
-        <h1 className="my-3 text-center">Generador de informes</h1>
+        <h1 className="my-3 text-center">Generador de reportes</h1>
 
         <form onSubmit={handleSubmit}>
           <textarea
@@ -95,7 +95,7 @@ export default function BuildReportPage() {
         <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
           Actualizar metas financieras
         </h2>
-        <form action={createReport}>
+        <form action={buildPLReport}>
           <label htmlFor="goals" className="mt-3 block">
             Metas financieras
           </label>
@@ -109,7 +109,7 @@ export default function BuildReportPage() {
 
           <div className="my-2 flex justify-end">
             <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
-              continuar con graficos
+              continuar con analisis
             </button>
           </div>
         </form>

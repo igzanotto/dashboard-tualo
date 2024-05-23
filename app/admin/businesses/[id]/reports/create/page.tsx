@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/button';
 import { createReport } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
@@ -13,6 +14,7 @@ interface FormData {
 
 export default function CreateReportPage() {
   const business_id = useParams().id;
+  console.log('business_id', business_id);
 
   const [formData, setFormData] = useState<FormData>({
     // start_prompt:
@@ -27,9 +29,16 @@ export default function CreateReportPage() {
       'voy a darle asesoría financiera a un cliente, vas a ayudarme a hacerla ',
     QA_prompt: 'te voy a pasar la transcriopcion de la entrevista que tuvimos',
     QA_transcript:
-      'de que se trata tu empresa? vendemos ropa, y vendimos 10000 el mes pasado',
+      'de que se trata tu empresa? \
+      vendemos ropa \
+      cuanto vendieron el mes pasado? \
+      vendimos 10000 en poleras y 2000 en pantalones \
+      cuantas personas trabajan en la empresa? \
+      estoy yo con mi socio y otros 3 empleados',
     QA_close: 'dame una descripcion de lo que crees que podria ser la empresa',
   });
+
+  const [threadId, setThreadId] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({
@@ -38,17 +47,18 @@ export default function CreateReportPage() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleCreateThread = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const business_resume = document.getElementById('business_resume');
-
-    const response = await fetch('/api', {
+    const response = await fetch('/api/thread/create', {
       method: 'POST',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        business_id: business_id,
+      }),
     });
 
     if (!response.ok) {
@@ -57,95 +67,175 @@ export default function CreateReportPage() {
     }
 
     const result = await response.json();
-    console.log('Formulario enviado con éxito', result.content);
+
+    setThreadId(result.thread.id);
+
+    console.log('thread generados con exito', result);
+  };
+
+  const handleCreateMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const response = await fetch('/api/message/create', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        content:
+          formData.start_prompt +
+          formData.QA_prompt +
+          formData.QA_transcript +
+          formData.QA_close,
+        threadId: threadId,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Error al agregar menssage al thread');
+      return;
+    }
+
+    const result = await response.json();
+    console.log('message creado con exito', result);
+  };
+
+  const handleCreateRun = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const response = await fetch('/api/run/create', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        threadId: threadId,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('Error al crear RUN');
+      return;
+    }
+
+    const result = await response.json();
+    console.log('Run creado con exito', result);
+  };
+
+  const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const business_resume = document.getElementById('business_resume');
+
+    const response = await fetch(`/api/thread/retrieve?threadId=${threadId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      console.error('Error al obtener mensajes');
+      return;
+    }
+
+    const result = await response.json();
+    console.log('Mensajes obtenidos con exito', result);
+
+    const responseBusinessResume = result.messagesData[1].content;
 
     if (!business_resume) {
       return;
     }
 
-    business_resume.innerHTML = result.content;
+    business_resume.innerHTML = responseBusinessResume;
   };
 
   return (
     <main>
       <div className="mt-3">
-        <h1 className="my-3 text-center">Generador de informes</h1>
+        <h1 className="my-3 text-center">Generador de reportes</h1>
 
-        <form onSubmit={handleSubmit}>
-          <textarea
-            name="text"
-            value={formData.start_prompt}
-            onChange={handleChange}
-            className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            autoFocus
-          />
-          <textarea
-            name="QA_prompt"
-            value={formData.QA_prompt}
-            onChange={handleChange}
-            className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            autoFocus
-          />
-          <textarea
-            name="QA_transcript"
-            value={formData.QA_transcript}
-            onChange={handleChange}
-            rows={4}
-            className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            autoFocus
-            placeholder=">>> ingresar el transcript del Q&A <<<"
-          />
-          <textarea
-            name="QA_close"
-            value={formData.QA_close}
-            onChange={handleChange}
-            rows={4}
-            className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            autoFocus
-          />
+        <textarea
+          name="start_prompt"
+          value={formData.start_prompt}
+          onChange={handleChange}
+          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <textarea
+          name="QA_prompt"
+          value={formData.QA_prompt}
+          onChange={handleChange}
+          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <textarea
+          name="QA_transcript"
+          value={formData.QA_transcript}
+          onChange={handleChange}
+          rows={4}
+          className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+          placeholder=">>> ingresar el transcript del Q&A <<<"
+        />
+        <textarea
+          name="QA_close"
+          value={formData.QA_close}
+          onChange={handleChange}
+          rows={4}
+          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
 
-          <div className="my-2 flex justify-end">
-            <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
-              Generar
-            </button>
-          </div>
-        </form>
+        <div className="my-2 flex justify-between">
+          <Button onClick={handleCreateThread}>crear thread</Button>
+          <Button onClick={handleCreateMessage}>crear mensaje</Button>
+          <Button onClick={handleCreateRun}>crear Run</Button>
+          <Button onClick={handleRetrieveThreadMessages}>
+            obtener mensajes
+          </Button>
+          <input type="text" defaultValue={threadId} name="thread_id" />
+        </div>
 
-
-        <h2
-          className='text-center mt-5 text-2xl font-bold text-blue-600'
-        >Crear nuevo reporte</h2>
+        <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
+          Resumen de la empresa
+        </h2>
         <form action={createReport}>
-          <label htmlFor="business_resume" className="mt-3 block">
-            Resumen de la empresa
-          </label>
           <textarea
             rows={9}
             id="business_resume"
             name="business_resume"
             className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
-           <select
-            name="month"
-            className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-          >
-            <option value="">Seleccione un mes</option>
-            <option value="1">Enero</option>
-            <option value="2">Febrero</option>
-            <option value="3">Marzo</option>
-            <option value="4">Abril</option>
-            <option value="5">Mayo</option>
-            <option value="6">Junio</option>
-            <option value="7">Julio</option>
-            <option value="8">Agosto</option>
-            <option value="9">Septiembre</option>
-            <option value="10">Octubre</option>
-            <option value="11">Noviembre</option>
-            <option value="12">Diciembre</option>
-          </select>
-          <input type="text" name="business_id" value={business_id} hidden/>
 
-          <div className="my-2 flex justify-end">
+          <input
+            type="text"
+            name="business_id"
+            defaultValue={business_id}
+            hidden
+          />
+          <div className="space-between my-2 flex items-center justify-around">
+            <select
+              name="month"
+              className="w-1/2 rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+            >
+              <option value="">Seleccione un mes</option>
+              <option value="1">Enero</option>
+              <option value="2">Febrero</option>
+              <option value="3">Marzo</option>
+              <option value="4">Abril</option>
+              <option value="5">Mayo</option>
+              <option value="6">Junio</option>
+              <option value="7">Julio</option>
+              <option value="8">Agosto</option>
+              <option value="9">Septiembre</option>
+              <option value="10">Octubre</option>
+              <option value="11">Noviembre</option>
+              <option value="12">Diciembre</option>
+            </select>
             <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
               crear en DB
             </button>
