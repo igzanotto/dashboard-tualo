@@ -48,7 +48,7 @@ import { createClient } from '@/utils/supabase/server';
       .select(`
         *,
         business:business_id (name),
-        charts(type, insights),
+        charts(type, insights, graphy_url),
         recomendations(content)
       `)
       
@@ -199,6 +199,5 @@ import { createClient } from '@/utils/supabase/server';
       } catch (error) {
         console.error('Error:', error);
         console.log("Salio mal", error);
-        
       }
     }

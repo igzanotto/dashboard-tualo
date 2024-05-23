@@ -59,7 +59,9 @@ export default async function ReportPage({
     return <p>Vacío</p>;
   }
 };
-  
+
+console.log(report.charts);
+
 
 
   return (
@@ -120,8 +122,8 @@ export default async function ReportPage({
                           suman y las rojas restan, dejando las grises como subtotales.
                         </p>
                       </div>
-                      <ChartEmbed src="https://visualize.graphy.app/view/fcc14466-5ab5-4e39-90b6-01801aaada32" />
-                      {/* <iframe src="https://vizzlo.com/embed/hwktFbEpS1S-Wefv8RSe4A?transparent&amp;nobacklink" style=" width: 400px; height: 225px; border:none; overflow:hidden;" allowTransparency="true" scrolling="no" frameborder="0"></iframe > */}
+                      <ChartEmbed src={data.graphy_url} />
+                     
                       <div className='mt-4'>
                       
                       {renderTextFromDatabase(`${data.insights}`)}
