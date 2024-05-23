@@ -5,11 +5,12 @@ import Link from 'next/link';
 export default async function ReportPage({
   params,
 }: {
-  params: { report_id: string };
+  params: { report_id: string, id:string };
 }) {
   
   const report = await fetchReportById(params.report_id);
   const businessName = report.business.name;
+
   
 
   return (
@@ -19,7 +20,7 @@ export default async function ReportPage({
       </h1>
       <div className='flex items-center justify-between'>
         <p className="mb-4 text-4xl">{businessName}</p>
-        <Link href={`/admin/businesses/create-chart/${report.id}`} className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white justify-center">
+        <Link href={`/admin/businesses/${params.id}/reports/${report.id}/create-chart`} className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white justify-center">
           Generar gráfico
           <ChartIcon/>
         </Link>

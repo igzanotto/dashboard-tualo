@@ -2,14 +2,8 @@ import { createChartEmbed } from "@/lib/actions";
 import { Select } from "@headlessui/react";
 
 
-export default function ChartForm({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function ChartForm({report_id}:any) {
   
-  const reportId = params.id;
-
   const chartTypes = [
     "Cascada P&L",
     "Ventas",
@@ -21,9 +15,9 @@ export default function ChartForm({
   
   return (
     <div className="flex flex-col gap-6 justify-center xl:w-[70%] mx-auto">
-      <h1>Crear Gráfico para Reporte {reportId}</h1>
+      <h1>Crear Gráfico para Reporte {report_id}</h1>
       <form action={createChartEmbed} className="flex flex-col gap-4">
-        <input type="hidden" name="report_id" value={reportId} />
+        <input type="hidden" name="report_id" value={report_id} />
         <Select name="type" className="rounded-xl">
           {chartTypes.map((chartType) => (
             <option key={chartType} value={chartType}>{chartType}</option>

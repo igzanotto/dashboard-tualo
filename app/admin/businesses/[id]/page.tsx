@@ -4,7 +4,6 @@ import AddIcon from "@/components/icons/AddIcon";
 import { InvoicesTableSkeleton } from "@/components/skeletons";
 import Link from "next/link";
 import { Suspense } from "react";
-import ChartIcon from "@/components/icons/ChartIcon";
 
 
 interface BusinessPageProps {
