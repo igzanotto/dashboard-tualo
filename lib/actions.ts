@@ -198,7 +198,7 @@ export async function createChartEmbed(formData:FormData){
 
   const { type, report_id, graphy_url} = parsedData.data;
 
-  console.log('Parsed Data:', { type, report_id, graphy_url });
+  console.log('Parsed Data:', { type, report_id, graphy_url});
 
   const supabase = createClient();
   try {
@@ -207,6 +207,7 @@ export async function createChartEmbed(formData:FormData){
       .from('charts')
       .select()
       .eq('type', type)
+      .eq('report_id', report_id)
       .limit(1);
 
     if (fetchError) {
