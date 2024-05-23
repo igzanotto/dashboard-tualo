@@ -10,6 +10,7 @@ export default async function ReportPage({
   const id = params.id;
   const report = await fetchReportById(id);
   const businessName = report.business.name;
+  
 
   return (
     <div className="flex flex-col gap-3">
@@ -18,7 +19,7 @@ export default async function ReportPage({
       </h1>
       <div className='flex items-center justify-between'>
         <p className="mb-4 text-4xl">{businessName}</p>
-        <Link href={"/admin/businesses/create-chart"} className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white justify-center">
+        <Link href={`/admin/businesses/create-chart/${report.id}`} className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white justify-center">
           Generar gráfico
           <ChartIcon/>
         </Link>
