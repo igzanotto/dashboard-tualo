@@ -211,7 +211,7 @@ export async function fetchBusinessThreadId(businessId:string) {
     if (error) {
       throw new Error('Failed to fetch thread ID.');
     }
-    return thread;
+    return thread.thread_id;
   }
   catch (error) {
     console.error('Failed to fetch thread ID:', error);

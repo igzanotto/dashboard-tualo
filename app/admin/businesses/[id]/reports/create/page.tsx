@@ -83,7 +83,11 @@ export default function CreateReportPage() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        content: formData.start_prompt + formData.QA_prompt + formData.QA_transcript + formData.QA_close,
+        content:
+          formData.start_prompt +
+          formData.QA_prompt +
+          formData.QA_transcript +
+          formData.QA_close,
         threadId: threadId,
       }),
     });
@@ -95,7 +99,7 @@ export default function CreateReportPage() {
 
     const result = await response.json();
     console.log('message creado con exito', result);
-  }
+  };
 
   const handleCreateRun = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,7 +122,7 @@ export default function CreateReportPage() {
 
     const result = await response.json();
     console.log('Run creado con exito', result);
-  }
+  };
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,7 +134,6 @@ export default function CreateReportPage() {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-     
     });
 
     if (!response.ok) {
@@ -139,64 +142,63 @@ export default function CreateReportPage() {
     }
 
     const result = await response.json();
-    console.log('Mensajes obtenidos con exito',  result);
+    console.log('Mensajes obtenidos con exito', result);
 
-    const responseBusinessResume = result.messagesData[1].content
+    const responseBusinessResume = result.messagesData[1].content;
 
     if (!business_resume) {
       return;
     }
 
     business_resume.innerHTML = responseBusinessResume;
-  }
-
+  };
 
   return (
     <main>
       <div className="mt-3">
         <h1 className="my-3 text-center">Generador de reportes</h1>
 
-       
-          <textarea
-            name="start_prompt"
-            value={formData.start_prompt}
-            onChange={handleChange}
-            className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            autoFocus
-          />
-          <textarea
-            name="QA_prompt"
-            value={formData.QA_prompt}
-            onChange={handleChange}
-            className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            autoFocus
-          />
-          <textarea
-            name="QA_transcript"
-            value={formData.QA_transcript}
-            onChange={handleChange}
-            rows={4}
-            className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            autoFocus
-            placeholder=">>> ingresar el transcript del Q&A <<<"
-          />
-          <textarea
-            name="QA_close"
-            value={formData.QA_close}
-            onChange={handleChange}
-            rows={4}
-            className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            autoFocus
-          />
+        <textarea
+          name="start_prompt"
+          value={formData.start_prompt}
+          onChange={handleChange}
+          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <textarea
+          name="QA_prompt"
+          value={formData.QA_prompt}
+          onChange={handleChange}
+          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <textarea
+          name="QA_transcript"
+          value={formData.QA_transcript}
+          onChange={handleChange}
+          rows={4}
+          className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+          placeholder=">>> ingresar el transcript del Q&A <<<"
+        />
+        <textarea
+          name="QA_close"
+          value={formData.QA_close}
+          onChange={handleChange}
+          rows={4}
+          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
 
-          <div className="my-2 flex justify-between">
-            <Button onClick={handleCreateThread}>crear thread</Button>
-            <Button onClick={handleCreateMessage}>crear mensaje</Button>
-            <Button onClick={handleCreateRun}>crear Run</Button>
-            <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>      
-            <input type="text" defaultValue={threadId} name="thread_id"/>  
-          </div>
-       
+        <div className="my-2 flex justify-between">
+          <Button onClick={handleCreateThread}>crear thread</Button>
+          <Button onClick={handleCreateMessage}>crear mensaje</Button>
+          <Button onClick={handleCreateRun}>crear Run</Button>
+          <Button onClick={handleRetrieveThreadMessages}>
+            obtener mensajes
+          </Button>
+          <input type="text" defaultValue={threadId} name="thread_id" />
+        </div>
 
         <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
           Resumen de la empresa

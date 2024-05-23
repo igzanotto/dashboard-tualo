@@ -94,7 +94,7 @@ export async function buildGoalsReport(formData:FormData) {
     .from('reports')
     .update({ goals: goals })
     .eq('id', id)
-    .select('id');
+    .select('id, business_id');
 
 
   if (error) {
@@ -108,8 +108,9 @@ export async function buildGoalsReport(formData:FormData) {
   }
 
   const report_id = data[0].id;
+  const business_id = data[0].business_id;
 
-  redirect(`/admin/reports/${report_id}/PL`);
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/PL`);
 }
 
 const ChartFormSchema = z.object({
