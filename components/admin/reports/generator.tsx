@@ -12,7 +12,7 @@ interface FormData {
 }
 
 export default function ReportGenerator({ threadId }: { threadId: any }) {
-  const report_id = useParams().id as string;
+  const report_id = useParams().report_id as string;
 
   const [formData, setFormData] = useState<FormData>({
     goals_prompt:
