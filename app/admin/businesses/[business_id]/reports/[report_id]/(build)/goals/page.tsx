@@ -2,8 +2,8 @@ import ReportGenerator from "@/components/admin/reports/generator";
 import { fetchBusinessThreadId } from "@/lib/data";
 
 export default async function BuildReportPage({ params }: { params: any }) {
-  const { id } = params;
-  const threadId = await fetchBusinessThreadId(id);
+  const { business_id } = params;
+  const threadId = await fetchBusinessThreadId(business_id);
 
   return (
     <main>

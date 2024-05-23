@@ -12,8 +12,8 @@ interface FormData {
   QA_close: string;
 }
 
-export default function CreateReportPage() {
-  const business_id = useParams().id;
+export default function CreateReportPage({ params }: { params: any }) {
+  const { business_id } = params;
   console.log('business_id', business_id);
 
   const [formData, setFormData] = useState<FormData>({
