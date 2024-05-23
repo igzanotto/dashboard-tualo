@@ -1,5 +1,6 @@
 
-import StackedBar from '@/components/charts/StackedBar';
+import ChartEmbed from '@/components/charts/ChartEmbed';
+// import StackedBar from '@/components/charts/StackedBar';
 import MyChart from '@/components/charts/spChart';
 import { fetchReportById } from '@/lib/data';
 
@@ -71,12 +72,6 @@ export default async function ReportPage({
       </div>
 
 
-      {/* <div>
-        <p className="mb-4 text-4xl">grafico S&P</p>
-        <MyChart />
-      </div> */}
-
-
       <div className="mt-10 flex flex-col gap-8">
         <div className='flex max-2xl:flex-wrap max-2xl:justify-between gap-8'>
 
@@ -125,7 +120,8 @@ export default async function ReportPage({
                           suman y las rojas restan, dejando las grises como subtotales.
                         </p>
                       </div>
-                      
+                      <ChartEmbed src="https://visualize.graphy.app/view/fcc14466-5ab5-4e39-90b6-01801aaada32" />
+                      {/* <iframe src="https://vizzlo.com/embed/hwktFbEpS1S-Wefv8RSe4A?transparent&amp;nobacklink" style=" width: 400px; height: 225px; border:none; overflow:hidden;" allowTransparency="true" scrolling="no" frameborder="0"></iframe > */}
                       <div className='mt-4'>
                       
                       {renderTextFromDatabase(`${data.insights}`)}
