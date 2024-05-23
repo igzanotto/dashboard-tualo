@@ -1,8 +1,6 @@
-
 import ChartEmbed from '@/components/charts/ChartEmbed';
-// import StackedBar from '@/components/charts/StackedBar';
-import MyChart from '@/components/charts/spChart';
 import { fetchReportById } from '@/lib/data';
+import { FolderIcon } from '@heroicons/react/24/outline';
 
 export default async function ReportPage({
   params,
@@ -64,7 +62,14 @@ export default async function ReportPage({
         <p className="mb-4 text-4xl">{report.business.name}</p>
       </div>
 
-
+    <div className='w-[400px] bg-[#18C964] p-3 rounded-xl flex flex-col gap-3'>
+      <div className='flex items-center text-white gap-2 text-2xl font-medium'>
+        <FolderIcon width={30} height={30}/>
+        <p>Resumen</p>
+      </div>
+      <p className='text-zinc-100 font-medium'>En tu resumen verás una descripción detallada de tu empresa. A continuación, se abordan diversos aspectos clave del negocio.</p>
+      <button className='underline text-zinc-100 font-medium w-[100px]'>Ver más...</button>
+    </div>
       <div className="mt-10 flex flex-col gap-8">
         <div className='flex max-2xl:flex-wrap max-2xl:justify-between gap-8'>
 
