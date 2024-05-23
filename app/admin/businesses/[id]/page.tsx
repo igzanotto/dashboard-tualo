@@ -4,6 +4,7 @@ import AddIcon from "@/components/icons/AddIcon";
 import { InvoicesTableSkeleton } from "@/components/skeletons";
 import Link from "next/link";
 import { Suspense } from "react";
+import ChartIcon from "@/components/icons/ChartIcon";
 
 
 interface BusinessPageProps {
@@ -33,6 +34,7 @@ export default async function BusinessPage({ params, searchParams }: BusinessPag
                         Agregar nuevo reporte
                         <AddIcon/>
                     </Link>
+                    
                 </div>
                 <Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
                     <ReportsTable query={query} currentPage={currentPage} business_id={business_id}/>

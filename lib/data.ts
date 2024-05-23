@@ -98,6 +98,9 @@ export async function fetchReportsByBusinesses() {
       .select(`
         *,
         business_id(*)
+        business:business_id (name),
+        charts(type, insights, graphy_url),
+        recomendations(content)
       `)
       .in('business_id', ids);
 
@@ -218,5 +221,3 @@ export async function fetchBusinessThreadId(businessId:string) {
   }
 }
           
-
-     
