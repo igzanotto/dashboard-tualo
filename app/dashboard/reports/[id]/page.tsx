@@ -1,4 +1,5 @@
 import ChartEmbed from '@/components/charts/ChartEmbed';
+import ModalDashboard from '@/components/modal/Modal';
 import { fetchReportById } from '@/lib/data';
 import { FolderIcon } from '@heroicons/react/24/outline';
 
@@ -68,16 +69,18 @@ export default async function ReportPage({
         <p>Resumen</p>
       </div>
       <p className='text-zinc-100 font-medium'>En tu resumen verás una descripción detallada de tu empresa. A continuación, se abordan diversos aspectos clave del negocio.</p>
-      <button className='underline text-zinc-100 font-medium w-[100px]'>Ver más...</button>
+      <ModalDashboard name={report.business.name} resume={renderTextFromDatabase(report.business_resume)}/>
     </div>
+    
+
       <div className="mt-10 flex flex-col gap-8">
         <div className='flex max-2xl:flex-wrap max-2xl:justify-between gap-8'>
 
           <div className='flex flex-col w-[100%]'>
-            <p className="mb-4 text-4xl">Resumen</p>
+            {/* <p className="mb-4 text-4xl">Resumen</p>
             <div className='bg-slate-50 rounded-xl p-3 w-full'>
                 {renderTextFromDatabase(report.business_resume)}
-            </div>
+            </div> */}
 
             <div className='mt-4'>
               <p className="mb-4 text-4xl">Recomendaciones</p>

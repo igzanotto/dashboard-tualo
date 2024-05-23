@@ -1,7 +1,6 @@
 import { DM_Sans, Inter, Poppins } from "next/font/google";
 import { Metadata } from 'next';
 import "./globals.css";
-import { Providers } from "./Providers";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,9 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={poppins.className}>
       <body className={`antialiased`}>
-        <Providers>
-          {children}
-        </Providers>
+        {children}
       </body>
     </html>
   );
