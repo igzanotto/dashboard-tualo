@@ -1,4 +1,4 @@
-import ReportGenerator from "@/components/admin/reports/generator";
+import GoalsGenerator from "@/components/admin/reports/goals-generator";
 import { fetchBusinessThreadId } from "@/lib/data";
 
 export default async function BuildReportPage({ params }: { params: any }) {
@@ -8,7 +8,7 @@ export default async function BuildReportPage({ params }: { params: any }) {
   return (
     <main>
       <div className="mt-3">
-       <ReportGenerator threadId={threadId} />
+       <GoalsGenerator threadId={threadId} />
       </div>
     </main>
   );
