@@ -15,7 +15,7 @@ interface Props{
 export default function ModalDashboard({name, resume}:Props) {
   return (
     <Dialog>
-      <DialogTrigger className='underline w-[100px]'>Ver más...</DialogTrigger>
+      <DialogTrigger className='underline w-[100px] text-white'>Ver más...</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle className='my-4'>Resumen {name}</DialogTitle>
