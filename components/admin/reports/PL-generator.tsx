@@ -17,8 +17,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
   const [formData, setFormData] = useState<FormData>({
     PL_prompt:
       'A continuacion te dare una tabla con su P&L para que entiendas sus',
-    PL_transcript:
-      'definitivamente necesito vender más, no necesariamente porque sí creo que soy muy eficiente. Por otro lado, también necesito mejorar mi flujo porque tengo muy poco dinero en el banco y eso tiene que cambiar.',
+    PL_transcript: '',
     PL_close: 'dame un resumen de esto',
   });
 
@@ -99,7 +98,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
     const result = await response.json();
     console.log('Mensajes obtenidos con exito', result);
 
-    const responseBusinessResume = result.messagesData[3].content;
+    const responseBusinessResume = result.messagesData[5].content;
 
     if (!goals) {
       return;
@@ -126,7 +125,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
         rows={4}
         className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
         autoFocus
-        placeholder=">>> ingresar el transcript del Q&A <<<"
+        placeholder=">>> ingresar el P&L sin formato <<<"
       />
       <textarea
         name = "PL_close"
@@ -161,7 +160,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
 
         <div className="my-2 flex justify-end">
           <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
-            continuar con P&L
+            continuar con graficos
           </button>
         </div>
       </form>
