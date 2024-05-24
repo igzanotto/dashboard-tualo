@@ -112,7 +112,7 @@ export default async function ReportPage({
       <div className='my-14'>
         <p className="text-xl xl:text-4xl my-4 font-semibold">Resumen financiero</p>
 
-      <div className='2xl:grid 2xl:grid-cols-2 gap-8 my-10 flex flex-col'>
+      <div className='gap-8 my-10 flex flex-col'>
         {report.charts.map((data: any) => (
           <div
             key={data.id}
@@ -135,10 +135,13 @@ export default async function ReportPage({
                 restan, dejando las grises como subtotales.
               </p>
             </div>
-            <ChartEmbed src={data.graphy_url} />
-
-            <div className="mt-4">
-              {renderTextFromDatabase(`${data.insights}`)}
+            <div className='flex gap-8'> 
+              <div className='w-[60%]'>
+                <ChartEmbed src={data.graphy_url} />
+              </div>
+              <div className="mt-4 w-[40%]">
+                {renderTextFromDatabase(`${data.insights}`)}
+              </div>
             </div>
           </div>
         ))} 
