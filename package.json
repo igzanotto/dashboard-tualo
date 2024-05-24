@@ -9,7 +9,6 @@
     "seed": "node -r dotenv/config ./scripts/seed.js"
   },
   "dependencies": {
-    "@headlessui/react": "^2.0.3",
     "@heroicons/react": "^2.0.18",
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-select": "^2.0.0",
