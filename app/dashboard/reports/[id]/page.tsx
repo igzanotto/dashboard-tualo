@@ -63,8 +63,8 @@ export default async function ReportPage({
       <div>
         <p className="mb-4 text-4xl">{report.business.name}</p>
       </div>
-      <div className="flex items-center xl:gap-6 2xl:gap-8">
-        <div className="flex w-[400px] 2xl:h-[180px] h-[200px] flex-col gap-3 rounded-xl bg-emerald-500 p-3 shadow-2xl">
+      <div className="flex items-center xl:gap-6 2xl:gap-8 max-xl:flex-wrap gap-5">
+        <div className="flex w-[400px] 2xl:h-[180px] xl:h-[200px] max-xl:w-full flex-col gap-3 rounded-xl bg-emerald-500 p-3 shadow-2xl">
           <div className="flex items-center gap-2 text-2xl font-medium text-white">
             <FolderIcon width={30} height={30} />
             <p>Resumen</p>
@@ -78,7 +78,7 @@ export default async function ReportPage({
           />
         </div>
         {/* bg-gradient-to-r from-[#4C30C5] to-[#39AEFF] */}
-        <div className="flex w-[400px] 2xl:h-[180px] h-[200px]  flex-col gap-3 rounded-xl bg-yellow-500 p-3 shadow-2xl">
+        <div className="flex w-[400px] 2xl:h-[180px] xl:h-[200px] max-xl:w-full flex-col gap-3 rounded-xl bg-yellow-500 p-3 shadow-2xl">
           <div className="flex items-center gap-2 text-2xl font-medium text-white">
             <LightBulbIcon width={30} height={30} />
             <p>Recomendaciones</p>
@@ -95,7 +95,7 @@ export default async function ReportPage({
           />
         </div>
 
-        <div className="flex w-[400px] 2xl:h-[180px] h-[200px]  flex-col gap-3 rounded-xl bg-[#5a36fa] p-3 shadow-2xl">
+        <div className="flex w-[400px] 2xl:h-[180px] xl:h-[200px] max-xl:w-full  flex-col gap-3 rounded-xl bg-[#5a36fa] p-3 shadow-2xl">
           <div className="flex items-center gap-2 text-2xl font-medium text-white">
             <GoalIcon width={30} height={30} />
             <p>Metas financieras</p>
