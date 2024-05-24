@@ -11,8 +11,8 @@ export default async function ReportsIndexNavbar({
   const reports = await fetchReportsByBusiness(business_id);
 
   return (
-    <div className="flow-root">
-      <div className="border-1 mb-10 flex w-full gap-10 rounded-xl bg-gray-50 p-4">
+    
+      <nav className="border-1 mb-10 flex gap-10 rounded-xl p-4 sticky -top-10 z-50" id='reportsNavbar'>
         {reports &&
           reports.map((report) => (
             <ReportsButton
@@ -21,7 +21,6 @@ export default async function ReportsIndexNavbar({
               month={report.month}
             />
           ))}
-      </div>
-    </div>
+      </nav>
   );
 }
