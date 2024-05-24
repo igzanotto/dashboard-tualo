@@ -9,7 +9,6 @@ export default async function BuildReportPage({ params }: { params: any }) {
   return (
     <main>
       <div className="mt-3">
-       {/* <ServerFetcher businessId={id} /> */}
        <ReportGenerator threadId={threadId} />
       </div>
     </main>
