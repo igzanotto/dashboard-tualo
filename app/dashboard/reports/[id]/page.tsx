@@ -57,11 +57,11 @@ export default async function ReportPage({
 
   return (
     <div className="flex flex-col gap-3">
-      <h1 className={`text-2xl`}>
+      <h1 className={`text-2xl font-semibold`}>
         Reporte de <span className="capitalize">{report.month}</span>
       </h1>
       <div>
-        <p className="mb-4 text-4xl">{report.business.name}</p>
+        <p className="mb-4 text-xl xl:text-4xl font-semibold">{report.business.name}</p>
       </div>
       <div className="flex items-center xl:gap-6 2xl:gap-8 max-xl:flex-wrap gap-5">
         <div className="flex w-[400px] 2xl:h-[180px] xl:h-[200px] max-xl:w-full flex-col gap-3 rounded-xl bg-emerald-500 p-3 shadow-2xl">
@@ -109,32 +109,67 @@ export default async function ReportPage({
           />
         </div>
       </div>
+      <div className='my-14'>
+        <p className="text-xl xl:text-4xl my-4 font-semibold">Resumen financiero</p>
 
-      <div className="mt-10 flex flex-col gap-8">
+      <div className='2xl:grid 2xl:grid-cols-2 gap-8 my-10 flex flex-col'>
+        {report.charts.map((data: any) => (
+          <div
+            key={data.id}
+            className="w-full rounded-xl p-3 bg-slate-50 shadow-lg"
+          >
+            <p className="text-xl xl:text-2xl my-4 font-semibold"> Gráfica de <span>{data.type}</span></p>
+            <div className="flex items-start gap-2 mb-8">
+              <div className="relative translate-y-0.5">
+                <InfoIcon width={20} height={20}/> 
+              </div>
+              <p>
+                Esta gráfica se lee de izquierda a derecha: inicia con
+                ingresos totales, luego se deducen los costos de
+                producción (los que están directamente relacionado con
+                las ventas), revelando la utilidad bruta. A
+                continuación, se restan los gastos operativos (los que
+                son indirectos) para obtener la utilidad operativa. Por
+                último se deducen los gastos financieros, para llegar a
+                la utilidad neta. Las barras verdes suman y las rojas
+                restan, dejando las grises como subtotales.
+              </p>
+            </div>
+            <ChartEmbed src={data.graphy_url} />
+
+            <div className="mt-4">
+              {renderTextFromDatabase(`${data.insights}`)}
+            </div>
+          </div>
+        ))} 
+        </div>
+      </div>
+
+      {/* <div className="mt-10 flex flex-col gap-8">
         <div className="flex gap-8 max-2xl:flex-wrap max-2xl:justify-between">
           <div className="flex w-[100%] flex-col">
-            {/* <p className="mb-4 text-4xl">Resumen</p>
+            <p className="mb-4 text-4xl">Resumen</p>
             <div className='bg-slate-50 rounded-xl p-3 w-full'>
                 {renderTextFromDatabase(report.business_resume)}
-            </div> */}
+            </div>
 
-            {/* <div className="mt-4">
+            <div className="mt-4">
               <p className="mb-4 text-4xl">Recomendaciones</p>
               <div className="rounded-xl bg-slate-50 p-3">
                 {report.recomendations.map((data: any) => (
                   <div>{renderTextFromDatabase(`${data.content}`)}</div>
                 ))}
               </div>
-            </div> */}
+            </div>
           </div>
 
           <div className="flex w-full flex-col gap-8">
-            {/* <div>
+            <div>
               <p className="mb-4 text-4xl">Metas financieras</p>
               <div className="rounded-xl bg-slate-50 p-3">
                 {renderTextFromDatabase(report.goals)}
               </div>
-            </div> */}
+            </div>
             <div>
               <p className="mb-4 text-4xl">Resumen financiero</p>
               <div className="flex flex-col gap-10">
@@ -151,9 +186,8 @@ export default async function ReportPage({
                     </p>
                     <div className="flex items-start gap-2">
                       <div className="relative translate-y-0.5">
-                        
+                        <InfoIcon width={20} height={20}/> 
                       </div>
-                        <InfoIcon width={20} height={20}/>
                       <p>
                         Esta gráfica se lee de izquierda a derecha: inicia con
                         ingresos totales, luego se deducen los costos de
@@ -178,7 +212,7 @@ export default async function ReportPage({
           </div>
         </div>
         <div></div>
-      </div>
+      </div> */}
     </div>
   );
 }

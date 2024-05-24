@@ -18,9 +18,9 @@ export default function ModalDashboard({name, resume}:Props) {
       <DialogTrigger className='underline w-[100px] text-white'>Ver más...</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className='my-4'>Resumen {name}</DialogTitle>
+          <DialogTitle className='my-4 xl:text-2xl'>{name}</DialogTitle>
           <DialogDescription>
-            {resume}
+            <p className='xl:text-xl text-black'>{resume}</p>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>
