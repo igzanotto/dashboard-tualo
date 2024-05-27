@@ -36,6 +36,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
     );
   }
 
+
   return (
     <div className='flex items-center gap-4'>
       {report.charts.map((chart: any) => (

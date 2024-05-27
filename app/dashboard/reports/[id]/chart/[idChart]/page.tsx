@@ -20,7 +20,6 @@ export default async function ChartPage({
       <div>
         <h2>{chart.type}</h2>
         <div>
-          {/* Renderizar el gráfico o información relacionada */}
           <ChartEmbed src={chart.graphy_url} />
         </div>
         <div>

@@ -19,8 +19,9 @@ export default async function ReportsIndexNavbar({
       {reports && <MonthButton reports={reports} />}
 
       {reports && reports.length > 0 && (
-        <ChartNavigation reportId={reports[0].id} /> // Aquí se pasa el primer reporte
+        <ChartNavigation reportId={reports[0].id} />
       )}
+
     </nav>
   );
 }
