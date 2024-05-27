@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/button';
-import { buildGoalsReport } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
@@ -13,6 +12,7 @@ interface FormData {
 
 export default function PLGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
+  const business_id = useParams().business_id as string;
 
   const [formData, setFormData] = useState<FormData>({
     PL_prompt:
@@ -107,6 +107,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
     goals.innerHTML = responseBusinessResume;
   };
 
+
   return (
     <div className="mt-3">
       <h1 className="my-3 text-center">Generador de informes</h1>
@@ -146,7 +147,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
       <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
         Actualizar metas financieras
       </h2>
-      <form action={buildGoalsReport}>
+      <form>
         <label htmlFor="goals" className="mt-3 block">
           Metas financieras
         </label>
@@ -159,9 +160,9 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
         <input type="text" name="report_id" defaultValue={report_id} hidden />
 
         <div className="my-2 flex justify-end">
-          <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
-            continuar con graficos
-          </button>
+          <a href={`/admin/businesses/${business_id}/reports/${report_id}/graphs`} className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
+            Ir a Gráficos
+          </a>
         </div>
       </form>
     </div>
