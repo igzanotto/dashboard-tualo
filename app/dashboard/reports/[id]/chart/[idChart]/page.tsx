@@ -4,7 +4,7 @@ import { fetchReportById } from '@/lib/data';
 import { FolderIcon, LightBulbIcon } from '@heroicons/react/24/outline';
 import { GoalIcon, InfoIcon } from 'lucide-react';
 
-export default async function ReportPage({
+export default async function ChartPage({
   params,
 }: {
   params: { id: string };
