@@ -120,7 +120,7 @@ export default async function ReportPage({
         </div>
       </div>
 
-      <div className="my-14">
+      {/* <div className="my-14">
         <p className="my-4 text-xl font-semibold xl:text-4xl">
           Resumen financiero
         </p>
@@ -167,7 +167,7 @@ export default async function ReportPage({
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

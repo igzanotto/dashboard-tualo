@@ -7,7 +7,7 @@ interface VisualizationEmbedProps {
       <iframe
         src={src}
         title="Visualization"
-        className="w-full h-screen border-none max-lg:h-[500px]"
+        className="w-[80%] h-[500px] border-none max-lg:h-[500px]"
       />
     </div>
   );
