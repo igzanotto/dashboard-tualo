@@ -160,7 +160,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
         <input type="text" name="report_id" defaultValue={report_id} hidden />
 
         <div className="my-2 flex justify-end">
-          <a href={`/admin/businesses/${business_id}/reports/${report_id}/graphs`} className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
+          <a href={`/admin/businesses/${business_id}/reports/${report_id}/charts`} className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
             Ir a Gráficos
           </a>
         </div>

@@ -262,3 +262,56 @@ export async function buildChartsInsights(formData:FormData) {
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/analysis`);
 }
 
+const RecomendationsFormSchema = z.object({
+  report_id: z.string(),
+  business_id: z.string(),
+  first_recomendation: z.string(),
+  second_recomendation: z.string(),
+  third_recomendation: z.string(),
+  fourth_recomendation: z.string().optional(),
+});
+
+const BuildRecomendations = RecomendationsFormSchema.omit({id: true, business_id: true, report_id: true});
+
+export async function buildRecomendations(formData:FormData) {
+  console.log("adentro de recomendations builder")
+  console.log(formData);
+  const report_id = formData.get('report_id');
+  const business_id = formData.get('business_id');
+
+  const {
+    first_recomendation,
+    second_recomendation, 
+    third_recomendation, 
+    fourth_recomendation, 
+  } = BuildRecomendations.parse({
+    first_recomendation: formData.get('first_recomendation'),
+    second_recomendation: formData.get('second_recomendation'),
+    third_recomendation: formData.get('third_recomendation'),
+    fourth_recomendation: formData.get('fourth_recomendation'),
+  });
+
+  const recommendations = [
+    { content: first_recomendation, report_id: report_id },
+    { content: second_recomendation, report_id: report_id },
+    { content: third_recomendation, report_id: report_id },
+    { content: fourth_recomendation, report_id: report_id },
+  ];
+
+  // Filter out empty recommendations
+  const nonEmptyRecommendations = recommendations.filter(rec => rec.content);
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('recomendations')
+    .insert(nonEmptyRecommendations)
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("recomendaciones generadas correctamente");
+  }
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}`);
+}
