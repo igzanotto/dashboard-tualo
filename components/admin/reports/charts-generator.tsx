@@ -11,6 +11,7 @@ interface FormData {
 
 export default function ChartsGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
+  const business_id = useParams().business_id as string;
 
   const [formData, setFormData] = useState<FormData>({
     charts_prompt: `
@@ -141,6 +142,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
           <div className='flex'>
             <div className="w-1/2 pr-4">
               <input type="text" name="report_id" defaultValue={report_id} hidden />
+              <input type="text" name="business_id" defaultValue={business_id} hidden />
               <label htmlFor="chartsResponse">Respuesta de las graficas</label>
               <textarea
                 rows={30}

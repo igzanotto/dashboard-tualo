@@ -181,9 +181,10 @@ const ChartsFormSchema = z.object({
   margins_chart_insights: z.string(),
   detailed_expenses_chart_insights: z.string(),
   report_id: z.string(),
+  business_id: z.string(),
 });
 
-const BuildChartsInsights = ChartsFormSchema.omit({id: true, report_id: true});
+const BuildChartsInsights = ChartsFormSchema.omit({id: true, business_id: true, report_id: true});
 
 export async function buildChartsInsights(formData:FormData) {
   console.log("adentro de charts builder")
