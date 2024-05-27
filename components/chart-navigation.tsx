@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { fetchReportById } from "@/lib/data";
+import SkeletonButtons from "./skeleton-buttons";
 
 interface ChartNavigationProps {
   reportId: string;
@@ -23,7 +24,16 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
   }, [reportId]);
 
   if (!report) {
-    return <div>Loading...</div>;
+    return (
+      <div className='flex items-center gap-4'>
+        <SkeletonButtons />
+        <SkeletonButtons />
+        <SkeletonButtons />
+        <SkeletonButtons />
+        <SkeletonButtons />
+        <SkeletonButtons />
+      </div>
+    );
   }
 
   return (
