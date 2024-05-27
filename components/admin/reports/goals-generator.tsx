@@ -16,9 +16,8 @@ export default function GoalGenerator({ threadId }: { threadId: any }) {
 
   const [formData, setFormData] = useState<FormData>({
     goals_prompt:
-      'le pedí al emprendedor que eligiera la(s) opción(es) que más correspondieran a sus metas actuales desde el punto de vista de las finanzas de su empresa y me dijo lo siguiente.',
-    goals_transcript:
-      'definitivamente necesito vender más, no necesariamente porque sí creo que soy muy eficiente. Por otro lado, también necesito mejorar mi flujo porque tengo muy poco dinero en el banco y eso tiene que cambiar.',
+      'Le pedí al emprendedor que eligiera la(s) opción(es) que más correspondieran a sus metas actuales desde el punto de vista de las finanzas de su empresa. A continuación su respuesta:',
+    goals_transcript:'definitivamente necesito vender más, no necesariamente porque sí creo que soy muy eficiente. Por otro lado, también necesito mejorar mi flujo porque tengo muy poco dinero en el banco y eso tiene que cambiar.',
     goals_close: 'dame un resumen de esto',
   });
 
@@ -110,7 +109,9 @@ export default function GoalGenerator({ threadId }: { threadId: any }) {
 
   return (
     <div className="mt-3">
-      <h1 className="my-3 text-center">Generador de informes</h1>
+      <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
+        Generar metas financieras
+      </h2>
 
       <textarea
         name="goals_prompt"
@@ -126,7 +127,7 @@ export default function GoalGenerator({ threadId }: { threadId: any }) {
         rows={4}
         className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
         autoFocus
-        placeholder=">>> ingresar el transcript del Q&A <<<"
+        placeholder=">>> ingresar el transcript de las metas <<<"
       />
       <textarea
         name="goals_close"
@@ -145,12 +146,10 @@ export default function GoalGenerator({ threadId }: { threadId: any }) {
       </div>
 
       <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
-        Actualizar metas financieras
+        Metas financieras
       </h2>
       <form action={buildGoals}>
-        <label htmlFor="goals" className="mt-3 block">
-          Metas financieras
-        </label>
+        
         <textarea
           rows={9}
           id="goals"

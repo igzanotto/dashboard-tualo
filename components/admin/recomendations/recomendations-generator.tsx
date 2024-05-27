@@ -233,7 +233,7 @@ export default function RecomendationsGenerator({
   return (
     <div className="mt-3">
       <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
-        Generador de Analisis financiero
+        Generar recomendaciones
       </h2>
 
       <textarea

@@ -115,7 +115,9 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
 
   return (
     <div className="mt-3">
-      <h1 className="my-3 text-center">Generador de informes</h1>
+      <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
+        Generar insights de graficas
+      </h2>
 
       <textarea
         name="PL_prompt"
@@ -133,94 +135,103 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
         <input type="text" defaultValue={threadId} name="thread_id" />
       </div>
 
-        <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
-          insights de graficas
-        </h2>
+      <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
+        Insights de graficas
+      </h2>
 
-        <form action={buildChartsInsights}>
+      <form action={buildChartsInsights}>
+        <div className="flex">
+          <div className="w-1/2 pr-4">
+            <input
+              type="text"
+              name="report_id"
+              defaultValue={report_id}
+              hidden
+            />
+            <input
+              type="text"
+              name="business_id"
+              defaultValue={business_id}
+              hidden
+            />
+            <label htmlFor="chartsResponse">Respuesta de las graficas</label>
+            <textarea
+              rows={30}
+              id="chartsResponse"
+              name="chartsResponse"
+              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+            />
+          </div>
 
-          <div className='flex'>
-            <div className="w-1/2 pr-4">
-              <input type="text" name="report_id" defaultValue={report_id} hidden />
-              <input type="text" name="business_id" defaultValue={business_id} hidden />
-              <label htmlFor="chartsResponse">Respuesta de las graficas</label>
-              <textarea
-                rows={30}
-                id="chartsResponse"
-                name="chartsResponse"
-                className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-              />
-            </div>
-
-            <div className="w-1/2 pl-4">
-              <label htmlFor="waterfall_chart_insights">grafico de cascada</label>
-              <textarea
-                name="waterfall_chart_insights"
-                onChange={handleChange}
-                rows={4}
-                className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-                autoFocus
-                placeholder=">>> insights del grafico de cascada <<<"
-              />
-              <label htmlFor="sales_chart_insights">grafico de ventas</label>
-              <textarea
-                name="sales_chart_insights"
-                onChange={handleChange}
-                rows={4}
-                className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-                autoFocus
-                placeholder=">>> insights del grafico de ventas <<<"
-              />
-              <label htmlFor="costs_and_expenses_chart_insights">
-                grafico de costos y gastos
-              </label>
-              <textarea
-                name="costs_and_expenses_chart_insights"
-                onChange={handleChange}
-                rows={4}
-                className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-                autoFocus
-                placeholder=">>> insights del grafico de costos y gastos <<<"
-              />
-              <label htmlFor="net_profit_and_margins_chart_insights">
-                grafico de utilidad neta y margen neto
-              </label>
-              <textarea
-                name="net_profit_and_margins_chart_insights"
-                onChange={handleChange}
-                rows={4}
-                className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-                autoFocus
-                placeholder=">>> insights del grafico de utilidad neta y margen neto <<<"
-              />
-              <label htmlFor="margins_chart_insights">grafico de margenes</label>
-              <textarea
-                name="margins_chart_insights"
-                onChange={handleChange}
-                rows={4}
-                className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-                autoFocus
-                placeholder=">>> insights del grafico de margenes <<<"
-              />
-              <label htmlFor="detailed_expenses_chart_insights">
-                grafico de costos desglosados
-              </label>
-              <textarea
-                name="detailed_expenses_chart_insights"
-                onChange={handleChange}
-                rows={4}
-                className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-                autoFocus
-                placeholder=">>> insights del grafico de costos desglosados <<<"
-              />
-              <div className="my-2 flex justify-end">
-                <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
-                  continuar con analisis
-                </button>
-              </div>
+          <div className="w-1/2 pl-4">
+            <label htmlFor="waterfall_chart_insights">grafico de cascada</label>
+            <textarea
+              name="waterfall_chart_insights"
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              autoFocus
+              placeholder=">>> insights del grafico de cascada <<<"
+            />
+            <label htmlFor="sales_chart_insights">grafico de ventas</label>
+            <textarea
+              name="sales_chart_insights"
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              autoFocus
+              placeholder=">>> insights del grafico de ventas <<<"
+            />
+            <label htmlFor="costs_and_expenses_chart_insights">
+              grafico de costos y gastos
+            </label>
+            <textarea
+              name="costs_and_expenses_chart_insights"
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              autoFocus
+              placeholder=">>> insights del grafico de costos y gastos <<<"
+            />
+            <label htmlFor="net_profit_and_margins_chart_insights">
+              grafico de utilidad neta y margen neto
+            </label>
+            <textarea
+              name="net_profit_and_margins_chart_insights"
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              autoFocus
+              placeholder=">>> insights del grafico de utilidad neta y margen neto <<<"
+            />
+            <label htmlFor="margins_chart_insights">grafico de margenes</label>
+            <textarea
+              name="margins_chart_insights"
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              autoFocus
+              placeholder=">>> insights del grafico de margenes <<<"
+            />
+            <label htmlFor="detailed_expenses_chart_insights">
+              grafico de costos desglosados
+            </label>
+            <textarea
+              name="detailed_expenses_chart_insights"
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              autoFocus
+              placeholder=">>> insights del grafico de costos desglosados <<<"
+            />
+            <div className="my-2 flex justify-end">
+              <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
+                continuar con analisis
+              </button>
             </div>
           </div>
-        </form>
+        </div>
+      </form>
     </div>
   );
 }

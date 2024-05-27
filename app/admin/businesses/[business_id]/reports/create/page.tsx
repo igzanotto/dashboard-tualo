@@ -6,7 +6,6 @@ import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
 interface FormData {
-  start_prompt: string;
   QA_prompt: string;
   QA_transcript: string;
   QA_close: string;
@@ -17,25 +16,59 @@ export default function CreateReportPage({ params }: { params: any }) {
   console.log('business_id', business_id);
 
   const [formData, setFormData] = useState<FormData>({
-    // start_prompt:
-    //   'voy a darle asesoría financiera a un cliente, vas a ayudarme a hacerla te voy a dar contexto sobre la empresa y sus metas financieras, así como su P&L de los últimos meses con base en eso, me vas a generar tres entregables: 1. comentarios de las gráficas 2. highlights y análisis del P&L 3. recomendaciones estratégicas tus respuestas deben de ser concisas y el lenguaje que uses debe de ser para gente no-financiera, que sea fácil de entender e interpretar estás de acuerdo?',
-    // QA_prompt:
-    //   'primero te daré el transcript de la sesión de Q&A que tuve con el cliente, quiero que lo analices y me devuelvas un resumen. Aquí está el transcript:',
-    // QA_transcript:
-    //   '1. ¿Cómo te llamas y cuál es tu posición en la empresa?\n\nDorothy Lerch, soy propietaria de Casa Kooch y realizo básicamente todas las actividades: dirigir, cocinar, entregar, administrar, pagos, cobranza, toda la operación del día a día.\n\nHay una persona adicional que me ayuda tanto en cocina como en entrega.\n\n2. ¿Cuál es el nombre de tu empresa y en qué industria o sector opera?\n\nCasa Kooch, es del sector alimenticio, hacemos particularmente quesos y postres veganos en venta ya sea particular o en tiendas retail.\n\n3. Pensando en el modelo de negocios de tu empresa, ¿qué tipo de empresa tienes? Escribe solo la letra que más se ajuste a tu empresa: a. Venta de bienes tangibles (como minoristas, restaurantes, o fabricantes)\n\na. Venta de bienes tangibles (como minoristas, restaurantes, o fabricantes)\n\n4. ¿Podrías describir brevemente tu modelo de negocio y cómo haces dinero? ¿Qué tipo de bienes o servicios ofreces? Si son más de un bien o servicio, por favor haz una lista completa.\n\nVenta de quesos principalmente, tanto a particular como a retail. Es venta de bienes, no ofrezco ningún servicio. Lo hacemos en la CDMX por el momento, con el objetivo de expandirnos a otras partes de la república. Como funciona es que producimos quesos semanalmente y entregamos a los clientes que ya nos compramos. Los productos son: quesos de diferentes tipos, postres, algunos son de temporada y algunos nos toman tiempo producirlos.\n\n5. ¿Podrías describir tu target de clientes? ¿A qué segmentos estás dirigido?\n\nMi target principalmente es gente vegana, que no consume productos de origen animal. También se expande a gente que no consume lácteos, gluten o soya. También están aquellos que solo le gustan los quesos aunque no tengan restricciones. Es un producto caro por lo que el sector es de altos ingresos.\n\n6. Podrías describir el manejo de cuentas bancarias en tu empresa: ¿Tienen una o varias cuentas dedicadas? ¿Utilizan tarjetas de crédito de la empresa, realizan operaciones en efectivo frecuentemente, etc.? ¿Usas algún software de ventas? Si tienes más de una cuenta, haz una lista de todas mencionando el banco y qué tipo de uso le dan.\n\nManejo dos cuentas bancarias, una es de ahorro de BBVA y otra que es de crédito de AMEX. Ambas están ligadas a mis gastos personales también. Tenemos algunas operaciones en efectivo pero son muy pocas, menos del 10%. Todo está registrado en mi excel, aunque no viene detallado el método de pago. Ese efectivo lo suelo usar para gastos personales. Donde más vendo en efectivo es en bazares. El software que uso de ventas es Google Sheets y yo manualmente voy actualizando mis ventas. También WA for Business para dar seguimiento a los clientes.\n\n7. ¿Tienes algún tipo de deuda o financiamiento? Si sí, describe brevemente las condiciones (plazo, fecha de contratación, monto inicial, tasa de interés, tipo de interés, quién fue el prestador, etc).\n\nSolo mi tarjeta de crédito, nada más.\n\n8. ¿Cómo describirías el nivel de estrés financiero que tu empresa está experimentando actualmente? ¿Qué lo está causando y cómo planean manejarlo?\n\nEstrés financiero altísimo, vivimos al día. Cada pago que recibimos lo usamos para pagar cosas y es mucha presión. Parte de la raíz es no tener claridad administrativa y no entender cuánto se va al negocio vs a mis gastos personales, y entonces yo como emprendedora también tengo un alto estrés financiero. La forma en la que lo queremos manejar es tener más orden y claridad, y por eso esta asesoría! Hay mucho dinero que gastamos en envíos, muchos los pagan los clientes, pero hay mucho ahí que yo absorbo y que no tengo claridad. También hay temas con la merma, que no es demasiada, pero por ahí también hay áreas de mejora.\n\n9. ¿Cuál es la meta financiera más importante para tu empresa actualmente? Por favor, elige una de las siguientes opciones, explicando porqué la elegiste. a. "Necesito vender más o gastar menos": Puede ser que quieras aumentar tus ingresos, ya sea encontrando más clientes, vendiendo más productos o servicios, o reduciendo tus gastos actuales. b. "Necesito más dinero en el banco": Podría ser que quieras mejorar tu flujo de efectivo o tener más ahorros para emergencias o futuras inversiones. c. "Necesito obtener un préstamo o encontrar inversionistas": Para algunas empresas pequeñas, un objetivo clave puede ser obtener financiamiento externo. d. "Necesito crecer mi negocio": Esto podría implicar contratar más personal, abrir una nueva sucursal, o expandir tu oferta de productos o servicios. e. "Otro"\n\nRespuesta: A, B y D\n\nJustificación: con la A definitivamente necesito vender más, aunque gastar menos no necesariamente porque sí creo que soy muy eficiente. Por otro lado, la B, también necesito mejorar mi flujo porque tengo muy poco dinero en el banco y eso tiene que cambiar. Y la D también, que está ligada a incrementar las ventas, pero no solo eso sino que tener más capacidad instalada (probablemente tener un taller e invertir en máquinas para hacer mejores y más eficientes mis procesos).\n\n10. Bonus: ¿algo más que creas relevante añadir?\n\nNo por ahora. Seguro saldrán más cosas después, pero por ahora esto es lo importante. Algo importante es diferencias mis ventas a particulares vs mis ventas en retail. Las particulares las hago directo a través de WA, yo lo coordino y ejecuto y las termino entregando a través de un chofer que me ayuda algunos días a la semana (con rutas pre-planeadas) o con LalaMove que es un servicio de entregas (los envíos casi siempre los cobro a parte, a veces con un poco de margen pero hay veces que incluso subsidio yo). Y el modelo de retail es yo buscando a las tiendas que ya tengo en mi cartera, suelen ser ventas más planeadas y con una mejor estructura para mi producción. Las entrego de forma similar. El 50% de los clientes de retail me paga el producto contra entrega, y el otro 50% me paga a final del mes, y aunque es compra a consignación casi nunca hay merma entonces es prácticamente venta en firme. Se los vendo con un 30-35% de descuento, dependiendo el deal. Otra cosa importante es que mi comunicación no es muy buena: no tengo pagina de internet, ni newsletter o otras cosas de contenido, no capturo datos de mis clientes ni nada similar. Donde más me esfuerzo es en Instagram, pero estoy segura que podría mejorar para tener más ventas. Hay otros gastos que sé que son muy importantes y necesarios que no he hecho porque no tengo dinero: contratar un servicio profesional para tomar fotos de mis productos y que mejoren las ventas; contratar un químico en alimentos que me ayude con las recetas y a optimizar mis procesos, etc',
-    // QA_close:
-    //   'si te queda claro, hazme un resumen de esto y pídeme la información de sus metas financieras',
-    start_prompt:
-      'voy a darle asesoría financiera a un cliente, vas a ayudarme a hacerla ',
-    QA_prompt: 'te voy a pasar la transcriopcion de la entrevista que tuvimos',
-    QA_transcript:
-      'de que se trata tu empresa? \
-      vendemos ropa \
-      cuanto vendieron el mes pasado? \
-      vendimos 10000 en poleras y 2000 en pantalones \
-      cuantas personas trabajan en la empresa? \
-      estoy yo con mi socio y otros 3 empleados',
-    QA_close: 'dame una descripcion de lo que crees que podria ser la empresa',
+    QA_prompt:
+      'Este es el formulario que completo mi cliente con informacion relevante de su empresa',
+    QA_transcript: `1. ¿Cómo te llamas y cuál es tu posición en la empresa?
+    Ana Carolina Salcedo, dueña
+    2. ¿Cuál es el nombre de tu empresa y en qué industria o sector opera?
+    Amïn Condesa
+    sector alimenticio
+    3. Pensando en el modelo de negocios de tu empresa, ¿qué tipo de empresa tienes? Escribe solo la letra que más se ajuste a tu empresa:
+    **a. Venta de bienes tangibles (como minoristas, restaurantes, o fabricantes)**
+    b. Prestación de servicios (como consultoría, educación, salud)
+    ****c. Productos de software y tecnología (empresas como SaaS o hardware)
+    d. Bienes raíces y construcción
+    ****e. Instituciones financieras (que ganan dinero a través de intereses de préstamos e inversiones)
+    f. Empresas de energía y servicios públicos (que venden electricidad, agua, gas, etc.)
+    4. ¿Podrías describir brevemente tu modelo de negocio y cómo haces dinero? ¿Qué tipo de bienes o servicios ofreces? Si son más de un bien o servicio, por favor haz una lista completa.
+    Ofrezco café, pan dulce y pan salado, bebidas frías y calientes, tisanas, desayunos y tapas o sándwiches, además estoy haciendo mi nueva línea de productos: croissants rellenos (dulces y salados)
+    básicamente vendemos bebidas y comida en mi cafetería
+    5. ¿Podrías describir tu target de clientes? ¿A qué segmentos estás dirigido?
+    doble A, no tanto triple A
+    edades: quiero acaparar el mercado juvenil pero aun no lo tengo, de licenciatura en adelante
+    6. Podrías describir el manejo de cuentas bancarias en tu empresa: ¿Tienen una o varias cuentas dedicadas? ¿Utilizan tarjetas de crédito de la empresa, realizan operaciones en efectivo frecuentemente, etc.? ¿Usas algún software de ventas? Si tienes más de una cuenta, haz una lista de todas mencionando el banco y qué tipo de uso le dan.
+    uso un software de venta, sistema operativo, que se llama AMDIT
+    hay dos cuentas bancarias: 
+    - Santander: la uso para darles tarjeta a empleados y se hacen compras en Costco y Sam’s
+    - Inbursa: es mi cuenta principal, y la tengo porque la terminal cobra las menores comisiones, también para compras en Walmart, la abrí en junio de este año
+    opero con tarjetas de crédito, tengo terminal de Inbursa
+    el efectivo que ingresamos se usa para pagar algunos insumos y caja chica
+    7. ¿Tienes algún tipo de deuda o financiamiento? Si sí, describe brevemente las condiciones (plazo, fecha de contratación, monto inicial, tasa de interés, tipo de interés, quién fue el prestador, etc).
+    sí, un crédito con Santander ligado a la cuenta del negocio
+    monto: 1mdp
+    originación: nov 2022, renovado en julio 2023
+    crédito de pymes
+    tasa de interés variable: me habían ofrecido 18.9% pero varía dependiendo la tasa de referencia
+    me lo cobran mensualmente a mi cuenta fiscal, $25,138.34 pago cada mes de capital y el interés varía
+    plazo: 48 meses a partir de julio 2023
+    8. ¿Cómo describirías el nivel de estrés financiero que tu empresa está experimentando actualmente? ¿Qué lo está causando y cómo planean manejarlo?
+    de agosto a septiembre hubo una variación a la baja de 10%
+    de mayo a junio aprox una baja de 15%
+    es decir, de mayo a septiembre, aprox ha bajado 25%
+    lo está causando el estrés económico general del país, y no he tocado los precios hace un año, tengo que modificarlos y también tengo que innovar con mi nueva línea de productos y con servicio enfocado más hacia la tarde/noche (tengo bien cubierto lo de la mañana y mediodía con los productos que vendo); planeo incorporar alcohol hasta las 5pm 
+    9. ¿Cuál es la meta financiera más importante para tu empresa actualmente? Por favor, elige una de las siguientes opciones, explicando porqué la elegiste.
+    **a. "Necesito vender más o gastar menos": Puede ser que quieras aumentar tus ingresos, ya sea encontrando más clientes, vendiendo más productos o servicios, o reduciendo tus gastos actuales.**
+    b. "Necesito más dinero en el banco": Podría ser que quieras mejorar tu flujo de efectivo o tener más ahorros para emergencias o futuras inversiones.
+    c. "Necesito obtener un préstamo o encontrar inversionistas": Para algunas empresas pequeñas, un objetivo clave puede ser obtener financiamiento externo.
+    **d. "Necesito crecer mi negocio": Esto podría implicar contratar más personal, abrir una nueva sucursal, o expandir tu oferta de productos o servicios.**
+    e. "Otro": 
+    justificación: tengo ambas, porque sí necesito cubrir tardes y noche de venta, aumentar la venta, en función de los productos que ofrezco ya que el local está muy bien ubicado y hay afluencia. hay un restaurante al lado muy grande y variado pero yo tengo lo que ellos no tienen. y claro: me encantaría replicarlo, pero lo haría con algo más establecido (con una cocina, etc), acá me aventé más pronto pero ya tengo más aprendida la línea para uno nuevo
+    10. Bonus: ¿algo más que creas relevante añadir?
+    - soy persona física con actividad empresarial, y manejo otros negocios (manejo departamentos en renta en Tulúm)
+    - sé que lo que necesito es un menú con imágenes más atractivas y que el cliente vea lo que vendo, que sea vistoso y que le de opciones al cliente para decidir
+    - necesito saber los costos que varían de mis recetas para en función a eso ir variando los precios de mis productos, porque sé que ahorita ya me rebasaron los costos vs mis precios
+    - necesito llevar un inventario más estrictamente para que genere la menor merma, un control de inventarios`,
+    QA_close: 'hazme un resumen de esto',
   });
 
   const [threadId, setThreadId] = useState('');
@@ -84,10 +117,7 @@ export default function CreateReportPage({ params }: { params: any }) {
       },
       body: JSON.stringify({
         content:
-          formData.start_prompt +
-          formData.QA_prompt +
-          formData.QA_transcript +
-          formData.QA_close,
+          formData.QA_prompt + formData.QA_transcript + formData.QA_close,
         threadId: threadId,
       }),
     });
@@ -156,15 +186,9 @@ export default function CreateReportPage({ params }: { params: any }) {
   return (
     <main>
       <div className="mt-3">
-        <h1 className="my-3 text-center">Generador de reportes</h1>
-
-        <textarea
-          name="start_prompt"
-          value={formData.start_prompt}
-          onChange={handleChange}
-          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-          autoFocus
-        />
+        <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
+          Generador de Reportes
+        </h2>
         <textarea
           name="QA_prompt"
           value={formData.QA_prompt}
