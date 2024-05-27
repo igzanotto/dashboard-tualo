@@ -3,6 +3,7 @@ import ModalDashboard from '@/components/modal/Modal';
 import { fetchReportById } from '@/lib/data';
 import { FolderIcon, LightBulbIcon } from '@heroicons/react/24/outline';
 import { GoalIcon, InfoIcon } from 'lucide-react';
+import Link from 'next/link';
 
 export default async function ReportPage({
   params,
@@ -114,36 +115,41 @@ export default async function ReportPage({
 
       <div className='gap-8 my-10 flex flex-col'>
         {report.charts.map((data: any) => (
-          <div
-            key={data.id}
-            className="w-full rounded-xl p-3 bg-slate-50 shadow-lg"
-          >
-            <p className="text-xl xl:text-2xl my-4 font-semibold"> Gráfica de <span>{data.type}</span></p>
-            <div className="flex items-start gap-2 mb-8">
-              <div className="relative translate-y-0.5">
-                <InfoIcon width={20} height={20}/> 
+          <Link href={`/dashboard/reports/${report.id}/chart/${data.id}`}>
+            <div
+              key={data.id}
+              className="w-full rounded-xl p-3 bg-slate-50 shadow-lg"
+            >
+              <p className="text-xl xl:text-2xl my-4 font-semibold"> Gráfica de <span>{data.type}</span></p>
+              <p className="text-xl xl:text-2xl my-4 font-semibold">{data.id}</p>
+              <div className="flex items-start gap-2 mb-8">
+                <div className="relative translate-y-0.5">
+                  <InfoIcon width={20} height={20}/> 
+                </div>
+                <p>
+                  Esta gráfica se lee de izquierda a derecha: inicia con
+                  ingresos totales, luego se deducen los costos de
+                  producción (los que están directamente relacionado con
+                  las ventas), revelando la utilidad bruta. A
+                  continuación, se restan los gastos operativos (los que
+                  son indirectos) para obtener la utilidad operativa. Por
+                  último se deducen los gastos financieros, para llegar a
+                  la utilidad neta. Las barras verdes suman y las rojas
+                  restan, dejando las grises como subtotales.
+                </p>
               </div>
-              <p>
-                Esta gráfica se lee de izquierda a derecha: inicia con
-                ingresos totales, luego se deducen los costos de
-                producción (los que están directamente relacionado con
-                las ventas), revelando la utilidad bruta. A
-                continuación, se restan los gastos operativos (los que
-                son indirectos) para obtener la utilidad operativa. Por
-                último se deducen los gastos financieros, para llegar a
-                la utilidad neta. Las barras verdes suman y las rojas
-                restan, dejando las grises como subtotales.
-              </p>
+              <div className='lg:flex gap-8'> 
+                <div className=' lg:w-[60%]'>
+          
+                    <ChartEmbed src={data.graphy_url} />
+                
+                </div>
+                <div className="mt-4 lg:w-[40%]">
+                  {renderTextFromDatabase(`${data.insights}`)}
+                </div>
+              </div>
             </div>
-            <div className='lg:flex gap-8'> 
-              <div className=' lg:w-[60%]'>
-                <ChartEmbed src={data.graphy_url} />
-              </div>
-              <div className="mt-4 lg:w-[40%]">
-                {renderTextFromDatabase(`${data.insights}`)}
-              </div>
-            </div>
-          </div>
+          </Link>
         ))} 
         </div>
       </div>

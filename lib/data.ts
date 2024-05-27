@@ -51,7 +51,7 @@ export async function fetchFilteredReports(
       .select(`
         *,
         business:business_id (name),
-        charts(type, insights, graphy_url),
+        charts(type, insights, graphy_url, id),
         recomendations(content)
       `)
       
@@ -222,4 +222,17 @@ export async function fetchBusinessThreadId(businessId:string) {
 }
           
 
-     
+export async function fetchChartById(chartId: string) {
+  try {
+    const supabase = createClient();
+    const { data: charts, error } = await supabase.from("charts").select().eq('id', chartId).single();
+    
+    if (error) {
+      throw new Error('Failed to fetch charts.');
+    }
+    
+    return charts;
+  } catch (error) {
+    console.error('Failed to fetch charts:', error);
+  }
+  }

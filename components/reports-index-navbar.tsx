@@ -1,8 +1,6 @@
 import { fetchReportsByBusiness } from '@/lib/data';
-import ReportsButton from './dashboard/reports-buttons';
 import { MonthButton } from './monthButton';
-import Link from 'next/link';
-
+import ChartNavigation from './chart-navigation';
 
 type ReportsNavbarProps = {
   business_id: string;
@@ -19,27 +17,10 @@ export default async function ReportsIndexNavbar({
       id="reportsNavbar"
     >
       {reports && <MonthButton reports={reports} />}
-      
-      <div className='flex items-center gap-4'>
-        <Link href={""}>
-          Cascada P&L
-        </Link>
-        <Link href={""}>
-          Ventas
-        </Link>
-        <Link href={""}>
-          Costos y gastos
-        </Link>
-        <Link href={""}>
-          Márgenes
-        </Link>
-        <Link href={""}>
-          Utilidad neta
-        </Link>
-        <Link href={""}>
-          Gastos desglosados
-        </Link>
-      </div>
+
+      {reports && reports.length > 0 && (
+        <ChartNavigation reportId={reports[0].id} /> // Aquí se pasa el primer reporte
+      )}
     </nav>
   );
 }
