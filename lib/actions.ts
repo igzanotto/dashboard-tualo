@@ -78,12 +78,12 @@ export async function createReport(formData:FormData) {
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/goals`);
 }
 
-const BuildGoalsReport = ReportFormSchema.omit({ month: true, business_id: true, analysis: true, business_resume: true });
+const BuildGoals = ReportFormSchema.omit({ month: true, business_id: true, analysis: true, business_resume: true });
 
-export async function buildGoalsReport(formData:FormData) {
+export async function buildGoals(formData:FormData) {
   console.log("adentro de createReport")
   console.log(formData);
-  const { id , goals } = BuildGoalsReport.parse({
+  const { id , goals } = BuildGoals.parse({
     id: formData.get('report_id'),
     goals: formData.get('goals'),
   });
@@ -107,11 +107,40 @@ export async function buildGoalsReport(formData:FormData) {
     return;
   }
 
-  const report_id = data[0].id;
+  const report_id = id
   const business_id = data[0].business_id;
 
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/PL`);
 }
+
+
+const BuildAnalysis = ReportFormSchema.omit({id: true, business_id: true, goals: true, month: true, business_resume: true});
+
+export async function buildAnalysis(formData:FormData) {
+  const report_id = formData.get('report_id');
+  const business_id = formData.get('business_id');
+
+  const { analysis } = BuildAnalysis.parse({
+    analysis: formData.get('analysis'),
+  });
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('reports')
+    .update({ analysis: analysis })
+    .eq('id', report_id)
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("analisis creado correctamente");
+  }
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/recomendations`);
+}
+
+
 
 const ChartFormSchema = z.object({
   id: z.string(),
@@ -232,3 +261,4 @@ export async function buildChartsInsights(formData:FormData) {
 
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/analysis`);
 }
+

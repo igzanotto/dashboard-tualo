@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/button';
-import { buildGoalsReport } from '@/lib/actions';
+import { buildGoals } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
@@ -147,7 +147,7 @@ export default function GoalGenerator({ threadId }: { threadId: any }) {
       <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
         Actualizar metas financieras
       </h2>
-      <form action={buildGoalsReport}>
+      <form action={buildGoals}>
         <label htmlFor="goals" className="mt-3 block">
           Metas financieras
         </label>

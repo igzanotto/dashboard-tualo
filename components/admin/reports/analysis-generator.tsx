@@ -1,25 +1,29 @@
 'use client';
 
 import { Button } from '@/components/button';
-import { buildGoalsReport } from '@/lib/actions';
+import { buildAnalysis } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
 interface FormData {
-  goals_prompt: string;
-  goals_transcript: string;
-  goals_close: string;
+  analysis_prompt: string;
 }
 
 export default function AnalysisGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
+  const business_id = useParams().business_id as string;
 
   const [formData, setFormData] = useState<FormData>({
-    goals_prompt:
-      'le pedí al emprendedor que eligiera la(s) opción(es) que más correspondieran a sus metas actuales desde el punto de vista de las finanzas de su empresa y me dijo lo siguiente.',
-    goals_transcript:
-      'definitivamente necesito vender más, no necesariamente porque sí creo que soy muy eficiente. Por otro lado, también necesito mejorar mi flujo porque tengo muy poco dinero en el banco y eso tiene que cambiar.',
-    goals_close: 'dame un resumen de esto',
+    analysis_prompt:
+      `vamos con el 2do entregable: **highlights y análisis del P&L**
+      usando lo aprendido en las gráficas anteriores del 1er entregable, resume las conclusiones e insights más importantes en un análisis financiero
+      
+      toma las siguientes consideraciones para hacerlo:
+      
+      - haz 5 bullets con los highlights financieros
+      - usa ejemplos específicos para explicar tus hallazgos, mencionando métricas o números
+      - habla en un idioma natural: considera que los usuarios no tienen experiencia financiera (no uses palabras técnicas financieras como márgenes, utilidad, rentabilidad, ebitda, etc)
+      - enfócate en hacer solamente análisis, nada de recomendaciones`,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -39,10 +43,7 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        content:
-          formData.goals_prompt +
-          formData.goals_transcript +
-          formData.goals_close,
+        content: formData.analysis_prompt,
         threadId: threadId,
       }),
     });
@@ -81,7 +82,7 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
     e.preventDefault();
-    const goals = document.getElementById('goals');
+    const analysis = document.getElementById('analysis');
 
     const response = await fetch(`/api/thread/retrieve?threadId=${threadId}`, {
       method: 'GET',
@@ -99,40 +100,26 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
     const result = await response.json();
     console.log('Mensajes obtenidos con exito', result);
 
-    const responseBusinessResume = result.messagesData[3].content;
+    const responseBusinessResume = result.messagesData[9].content;
 
-    if (!goals) {
+    if (!analysis) {
       return;
     }
 
-    goals.innerHTML = responseBusinessResume;
+    analysis.innerHTML = responseBusinessResume;
   };
 
   return (
     <div className="mt-3">
-      <h1 className="my-3 text-center">Generador de informes</h1>
+      <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
+        Generador de Analisis financiero
+      </h2>
 
       <textarea
-        name="goals_prompt"
-        value={formData.goals_prompt}
+        name="analysis_prompt"
+        rows={13}
+        value={formData.analysis_prompt}
         onChange={handleChange}
-        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-        autoFocus
-      />
-      <textarea
-        name="goals_transcript"
-        value={formData.goals_transcript}
-        onChange={handleChange}
-        rows={4}
-        className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-        autoFocus
-        placeholder=">>> ingresar el transcript del Q&A <<<"
-      />
-      <textarea
-        name="goals_close"
-        value={formData.goals_close}
-        onChange={handleChange}
-        rows={4}
         className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
         autoFocus
       />
@@ -145,23 +132,21 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
       </div>
 
       <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
-        Actualizar metas financieras
+        Analisis financiero
       </h2>
-      <form action={buildGoalsReport}>
-        <label htmlFor="goals" className="mt-3 block">
-          Metas financieras
-        </label>
+      <form action={buildAnalysis}>
+        <input type="text" name="report_id" defaultValue={report_id} hidden />
+        <input type="text" name="business_id" defaultValue={business_id} hidden />
+        
         <textarea
-          rows={9}
-          id="goals"
-          name="goals"
+          rows={20}
+          id="analysis"
+          name="analysis"
           className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
-        <input type="text" name="report_id" defaultValue={report_id} hidden />
-
         <div className="my-2 flex justify-end">
           <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
-            continuar con P&L
+            continuar con recomendaciones
           </button>
         </div>
       </form>
