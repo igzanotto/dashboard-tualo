@@ -78,12 +78,12 @@ export async function createReport(formData:FormData) {
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/goals`);
 }
 
-const BuildGoalsReport = ReportFormSchema.omit({ month: true, business_id: true, analysis: true, business_resume: true });
+const BuildGoals = ReportFormSchema.omit({ month: true, business_id: true, analysis: true, business_resume: true });
 
-export async function buildGoalsReport(formData:FormData) {
+export async function buildGoals(formData:FormData) {
   console.log("adentro de createReport")
   console.log(formData);
-  const { id , goals } = BuildGoalsReport.parse({
+  const { id , goals } = BuildGoals.parse({
     id: formData.get('report_id'),
     goals: formData.get('goals'),
   });
@@ -107,11 +107,40 @@ export async function buildGoalsReport(formData:FormData) {
     return;
   }
 
-  const report_id = data[0].id;
+  const report_id = id
   const business_id = data[0].business_id;
 
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/PL`);
 }
+
+
+const BuildAnalysis = ReportFormSchema.omit({id: true, business_id: true, goals: true, month: true, business_resume: true});
+
+export async function buildAnalysis(formData:FormData) {
+  const report_id = formData.get('report_id');
+  const business_id = formData.get('business_id');
+
+  const { analysis } = BuildAnalysis.parse({
+    analysis: formData.get('analysis'),
+  });
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('reports')
+    .update({ analysis: analysis })
+    .eq('id', report_id)
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("analisis creado correctamente");
+  }
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/recomendations`);
+}
+
+
 
 const ChartFormSchema = z.object({
   id: z.string(),
@@ -317,4 +346,120 @@ export async function updateReport(formData: FormData) {
     console.error('Error updating report:', error);
     throw error;
   }
+}
+
+
+const ChartsFormSchema = z.object({
+  id: z.string(),
+  waterfall_chart_insights: z.string(),
+  sales_chart_insights: z.string(),
+  costs_and_expenses_chart_insights: z.string(),
+  net_profit_and_margins_chart_insights: z.string(),
+  margins_chart_insights: z.string(),
+  detailed_expenses_chart_insights: z.string(),
+  report_id: z.string(),
+  business_id: z.string(),
+});
+
+const BuildChartsInsights = ChartsFormSchema.omit({id: true, business_id: true, report_id: true});
+
+export async function buildChartsInsights(formData:FormData) {
+  console.log("adentro de charts builder")
+  console.log(formData);
+  const report_id = formData.get('report_id');
+  const business_id = formData.get('business_id');
+
+  const {
+      waterfall_chart_insights,
+      sales_chart_insights, 
+      costs_and_expenses_chart_insights, 
+      net_profit_and_margins_chart_insights, 
+      margins_chart_insights,
+      detailed_expenses_chart_insights,
+   } = BuildChartsInsights.parse({
+    waterfall_chart_insights: formData.get('waterfall_chart_insights'),
+    sales_chart_insights: formData.get('sales_chart_insights'),
+    costs_and_expenses_chart_insights: formData.get('costs_and_expenses_chart_insights'),
+    net_profit_and_margins_chart_insights: formData.get('net_profit_and_margins_chart_insights'),
+    margins_chart_insights: formData.get('margins_chart_insights'),
+    detailed_expenses_chart_insights: formData.get('detailed_expenses_chart_insights'),
+
+  });
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('charts')
+    .insert([
+      { type: "waterfall", insights: waterfall_chart_insights, report_id: report_id },
+      { type: "sales", insights: sales_chart_insights, report_id: report_id },
+      { type: "costs_and_expenses", insights: costs_and_expenses_chart_insights, report_id: report_id },
+      { type: "net_profit_and_margins", insights: net_profit_and_margins_chart_insights, report_id: report_id },
+      { type: "margins", insights: margins_chart_insights, report_id: report_id },
+      { type: "detailed_expenses", insights: detailed_expenses_chart_insights, report_id: report_id },
+    ])
+    
+
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("graficos generados correctamente");
+  }
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/analysis`);
+}
+
+const RecomendationsFormSchema = z.object({
+  report_id: z.string(),
+  business_id: z.string(),
+  first_recomendation: z.string(),
+  second_recomendation: z.string(),
+  third_recomendation: z.string(),
+  fourth_recomendation: z.string().optional(),
+});
+
+const BuildRecomendations = RecomendationsFormSchema.omit({id: true, business_id: true, report_id: true});
+
+export async function buildRecomendations(formData:FormData) {
+  console.log("adentro de recomendations builder")
+  console.log(formData);
+  const report_id = formData.get('report_id');
+  const business_id = formData.get('business_id');
+
+  const {
+    first_recomendation,
+    second_recomendation, 
+    third_recomendation, 
+    fourth_recomendation, 
+  } = BuildRecomendations.parse({
+    first_recomendation: formData.get('first_recomendation'),
+    second_recomendation: formData.get('second_recomendation'),
+    third_recomendation: formData.get('third_recomendation'),
+    fourth_recomendation: formData.get('fourth_recomendation'),
+  });
+
+  const recommendations = [
+    { content: first_recomendation, report_id: report_id },
+    { content: second_recomendation, report_id: report_id },
+    { content: third_recomendation, report_id: report_id },
+    { content: fourth_recomendation, report_id: report_id },
+  ];
+
+  // Filter out empty recommendations
+  const nonEmptyRecommendations = recommendations.filter(rec => rec.content);
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('recomendations')
+    .insert(nonEmptyRecommendations)
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("recomendaciones generadas correctamente");
+  }
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}`);
 }
