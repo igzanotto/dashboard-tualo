@@ -89,8 +89,8 @@ export default async function ReportPage({
           </p>
           <ModalDashboard
             name={report.business.name}
-            resume={report.recomendations.map((data: any) => (
-              <div>{renderTextFromDatabase(`${data.content}`)}</div>
+            resume={report.recomendations.map((data: any, index: number) => (
+              <div key={index}>{renderTextFromDatabase(`${data.content}`)}</div>
             ))}
           />
         </div>
