@@ -11,13 +11,13 @@ const VentasChart: React.FC<ChartProps> = ({ series, categories }) => {
     const options = {
         chart: {
           height: 350,
-          type: 'bar'
+          type: 'bar' as 'bar'
         },
         plotOptions: {
           bar: {
             borderRadius: 10,
             dataLabels: {
-              position: 'top' // top, center, bottom
+              position: 'top' as 'top'
             }
           }
         },
@@ -34,7 +34,7 @@ const VentasChart: React.FC<ChartProps> = ({ series, categories }) => {
         },
         xaxis: {
           categories: categories,
-          position: 'top',
+          position: 'top' as 'top',
           axisBorder: {
             show: false
           },
@@ -75,7 +75,7 @@ const VentasChart: React.FC<ChartProps> = ({ series, categories }) => {
         //   text: 'Monthly Inflation in Argentina, 2002',
           floating: true,
           offsetY: 330,
-          align: 'center',
+          align: 'center' as 'center',
           style: {
             color: '#444'
           }
@@ -89,4 +89,4 @@ const VentasChart: React.FC<ChartProps> = ({ series, categories }) => {
   );
 };
 
-export default VentasChart;
+export default VentasChart
