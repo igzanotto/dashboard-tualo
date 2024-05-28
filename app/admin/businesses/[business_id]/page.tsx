@@ -8,7 +8,7 @@ import { Suspense } from "react";
 
 interface BusinessPageProps {
     params: {
-      id: string;
+      business_id: string;
     };
     searchParams?: {
       query?: string;
@@ -17,7 +17,7 @@ interface BusinessPageProps {
   }
 
 export default async function BusinessPage({ params, searchParams }: BusinessPageProps){
-    const business_id = params.id;
+    const business_id = params.business_id;
     const query = searchParams?.query || '';
     const currentPage = Number(searchParams?.page) || 1;
     const business = await fetchBusinessById(business_id)
