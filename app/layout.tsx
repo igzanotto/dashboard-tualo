@@ -1,10 +1,11 @@
-import { Inter, Poppins } from "next/font/google";
+import { DM_Sans, Inter, Poppins } from "next/font/google";
 import { Metadata } from 'next';
 import "./globals.css";
 
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({subsets:["latin"], weight:["100", "200", "300", "400", "500"]})
+const dmSans = DM_Sans({subsets: ["latin"]})
 
 export const metadata: Metadata = {
   title: "Tualo Dashboard",
@@ -18,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.className}>
+    <html lang="en" className={poppins.className}>
       <body className={`antialiased`}>
         {children}
       </body>

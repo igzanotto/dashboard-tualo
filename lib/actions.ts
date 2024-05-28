@@ -419,3 +419,45 @@ export async function buildRecomendations(formData:FormData) {
 
   redirect(`/admin/businesses/${business_id}/reports/${report_id}`);
 }
+
+const ReportUpdateSchema = z.object({
+  report_id: z.string(),
+  business_resume: z.string().optional(),
+  goals: z.string().optional(),
+  analysis: z.string().optional(),
+});
+
+// Función para actualizar el reporte en Supabase
+export async function updateReport(formData: FormData) {
+  const parsedData = ReportUpdateSchema.safeParse({
+    report_id: formData.get('report_id'),
+    business_resume: formData.get('business_resume'),
+    goals: formData.get('goals'),
+    analysis: formData.get('analysis'),
+  });
+
+  if (!parsedData.success) {
+    console.error('Validation Error:', parsedData.error);
+    throw new Error('Invalid form data');
+  }
+
+  const { report_id, business_resume, goals, analysis } = parsedData.data;
+  const supabase = createClient();
+
+  try {
+    const { data, error } = await supabase
+      .from('reports')
+      .update({ business_resume, goals, analysis })
+      .eq('id', report_id)
+      .single();
+
+    if (error) {
+      console.error('Supabase update error:', error);
+      throw error;
+    }
+    return data;
+  } catch (error) {
+    console.error('Error updating report:', error);
+    throw error;
+  }
+}
