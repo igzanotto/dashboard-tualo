@@ -5,7 +5,7 @@ const openai = new OpenAI();
 
 export async function POST(req: Request) {
     const { threadId } = await req.json()
-    const assistant_id = "asst_JZUAqqBJOH1EEbjcSYNWWPY8"
+    const assistant_id = "asst_eXDbopN5sswZRPH64ed2zvhJ"
 
   try {
     const run = await openai.beta.threads.runs.create(
