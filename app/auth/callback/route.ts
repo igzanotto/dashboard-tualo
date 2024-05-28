@@ -15,8 +15,8 @@ export async function GET(request: Request) {
 
     if (!error) {
         // en este caso elegimos redirigir adentro de la app
-        // return NextResponse.redirect(`${origin}/admin`);
-        return NextResponse.redirect(`https://nextjs-dashboard-2-woad.vercel.app/admin`);
+        return NextResponse.redirect(`${origin}/admin`);
+        // return NextResponse.redirect(`https://nextjs-dashboard-2-woad.vercel.app/admin`);
 
     }
   }
