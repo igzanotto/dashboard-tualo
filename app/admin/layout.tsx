@@ -10,8 +10,10 @@ export default async function Layout({
   const supabase = createClient();
 
   // llama a la table profiles todos los users pero por una policy se limita al profile que conincide con el user que lo pide
-  const { data: admin, error }= await supabase.from('profiles').select('admin').single();
-  const isAdmin = admin?.admin;
+  const { data: email, error }= await supabase.from('profiles').select('email').single();
+
+  // checks if email ends with @tualo.mx
+  const isAdmin = email?.email.endsWith('@tualo.mx')
 
   if (!isAdmin) {
     return redirect('/dashboard');
