@@ -48,6 +48,17 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
           {chart.type}
         </Link>
       ))}
+      <Link href={`/dashboard/reports/${reportId}/#conclusiones`} className='bg-gray-200 text-black p-2 rounded-lg font-medium'>
+        Conclusiones
+      </Link>
+
+      <Link href={`/dashboard/reports/${reportId}/#recomendaciones`} className='bg-gray-200 text-black p-2 rounded-lg font-medium'>
+        Recomendaciones
+      </Link>
+
+      <Link href={`/dashboard/reports/${reportId}/#anexo`} className='bg-gray-200 text-black p-2 rounded-lg font-medium'>
+        Anexo
+      </Link>
     </div>
   );
 }

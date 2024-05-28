@@ -2,7 +2,7 @@ import ChartEmbed from '@/components/charts/ChartEmbed';
 import ModalDashboard from '@/components/modal/Modal';
 import { fetchReportById } from '@/lib/data';
 import { FolderIcon, LightBulbIcon } from '@heroicons/react/24/outline';
-import { GoalIcon, InfoIcon } from 'lucide-react';
+import { File, GoalIcon, InfoIcon, ListEndIcon } from 'lucide-react';
 import {
   Tooltip,
   TooltipContent,
@@ -64,6 +64,22 @@ export default async function ReportPage({
 
   return (
     <div className="flex flex-col gap-3">
+
+      <div className='flex items-center gap-4 justify-end sticky top-12'>
+        <Link href={"/#conclusiones"} className='bg-gray-200 text-black p-2 rounded-lg font-medium flex items-center gap-1'>
+          <File width={20} height={20}/>
+          Conclusiones
+        </Link>
+
+        <Link href={`/dashboard/reports/${report.id}/#recomendaciones`} className='bg-gray-200 text-black p-2 rounded-lg font-medium'>
+          Recomendaciones
+        </Link>
+
+        <Link href={"/#anexo"} className='bg-gray-200 text-black p-2 rounded-lg font-medium'>
+          Anexo
+        </Link>
+      </div>
+
       <h1 className={`text-2xl font-semibold`}>
         Reporte de <span className="capitalize">{report.month}</span>
       </h1>
@@ -72,102 +88,31 @@ export default async function ReportPage({
           {report.business.name}
         </p>
       </div>
-      <div className="flex items-center gap-5 max-xl:flex-wrap xl:gap-6 2xl:gap-8">
-        <div className="flex w-[400px] flex-col gap-3 rounded-xl bg-emerald-500 p-3 shadow-2xl max-xl:w-full xl:h-[200px] 2xl:h-[180px]">
-          <div className="flex items-center gap-2 text-2xl font-medium text-white">
-            <FolderIcon width={30} height={30} />
-            <p>Conclusiones</p>
-          </div>
-          <p className="w-full font-medium text-zinc-100">
-            En tu resumen verás una descripción detallada de tu negocio donde se
-            abordan diversos aspectos clave.
-          </p>
-          <ModalDashboard
-            name={report.business.name}
-            resume={renderTextFromDatabase(report.business_resume)}
-          />
-        </div>
-        <div className="flex w-[400px] flex-col gap-3 rounded-xl bg-yellow-500 p-3 shadow-2xl max-xl:w-full xl:h-[200px] 2xl:h-[180px]">
-          <div className="flex items-center gap-2 text-2xl font-medium text-white">
-            <LightBulbIcon width={30} height={30} />
-            <p>Recomendaciones</p>
-          </div>
-          <p className="font-medium text-zinc-100">
-            En las recomendaciones verás estrategias clave para mejorar el
-            rendimiento y la eficiencia de tu negocio.
-          </p>
-          <ModalDashboard
-            name={report.business.name}
-            resume={report.recomendations.map((data: any) => (
-              <div>{renderTextFromDatabase(`${data.content}`)}</div>
-            ))}
-          />
-        </div>
 
-        <div className="flex w-[400px] flex-col gap-3 rounded-xl  bg-[#5a36fa] p-3 shadow-2xl max-xl:w-full xl:h-[200px] 2xl:h-[180px]">
-          <div className="flex items-center gap-2 text-2xl font-medium text-white">
-            <GoalIcon width={30} height={30} />
-            <p>Anexos</p>
-          </div>
-          <p className="font-medium text-zinc-100">
-            Estas metas son fundamentales para la salud financiera y el
-            crecimiento sostenible del negocio
-          </p>
-          <ModalDashboard
-            name={report.business.name}
-            resume={renderTextFromDatabase(report.goals)}
-          />
+      <div className='flex flex-col gap-28'>
+      <div id='metas-financieras'>
+        <p className='text-2xl font-semibold mb-4'>Metas financieras</p>
+        <div className='p-3 rounded-xl bg-gray-100'>
+          {renderTextFromDatabase(report.goals)}
         </div>
       </div>
 
-      {/* <div className="my-14">
-        <p className="my-4 text-xl font-semibold xl:text-4xl">
-          Resumen financiero
-        </p>
-
-        <div className="my-10 flex flex-col gap-8">
-          {report.charts.map((data: any) => (
-            <div
-              key={data.id}
-              className="w-full rounded-xl bg-slate-50 p-3 shadow-lg"
-            >
-              <div className='flex items-center gap-2'>
-              <p className="my-4 text-xl font-semibold xl:text-2xl">
-                {' '}
-                Gráfica de <span>{data.type}</span>
-              </p>
-              <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <InfoIcon width={20} height={20} />
-                      </TooltipTrigger>
-                      <TooltipContent className='w-[400px]'>
-                        <p>
-                          Esta gráfica se lee de izquierda a derecha: inicia con
-                          ingresos totales, luego se deducen los costos de producción
-                          (los que están directamente relacionado con las ventas),
-                          revelando la utilidad bruta. A continuación, se restan los
-                          gastos operativos (los que son indirectos) para obtener la
-                          utilidad operativa. Por último se deducen los gastos
-                          financieros, para llegar a la utilidad neta. Las barras verdes
-                          suman y las rojas restan, dejando las grises como subtotales.
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-              </div>
-              <div className="gap-8 lg:flex">
-                <div className=" lg:w-[60%]">
-                  <ChartEmbed src={data.graphy_url} />
-                </div>
-                <div className="mt-4 lg:w-[40%]">
-                  {renderTextFromDatabase(`${data.insights}`)}
-                </div>
-              </div>
-            </div>
-          ))}
+      <div id='conclusiones'>
+        <p className='text-2xl font-semibold mb-4'>Conclusiones</p>
+        <div className='p-3 rounded-xl bg-gray-100'>
+          {renderTextFromDatabase(report.analysis)}
         </div>
-      </div> */}
+      </div>
+
+      <div id='recomendaciones'>
+        <p className='text-2xl font-semibold mb-4'>Recomendaciones</p>
+        <div className='p-3 rounded-xl bg-gray-100'>
+        {report.recomendations.map((data: any) => (
+              <div>{renderTextFromDatabase(`${data.content}`)}</div>
+            ))}
+        </div>
+      </div>
+      </div>
     </div>
   );
 }
