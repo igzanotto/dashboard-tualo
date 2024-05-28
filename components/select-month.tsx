@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
 interface Report {
     id: string;
@@ -15,6 +16,7 @@ interface MonthDropdownProps {
 const SelectMonth: React.FC<MonthDropdownProps> = ({ reports }) => {
     const [selectedMonth, setSelectedMonth] = useState<string>('');
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     const handleMonthSelect = (month: string) => {
         setSelectedMonth(month);
@@ -25,13 +27,27 @@ const SelectMonth: React.FC<MonthDropdownProps> = ({ reports }) => {
         setIsOpen(!isOpen);
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <div className="relative inline-block w-40">
+        <div ref={dropdownRef} className="relative inline-block">
             <button
                 onClick={toggleDropdown}
-                className="w-full text-center capitalize px-4 py-2 bg-[#0065A1] border text-white text-xl font-medium border-gray-300 shadow-sm rounded-lg"
+                className="w-full flex items-center gap-2 text-center capitalize px-4 py-2 bg-[#0065A1] border text-white text-xl font-medium border-gray-300 shadow-sm rounded-lg"
             >
                 {selectedMonth || 'Seleccionar mes'}
+                <ChevronDownIcon width={20} height={20}/>
             </button>
             {isOpen && (
                 <div className="absolute mt-1 w-full bg-white border border-gray-300 shadow-lg flex flex-col gap-2 rounded-lg p-2">
@@ -43,7 +59,6 @@ const SelectMonth: React.FC<MonthDropdownProps> = ({ reports }) => {
                             onClick={() => handleMonthSelect(report.month)}
                             className='capitalize p-2 bg-gray-100 rounded-lg'
                         >
-                           
                             {report.month}
                         </Link>
                     ))}
