@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/tooltip"
 
 import Link from 'next/link';
+import SuggestIcon from '@/components/icons/SuggestIcon';
+import Attachment from '@/components/icons/Attachment';
 
 export default async function ReportPage({
   params,
@@ -65,17 +67,19 @@ export default async function ReportPage({
   return (
     <div className="flex flex-col gap-3">
 
-      <div className='flex items-center gap-4 justify-end sticky top-12'>
-        <Link href={"/#conclusiones"} className='bg-gray-200 text-black p-2 rounded-lg font-medium flex items-center gap-1'>
+      <div className='flex items-center gap-4 justify-end sticky top-12 p-3 w-min self-end' id='secondNavbar'>
+        <Link href={`/dashboard/reports/${report.id}/#conclusiones`} className='bg-gray-200 text-black p-2 rounded-lg font-medium flex items-center gap-1'>
           <File width={20} height={20}/>
           Conclusiones
         </Link>
 
-        <Link href={`/dashboard/reports/${report.id}/#recomendaciones`} className='bg-gray-200 text-black p-2 rounded-lg font-medium'>
+        <Link href={`/dashboard/reports/${report.id}/#recomendaciones`} className='bg-gray-200 text-black p-2 rounded-lg font-medium flex items-center gap-1'>
+          <SuggestIcon/>
           Recomendaciones
         </Link>
 
-        <Link href={"/#anexo"} className='bg-gray-200 text-black p-2 rounded-lg font-medium'>
+        <Link href={"/#anexo"} className='bg-gray-200 text-black p-2 rounded-lg font-medium flex items-center gap-1'>
+          <Attachment/>
           Anexo
         </Link>
       </div>
