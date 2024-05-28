@@ -31,6 +31,6 @@ export async function GET(request: Request) {
   } catch (error) {
     // Handle any errors that occur during the API call
     console.error("Error generating stuff:", error);
-    return error
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
