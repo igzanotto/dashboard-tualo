@@ -178,9 +178,113 @@ export async function createChart(formData:FormData) {
   redirect('/dashbord/reports');
 }
 
-export async function searchBusiness(formData:FormData){
 
+interface ChartData {
+  name: string;
+  data: number[];
 }
+
+interface ChartDataPayload {
+  series: ChartData[];
+  categories: string[];
+}
+export async function createStackedChart(data: ChartDataPayload){
+  const supabase = createClient();
+  try {
+    const { data: chartData, error } = await supabase.from('chart_data').insert([
+      { series: JSON.stringify(data.series), categories: JSON.stringify(data.categories) }
+    ]);
+
+    if (error) {
+      throw error;
+    }
+
+    console.log('Datos del gráfico guardados correctamente:', chartData);
+    console.log("Data",data);
+    
+    return chartData;
+  } catch (error) {
+    console.error('Error al guardar los datos del gráfico:', error);
+    throw error;
+  }
+}
+
+
+const ChartEmbedFormSchema = z.object({
+  type: z.string(),
+  report_id: z.string(),
+  graphy_url: z.string(),
+});
+
+export async function createChartEmbed(formData:FormData){
+  const parsedData = ChartEmbedFormSchema.safeParse({
+    type: formData.get('type'),
+    report_id: formData.get('report_id'),
+    graphy_url: formData.get('graphy_url'),
+  });
+
+  
+  if (!parsedData.success) {
+    console.error('Validation Error:', parsedData.error);
+    throw new Error('Invalid form data');
+  }
+
+  const { type, report_id, graphy_url} = parsedData.data;
+
+  console.log('Parsed Data:', { type, report_id, graphy_url});
+
+  const supabase = createClient();
+  try {
+    // Verificar si ya existe una fila para el tipo de gráfico seleccionado
+    const { data: existingCharts, error: fetchError } = await supabase
+      .from('charts')
+      .select()
+      .eq('type', type)
+      .eq('report_id', report_id)
+      .limit(1);
+
+    if (fetchError) {
+      console.error('Supabase fetch error:', fetchError);
+      throw fetchError;
+    }
+
+    if (existingCharts.length > 0) {
+      
+      const existingChart = existingCharts[0];
+      const { data: updatedChart, error: updateError } = await supabase
+        .from('charts')
+        .update({ graphy_url })
+        .eq('id', existingChart.id)
+        .single();
+
+      if (updateError) {
+        console.error('Supabase update error:', updateError);
+        throw updateError;
+      }
+
+      console.log('Updated chart data:', updatedChart);
+      return updatedChart;
+    } else {
+      // Si no existe, crear una nueva fila con el graphy_url
+      const { data: newChart, error: insertError } = await supabase
+        .from('charts')
+        .insert([{ type, report_id, graphy_url }]);
+
+      if (insertError) {
+        console.error('Supabase insert error:', insertError);
+        throw insertError;
+      }
+
+      console.log('Inserted chart data:', newChart);
+      return newChart;
+    }
+  } catch (error) {
+    console.error('Error creating or updating chart:', error);
+    throw error;
+  }
+}
+
+
 
 export async function addThreadToBusiness(thread_id: string, business_id: string) {
   const supabase = createClient();

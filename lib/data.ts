@@ -40,26 +40,29 @@ export async function fetchFilteredReports(
   }
 }
 
-export async function fetchReportById(reportId:string) {
-  try {
-    const supabase = createClient();
-    const { data: report } = await supabase
-    .from('reports')
-    .select(`
-      *,
-      business:business_id (name),
-      charts(type, insights),
-      recomendations(content)
-    `)
-    
-    .eq('id', reportId)
-    .single();
-    console.log("report>>>>>>", report);
-    return report;
-  } catch (error) {
-    console.error('Failed to fetch report by id:', error);
+
+
+
+  export async function fetchReportById(reportId:string) {
+    try {
+      const supabase = createClient();
+      const { data: report } = await supabase
+      .from('reports')
+      .select(`
+        *,
+        business:business_id (name),
+        charts(type, insights, graphy_url),
+        recomendations(content)
+      `)
+      
+      .eq('id', reportId)
+      .single();
+      console.log("report>>>>>>", report);
+      return report;
+    } catch (error) {
+      console.error('Failed to fetch report by id:', error);
+    }
   }
-}
 
 export async function fetchReportsByBusiness(business_id:string) {
   try {
