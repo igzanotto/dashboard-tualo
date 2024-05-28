@@ -33,7 +33,7 @@ export function MonthButton({ reports }: MonthButtonProps) {
     <NavigationMenu>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="bg-gradient-to-r from-[#4C30C5] to-[#39AEFF] text-white text-base capitalize">
+          <NavigationMenuTrigger className="bg-gradient-to-r from-[#4C30C5] to-[#39AEFF] text-white text-base capitalize w-[200px]">
             {pathname === "/dashboard/reports" ? "Mes" : selectedMonth || "Mes"}
           </NavigationMenuTrigger>
           <NavigationMenuContent className="flex flex-col p-2 gap-2">
