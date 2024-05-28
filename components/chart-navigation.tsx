@@ -1,13 +1,9 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { fetchReportById } from "@/lib/data";
 import SkeletonButtons from "./skeleton-buttons";
-import { File, GoalIcon } from "lucide-react";
-import SuggestIcon from "./icons/SuggestIcon";
-import Attachment from "./icons/Attachment";
 
 interface ChartNavigationProps {
   reportId: string;
@@ -15,7 +11,8 @@ interface ChartNavigationProps {
 
 export default function ChartNavigation({ reportId }: ChartNavigationProps) {
   const [report, setReport] = useState<any>(null);
-  const pathname = usePathname();
+  const [selectedChart, setSelectedChart] = useState<string | null>(null);
+  const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
 
   useEffect(() => {
     const getReport = async () => {
@@ -26,9 +23,44 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
     getReport();
   }, [reportId]);
 
+  useEffect(() => {
+    if (!report) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setSelectedChart(entry.target.id);
+          }
+        });
+      },
+      {
+        root: null,
+        rootMargin: "0px",
+        threshold: 0.5,
+      }
+    );
+
+    report.charts.forEach((chart: any) => {
+      const section = document.getElementById(chart.type);
+      if (section) {
+        observer.observe(section);
+        sectionRefs.current.set(chart.type, section);
+      }
+    });
+
+    return () => {
+      sectionRefs.current.forEach((section) => observer.unobserve(section));
+    };
+  }, [report]);
+
+  const handleChartClick = (chartType: string) => {
+    setSelectedChart(chartType);
+  };
+
   if (!report) {
     return (
-      <div className='flex items-center gap-4'>
+      <div className="flex items-center gap-4">
         <SkeletonButtons />
         <SkeletonButtons />
         <SkeletonButtons />
@@ -39,14 +71,18 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
     );
   }
 
-
   return (
-    <div className='flex items-center gap-4'>
+    <div className="flex items-center gap-4">
       {report.charts.map((chart: any) => (
         <Link
           key={chart.id}
           href={`/dashboard/reports/${reportId}/#${chart.type}`}
-          className={pathname === `/dashboard/reports/${reportId}/#${chart.type}` ? 'bg-gradient-to-r from-[#4C30C5] to-[#39AEFF] text-white p-2 rounded-lg font-medium' : 'bg-gray-200 text-black p-2 rounded-lg font-medium'}
+          onClick={() => handleChartClick(chart.type)}
+          className={`p-2 rounded-lg font-medium transition-all ${
+            selectedChart === chart.type
+            ? "bg-[#00AE8D] hover:text-white text-white px-7"
+            : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
+          }`}
         >
           {chart.type}
         </Link>
@@ -54,3 +90,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
     </div>
   );
 }
+
+
+
+

@@ -67,42 +67,6 @@ export default async function ReportPage({
 
   return (
     <div className="flex flex-col gap-3">
-      {/* <div
-        className="sticky top-12 z-10 flex items-center justify-end gap-4 p-3"
-        id="secondNavbar"
-      >
-        <Link
-          href={`/dashboard/reports/${report.id}/#metas-financieras`}
-          className="flex items-center gap-1 rounded-lg bg-gray-200 p-2 font-medium text-black"
-        >
-          <GoalIcon width={20} height={20} />
-          Metas financieras
-        </Link>
-
-        <Link
-          href={`/dashboard/reports/${report.id}/#conclusiones`}
-          className="flex items-center gap-1 rounded-lg bg-gray-200 p-2 font-medium text-black"
-        >
-          <File width={20} height={20} />
-          Conclusiones
-        </Link>
-
-        <Link
-          href={`/dashboard/reports/${report.id}/#recomendaciones`}
-          className="flex items-center gap-1 rounded-lg bg-gray-200 p-2 font-medium text-black"
-        >
-          <SuggestIcon />
-          Recomendaciones
-        </Link>
-
-        <Link
-          href={'/#anexo'}
-          className="flex items-center gap-1 rounded-lg bg-gray-200 p-2 font-medium text-black"
-        >
-          <Attachment />
-          Anexo
-        </Link>
-      </div> */}
 
       <h1 className={`text-2xl font-semibold`}>
         Reporte de <span className="capitalize">{report.month}</span>
@@ -117,7 +81,8 @@ export default async function ReportPage({
       {report.charts.map((chart: any) => (
         <div
           className="section-margin flex items-center justify-center"
-          id={chart.type}
+          id={chart.type} 
+          key={chart.id}
         >
           <div className="w-[50%]">
             <div className="flex items-center gap-2">
