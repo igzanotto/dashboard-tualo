@@ -90,6 +90,23 @@ export default async function ReportPage({
         </p>
       </div>
 
+      <div>
+        <div id='resumen' className="section-margin flex flex-col gap-10 mt-10" key={'resumen'}>
+          <div>
+            <p className="mb-4 text-2xl font-semibold">Resumen</p>
+            <div className="rounded-xl bg-gray-100 p-3">
+              {renderTextFromDatabase(report.business_resume)}
+            </div>
+          </div>
+          <div>
+            <p className="mb-4 text-2xl font-semibold">Metas financieras</p>
+            <div className="rounded-xl bg-gray-100 p-3">
+              {renderTextFromDatabase(report.goals)}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className='flex flex-col gap-36 mt-10'>
       {orderedCharts.map((chart: any) => (
         <div
@@ -152,12 +169,6 @@ export default async function ReportPage({
       </div>
 
       <div className="flex flex-col gap-28">
-        <div id="metas-financieras" className="section-margin">
-          <p className="mb-4 text-2xl font-semibold">Metas financieras</p>
-          <div className="rounded-xl bg-gray-100 p-3">
-            {renderTextFromDatabase(report.goals)}
-          </div>
-        </div>
 
         <div id="conclusiones" className="section-margin">
           <p className="mb-4 text-2xl font-semibold">Conclusiones</p>

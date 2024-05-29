@@ -31,23 +31,25 @@ console.log(reportId);
      {/* <MonthButton/> */}
     
       <div className='flex flex-col items-center mx-auto gap-4'>
+
       {reports && reports.length > 0 && (
-        <ChartNavigation reportId={reports[0].id} />
+          <ChartNavigation reportId={reports[0].id} />
+
       )}
       
       
       
       <div className='flex items-center gap-4'>
-      <Link
+      {/* <Link
           href={`/dashboard/reports/${reportId}/#metas-financieras`}
           className="flex items-center gap-1 rounded-lg bg-gray-200 p-2 font-medium text-black hover:px-7 hover:bg-[#FF6C0E] hover:text-white transition-all"
         >
           <GoalIcon width={20} height={20} />
           Metas financieras
-        </Link>
+        </Link> */}
 
         <Link
-          href={`/dashboard/reports/${reportId}/#conclusiones`}
+          href={`/dashboard/reports/${reportId}/enero/#conclusiones`}
           className="flex items-center gap-1 rounded-lg bg-gray-200 p-2 font-medium text-black hover:px-7 hover:bg-[#FF6C0E] hover:text-white transition-all"
         >
           <File width={20} height={20} />
