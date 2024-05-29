@@ -185,7 +185,7 @@ export default function CreateReportPage({ params }: { params: any }) {
 
   return (
     <main>
-      <div className="mt-3">
+      <div className="mt-3 ">
         <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
           Generador de Reportes
         </h2>
@@ -193,15 +193,14 @@ export default function CreateReportPage({ params }: { params: any }) {
           name="QA_prompt"
           value={formData.QA_prompt}
           onChange={handleChange}
-          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-          autoFocus
+          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
         <textarea
           name="QA_transcript"
           value={formData.QA_transcript}
           onChange={handleChange}
-          rows={4}
-          className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          rows={12}
+          className="w-full rounded-md px-3 py-2 text-black border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
           autoFocus
           placeholder=">>> ingresar el transcript del Q&A <<<"
         />
@@ -210,7 +209,7 @@ export default function CreateReportPage({ params }: { params: any }) {
           value={formData.QA_close}
           onChange={handleChange}
           rows={4}
-          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
           autoFocus
         />
 
@@ -221,7 +220,7 @@ export default function CreateReportPage({ params }: { params: any }) {
           <Button onClick={handleRetrieveThreadMessages}>
             obtener mensajes
           </Button>
-          <input type="text" defaultValue={threadId} name="thread_id" />
+          <input type="text" defaultValue={threadId} name="thread_id" className='border-2 border-blue-400' />
         </div>
 
         <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
@@ -232,7 +231,7 @@ export default function CreateReportPage({ params }: { params: any }) {
             rows={9}
             id="business_resume"
             name="business_resume"
-            className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
           />
 
           <input
