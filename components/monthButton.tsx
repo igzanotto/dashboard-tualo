@@ -65,8 +65,9 @@ export default function MonthButton({ reports }: MonthDropdownProps) {
               <CommandEmpty>No hay reportes encontrados.</CommandEmpty>
               <CommandGroup>
                 {reports.map((report) => (
-                  <Link key={report.id} href={`/dashboard/reports/${report.id}/${report.month}`} passHref className="cursor-pointer">
+                  <Link key={report.id} href={`/dashboard/reports/${report.id}/${report.month}`} passHref>
                     <CommandItem
+                    className="cursor-pointer"
                       value={report.id}
                       onSelect={(value) => {
                         setSelectedStatus(reports.find((r) => r.id === value) || null);
