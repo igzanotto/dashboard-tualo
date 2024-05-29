@@ -13,7 +13,8 @@ export default async function Layout({
   const { data: email, error }= await supabase.from('profiles').select('email').single();
 
   // checks if email ends with @tualo.mx
-  const isAdmin = email?.email.endsWith('@tualo.mx')
+
+  const isAdmin = email?.email?.endsWith('@tualo.mx')
 
   if (!isAdmin) {
     return redirect('/dashboard');
