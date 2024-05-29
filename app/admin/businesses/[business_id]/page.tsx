@@ -30,13 +30,20 @@ export default async function BusinessPage({
       <p>{business.description}</p>
       <div className="mt-10 flex flex-col">
         <div className="mb-4 flex items-center justify-between">
-          <p className="text-2xl">Reportes de {business.name}</p>
+          <p className="text-2xl">Reportes</p>
           <Link
             href={`/admin/businesses/${business.id}/reports/create`}
             className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white"
           >
-            Agregar nuevo reporte
             <AddIcon />
+            Nuevo reporte
+          </Link>
+          <Link
+            href={`/admin/businesses/${business.id}/users/create`}
+            className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white"
+          >
+            <AddIcon />
+            Agregar usuario
           </Link>
         </div>
         <Suspense
