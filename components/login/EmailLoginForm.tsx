@@ -27,7 +27,7 @@ export default function EmailLoginForm({
 
     if (error) {
       console.log("error login",error);
-      return redirect('/login?message=Could not authenticate user');
+      return redirect(`/login?message=${error}`);
     }
 
     return redirect('/dashboard');
