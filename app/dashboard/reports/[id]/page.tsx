@@ -9,10 +9,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-
-import Link from 'next/link';
-import SuggestIcon from '@/components/icons/SuggestIcon';
-import Attachment from '@/components/icons/Attachment';
 import '../../../globals.css'
 
 export default async function ReportPage({

@@ -72,13 +72,13 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
   }
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 flex-wrap justify-center">
       {report.charts.map((chart: any) => (
         <Link
           key={chart.id}
           href={`/dashboard/reports/${reportId}/#${chart.type}`}
           onClick={() => handleChartClick(chart.type)}
-          className={`p-2 rounded-lg font-medium transition-all ${
+          className={`p-2 rounded-lg font-medium transition-all text ${
             selectedChart === chart.type
             ? "bg-[#00AE8D] hover:text-white text-white px-7"
             : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
