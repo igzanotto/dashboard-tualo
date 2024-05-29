@@ -9,7 +9,7 @@ export default async function ReportsPageDashboard (){
     
 
     useEffect(() => {
-        redirect(`/dashboard/reports/3`)
+        redirect(`/dashboard/reports/3/enero`)
     }, [])
 
     return(

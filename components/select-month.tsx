@@ -52,7 +52,7 @@ const SelectMonth: React.FC<MonthDropdownProps> = ({ reports }) => {
                 onClick={toggleDropdown}
                 className="w-full flex items-center gap-2 text-center capitalize px-4 py-2 bg-[#0065A1] border text-white text-xl font-medium border-gray-300 shadow-sm rounded-lg"
             >
-                {reportId}
+                {selectedMonth}
                 <ChevronDownIcon width={20} height={20}/>
             </button>
             {isOpen && (

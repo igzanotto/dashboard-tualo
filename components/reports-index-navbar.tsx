@@ -1,5 +1,4 @@
 import { fetchReportsByBusiness } from '@/lib/data';
-import { MonthButton } from './monthButton';
 import ChartNavigation from './chart-navigation';
 import Link from 'next/link';
 import { File, GoalIcon } from 'lucide-react';
@@ -7,6 +6,7 @@ import SuggestIcon from './icons/SuggestIcon';
 import Attachment from './icons/Attachment';
 import { PaperClipIcon } from '@heroicons/react/24/outline';
 import SelectMonth from './select-month';
+import MonthButton from './monthButton';
 
 type ReportsNavbarProps = {
   business_id: string;
@@ -26,7 +26,9 @@ console.log(reportId);
       id="reportsNavbar"
     >
       
-     {reports && <SelectMonth reports={reports}/>}
+     {/* {reports && <SelectMonth reports={reports}/>} */}
+     {reports && <MonthButton reports={reports}/>}
+     {/* <MonthButton/> */}
     
       <div className='flex flex-col items-center mx-auto gap-4'>
       {reports && reports.length > 0 && (
