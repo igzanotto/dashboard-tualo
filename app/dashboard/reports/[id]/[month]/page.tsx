@@ -11,14 +11,31 @@ import {
 } from "@/components/ui/tooltip"
 import '../../../../globals.css'
 
+
+const chartOrder = [
+  'Cascada P&L',
+  'Ventas',
+  'Costos y gastos',
+  'Utilidad neta y margen neto',
+  'Márgenes',
+  'Gastos desglosados'
+];
+
+const reorderCharts = (charts:any) => {
+  return charts.sort((a:any, b:any) => {
+    return chartOrder.indexOf(a.type) - chartOrder.indexOf(b.type);
+  });
+};
+
+
 export default async function ReportPage({
   params,
 }: {
   params: { id: string, month:string };
 }) {
   const id = params.id;
-  const month = params.month;
   const report = await fetchReportById(id);
+  const orderedCharts = reorderCharts(report.charts);
 
   
   const renderTextFromDatabase = (text: string | undefined) => {
@@ -74,7 +91,7 @@ export default async function ReportPage({
       </div>
 
       <div className='flex flex-col gap-36 mt-10'>
-      {report.charts.map((chart: any) => (
+      {orderedCharts.map((chart: any) => (
         <div
           className={`section-margin flex items-center justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col 
           ${
