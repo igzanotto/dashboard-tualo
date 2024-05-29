@@ -6,7 +6,8 @@ import Link from "next/link";
 import { fetchReportById } from "@/lib/data";
 import SkeletonButtons from "./skeleton-buttons";
 import { GoalIcon } from "lucide-react";
-import { DocumentChartBarIcon } from "@heroicons/react/24/outline";
+import { DocumentChartBarIcon, PaperClipIcon } from "@heroicons/react/24/outline";
+import SuggestIcon from "./icons/SuggestIcon";
 
 interface ChartNavigationProps {
   reportId: string;
@@ -61,7 +62,18 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
       sectionRefs.current.set('resumen', resumenSection);
     }
 
-    // Observar las secciones de los gráficos
+    const conclusionesSection = document.getElementById('conclusiones');
+    if (conclusionesSection) {
+      observer.observe(conclusionesSection);
+      sectionRefs.current.set('conclusiones', conclusionesSection);
+    }
+
+    const recomendacionesSection = document.getElementById('recomendaciones');
+    if (recomendacionesSection) {
+      observer.observe(recomendacionesSection);
+      sectionRefs.current.set('recomendaciones', recomendacionesSection);
+    }
+
     report.charts.forEach((chart: any) => {
       const section = document.getElementById(chart.type);
       if (section) {
@@ -98,33 +110,73 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
   });
 
   return (
-    <div className="flex items-center gap-4 flex-wrap justify-center">
-      <Link
-        href={`/dashboard/reports/${reportId}/${report.month}/#resumen`}
-        onClick={() => setSelectedChart("resumen")}
-        className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
-          selectedChart === "resumen"
-            ? "bg-[#00AE8D] hover:text-white text-white px-7"
-            : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
-        }`}
-      >
-        <DocumentChartBarIcon width={20} height={20}/>
-        Resumen
-      </Link>
-      {orderedCharts.map((chart: any) => (
+    <div className="flex flex-col gap-4 flex-wrap justify-center">
+      <div className="flex items-center gap-4">
+          <Link
+            href={`/dashboard/reports/${reportId}/${report.month}/#resumen`}
+            onClick={() => setSelectedChart("resumen")}
+            className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
+              selectedChart === "resumen"
+                ? "bg-[#00AE8D] hover:text-white text-white px-7"
+                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
+            }`}
+          >
+            <DocumentChartBarIcon width={20} height={20}/>
+            Resumen
+          </Link>
+          {orderedCharts.map((chart: any) => (
+            <Link
+              key={chart.id}
+              href={`/dashboard/reports/${reportId}/#${chart.type}`}
+              onClick={() => handleChartClick(chart.type)}
+              className={`p-2 rounded-lg font-medium transition-all text ${
+                selectedChart === chart.type
+                  ? "bg-[#00AE8D] hover:text-white text-white px-7"
+                  : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
+              }`}
+            >
+              {chart.type}
+            </Link>
+          ))}
+      </div>
+      <div className="flex items-center gap-4 justify-center">
         <Link
-          key={chart.id}
-          href={`/dashboard/reports/${reportId}/#${chart.type}`}
-          onClick={() => handleChartClick(chart.type)}
-          className={`p-2 rounded-lg font-medium transition-all text ${
-            selectedChart === chart.type
-              ? "bg-[#00AE8D] hover:text-white text-white px-7"
-              : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
-          }`}
-        >
-          {chart.type}
-        </Link>
-      ))}
+              href={`/dashboard/reports/${reportId}/${report.month}/#conclusiones`}
+              onClick={() => setSelectedChart("conclusiones")}
+              className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
+                selectedChart === "conclusiones"
+                  ? "bg-[#00AE8D] hover:text-white text-white px-7"
+                  : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
+              }`}
+            >
+              <DocumentChartBarIcon width={20} height={20}/>
+              Conclusiones
+            </Link>
+            <Link
+            href={`/dashboard/reports/${reportId}/${report.month}/#recomendaciones`}
+            onClick={() => setSelectedChart("recomendaciones")}
+            className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
+              selectedChart === "recomendaciones"
+                ? "bg-[#00AE8D] hover:text-white text-white px-7"
+                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
+            }`}
+          >
+            <SuggestIcon />
+            Recomendaciones
+          </Link>
+          <Link
+            href={`/dashboard/reports/${reportId}/${report.month}/#anexo`}
+            onClick={() => setSelectedChart("anexo")}
+            className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
+              selectedChart === "anexo"
+                ? "bg-[#00AE8D] hover:text-white text-white px-7"
+                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
+            }`}
+          >
+            <PaperClipIcon width={20} height={20}/>
+            Anexo
+          </Link>
+      </div>
     </div>
   );
 }

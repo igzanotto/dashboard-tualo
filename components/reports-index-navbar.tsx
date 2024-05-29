@@ -48,7 +48,7 @@ console.log(reportId);
           Metas financieras
         </Link> */}
 
-        <Link
+        {/* <Link
           href={`/dashboard/reports/${reportId}/enero/#conclusiones`}
           className="flex items-center gap-1 rounded-lg bg-gray-200 p-2 font-medium text-black hover:px-7 hover:bg-[#FF6C0E] hover:text-white transition-all"
         >
@@ -70,7 +70,7 @@ console.log(reportId);
         >
           <PaperClipIcon width={20} height={20}/>
           Anexo
-        </Link>
+        </Link> */}
       </div>
       </div>
 

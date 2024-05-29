@@ -168,16 +168,16 @@ export default async function ReportPage({
       ))}
       </div>
 
-      <div className="flex flex-col gap-28">
+      <div className="flex flex-col gap-28 my-28">
 
-        <div id="conclusiones" className="section-margin">
+        <div id="conclusiones" className="section-margin" key={"conclusiones"}>
           <p className="mb-4 text-2xl font-semibold">Conclusiones</p>
           <div className="rounded-xl bg-gray-100 p-3">
             {renderTextFromDatabase(report.analysis)}
           </div>
         </div>
 
-        <div id="recomendaciones" className="section-margin">
+        <div id="recomendaciones" className="section-margin" key={"recomendaciones"}>
           <p className="mb-4 text-2xl font-semibold">Recomendaciones</p>
           <div className="p-3 flex flex-col gap-10">
           {report.recomendations.map((data: any, index:number) => (
