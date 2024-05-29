@@ -237,25 +237,3 @@ export async function fetchChartById(chartId: string) {
   }
   }
 
-
-  export async function fetchLatestReportId() {
-    try {
-      const supabase = createClient();
-      const { data, error } = await supabase
-        .from('reports')
-        .select('id')
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
-  
-      if (error) {
-        throw error;
-      }
-  
-      console.log("latest report ID>>>>>>", data.id);
-      return data.id;
-    } catch (error) {
-      console.error('Failed to fetch latest report ID:', error);
-      return null; // Maneja el caso de error devolviendo null o un valor por defecto
-    }
-  }
