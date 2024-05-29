@@ -79,7 +79,7 @@ export default async function ReportPage({
       <div className='flex flex-col gap-36 mt-10'>
       {report.charts.map((chart: any) => (
         <div
-          className={`section-margin flex items-center justify-center py-4 rounded-xl 
+          className={`section-margin flex items-center justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col 
           ${
             chart.type === "Costos y gastos" ? "bg-[rgba(255,0,0,0.07046568627450978)]" :
             chart.type === "Ventas" ? "bg-[rgba(0,255,0,0.1)]" :
@@ -92,7 +92,7 @@ export default async function ReportPage({
           id={chart.type} 
           key={chart.id}
         >
-          <div className="w-[50%]">
+          <div className="2xl:w-[50%] xl:w-[50%] max-xl:w-full">
             <div className="flex items-center gap-2">
               <p className="my-4 text-xl font-semibold xl:text-2xl">
                 {' '}
@@ -121,13 +121,13 @@ export default async function ReportPage({
             </div>
             <ChartEmbed src={chart.graphy_url} />
           </div>
-          <div className="w-[40%] translate-y-5 rounded-lg bg-white px-4 py-3">
+          <div className="2xl:w-[40%] xl:w-[50%] rounded-lg bg-white px-3 py-5">
             {chart.insights && (
               <div>
                 <h3 className="mb-5 text-center text-2xl font-medium">
                   Resumen
                 </h3>
-                <p className="text-xl">
+                <p className="text-lg">
                   {renderTextFromDatabase(chart.insights)}
                 </p>
               </div>
