@@ -150,10 +150,12 @@ export default async function ReportPage({
 
         <div id="recomendaciones" className="section-margin">
           <p className="mb-4 text-2xl font-semibold">Recomendaciones</p>
-          <div className="rounded-xl bg-gray-100 p-3">
-            {report.recomendations.map((data: any) => (
-              <div>{renderTextFromDatabase(`${data.content}`)}</div>
-            ))}
+          <div className="p-3 flex flex-col gap-10">
+          {report.recomendations.map((data: any, index:number) => (
+            <div key={index} className='bg-gray-50 border-2 border-gray-300 flex items-center p-4 rounded-xl'>
+              {renderTextFromDatabase(`${data.content}`)}
+            </div>
+          ))}
           </div>
         </div>
       </div>
