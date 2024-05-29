@@ -7,20 +7,18 @@ import { z } from 'zod';
 const BusinessFormSchema = z.object({
   id: z.number(),
   name: z.string(),
-  description: z.string(),
 });
 
 const CreateBusiness = BusinessFormSchema.omit({ id: true });
 
 export async function createBusiness(formData: FormData) {
-  const { name, description } = CreateBusiness.parse({
-    name: formData.get('name'),
-    description: formData.get('description'),
+  const { name } = CreateBusiness.parse({
+    name: formData.get('name')
   });
 
   const supabase = createClient();
 
-  const { data: businesses, error } = await supabase.from('businesses').insert({ name, description });
+  const { data: businesses, error } = await supabase.from('businesses').insert({ name });
 
   if (error) {
     throw error;
@@ -460,4 +458,25 @@ export async function updateReport(formData: FormData) {
     console.error('Error updating report:', error);
     throw error;
   }
+}
+
+export async function createUser(formData: FormData) {
+  const { name, email } = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+  };
+
+  const password = Math.random().toString(36).slice(-8);
+  const supabase = createClient();
+
+  const { data, error } = await supabase.auth.signUp({ email: email as string, password: password });
+
+  if (error) {
+    console.error('Error signing up:', error);
+    throw error;
+  }
+
+  console.log('User signed up:', data);
+
+  redirect('/admin/businesses');
 }
