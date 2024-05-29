@@ -18,14 +18,20 @@ export async function createBusiness(formData: FormData) {
 
   const supabase = createClient();
 
-  const { data: businesses, error } = await supabase.from('businesses').insert({ name });
+  const { data: response, error } = await supabase
+  .from('businesses')
+  .insert({ name })
+  .select('id')
+  .single();
+
 
   if (error) {
     throw error;
   }
 
+  console.log('Business created:', response.id);
   // clear this cache and trigger a new request to the server for the path to see the new business
-  revalidatePath('/admin/businesses');
+  revalidatePath(`/admin/businesses/${response.id}/users/add`);
 
   redirect('/admin/businesses');
 }
