@@ -124,7 +124,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
         rows={15}
         value={formData.charts_prompt}
         onChange={handleChange}
-        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         autoFocus
       />
 
@@ -132,7 +132,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
         <Button onClick={handleCreateMessage}>crear mensaje</Button>
         <Button onClick={handleCreateRun}>crear Run</Button>
         <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>
-        <input type="text" defaultValue={threadId} name="thread_id" />
+        <input type="text" defaultValue={threadId} name="thread_id" className=' border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none' />
       </div>
 
       <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
@@ -159,7 +159,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
               rows={30}
               id="chartsResponse"
               name="chartsResponse"
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
           </div>
 
@@ -169,7 +169,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
               name="waterfall_chart_insights"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> insights del grafico de cascada <<<"
             />
@@ -178,7 +178,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
               name="sales_chart_insights"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> insights del grafico de ventas <<<"
             />
@@ -189,7 +189,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
               name="costs_and_expenses_chart_insights"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> insights del grafico de costos y gastos <<<"
             />
@@ -200,7 +200,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
               name="net_profit_and_margins_chart_insights"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> insights del grafico de utilidad neta y margen neto <<<"
             />
@@ -209,7 +209,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
               name="margins_chart_insights"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> insights del grafico de margenes <<<"
             />
@@ -220,12 +220,12 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
               name="detailed_expenses_chart_insights"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> insights del grafico de costos desglosados <<<"
             />
             <div className="my-2 flex justify-end">
-              <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
+              <button className="rounded-md bg-blue-600 px-3 py-2 text-white  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:opacity-50">
                 continuar con analisis
               </button>
             </div>

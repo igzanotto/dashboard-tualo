@@ -147,7 +147,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
         name="PL_prompt"
         value={formData.PL_prompt}
         onChange={handleChange}
-        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         autoFocus
       />
       <textarea
@@ -155,7 +155,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
         value={formData.PL_transcript}
         onChange={handleChange}
         rows={4}
-        className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         autoFocus
         placeholder=">>> ingresar el P&L sin formato <<<"
       />
@@ -164,7 +164,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
         value={formData.PL_close}
         onChange={handleChange}
         rows={4}
-        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         autoFocus
       />
 
@@ -172,7 +172,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
         <Button onClick={handleCreateMessage}>crear mensaje</Button>
         <Button onClick={handleCreateRun}>crear Run</Button>
         <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>
-        <input type="text" defaultValue={threadId} name="thread_id" />
+        <input type="text" defaultValue={threadId} name="thread_id" className=' border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none' />
       </div>
 
       <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
@@ -184,12 +184,12 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
           rows={9}
           id="goals"
           name="goals"
-          className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
         <input type="text" name="report_id" defaultValue={report_id} hidden />
 
         <div className="my-2 flex justify-end">
-          <a href={`/admin/businesses/${business_id}/reports/${report_id}/charts`} className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
+          <a href={`/admin/businesses/${business_id}/reports/${report_id}/charts`} className="rounded-md bg-blue-600 px-3 py-2 text-white  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:opacity-50">
             Ir a Gráficos
           </a>
         </div>

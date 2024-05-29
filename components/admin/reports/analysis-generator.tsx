@@ -120,7 +120,7 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
         rows={13}
         value={formData.analysis_prompt}
         onChange={handleChange}
-        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         autoFocus
       />
 
@@ -142,10 +142,10 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
           rows={20}
           id="analysis"
           name="analysis"
-          className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         />
         <div className="my-2 flex justify-end">
-          <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
+          <button className="rounded-md bg-blue-600 px-3 py-2 text-white  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:opacity-50">
             continuar con recomendaciones
           </button>
         </div>

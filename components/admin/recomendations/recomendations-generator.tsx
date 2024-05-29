@@ -241,7 +241,7 @@ export default function RecomendationsGenerator({
         rows={5}
         value={formData.bullets_prompt}
         onChange={handleChange}
-        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         autoFocus
       />
       <div className="my-2 flex justify-between">
@@ -266,7 +266,7 @@ export default function RecomendationsGenerator({
         rows={10}
         value={formData.evaluation_prompt}
         onChange={handleChange}
-        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
 
       <div className="my-2 flex justify-between">
@@ -291,7 +291,7 @@ export default function RecomendationsGenerator({
         rows={13}
         value={formData.recomendations_prompt}
         onChange={handleChange}
-        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
 
       <div className="my-2 flex justify-between">
@@ -325,7 +325,7 @@ export default function RecomendationsGenerator({
               rows={20}
               id="recomendations"
               name="recomendations"
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               placeholder=">>> recomendaciones <<<"
             />
           </div>
@@ -336,7 +336,7 @@ export default function RecomendationsGenerator({
               name="first_recomendation"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>>  primera recomendacion <<<"
             />
@@ -345,7 +345,7 @@ export default function RecomendationsGenerator({
               name="second_recomendation"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> segunda recomendacion <<<"
             />
@@ -354,7 +354,7 @@ export default function RecomendationsGenerator({
               name="third_recomendation"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> tercera recomendacion <<<"
             />
@@ -363,13 +363,13 @@ export default function RecomendationsGenerator({
               name="fourth_recomendation"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> cuarta recomendacion <<<"
             />
 
             <div className="my-2 flex justify-end">
-              <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
+              <button className="rounded-md bg-blue-600 px-3 py-2 text-white  disabled:opacity-50">
                 finalizar reporte
               </button>
             </div>
