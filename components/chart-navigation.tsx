@@ -105,7 +105,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
 
   if (!report) {
     return (
-      <div className="flex flex-col items-center gap-4">
+      <div className="flex flex-col items-center gap-4 max-[1228px]:hidden">
         <div className="flex items-center gap-4 justify-center">
           <SkeletonButtons />
           <SkeletonButtons />

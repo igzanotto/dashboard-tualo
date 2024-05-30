@@ -26,7 +26,7 @@ export default async function Layout({
       <div className="flex-none w-[100px]">
         <SideNav />
       </div>
-      <div className="flex-grow md:overflow-y-auto 2xl:px-12 px-2 py-0">
+      <div className="flex-grow md:overflow-y-auto 2xl:px-12 px-2 py-0 max-md:p-0">
         <ReportsIndexNavbar business_id={business_id} />
         {children}
       </div>
