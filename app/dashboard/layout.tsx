@@ -12,6 +12,8 @@ export default async function Layout({
   const supabase = createClient();
   const {data: { user }} = await supabase.auth.getUser();
   
+  
+  
   if (!user) {
     return redirect('/login');
   }
@@ -21,10 +23,10 @@ export default async function Layout({
   
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-      <div className="w-full flex-none md:w-64">
+      <div className="flex-none w-[100px]">
         <SideNav />
       </div>
-      <div className="flex-grow p-6 md:overflow-y-auto md:p-12">
+      <div className="flex-grow md:overflow-y-auto 2xl:px-12 px-2 py-0 max-md:p-0">
         <ReportsIndexNavbar business_id={business_id} />
         {children}
       </div>
