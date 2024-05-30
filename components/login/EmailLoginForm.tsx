@@ -30,7 +30,7 @@ export default function EmailLoginForm({
       return redirect(`/login?message=${error}`);
     }
 
-    return redirect('/dashboard');
+    return redirect('/admin');
   };
 
   const signUp = async (formData: FormData) => {

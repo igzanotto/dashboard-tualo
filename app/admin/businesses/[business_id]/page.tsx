@@ -39,7 +39,7 @@ export default async function BusinessPage({
             Nuevo reporte
           </Link>
           <Link
-            href={`/admin/businesses/${business.id}/users/create`}
+            href={`/admin/businesses/${business.id}/users/add`}
             className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white"
           >
             <AddIcon />

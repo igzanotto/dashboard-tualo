@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { z } from 'zod';
+import { createAdmin } from '@/utils/supabase/admin';
 
 const BusinessFormSchema = z.object({
   id: z.number(),
@@ -18,14 +19,20 @@ export async function createBusiness(formData: FormData) {
 
   const supabase = createClient();
 
-  const { data: businesses, error } = await supabase.from('businesses').insert({ name });
+  const { data: response, error } = await supabase
+  .from('businesses')
+  .insert({ name })
+  .select('id')
+  .single();
+
 
   if (error) {
     throw error;
   }
 
+  console.log('Business created:', response.id);
   // clear this cache and trigger a new request to the server for the path to see the new business
-  revalidatePath('/admin/businesses');
+  revalidatePath(`/admin/businesses/${response.id}/users/add`);
 
   redirect('/admin/businesses');
 }
@@ -460,23 +467,39 @@ export async function updateReport(formData: FormData) {
   }
 }
 
-export async function createUser(formData: FormData) {
-  const { name, email } = {
-    name: formData.get('name'),
-    email: formData.get('email'),
-  };
+export const createUser = async (users: any[]) => {
+  const supabase = createAdmin();
+  
+  // Filtrar los usuarios que tienen un email no vacío
+  const validUsers = users.filter(user => user.email.trim() !== '');
+  
+  for (const user of validUsers) {
+    try {
+      const { data: userData, error: userError } = await supabase.auth.admin.inviteUserByEmail(user.email);
 
-  const password = Math.random().toString(36).slice(-8);
-  const supabase = createClient();
+      if (userError) {
+        console.error(`Error creating user ${user.email}:`, userError);
+        continue; // Skip to the next user
+      }
 
-  const { data, error } = await supabase.auth.signUp({ email: email as string, password: password });
+      console.log(`User invited: ${userData.user.email}`);
+      
+      // Adding the profile with name and business_id
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .update({ name: user.name, business_id: 1 })
+        .eq('id', userData.user.id)
+        .single();
 
-  if (error) {
-    console.error('Error signing up:', error);
-    throw error;
+      if (profileError) {
+        console.error(`Error creating profile for ${user.email}:`, profileError);
+        throw profileError;
+      } else {
+        console.log(`Profile created for ${profileData}`);
+      }
+      
+    } catch (err) {
+      console.error(`Unexpected error for user ${user.email}:`, err);
+    }
   }
-
-  console.log('User signed up:', data);
-
-  redirect('/admin/businesses');
-}
+};
