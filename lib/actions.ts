@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { z } from 'zod';
+import { createAdmin } from '@/utils/supabase/admin';
 
 const BusinessFormSchema = z.object({
   id: z.number(),
@@ -466,23 +467,33 @@ export async function updateReport(formData: FormData) {
   }
 }
 
-export async function createUser(formData: FormData) {
-  const { name, email } = {
-    name: formData.get('name'),
-    email: formData.get('email'),
-  };
+export const createUser = async (users) => {
+  const supabase = createAdmin();
+  // Handle user creation logic here
+  console.log(users);
+  // Filtrar los usuarios que tienen un email no vacío
+  const validUsers = users.filter(user => user.email.trim() !== '');
+  // Example logic to process each user
+  for (const user of validUsers) {
+    const { data, error } = await supabase.auth.admin.inviteUserByEmail(user.email);
+    // const { data, error } = await supabase.auth.admin.createUser({
+    //   email: user.email,
+    //   password: "TUALO2024",
+    //   user_metadata: { name: user.name },
+    //   email_confirm: true,
+    // });
 
-  const password = Math.random().toString(36).slice(-8);
-  const supabase = createClient();
-
-  const { data, error } = await supabase.auth.signUp({ email: email as string, password: password });
-
-  if (error) {
-    console.error('Error signing up:', error);
-    throw error;
+    if (error) {
+      console.error(`Error creating user ${user.email}:`, error);
+    } else {
+      console.log(`User data: ${data.user.email}`);
+      
+      // agregar al profile el name y el business_id
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .insert({ name: user.name, email: user.email, business_id: 1 })
+        .eq('id', data.user.id)
+        .single();
+    }
   }
-
-  console.log('User signed up:', data);
-
-  redirect('/admin/businesses');
-}
+};
