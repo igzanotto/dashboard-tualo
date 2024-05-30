@@ -467,7 +467,7 @@ export async function updateReport(formData: FormData) {
   }
 }
 
-export const createUser = async (users) => {
+export const createUser = async (users: any[]) => {
   const supabase = createAdmin();
   
   // Filtrar los usuarios que tienen un email no vacío
