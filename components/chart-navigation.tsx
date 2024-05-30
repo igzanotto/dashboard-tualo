@@ -17,7 +17,7 @@ const chartOrder = [
   'Cascada P&L',
   'Ventas',
   'Costos y gastos',
-  'Utilidad neta y margen neto',
+  'Utilidad neta',
   'Márgenes',
   'Gastos desglosados'
 ];
@@ -93,14 +93,21 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
 
   if (!report) {
     return (
-      <div className="flex items-center gap-4">
-        <SkeletonButtons />
-        <SkeletonButtons />
-        <SkeletonButtons />
-        <SkeletonButtons />
-        <SkeletonButtons />
-        <SkeletonButtons />
-        <SkeletonButtons />
+      <div className="flex flex-col items-center gap-4">
+        <div className="flex items-center gap-4 justify-center">
+          <SkeletonButtons />
+          <SkeletonButtons />
+          <SkeletonButtons />
+          <SkeletonButtons />
+          <SkeletonButtons />
+          <SkeletonButtons />
+          <SkeletonButtons />
+        </div>
+        <div className="flex items-center gap-4 justify-center">
+          <SkeletonButtons />
+          <SkeletonButtons />
+          <SkeletonButtons />
+        </div>
       </div>
     );
   }
@@ -110,8 +117,8 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
   });
 
   return (
-    <div className="flex flex-col gap-4 flex-wrap justify-center">
-      <div className="flex items-center gap-4">
+    <div className="flex flex-col gap-4 justify-center">
+      <div className="flex items-center gap-4 justify-center">
           <Link
             href={`/dashboard/reports/${reportId}/${report.month}/#resumen`}
             onClick={() => setSelectedChart("resumen")}

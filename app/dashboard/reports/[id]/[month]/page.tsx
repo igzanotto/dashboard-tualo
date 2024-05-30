@@ -16,7 +16,7 @@ const chartOrder = [
   'Cascada P&L',
   'Ventas',
   'Costos y gastos',
-  'Utilidad neta y margen neto',
+  'Utilidad neta',
   'Márgenes',
   'Gastos desglosados'
 ];

@@ -16,7 +16,7 @@ export default function ChartForm({report_id}:any) {
     "Ventas",
     "Costos y gastos",
     "Márgenes",
-    "Utilidad neta y margen neto",
+    "Utilidad neta",
     "Gastos desglosados"
   ]
   
