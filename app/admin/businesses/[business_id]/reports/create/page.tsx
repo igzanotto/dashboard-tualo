@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/button';
 import { createReport } from '@/lib/actions';
-import { useState } from 'react';
+import { SetStateAction, useState } from 'react';
 
 interface FormData {
   QA_prompt: string;
@@ -14,7 +14,7 @@ export default function CreateReportPage({ params }: { params: any }) {
   const { business_id } = params;
   console.log('business_id', business_id);
 
-  const handleMonthChange = (event) => {
+  const handleMonthChange = (event: any) => {
     setSelectedMonth(event.target.value);
   };
 
