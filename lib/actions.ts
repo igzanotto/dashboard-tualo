@@ -3,31 +3,36 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { z } from 'zod';
+import { createAdmin } from '@/utils/supabase/admin';
 
 const BusinessFormSchema = z.object({
   id: z.number(),
   name: z.string(),
-  description: z.string(),
 });
 
 const CreateBusiness = BusinessFormSchema.omit({ id: true });
 
 export async function createBusiness(formData: FormData) {
-  const { name, description } = CreateBusiness.parse({
-    name: formData.get('name'),
-    description: formData.get('description'),
+  const { name } = CreateBusiness.parse({
+    name: formData.get('name')
   });
 
   const supabase = createClient();
 
-  const { data: businesses, error } = await supabase.from('businesses').insert({ name, description });
+  const { data: response, error } = await supabase
+  .from('businesses')
+  .insert({ name })
+  .select('id')
+  .single();
+
 
   if (error) {
     throw error;
   }
 
+  console.log('Business created:', response.id);
   // clear this cache and trigger a new request to the server for the path to see the new business
-  revalidatePath('/admin/businesses');
+  revalidatePath(`/admin/businesses/${response.id}/users/add`);
 
   redirect('/admin/businesses');
 }
@@ -78,12 +83,12 @@ export async function createReport(formData:FormData) {
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/goals`);
 }
 
-const BuildGoalsReport = ReportFormSchema.omit({ month: true, business_id: true, analysis: true, business_resume: true });
+const BuildGoals = ReportFormSchema.omit({ month: true, business_id: true, analysis: true, business_resume: true });
 
-export async function buildGoalsReport(formData:FormData) {
+export async function buildGoals(formData:FormData) {
   console.log("adentro de createReport")
   console.log(formData);
-  const { id , goals } = BuildGoalsReport.parse({
+  const { id , goals } = BuildGoals.parse({
     id: formData.get('report_id'),
     goals: formData.get('goals'),
   });
@@ -107,11 +112,40 @@ export async function buildGoalsReport(formData:FormData) {
     return;
   }
 
-  const report_id = data[0].id;
+  const report_id = id
   const business_id = data[0].business_id;
 
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/PL`);
 }
+
+
+const BuildAnalysis = ReportFormSchema.omit({id: true, business_id: true, goals: true, month: true, business_resume: true});
+
+export async function buildAnalysis(formData:FormData) {
+  const report_id = formData.get('report_id');
+  const business_id = formData.get('business_id');
+
+  const { analysis } = BuildAnalysis.parse({
+    analysis: formData.get('analysis'),
+  });
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('reports')
+    .update({ analysis: analysis })
+    .eq('id', report_id)
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("analisis creado correctamente");
+  }
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/recomendations`);
+}
+
+
 
 const ChartFormSchema = z.object({
   id: z.string(),
@@ -271,6 +305,201 @@ export async function addThreadToBusiness(thread_id: string, business_id: string
   if (error) {
     console.error('Error inserting data:', error);
   } else {
-    console.log("thread guardado en negocio");
+    console.log("thread guardado en business correctamente");
   }
 }
+
+
+const ChartsFormSchema = z.object({
+  id: z.string(),
+  waterfall_chart_insights: z.string(),
+  sales_chart_insights: z.string(),
+  costs_and_expenses_chart_insights: z.string(),
+  net_profit_and_margins_chart_insights: z.string(),
+  margins_chart_insights: z.string(),
+  detailed_expenses_chart_insights: z.string(),
+  report_id: z.string(),
+  business_id: z.string(),
+});
+
+const BuildChartsInsights = ChartsFormSchema.omit({id: true, business_id: true, report_id: true});
+
+export async function buildChartsInsights(formData:FormData) {
+  console.log("adentro de charts builder")
+  console.log(formData);
+  const report_id = formData.get('report_id');
+  const business_id = formData.get('business_id');
+
+  const {
+      waterfall_chart_insights,
+      sales_chart_insights, 
+      costs_and_expenses_chart_insights, 
+      net_profit_and_margins_chart_insights, 
+      margins_chart_insights,
+      detailed_expenses_chart_insights,
+   } = BuildChartsInsights.parse({
+    waterfall_chart_insights: formData.get('waterfall_chart_insights'),
+    sales_chart_insights: formData.get('sales_chart_insights'),
+    costs_and_expenses_chart_insights: formData.get('costs_and_expenses_chart_insights'),
+    net_profit_and_margins_chart_insights: formData.get('net_profit_and_margins_chart_insights'),
+    margins_chart_insights: formData.get('margins_chart_insights'),
+    detailed_expenses_chart_insights: formData.get('detailed_expenses_chart_insights'),
+
+  });
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('charts')
+    .insert([
+      { type: "waterfall", insights: waterfall_chart_insights, report_id: report_id },
+      { type: "sales", insights: sales_chart_insights, report_id: report_id },
+      { type: "costs_and_expenses", insights: costs_and_expenses_chart_insights, report_id: report_id },
+      { type: "net_profit_and_margins", insights: net_profit_and_margins_chart_insights, report_id: report_id },
+      { type: "margins", insights: margins_chart_insights, report_id: report_id },
+      { type: "detailed_expenses", insights: detailed_expenses_chart_insights, report_id: report_id },
+    ])
+    
+
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("graficos generados correctamente");
+  }
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/analysis`);
+}
+
+const RecomendationsFormSchema = z.object({
+  report_id: z.string(),
+  business_id: z.string(),
+  first_recomendation: z.string(),
+  second_recomendation: z.string(),
+  third_recomendation: z.string(),
+  fourth_recomendation: z.string().optional(),
+});
+
+const BuildRecomendations = RecomendationsFormSchema.omit({id: true, business_id: true, report_id: true});
+
+export async function buildRecomendations(formData:FormData) {
+  console.log("adentro de recomendations builder")
+  console.log(formData);
+  const report_id = formData.get('report_id');
+  const business_id = formData.get('business_id');
+
+  const {
+    first_recomendation,
+    second_recomendation, 
+    third_recomendation, 
+    fourth_recomendation, 
+  } = BuildRecomendations.parse({
+    first_recomendation: formData.get('first_recomendation'),
+    second_recomendation: formData.get('second_recomendation'),
+    third_recomendation: formData.get('third_recomendation'),
+    fourth_recomendation: formData.get('fourth_recomendation'),
+  });
+
+  const recommendations = [
+    { content: first_recomendation, report_id: report_id },
+    { content: second_recomendation, report_id: report_id },
+    { content: third_recomendation, report_id: report_id },
+    { content: fourth_recomendation, report_id: report_id },
+  ];
+
+  // Filter out empty recommendations
+  const nonEmptyRecommendations = recommendations.filter(rec => rec.content);
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('recomendations')
+    .insert(nonEmptyRecommendations)
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("recomendaciones generadas correctamente");
+  }
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}`);
+}
+
+const ReportUpdateSchema = z.object({
+  report_id: z.string(),
+  business_resume: z.string().optional(),
+  goals: z.string().optional(),
+  analysis: z.string().optional(),
+});
+
+// Función para actualizar el reporte en Supabase
+export async function updateReport(formData: FormData) {
+  const parsedData = ReportUpdateSchema.safeParse({
+    report_id: formData.get('report_id'),
+    business_resume: formData.get('business_resume'),
+    goals: formData.get('goals'),
+    analysis: formData.get('analysis'),
+  });
+
+  if (!parsedData.success) {
+    console.error('Validation Error:', parsedData.error);
+    throw new Error('Invalid form data');
+  }
+
+  const { report_id, business_resume, goals, analysis } = parsedData.data;
+  const supabase = createClient();
+
+  try {
+    const { data, error } = await supabase
+      .from('reports')
+      .update({ business_resume, goals, analysis })
+      .eq('id', report_id)
+      .single();
+
+    if (error) {
+      console.error('Supabase update error:', error);
+      throw error;
+    }
+    return data;
+  } catch (error) {
+    console.error('Error updating report:', error);
+    throw error;
+  }
+}
+
+export const createUser = async (users: any[]) => {
+  const supabase = createAdmin();
+  
+  // Filtrar los usuarios que tienen un email no vacío
+  const validUsers = users.filter(user => user.email.trim() !== '');
+  
+  for (const user of validUsers) {
+    try {
+      const { data: userData, error: userError } = await supabase.auth.admin.inviteUserByEmail(user.email);
+
+      if (userError) {
+        console.error(`Error creating user ${user.email}:`, userError);
+        continue; // Skip to the next user
+      }
+
+      console.log(`User invited: ${userData.user.email}`);
+      
+      // Adding the profile with name and business_id
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .update({ name: user.name, business_id: 1 })
+        .eq('id', userData.user.id)
+        .single();
+
+      if (profileError) {
+        console.error(`Error creating profile for ${user.email}:`, profileError);
+        throw profileError;
+      } else {
+        console.log(`Profile created for ${profileData}`);
+      }
+      
+    } catch (err) {
+      console.error(`Unexpected error for user ${user.email}:`, err);
+    }
+  }
+};

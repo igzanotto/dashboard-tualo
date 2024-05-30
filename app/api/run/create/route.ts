@@ -5,17 +5,15 @@ const openai = new OpenAI();
 
 export async function POST(req: Request) {
     const { threadId } = await req.json()
-    const assistant_id = "asst_eXDbopN5sswZRPH64ed2zvhJ"
+    const assistant_id = "asst_JZUAqqBJOH1EEbjcSYNWWPY8"
 
   try {
-    const run = await openai.beta.threads.runs.create(
+    const run = await openai.beta.threads.runs.createAndPoll(
         threadId,
         { assistant_id: assistant_id }
       );
 
       console.log("run>>>>>>>>", run)
-
-
       
     return NextResponse.json({ 
        run: run
