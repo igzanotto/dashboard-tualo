@@ -206,8 +206,8 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
         {SHEET_SIDES.map((side) => (
           <Sheet key={side}>
             <SheetTrigger asChild>
-              <Button variant="outline" className="w-[200px] flex items-center justify-between">
-                Gráficas y resumen
+              <Button variant="outline" className="w-[120px] flex items-center justify-between">
+                Gráficas
                 <ChevronDownIcon width={20} height={20}/>
               </Button>
             </SheetTrigger>
@@ -242,7 +242,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
                       </Link>
                     ))}
                   </div>
-                  <div className="flex items-center justify-center gap-2">
+                  <div className="flex flex-wrap items-center justify-center gap-2">
           <Link
             href={`/dashboard/reports/${reportId}/${report.month}/#conclusiones`}
             onClick={() => setSelectedChart('conclusiones')}

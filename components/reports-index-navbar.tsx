@@ -35,7 +35,7 @@ console.log(reportId);
       </div>
 
 
-    <div className='flex items-center gap-8 md:hidden'>
+    <div className='flex items-center gap-4 md:hidden'>
       {reports && <MonthButton reports={reports}/>}
       
       <div className='flex items-center gap-4 chart-space'>

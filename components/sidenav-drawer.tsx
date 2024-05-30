@@ -76,6 +76,7 @@ export default async function SideNavDrawer() {
                   }}
                 >
                   <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:p-2 md:px-3">
+                    <div className='max-md:hidden'>
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
@@ -86,6 +87,7 @@ export default async function SideNavDrawer() {
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
+                    </div>
                     <p className='md:hidden'>Cerrar sesión</p>
                   </button>
                 </form>
