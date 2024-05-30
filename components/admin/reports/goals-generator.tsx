@@ -4,6 +4,7 @@ import { Button } from '@/components/button';
 import { buildGoals } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
+import { set } from 'zod';
 
 interface FormData {
   goals_prompt: string;
@@ -14,6 +15,7 @@ interface FormData {
 export default function GoalGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
 
+  const [statusMessage, setStatusMessage] = useState('');
   const [formData, setFormData] = useState<FormData>({
     goals_prompt:
       'Le pedí al emprendedor que eligiera la(s) opción(es) que más correspondieran a sus metas actuales desde el punto de vista de las finanzas de su empresa. A continuación su respuesta:',
@@ -31,6 +33,7 @@ export default function GoalGenerator({ threadId }: { threadId: any }) {
   const handleCreateMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setStatusMessage('creando mensaje...');
     const response = await fetch('/api/message/create', {
       method: 'POST',
       headers: {
@@ -48,34 +51,13 @@ export default function GoalGenerator({ threadId }: { threadId: any }) {
 
     if (!response.ok) {
       console.error('Error al agregar menssage al thread');
+      setStatusMessage('Error al crear mensaje');
       return;
     }
 
     const result = await response.json();
     console.log('message creado con exito', result);
-  };
-
-  const handleCreateRun = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const response = await fetch('/api/run/create', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        threadId: threadId,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('Error al crear RUN');
-      return;
-    }
-
-    const result = await response.json();
-    console.log('Run creado con exito', result);
+    setStatusMessage('mensaje creado con exito!');
   };
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
@@ -139,8 +121,8 @@ export default function GoalGenerator({ threadId }: { threadId: any }) {
       />
 
       <div className="my-2 flex justify-between">
-        <Button onClick={handleCreateMessage}>crear mensaje</Button>
-        <Button onClick={handleCreateRun}>crear Run</Button>
+        <Button onClick={handleCreateMessage}>generar</Button>
+        <p>{statusMessage}</p>
         <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>
         <input type="text" defaultValue={threadId} name="thread_id" className=' border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none'/>
       </div>
