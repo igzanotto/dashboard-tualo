@@ -18,11 +18,15 @@ export async function GET(request: Request) {
       );
       let messagesData = []
       for (const message of messages.data.reverse()) {
-        console.log(`${message.role} > ${message.content[0].text.value}`);
-        messagesData.push({
-            role: message.role,
-            content: message.content[0].text.value
-        })
+        for (const contentBlock of message.content) {
+          if ('text' in contentBlock) {
+            console.log(`${message.role} > ${contentBlock.text.value}`);
+            messagesData.push({
+                role: message.role,
+                content: contentBlock.text.value,
+            });
+          }
+        }
       }
 
     //   console.log("messages>>>>>>>>", messages)
@@ -31,6 +35,6 @@ export async function GET(request: Request) {
   } catch (error) {
     // Handle any errors that occur during the API call
     console.error("Error generating stuff:", error);
-    return error
+    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }

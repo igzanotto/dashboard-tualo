@@ -2,7 +2,6 @@
 import {
   AtSymbolIcon,
   KeyIcon,
-  ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
@@ -27,10 +26,11 @@ export default function EmailLoginForm({
     });
 
     if (error) {
-      return redirect('/login?message=Could not authenticate user');
+      console.log("error login",error);
+      return redirect(`/login?message=${error}`);
     }
 
-    return redirect('/dashboard');
+    return redirect('/admin');
   };
 
   const signUp = async (formData: FormData) => {
