@@ -34,7 +34,7 @@ export default function NavLinks() {
       <Link
             href={`/dashboard/reports/${latestReport?.id}/${latestReport?.month}`}
             className={clsx(
-              'flex h-[48px] grow items-center justify-center rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none  md:p-2 md:px-3',
+              'flex h-[48px] grow items-center md:justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none  md:p-2 md:px-3',
             )}
           >
             <TooltipProvider>
@@ -49,6 +49,7 @@ export default function NavLinks() {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
+              <p className='md:hidden text-lg font-medium'>Resumen</p>
           </Link>
     </>
   );
