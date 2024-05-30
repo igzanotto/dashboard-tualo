@@ -44,7 +44,7 @@ export default async function ReportPage({
     }
   
     const applyStyles = (text: string) => {
-      return <span className="font-bold text-black">{text}</span>;
+      return <span className="font-bold text-zinc-700">{text}</span>;
     };
   
     
@@ -79,27 +79,27 @@ export default async function ReportPage({
   
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 xl:px-2">
 
-      <h1 className={`text-2xl font-semibold`}>
+      <h1 className={`text-2xl font-semibold xl:w-[80%] mx-auto max-xl:w-[90%] text-zinc-700`}>
         Reporte de <span className="capitalize">{report.month}</span>
       </h1>
       <div>
-        <p className="mb-4 text-xl font-semibold xl:text-4xl">
+        <p className="mb-4 text-xl font-semibold xl:text-4xl xl:w-[80%] mx-auto max-xl:w-[90%] text-zinc-700">
           {report.business.name}
         </p>
       </div>
 
-      <div>
-        <div id='resumen' className="section-margin flex flex-col gap-10 mt-10" key={'resumen'}>
+      <div className='xl:w-[80%] mx-auto max-xl:w-[90%]'>
+        <div id='resumen' className="section-margin flex flex-col gap-10 my-20" key={'resumen'}>
           <div>
-            <p className="mb-4 text-2xl font-semibold">Resumen</p>
+            <p className="mb-4 text-2xl font-semibold text-zinc-700">Resumen</p>
             <div className="rounded-xl bg-gray-100 p-3">
               {renderTextFromDatabase(report.business_resume)}
             </div>
           </div>
           <div>
-            <p className="mb-4 text-2xl font-semibold">Metas financieras</p>
+            <p className="mb-4 text-2xl font-semibold text-zinc-700">Metas financieras</p>
             <div className="rounded-xl bg-gray-100 p-3">
               {renderTextFromDatabase(report.goals)}
             </div>
@@ -125,7 +125,7 @@ export default async function ReportPage({
         >
           <div className="2xl:w-[50%] xl:w-[50%] max-xl:w-full">
             <div className="flex items-center gap-2">
-              <p className="my-4 text-xl font-semibold xl:text-2xl">
+              <p className="my-4 text-xl font-semibold xl:text-2xl text-zinc-700">
                 {' '}
                 Gráfica de <span>{chart.type}</span>
               </p>
@@ -171,14 +171,14 @@ export default async function ReportPage({
       <div className="flex flex-col gap-28 my-28">
 
         <div id="conclusiones" className="section-margin" key={"conclusiones"}>
-          <p className="mb-4 text-2xl font-semibold">Conclusiones</p>
+          <p className="mb-4 text-2xl font-semibold text-zinc-700">Conclusiones</p>
           <div className="rounded-xl bg-gray-100 p-3">
             {renderTextFromDatabase(report.analysis)}
           </div>
         </div>
 
         <div id="recomendaciones" className="section-margin" key={"recomendaciones"}>
-          <p className="mb-4 text-2xl font-semibold">Recomendaciones</p>
+          <p className="mb-4 text-2xl font-semibold text-zinc-700">Recomendaciones</p>
           <div className="p-3 flex flex-col gap-10">
           {report.recomendations.map((data: any, index:number) => (
             <div key={index} className='bg-gray-50 border-2 border-gray-300 flex items-center p-4 rounded-xl'>

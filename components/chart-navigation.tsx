@@ -134,7 +134,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
           {orderedCharts.map((chart: any) => (
             <Link
               key={chart.id}
-              href={`/dashboard/reports/${reportId}/#${chart.type}`}
+              href={`/dashboard/reports/${reportId}/${report.month}/#${chart.type}`}
               onClick={() => handleChartClick(chart.type)}
               className={`p-2 rounded-lg font-medium transition-all text ${
                 selectedChart === chart.type
