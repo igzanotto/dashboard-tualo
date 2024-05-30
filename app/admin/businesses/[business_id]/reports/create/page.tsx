@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/button';
 import { createReport } from '@/lib/actions';
-import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
 interface FormData {
@@ -220,7 +219,6 @@ export default function CreateReportPage({ params }: { params: any }) {
             rows={9}
             id="business_resume"
             name="business_resume"
-            // defaultValue={business_resume}
             className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
 
