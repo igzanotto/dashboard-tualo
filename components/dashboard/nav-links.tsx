@@ -1,33 +1,38 @@
-'use client';
+"use client"
 
-import {
-  UserGroupIcon,
-  HomeIcon,
-  DocumentDuplicateIcon,
-  DocumentChartBarIcon,
-} from '@heroicons/react/24/outline';
+import { DocumentChartBarIcon, LinkIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { getLastReport } from '@/lib/data';
 import clsx from 'clsx';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
-// Map of links to display in the side navigation.
-// Depending on the size of the application, this would be stored in a database.
-const links = [
-  { name: 'Reportes', href: '/dashboard/reports', icon: DocumentChartBarIcon },
-];
+interface ReportData {
+  id:number,
+  month:string
+}
 
 export default function NavLinks() {
-  const pathname = usePathname();
+  const [latestReport, setLatestReport] = useState<ReportData | null>(null);
+
+
+  useEffect(() => {
+    const fetchLastReport = async () => {
+      try {
+        const report = await getLastReport();
+        setLatestReport(report);
+      } catch (error) {
+        console.error("Error fetching last report:", error);
+        // Puedes manejar el error de alguna manera, por ejemplo, redireccionando a una página de error.
+      }
+    };
+    fetchLastReport();
+  }, []);
 
   return (
     <>
-      {links.map((link) => {
-        const LinkIcon = link.icon;
-        return (
-          <Link
-            key={link.name}
-            href={link.href}
+      <Link
+            href={`/dashboard/reports/${latestReport?.id}/${latestReport?.month}`}
             className={clsx(
               'flex h-[48px] grow items-center justify-center rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none  md:p-2 md:px-3',
             )}
@@ -35,18 +40,16 @@ export default function NavLinks() {
             <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
-                    <LinkIcon width={30} height={30}/>
+                    <DocumentChartBarIcon width={30} height={30}/>
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>
-                      {link.name}
+                      Resumen
                     </p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
           </Link>
-        );
-      })}
     </>
   );
 }

@@ -237,3 +237,59 @@ export async function fetchChartById(chartId: string) {
   }
   }
 
+
+
+
+
+  interface ProfileData {
+    business_id: number; // Ajusta el tipo según el tipo real en tu base de datos
+  }
+  
+  interface ReportData {
+    id: number;
+    month: string; // Ajusta el tipo según el tipo real en tu base de datos
+    // Agrega otras propiedades de reporte según tu esquema
+  }
+  
+  export async function getLastReport(): Promise<ReportData | null> {
+    const supabase = createClient();
+
+    try {
+      // Obtener el business_id asociado al userId desde la tabla profiles
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('business_id')
+  
+        .single();
+  
+      if (profileError) {
+        throw profileError;
+      }
+  
+      if (!profileData) {
+        throw new Error('No profile found for this user');
+      }
+  
+      const businessId = profileData.business_id;
+  
+      // Obtener el último reporte asociado al business_id del usuario desde la tabla reports
+      const { data: reportData, error: reportError } = await supabase
+        .from('reports')
+        .select('*')
+        .eq('business_id', businessId)
+        .order('created_at', { ascending: false })
+        .limit(1);
+  
+      if (reportError) {
+        throw reportError;
+      }
+      console.log(reportData);
+      
+  
+      return reportData?.[0] || null;
+    } catch (error) {
+      console.error('Error fetching the last report:', error);
+      throw error;
+    }
+  }
+  

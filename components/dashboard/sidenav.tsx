@@ -16,6 +16,7 @@ export default async function SideNav() {
   const {data: { user }} = await supabase.auth.getUser();
   console.log(user?.user_metadata.full_name);
   
+  
 
   return (
     <div className="flex h-full flex-col justify-center px-3 py-4 md:px-2 shadow-lg">
