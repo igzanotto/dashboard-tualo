@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/button';
 import { createReport } from '@/lib/actions';
-import { useParams } from 'next/navigation';
 import { useState } from 'react';
 
 interface FormData {
@@ -14,6 +13,14 @@ interface FormData {
 export default function CreateReportPage({ params }: { params: any }) {
   const { business_id } = params;
   console.log('business_id', business_id);
+
+  const handleMonthChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
+
+  const [selectedMonth, setSelectedMonth] = useState('');
+  const [statusMessage, setStatusMessage] = useState('');
+  const [threadId, setThreadId] = useState('');
 
   const [formData, setFormData] = useState<FormData>({
     QA_prompt:
@@ -71,8 +78,6 @@ export default function CreateReportPage({ params }: { params: any }) {
     QA_close: 'hazme un resumen de esto',
   });
 
-  const [threadId, setThreadId] = useState('');
-
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
@@ -80,78 +85,57 @@ export default function CreateReportPage({ params }: { params: any }) {
     });
   };
 
-  const handleCreateThread = async (e: React.FormEvent) => {
+  const handleRun = async (e: React.FormEvent) => {
     e.preventDefault();
+    setStatusMessage('Creando hilo...');
 
-    const response = await fetch('/api/thread/create', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        business_id: business_id,
-      }),
-    });
+    try {
+      const generateThreadResponse = await fetch('/api/thread/create', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ business_id }),
+      });
 
-    if (!response.ok) {
-      console.error('Error al enviar el formulario');
-      return;
+      if (!generateThreadResponse.ok) {
+        throw new Error('Error al enviar el formulario');
+      }
+
+      const threadResult = await generateThreadResponse.json();
+      const threadId = threadResult.thread.id;
+      setThreadId(threadId);
+
+      setStatusMessage('Hilo creado con éxito');
+
+      console.log('Thread generado con éxito', threadResult);
+
+      setStatusMessage('generando resumen del negocio...');
+
+      const runMessageResponse = await fetch('/api/message/create', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content:
+            formData.QA_prompt + formData.QA_transcript + formData.QA_close,
+          threadId,
+        }),
+      });
+
+      if (!runMessageResponse.ok) {
+        throw new Error('Error al agregar mensaje al thread');
+      }
+
+      const messageResult = await runMessageResponse.json();
+      setStatusMessage('resumen generado con éxito');
+      console.log('resumen generado con éxito!', messageResult);
+    } catch (error: any) {
+      console.error(error.message);
     }
-
-    const result = await response.json();
-
-    setThreadId(result.thread.id);
-
-    console.log('thread generados con exito', result);
-  };
-
-  const handleCreateMessage = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const response = await fetch('/api/message/create', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        content:
-          formData.QA_prompt + formData.QA_transcript + formData.QA_close,
-        threadId: threadId,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('Error al agregar menssage al thread');
-      return;
-    }
-
-    const result = await response.json();
-    console.log('message creado con exito', result);
-  };
-
-  const handleCreateRun = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const response = await fetch('/api/run/create', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        threadId: threadId,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('Error al crear RUN');
-      return;
-    }
-
-    const result = await response.json();
-    console.log('Run creado con exito', result);
   };
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
@@ -193,14 +177,14 @@ export default function CreateReportPage({ params }: { params: any }) {
           name="QA_prompt"
           value={formData.QA_prompt}
           onChange={handleChange}
-          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
         <textarea
           name="QA_transcript"
           value={formData.QA_transcript}
           onChange={handleChange}
           rows={12}
-          className="w-full rounded-md px-3 py-2 text-black border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="w-full rounded-md border-2 border-blue-400 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           autoFocus
           placeholder=">>> ingresar el transcript del Q&A <<<"
         />
@@ -209,18 +193,22 @@ export default function CreateReportPage({ params }: { params: any }) {
           value={formData.QA_close}
           onChange={handleChange}
           rows={4}
-          className="w-full rounded-md bg-blue-100 px-3 py-2 text-black border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           autoFocus
         />
 
         <div className="my-2 flex justify-between">
-          <Button onClick={handleCreateThread}>crear thread</Button>
-          <Button onClick={handleCreateMessage}>crear mensaje</Button>
-          <Button onClick={handleCreateRun}>crear Run</Button>
+          <Button onClick={handleRun}>Ejecutar</Button>
+          <p>{statusMessage}</p>
           <Button onClick={handleRetrieveThreadMessages}>
             obtener mensajes
           </Button>
-          <input type="text" defaultValue={threadId} name="thread_id" className='border-2 border-blue-400' />
+          <input
+            type="text"
+            defaultValue={threadId}
+            name="thread_id"
+            className="border-2 border-blue-400"
+          />
         </div>
 
         <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
@@ -231,7 +219,7 @@ export default function CreateReportPage({ params }: { params: any }) {
             rows={9}
             id="business_resume"
             name="business_resume"
-            className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+            className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           />
 
           <input
@@ -244,6 +232,8 @@ export default function CreateReportPage({ params }: { params: any }) {
             <select
               name="month"
               className="w-1/2 rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              value={selectedMonth}
+              onChange={handleMonthChange}
             >
               <option value="">Seleccione un mes</option>
               <option value="Enero">Enero</option>
@@ -259,7 +249,10 @@ export default function CreateReportPage({ params }: { params: any }) {
               <option value="Noviembre">Noviembre</option>
               <option value="Diciembre">Diciembre</option>
             </select>
-            <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
+            <button
+              className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50"
+              disabled={!selectedMonth}
+            >
               crear en DB
             </button>
           </div>

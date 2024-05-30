@@ -305,7 +305,7 @@ export async function addThreadToBusiness(thread_id: string, business_id: string
   if (error) {
     console.error('Error inserting data:', error);
   } else {
-    console.log("thread guardado en negocio");
+    console.log("thread guardado en business correctamente");
   }
 }
 
