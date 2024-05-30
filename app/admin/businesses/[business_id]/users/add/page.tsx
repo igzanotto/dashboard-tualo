@@ -3,7 +3,7 @@
 import { createUser } from "@/lib/actions";
 
 export default function CreateUserPage() {
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const users = [
