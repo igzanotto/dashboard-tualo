@@ -469,31 +469,37 @@ export async function updateReport(formData: FormData) {
 
 export const createUser = async (users) => {
   const supabase = createAdmin();
-  // Handle user creation logic here
-  console.log(users);
+  
   // Filtrar los usuarios que tienen un email no vacío
   const validUsers = users.filter(user => user.email.trim() !== '');
-  // Example logic to process each user
+  
   for (const user of validUsers) {
-    const { data, error } = await supabase.auth.admin.inviteUserByEmail(user.email);
-    // const { data, error } = await supabase.auth.admin.createUser({
-    //   email: user.email,
-    //   password: "TUALO2024",
-    //   user_metadata: { name: user.name },
-    //   email_confirm: true,
-    // });
+    try {
+      const { data: userData, error: userError } = await supabase.auth.admin.inviteUserByEmail(user.email);
 
-    if (error) {
-      console.error(`Error creating user ${user.email}:`, error);
-    } else {
-      console.log(`User data: ${data.user.email}`);
+      if (userError) {
+        console.error(`Error creating user ${user.email}:`, userError);
+        continue; // Skip to the next user
+      }
+
+      console.log(`User invited: ${userData.user.email}`);
       
-      // agregar al profile el name y el business_id
-      const { data: profile, error: profileError } = await supabase
+      // Adding the profile with name and business_id
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .insert({ name: user.name, email: user.email, business_id: 1 })
-        .eq('id', data.user.id)
+        .update({ name: user.name, business_id: 1 })
+        .eq('id', userData.user.id)
         .single();
+
+      if (profileError) {
+        console.error(`Error creating profile for ${user.email}:`, profileError);
+        throw profileError;
+      } else {
+        console.log(`Profile created for ${profileData}`);
+      }
+      
+    } catch (err) {
+      console.error(`Unexpected error for user ${user.email}:`, err);
     }
   }
 };
