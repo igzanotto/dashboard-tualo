@@ -229,7 +229,7 @@ export default function RecomendationsGenerator({
         rows={5}
         value={formData.bullets_prompt}
         onChange={handleChange}
-        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         autoFocus
       />
       <div className="my-2 flex justify-between">
@@ -246,7 +246,7 @@ export default function RecomendationsGenerator({
         id="bullets_response"
         name="bullets_response"
         placeholder=">>> respuesta de api <<<"
-        className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2"
+        className="w-full rounded-md px-3 py-2 text-black border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
 
       <textarea
@@ -271,7 +271,7 @@ export default function RecomendationsGenerator({
         id="evaluation_response"
         name="evaluation_response"
         placeholder=">>> respuesta de api <<<"
-        className="w-full rounded-md px-3 py-2 text-black focus:outline-none focus:ring-2"
+        className="w-full rounded-md px-3 py-2 text-black border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
       />
 
       <textarea
