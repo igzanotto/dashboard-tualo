@@ -107,7 +107,7 @@ export default function CreateReportPage({ params }: { params: any }) {
 
       console.log('Thread generado con éxito', threadResult);
 
-      setStatusMessage('Agregando mensaje al hilo...');
+      setStatusMessage('generando resumen del negocio...');
 
       const runMessageResponse = await fetch('/api/message/create', {
         method: 'POST',
@@ -127,8 +127,8 @@ export default function CreateReportPage({ params }: { params: any }) {
       }
 
       const messageResult = await runMessageResponse.json();
-      setStatusMessage('Mensaje agregado con éxito');
-      console.log('Mensaje creado con éxito', messageResult);
+      setStatusMessage('resumen generado con éxito');
+      console.log('resumen generado con éxito!', messageResult);
       
     } catch (error: any) {
       console.error(error.message);
