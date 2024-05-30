@@ -83,3 +83,15 @@
   .section-margin {
     scroll-margin-top: 150px; /* Ajusta el valor según la altura de tu navbar */
   }
+
+
+  
+  @media(min-width:1228px){
+    
+    .chart-space{
+      margin: auto;
+    }
+    .chart-navigation-responsive{
+      display: none;
+    }
+  }

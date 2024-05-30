@@ -8,6 +8,7 @@ import LogoScrolled from '../icons/LogoScrolled';
 import { LogOut } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import Image from 'next/image';
+import SideNavDrawer from '../sidenav-drawer';
 
 
 export default async function SideNav() {
@@ -19,13 +20,14 @@ export default async function SideNav() {
   
 
   return (
-    <div className="flex h-full flex-col justify-center px-3 py-4 md:px-2 shadow-lg">
-      <Link
-      className='mb-3 self-center'
-        href="/dashboard"
-      >
-        <LogoScrolled/>
-      </Link>
+   <div className="flex h-full flex-col justify-center px-3 py-4 md:px-2 shadow-lg">
+     <SideNavDrawer/>
+     <Link
+     className='mb-3 self-center'
+       href="/dashboard"
+     >
+       <LogoScrolled/>
+     </Link>
 
       {/* <div>
         <p>¡Hola <span>{user?.user_metadata.full_name}</span>!</p>

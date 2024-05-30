@@ -6,8 +6,20 @@ import Link from "next/link";
 import { fetchReportById } from "@/lib/data";
 import SkeletonButtons from "./skeleton-buttons";
 import { GoalIcon } from "lucide-react";
-import { DocumentChartBarIcon, PaperClipIcon } from "@heroicons/react/24/outline";
+import { ChevronDownIcon, DocumentChartBarIcon, PaperClipIcon } from "@heroicons/react/24/outline";
+import { Button } from "@/components/ui/button"
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import SuggestIcon from "./icons/SuggestIcon";
+import '../app/globals.css'
 
 interface ChartNavigationProps {
   reportId: string;
@@ -116,19 +128,24 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
     return chartOrder.indexOf(a.type) - chartOrder.indexOf(b.type);
   });
 
+  const SHEET_SIDES = ["top"] as const
+
+  type SheetSide = (typeof SHEET_SIDES)[number]
+
   return (
-    <div className="flex flex-col gap-2 justify-center">
-      <div className="flex items-center gap-2 justify-center">
+    <div>
+      <div className="flex flex-col justify-center gap-2 max-[1228px]:hidden">
+        <div className="flex items-center justify-center gap-2">
           <Link
             href={`/dashboard/reports/${reportId}/${report.month}/#resumen`}
-            onClick={() => setSelectedChart("resumen")}
-            className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
-              selectedChart === "resumen"
-                ? "bg-[#00AE8D] hover:text-white text-white px-4"
-                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-4"
+            onClick={() => setSelectedChart('resumen')}
+            className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
+              selectedChart === 'resumen'
+                ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
             }`}
           >
-            <DocumentChartBarIcon width={20} height={20}/>
+            <DocumentChartBarIcon width={20} height={20} />
             Resumen
           </Link>
           {orderedCharts.map((chart: any) => (
@@ -136,36 +153,36 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
               key={chart.id}
               href={`/dashboard/reports/${reportId}/${report.month}/#${chart.type}`}
               onClick={() => handleChartClick(chart.type)}
-              className={`p-2 rounded-lg font-medium transition-all text ${
+              className={`text rounded-lg p-2 font-medium transition-all ${
                 selectedChart === chart.type
-                  ? "bg-[#00AE8D] hover:text-white text-white px-4"
-                  : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-4"
+                  ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                  : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
               }`}
             >
               {chart.type}
             </Link>
           ))}
-      </div>
-      <div className="flex items-center gap-2 justify-center">
-        <Link
-              href={`/dashboard/reports/${reportId}/${report.month}/#conclusiones`}
-              onClick={() => setSelectedChart("conclusiones")}
-              className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
-                selectedChart === "conclusiones"
-                  ? "bg-[#00AE8D] hover:text-white text-white px-4"
-                  : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-4"
-              }`}
-            >
-              <DocumentChartBarIcon width={20} height={20}/>
-              Conclusiones
-            </Link>
-            <Link
+        </div>
+        <div className="flex items-center justify-center gap-2">
+          <Link
+            href={`/dashboard/reports/${reportId}/${report.month}/#conclusiones`}
+            onClick={() => setSelectedChart('conclusiones')}
+            className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
+              selectedChart === 'conclusiones'
+                ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+            }`}
+          >
+            <DocumentChartBarIcon width={20} height={20} />
+            Conclusiones
+          </Link>
+          <Link
             href={`/dashboard/reports/${reportId}/${report.month}/#recomendaciones`}
-            onClick={() => setSelectedChart("recomendaciones")}
-            className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
-              selectedChart === "recomendaciones"
-                ? "bg-[#00AE8D] hover:text-white text-white px-4"
-                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-4"
+            onClick={() => setSelectedChart('recomendaciones')}
+            className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
+              selectedChart === 'recomendaciones'
+                ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
             }`}
           >
             <SuggestIcon />
@@ -173,16 +190,101 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
           </Link>
           <Link
             href={`/dashboard/reports/${reportId}/${report.month}/#anexo`}
-            onClick={() => setSelectedChart("anexo")}
-            className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
-              selectedChart === "anexo"
-                ? "bg-[#00AE8D] hover:text-white text-white px-4"
-                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-4"
+            onClick={() => setSelectedChart('anexo')}
+            className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
+              selectedChart === 'anexo'
+                ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
             }`}
           >
-            <PaperClipIcon width={20} height={20}/>
+            <PaperClipIcon width={20} height={20} />
             Anexo
           </Link>
+        </div>
+      </div>
+      <div className="chart-navigation-responsive flex">
+        {SHEET_SIDES.map((side) => (
+          <Sheet key={side}>
+            <SheetTrigger asChild>
+              <Button variant="outline" className="w-[200px] flex items-center justify-between">
+                Gráficas y resumen
+                <ChevronDownIcon width={20} height={20}/>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side={side}>
+              <SheetHeader>
+                <SheetDescription className="flex flex-col justify-center gap-2">
+                  <div className="flex flex-wrap items-center justify-center gap-2">
+                    <Link
+                      href={`/dashboard/reports/${reportId}/${report.month}/#resumen`}
+                      onClick={() => setSelectedChart('resumen')}
+                      className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
+                        selectedChart === 'resumen'
+                          ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                          : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+                      }`}
+                    >
+                      <DocumentChartBarIcon width={20} height={20} />
+                      Resumen
+                    </Link>
+                    {orderedCharts.map((chart: any) => (
+                      <Link
+                        key={chart.id}
+                        href={`/dashboard/reports/${reportId}/${report.month}/#${chart.type}`}
+                        onClick={() => handleChartClick(chart.type)}
+                        className={`text rounded-lg p-2 font-medium transition-all ${
+                          selectedChart === chart.type
+                            ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                            : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+                        }`}
+                      >
+                        {chart.type}
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-center gap-2">
+          <Link
+            href={`/dashboard/reports/${reportId}/${report.month}/#conclusiones`}
+            onClick={() => setSelectedChart('conclusiones')}
+            className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
+              selectedChart === 'conclusiones'
+                ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+            }`}
+          >
+            <DocumentChartBarIcon width={20} height={20} />
+            Conclusiones
+          </Link>
+          <Link
+            href={`/dashboard/reports/${reportId}/${report.month}/#recomendaciones`}
+            onClick={() => setSelectedChart('recomendaciones')}
+            className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
+              selectedChart === 'recomendaciones'
+                ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+            }`}
+          >
+            <SuggestIcon />
+            Recomendaciones
+          </Link>
+          <Link
+            href={`/dashboard/reports/${reportId}/${report.month}/#anexo`}
+            onClick={() => setSelectedChart('anexo')}
+            className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
+              selectedChart === 'anexo'
+                ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+            }`}
+          >
+            <PaperClipIcon width={20} height={20} />
+            Anexo
+          </Link>
+        </div>
+                </SheetDescription>
+              </SheetHeader>
+            </SheetContent>
+          </Sheet>
+        ))}
       </div>
     </div>
   );
