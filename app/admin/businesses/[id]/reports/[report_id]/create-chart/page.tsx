@@ -1,4 +1,4 @@
-import CreateChartForm from "@/components/admin/create-chart-form";
+
 import ChartForm from "@/components/admin/reports/chart-form/ChartForm";
 
 export default function CreateChartPage({
@@ -9,7 +9,7 @@ export default function CreateChartPage({
 
     return(
         <div>
-            <ChartForm params={params}/>
+            <ChartForm report_id={params.id}/>
         </div>
     )
 }
