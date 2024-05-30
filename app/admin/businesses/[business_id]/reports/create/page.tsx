@@ -13,7 +13,12 @@ interface FormData {
 export default function CreateReportPage({ params }: { params: any }) {
   const { business_id } = params;
   console.log('business_id', business_id);
-  
+
+  const handleMonthChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
+
+  const [selectedMonth, setSelectedMonth] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
   const [threadId, setThreadId] = useState('');
 
@@ -73,7 +78,6 @@ export default function CreateReportPage({ params }: { params: any }) {
     QA_close: 'hazme un resumen de esto',
   });
 
-
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
@@ -129,10 +133,9 @@ export default function CreateReportPage({ params }: { params: any }) {
       const messageResult = await runMessageResponse.json();
       setStatusMessage('resumen generado con éxito');
       console.log('resumen generado con éxito!', messageResult);
-      
     } catch (error: any) {
       console.error(error.message);
-    } 
+    }
   };
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
@@ -195,9 +198,7 @@ export default function CreateReportPage({ params }: { params: any }) {
         />
 
         <div className="my-2 flex justify-between">
-          <Button onClick={handleRun}>
-            Ejecutar
-          </Button>
+          <Button onClick={handleRun}>Ejecutar</Button>
           <p>{statusMessage}</p>
           <Button onClick={handleRetrieveThreadMessages}>
             obtener mensajes
@@ -209,7 +210,6 @@ export default function CreateReportPage({ params }: { params: any }) {
             className="border-2 border-blue-400"
           />
         </div>
-        
 
         <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
           Resumen de la empresa
@@ -232,6 +232,8 @@ export default function CreateReportPage({ params }: { params: any }) {
             <select
               name="month"
               className="w-1/2 rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              value={selectedMonth}
+              onChange={handleMonthChange}
             >
               <option value="">Seleccione un mes</option>
               <option value="Enero">Enero</option>
@@ -247,7 +249,10 @@ export default function CreateReportPage({ params }: { params: any }) {
               <option value="Noviembre">Noviembre</option>
               <option value="Diciembre">Diciembre</option>
             </select>
-            <button className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
+            <button
+              className="rounded-md bg-blue-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50"
+              disabled={!selectedMonth}
+            >
               crear en DB
             </button>
           </div>
