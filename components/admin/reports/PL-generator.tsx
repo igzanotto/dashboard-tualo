@@ -13,6 +13,7 @@ interface FormData {
 export default function PLGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
   const business_id = useParams().business_id as string;
+  const [statusMessage, setStatusMessage] = useState('');
 
   const [formData, setFormData] = useState<FormData>({
     PL_prompt:
@@ -60,6 +61,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
   const handleCreateMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setStatusMessage('creando mensaje...');
     const response = await fetch('/api/message/create', {
       method: 'POST',
       headers: {
@@ -77,34 +79,13 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
 
     if (!response.ok) {
       console.error('Error al agregar menssage al thread');
+      setStatusMessage('Error al crear mensaje');
       return;
     }
 
     const result = await response.json();
     console.log('message creado con exito', result);
-  };
-
-  const handleCreateRun = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const response = await fetch('/api/run/create', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        threadId: threadId,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('Error al crear RUN');
-      return;
-    }
-
-    const result = await response.json();
-    console.log('Run creado con exito', result);
+    setStatusMessage('mensaje creado con exito!');
   };
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
@@ -170,7 +151,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
 
       <div className="my-2 flex justify-between">
         <Button onClick={handleCreateMessage}>crear mensaje</Button>
-        <Button onClick={handleCreateRun}>crear Run</Button>
+        <p>{statusMessage}</p>
         <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>
         <input type="text" defaultValue={threadId} name="thread_id" className=' border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none' />
       </div>

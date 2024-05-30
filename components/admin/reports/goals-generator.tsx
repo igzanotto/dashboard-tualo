@@ -4,7 +4,6 @@ import { Button } from '@/components/button';
 import { buildGoals } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import { set } from 'zod';
 
 interface FormData {
   goals_prompt: string;

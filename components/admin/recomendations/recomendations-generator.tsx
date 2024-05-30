@@ -4,6 +4,7 @@ import { Button } from '@/components/button';
 import { buildRecomendations } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
+import { set } from 'zod';
 
 interface FormData {
   bullets_prompt: string;
@@ -19,6 +20,7 @@ export default function RecomendationsGenerator({
   const report_id = useParams().report_id as string;
   const business_id = useParams().business_id as string;
 
+  const [statusMessage, setStatusMessage] = useState('');
   const [formData, setFormData] = useState<FormData>({
     bullets_prompt: `para el 3er entregable lo vamos a hacer paso a paso
 
@@ -51,6 +53,7 @@ export default function RecomendationsGenerator({
   const handleCreateMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setStatusMessage('creando recomendaciones filtradas...');
     const response = await fetch('/api/message/create', {
       method: 'POST',
       headers: {
@@ -65,16 +68,19 @@ export default function RecomendationsGenerator({
 
     if (!response.ok) {
       console.error('Error al agregar menssage al thread');
+      setStatusMessage('Error al crear mensaje');
       return;
     }
 
     const result = await response.json();
     console.log('message creado con exito', result);
+    setStatusMessage('recomendaciones generadas con exito!');
   };
 
   const handleCreateMessageBullet = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setStatusMessage('generando recomendaciones...');
     const response = await fetch('/api/message/create', {
       method: 'POST',
       headers: {
@@ -89,16 +95,19 @@ export default function RecomendationsGenerator({
 
     if (!response.ok) {
       console.error('Error al agregar menssage al thread');
+      setStatusMessage('Error al crear mensaje');
       return;
     }
 
     const result = await response.json();
     console.log('message creado con exito', result);
+    setStatusMessage('recomendaciones generadas con exito!');
   };
 
   const handleCreateMessageEvaluation = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    setStatusMessage('generando evaluacion...');
     const response = await fetch('/api/message/create', {
       method: 'POST',
       headers: {
@@ -113,34 +122,13 @@ export default function RecomendationsGenerator({
 
     if (!response.ok) {
       console.error('Error al agregar menssage al thread');
+      setStatusMessage('Error al crear mensaje');
       return;
     }
 
     const result = await response.json();
     console.log('message creado con exito', result);
-  };
-
-  const handleCreateRun = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const response = await fetch('/api/run/create', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        threadId: threadId,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('Error al crear RUN');
-      return;
-    }
-
-    const result = await response.json();
-    console.log('Run creado con exito', result);
+    setStatusMessage('evaluacion generada con exito!');
   };
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
@@ -246,7 +234,7 @@ export default function RecomendationsGenerator({
       />
       <div className="my-2 flex justify-between">
         <Button onClick={handleCreateMessageBullet}>crear mensaje</Button>
-        <Button onClick={handleCreateRun}>crear Run</Button>
+        <p>{statusMessage}</p>
         <Button onClick={handleRetrieveThreadMessagesBullet}>
           obtener mensajes
         </Button>
@@ -271,7 +259,7 @@ export default function RecomendationsGenerator({
 
       <div className="my-2 flex justify-between">
         <Button onClick={handleCreateMessageEvaluation}>crear mensaje</Button>
-        <Button onClick={handleCreateRun}>crear Run</Button>
+        <p>{statusMessage}</p>
         <Button onClick={handleRetrieveThreadMessagesEvaluation}>
           obtener mensajes
         </Button>
@@ -296,7 +284,7 @@ export default function RecomendationsGenerator({
 
       <div className="my-2 flex justify-between">
         <Button onClick={handleCreateMessage}>crear mensaje</Button>
-        <Button onClick={handleCreateRun}>crear Run</Button>
+        <p>{statusMessage}</p>
         <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>
         <input type="text" defaultValue={threadId} name="thread_id" />
       </div>
