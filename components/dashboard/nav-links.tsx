@@ -53,6 +53,9 @@ export default function NavLinks() {
             </Tooltip>
           </TooltipProvider>
         </div>
+        <div className='md:hidden'>
+          <DocumentChartBarIcon width={30} height={30} />
+        </div>
         <p className="text-lg font-medium md:hidden">Resumen</p>
       </Link>
     </>

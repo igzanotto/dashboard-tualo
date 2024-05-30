@@ -88,6 +88,10 @@ export default async function SideNavDrawer() {
                       </Tooltip>
                     </TooltipProvider>
                     </div>
+                    <div className='md:hidden'>
+                    <LogOut width={30} height={30} />
+                      
+                    </div>
                     <p className='md:hidden'>Cerrar sesión</p>
                   </button>
                 </form>
