@@ -53,12 +53,12 @@ export default function MonthButton({ reports }: MonthDropdownProps) {
     <div className="flex flex-col items-center space-x-4">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <Button variant="outline" size="sm" className="w-[150px] capitalize flex items-center justify-between">
+          <Button variant="outline" size="sm" className="w-[120px] capitalize flex items-center justify-between">
             {reportMonth}
             <ChevronDownIcon width={20} height={20}/>
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0 w-[150px]">
+        <PopoverContent className="p-0 w-[120px]">
           <Command>
             <CommandInput placeholder="Buscar..." />
             <CommandList>

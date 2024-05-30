@@ -117,15 +117,15 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
   });
 
   return (
-    <div className="flex flex-col gap-4 justify-center">
-      <div className="flex items-center gap-4 justify-center">
+    <div className="flex flex-col gap-2 justify-center">
+      <div className="flex items-center gap-2 justify-center">
           <Link
             href={`/dashboard/reports/${reportId}/${report.month}/#resumen`}
             onClick={() => setSelectedChart("resumen")}
             className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
               selectedChart === "resumen"
-                ? "bg-[#00AE8D] hover:text-white text-white px-7"
-                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
+                ? "bg-[#00AE8D] hover:text-white text-white px-4"
+                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-4"
             }`}
           >
             <DocumentChartBarIcon width={20} height={20}/>
@@ -138,22 +138,22 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
               onClick={() => handleChartClick(chart.type)}
               className={`p-2 rounded-lg font-medium transition-all text ${
                 selectedChart === chart.type
-                  ? "bg-[#00AE8D] hover:text-white text-white px-7"
-                  : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
+                  ? "bg-[#00AE8D] hover:text-white text-white px-4"
+                  : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-4"
               }`}
             >
               {chart.type}
             </Link>
           ))}
       </div>
-      <div className="flex items-center gap-4 justify-center">
+      <div className="flex items-center gap-2 justify-center">
         <Link
               href={`/dashboard/reports/${reportId}/${report.month}/#conclusiones`}
               onClick={() => setSelectedChart("conclusiones")}
               className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
                 selectedChart === "conclusiones"
-                  ? "bg-[#00AE8D] hover:text-white text-white px-7"
-                  : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
+                  ? "bg-[#00AE8D] hover:text-white text-white px-4"
+                  : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-4"
               }`}
             >
               <DocumentChartBarIcon width={20} height={20}/>
@@ -164,8 +164,8 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
             onClick={() => setSelectedChart("recomendaciones")}
             className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
               selectedChart === "recomendaciones"
-                ? "bg-[#00AE8D] hover:text-white text-white px-7"
-                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
+                ? "bg-[#00AE8D] hover:text-white text-white px-4"
+                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-4"
             }`}
           >
             <SuggestIcon />
@@ -176,8 +176,8 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
             onClick={() => setSelectedChart("anexo")}
             className={`p-2 rounded-lg font-medium transition-all text flex items-center gap-2 ${
               selectedChart === "anexo"
-                ? "bg-[#00AE8D] hover:text-white text-white px-7"
-                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-7"
+                ? "bg-[#00AE8D] hover:text-white text-white px-4"
+                : "bg-gray-200 text-black hover:bg-[#00AE8D] hover:text-white hover:px-4"
             }`}
           >
             <PaperClipIcon width={20} height={20}/>
