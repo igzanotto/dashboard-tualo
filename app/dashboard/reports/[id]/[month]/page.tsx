@@ -2,7 +2,8 @@ import ChartEmbed from '@/components/charts/ChartEmbed';
 import ModalDashboard from '@/components/modal/Modal';
 import { fetchReportById } from '@/lib/data';
 import { FolderIcon, LightBulbIcon } from '@heroicons/react/24/outline';
-import { File, GoalIcon, InfoIcon, ListEndIcon } from 'lucide-react';
+import { File, GoalIcon, InfoIcon,} from 'lucide-react';
+import { Libre_Baskerville } from 'next/font/google';
 import {
   Tooltip,
   TooltipContent,
@@ -10,6 +11,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import '../../../../globals.css'
+// import conclusiones from '../../../../../components/images/conlcusiones-financieras.png'
+// import recomendaciones from '../../../../../components/images/recomendaciones.png'
+// import resumen from '../../../../../components/images/resumen-financiero.png'
+// import Image from 'next/image';
+
+
+const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
 
 
 const chartOrder = [
@@ -249,7 +257,10 @@ export default async function ReportPage({
       </div>
 
       <div className="flex flex-col gap-28 my-28">
-
+      {/* <Image src={conclusiones} alt='Conclusiones' width={1000} height={1000} className='w-full'/> */}
+      <div className={`w-full rounded-2xl p-5 bg-gradient-to-r from-[#0065A1] to-[#00AE8D] flex items-center justify-between` }>
+        <p className={`${libreBaskerville.className} text-white text-3xl`} >Conclusiones financieras</p>
+      </div>
         <div id="conclusiones" className="section-margin" key={"conclusiones"}>
           <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p>
           <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
