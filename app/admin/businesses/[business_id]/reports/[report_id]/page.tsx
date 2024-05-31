@@ -1,5 +1,6 @@
+import ChartEmbed from '@/components/charts/ChartEmbed';
 import ChartIcon from '@/components/icons/ChartIcon';
-import { updateReport } from '@/lib/actions';
+import { createChartEmbed, updateReport } from '@/lib/actions';
 import { fetchReportById } from '@/lib/data';
 import Link from 'next/link';
 
@@ -63,6 +64,31 @@ export default async function ReportPage({
         </div>
       </form>
       </div>
+      <div className="mx-auto flex flex-col justify-center gap-6 xl:w-[70%]">
+      {report.chart.graphy_url ? (
+  <ChartEmbed src={report.chart.graphy_url} />
+) : (
+  <div>
+    <h1>Crear Gráfico de {report.chart.type}</h1>
+    <form action={createChartEmbed}>
+      <input type="hidden" name="report_id" value={report.id} />
+      <input type="hidden" name="type" value={report.chart.type} />
+      <input
+        type="text"
+        name="graphy_url"
+        placeholder="Url del gráfico"
+        className="rounded-xl p-2"
+      />
+      <button
+        type="submit"
+        className="rounded-xl bg-blue-500 p-3 font-semibold text-white"
+      >
+        Crear gráfico
+      </button>
+    </form>
+  </div>
+)}
+    </div>
     </div>
   );
 }
