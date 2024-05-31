@@ -110,16 +110,7 @@ export default async function ReportPage({
       <div className='flex flex-col gap-36 mt-10'>
       {orderedCharts.map((chart: any) => (
         <div
-          className={`section-margin flex items-center justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col 
-          ${
-            chart.type === "Costos y gastos" ? "bg-[rgba(255,0,0,0.07046568627450978)]" :
-            chart.type === "Ventas" ? "bg-[rgba(0,255,0,0.1)]" :
-            chart.type === "Utilidad neta y margen neto" ? "bg-[rgba(163,98,238,0.1)]" :
-            chart.type === "Márgenes" ? "bg-[rgba(219,103,255,0.1)]" :
-            chart.type === "Gastos desglosados" ? "bg-[rgba(248,222,103,0.1)]" :
-            chart.type === "Ingresos y egresos" ? "bg-[rgba(166,166,166,0.1)]" :
-            "bg-gray-100"
-          }`}
+          className={`section-margin flex items-center justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col bg-[#003E52]/10`}
           id={chart.type} 
           key={chart.id}
         >
@@ -240,7 +231,7 @@ export default async function ReportPage({
             </div>
             <ChartEmbed src={chart.graphy_url} />
           </div>
-          <div className="2xl:w-[40%] xl:w-[50%] rounded-lg bg-white px-3 py-5">
+          <div className="2xl:w-[40%] xl:w-[50%] rounded-lg px-3 py-5">
             {chart.insights && (
               <div>
                 <h3 className="mb-5 text-center text-2xl font-medium">
@@ -260,7 +251,7 @@ export default async function ReportPage({
 
         <div id="conclusiones" className="section-margin" key={"conclusiones"}>
           <p className="mb-4 text-2xl font-semibold text-zinc-700">Conclusiones</p>
-          <div className="rounded-xl bg-gray-100 p-3">
+          <div className="rounded-xl bg-[#003E52]/10 p-3">
             {renderTextFromDatabase(report.analysis)}
           </div>
         </div>
@@ -269,7 +260,7 @@ export default async function ReportPage({
           <p className="mb-4 text-2xl font-semibold text-zinc-700">Recomendaciones</p>
           <div className="p-3 flex flex-col gap-10">
           {report.recomendations.map((data: any, index:number) => (
-            <div key={index} className='bg-gray-50 border-2 border-gray-300 flex items-center p-4 rounded-xl'>
+            <div key={index} className='bg-[#003E52]/10 flex items-center p-4 rounded-xl'>
               {renderTextFromDatabase(`${data.content}`)}
             </div>
           ))}
