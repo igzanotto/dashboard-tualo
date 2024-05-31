@@ -339,10 +339,19 @@ export default function RecomendationsGenerator({
               autoFocus
               placeholder=">>> cuarta recomendacion <<<"
             />
+             <label htmlFor="fifth_recomendation">quinta recomendacion</label>
+            <textarea
+              name="fifth_recomendation"
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              autoFocus
+              placeholder=">>> quinta recomendacion <<<"
+            />
 
             <div className="my-2 flex justify-end">
               <button className="rounded-md bg-blue-600 px-3 py-2 text-white  disabled:opacity-50">
-                finalizar reporte
+                continuer con gráficos
               </button>
             </div>
           </div>

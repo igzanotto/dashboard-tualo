@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/button';
-import { buildFollowupRecomendations } from '@/lib/actions';
+import { buildRecomendations } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { followup_recomendations_prompt } from '@/utils/prompts';
@@ -115,7 +115,7 @@ export default function FollowupRecomendationsGenerator({
         <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
           Recomendaciones
         </h2>
-        <form action={buildFollowupRecomendations}>
+        <form action={buildRecomendations}>
           <div className="flex">
             <div className="w-1/2 pr-4">
               <input
@@ -181,10 +181,19 @@ export default function FollowupRecomendationsGenerator({
                 autoFocus
                 placeholder=">>> cuarta recomendacion <<<"
               />
+              <label htmlFor="fifth_recomendation">quinta recomendacion</label>
+              <textarea
+                name="fifth_recomendation"
+                onChange={handleChange}
+                rows={4}
+                className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+                autoFocus
+                placeholder=">>> quinta recomendacion <<<"
+              />
 
               <div className="my-2 flex justify-end">
                 <button className="rounded-md bg-blue-600 px-3 py-2 text-white  disabled:opacity-50">
-                  finalizar reporte
+                  continuar con graficos
                 </button>
               </div>
             </div>

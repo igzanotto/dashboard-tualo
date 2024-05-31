@@ -124,6 +124,7 @@ const BuildAnalysis = ReportFormSchema.omit({id: true, business_id: true, goals:
 export async function buildAnalysis(formData:FormData) {
   const report_id = formData.get('report_id');
   const business_id = formData.get('business_id');
+  const report_type = formData.get('report_type');
 
   const { analysis } = BuildAnalysis.parse({
     analysis: formData.get('analysis'),
@@ -142,6 +143,8 @@ export async function buildAnalysis(formData:FormData) {
     console.log("analisis creado correctamente");
   }
 
+  report_type === "followup" ? 
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-recomendations`) :
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/recomendations`);
 }
 
@@ -329,6 +332,7 @@ export async function buildChartsInsights(formData:FormData) {
   console.log(formData);
   const report_id = formData.get('report_id');
   const business_id = formData.get('business_id');
+  const report_type = formData.get('report_type');
 
   const {
       waterfall_chart_insights,
@@ -368,7 +372,10 @@ export async function buildChartsInsights(formData:FormData) {
     console.log("graficos generados correctamente");
   }
 
-  redirect(`/admin/businesses/${business_id}/reports/${report_id}/analysis`);
+  console.log("report_type", report_type);
+  report_type === "followup" ? 
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-analysis`) :
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/analysis`) ;
 }
 
 const RecomendationsFormSchema = z.object({
@@ -378,6 +385,7 @@ const RecomendationsFormSchema = z.object({
   second_recomendation: z.string(),
   third_recomendation: z.string(),
   fourth_recomendation: z.string().optional(),
+  fifth_recomendation: z.string().optional(),
 });
 
 const BuildRecomendations = RecomendationsFormSchema.omit({id: true, business_id: true, report_id: true});
@@ -387,17 +395,20 @@ export async function buildRecomendations(formData:FormData) {
   console.log(formData);
   const report_id = formData.get('report_id');
   const business_id = formData.get('business_id');
+  const report_type = formData.get('report_type');
 
   const {
     first_recomendation,
     second_recomendation, 
     third_recomendation, 
     fourth_recomendation, 
+    fifth_recomendation
   } = BuildRecomendations.parse({
     first_recomendation: formData.get('first_recomendation'),
     second_recomendation: formData.get('second_recomendation'),
     third_recomendation: formData.get('third_recomendation'),
     fourth_recomendation: formData.get('fourth_recomendation'),
+    fifth_recomendation: formData.get('fifth_recomendation'),
   });
 
   const recommendations = [
@@ -405,6 +416,7 @@ export async function buildRecomendations(formData:FormData) {
     { content: second_recomendation, report_id: report_id },
     { content: third_recomendation, report_id: report_id },
     { content: fourth_recomendation, report_id: report_id },
+    { content: fifth_recomendation, report_id: report_id },
   ];
 
   // Filter out empty recommendations
@@ -422,6 +434,9 @@ export async function buildRecomendations(formData:FormData) {
     console.log("recomendaciones generadas correctamente");
   }
 
+  
+  report_type === "followup" ? 
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`) :
   redirect(`/admin/businesses/${business_id}/reports/${report_id}`);
 }
 
@@ -506,19 +521,19 @@ export const createUser = async (users: any[]) => {
 
 
 
-const NextReportFormSchema = z.object({
+const FollowupReportFormSchema = z.object({
   id: z.string(),
   business_id: z.string(),
   month: z.string(),
   highligths_and_PL_analysis_response: z.string(),
 });
 
-const CreateNextReport = NextReportFormSchema.omit({ id: true});
+const CreateFollowupReport = FollowupReportFormSchema.omit({ id: true});
 
-export async function createNextReport(formData:FormData) {
+export async function createFollowupReport(formData:FormData) {
   console.log("adentro de createReport")
   console.log(formData);
-  const { month, highligths_and_PL_analysis_response, business_id } = CreateNextReport.parse({
+  const { month, highligths_and_PL_analysis_response, business_id } = CreateFollowupReport.parse({
     month: formData.get('month'),
     highligths_and_PL_analysis_response: formData.get('highligths_and_PL_analysis_response'),
     business_id: formData.get('business_id'),
@@ -546,56 +561,56 @@ export async function createNextReport(formData:FormData) {
 
   const report_id = data[0].id;
 
-  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-recomendations`);
-}
-
-
-
-
-// todo este es igual al build recomendations excepto el redirect.. habria que unificar
-
-const BuildFollowupRecomendations = RecomendationsFormSchema.omit({id: true, business_id: true, report_id: true});
-// este omit del business_id y report_id no esta muy claro por que esta por que si uso esos datos
-
-export async function buildFollowupRecomendations(formData:FormData) {
-  console.log("adentro de Followuprecomendations builder")
-  console.log(formData);
-  const report_id = formData.get('report_id');
-  const business_id = formData.get('business_id');
-
-  const {
-    first_recomendation,
-    second_recomendation, 
-    third_recomendation, 
-    fourth_recomendation, 
-  } = BuildFollowupRecomendations.parse({
-    first_recomendation: formData.get('first_recomendation'),
-    second_recomendation: formData.get('second_recomendation'),
-    third_recomendation: formData.get('third_recomendation'),
-    fourth_recomendation: formData.get('fourth_recomendation'),
-  });
-
-  const recommendations = [
-    { content: first_recomendation, report_id: report_id },
-    { content: second_recomendation, report_id: report_id },
-    { content: third_recomendation, report_id: report_id },
-    { content: fourth_recomendation, report_id: report_id },
-  ];
-
-  // Filter out empty recommendations
-  const nonEmptyRecommendations = recommendations.filter(rec => rec.content);
-
-  const supabase = createClient();
-
-  const { data, error } = await supabase
-    .from('recomendations')
-    .insert(nonEmptyRecommendations)
-
-  if (error) {
-    console.error('Error inserting data:', error);
-  } else {
-    console.log("recomendaciones generadas correctamente");
-  }
-
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
 }
+
+
+
+
+// // todo este es igual al build recomendations excepto el redirect.. habria que unificar
+
+// const BuildFollowupRecomendations = RecomendationsFormSchema.omit({id: true, business_id: true, report_id: true});
+// // este omit del business_id y report_id no esta muy claro por que esta por que si uso esos datos
+
+// export async function buildFollowupRecomendations(formData:FormData) {
+//   console.log("adentro de Followuprecomendations builder")
+//   console.log(formData);
+//   const report_id = formData.get('report_id');
+//   const business_id = formData.get('business_id');
+
+//   const {
+//     first_recomendation,
+//     second_recomendation, 
+//     third_recomendation, 
+//     fourth_recomendation, 
+//   } = BuildFollowupRecomendations.parse({
+//     first_recomendation: formData.get('first_recomendation'),
+//     second_recomendation: formData.get('second_recomendation'),
+//     third_recomendation: formData.get('third_recomendation'),
+//     fourth_recomendation: formData.get('fourth_recomendation'),
+//   });
+
+//   const recommendations = [
+//     { content: first_recomendation, report_id: report_id },
+//     { content: second_recomendation, report_id: report_id },
+//     { content: third_recomendation, report_id: report_id },
+//     { content: fourth_recomendation, report_id: report_id },
+//   ];
+
+//   // Filter out empty recommendations
+//   const nonEmptyRecommendations = recommendations.filter(rec => rec.content);
+
+//   const supabase = createClient();
+
+//   const { data, error } = await supabase
+//     .from('recomendations')
+//     .insert(nonEmptyRecommendations)
+
+//   if (error) {
+//     console.error('Error inserting data:', error);
+//   } else {
+//     console.log("recomendaciones generadas correctamente");
+//   }
+
+//   redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
+// }
