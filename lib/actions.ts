@@ -503,3 +503,99 @@ export const createUser = async (users: any[]) => {
     }
   }
 };
+
+
+
+const NextReportFormSchema = z.object({
+  id: z.string(),
+  business_id: z.string(),
+  month: z.string(),
+  highligths_and_PL_analysis_response: z.string(),
+});
+
+const CreateNextReport = NextReportFormSchema.omit({ id: true});
+
+export async function createNextReport(formData:FormData) {
+  console.log("adentro de createReport")
+  console.log(formData);
+  const { month, highligths_and_PL_analysis_response, business_id } = CreateNextReport.parse({
+    month: formData.get('month'),
+    highligths_and_PL_analysis_response: formData.get('highligths_and_PL_analysis_response'),
+    business_id: formData.get('business_id'),
+  });
+  console.log("data enviada ",month, highligths_and_PL_analysis_response, business_id);
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('reports')
+    .insert([
+      { month: month, operations_resume: highligths_and_PL_analysis_response, business_id: business_id }
+    ])
+    .select('id');
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("ID de la fila insertada:", data);
+  }
+
+  if (!data) {
+    return;
+  }
+
+  const report_id = data[0].id;
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-recomendations`);
+}
+
+
+
+
+// todo este es igual al build recomendations excepto el redirect.. habria que unificar
+
+const BuildFollowupRecomendations = RecomendationsFormSchema.omit({id: true, business_id: true, report_id: true});
+// este omit del business_id y report_id no esta muy claro por que esta por que si uso esos datos
+
+export async function buildFollowupRecomendations(formData:FormData) {
+  console.log("adentro de Followuprecomendations builder")
+  console.log(formData);
+  const report_id = formData.get('report_id');
+  const business_id = formData.get('business_id');
+
+  const {
+    first_recomendation,
+    second_recomendation, 
+    third_recomendation, 
+    fourth_recomendation, 
+  } = BuildFollowupRecomendations.parse({
+    first_recomendation: formData.get('first_recomendation'),
+    second_recomendation: formData.get('second_recomendation'),
+    third_recomendation: formData.get('third_recomendation'),
+    fourth_recomendation: formData.get('fourth_recomendation'),
+  });
+
+  const recommendations = [
+    { content: first_recomendation, report_id: report_id },
+    { content: second_recomendation, report_id: report_id },
+    { content: third_recomendation, report_id: report_id },
+    { content: fourth_recomendation, report_id: report_id },
+  ];
+
+  // Filter out empty recommendations
+  const nonEmptyRecommendations = recommendations.filter(rec => rec.content);
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('recomendations')
+    .insert(nonEmptyRecommendations)
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("recomendaciones generadas correctamente");
+  }
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
+}

@@ -4,7 +4,7 @@ import { Button } from '@/components/button';
 import { buildRecomendations } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import { set } from 'zod';
+import { bullets_prompt, evaluation_prompt, recomendations_prompt } from '@/utils/prompts'
 
 interface FormData {
   bullets_prompt: string;
@@ -22,25 +22,9 @@ export default function RecomendationsGenerator({
 
   const [statusMessage, setStatusMessage] = useState('');
   const [formData, setFormData] = useState<FormData>({
-    bullets_prompt: `para el 3er entregable lo vamos a hacer paso a paso
-
-      lo primero que haremos es lo siguiente:
-      haz una lista en bullets de al menos 10 recomendaciones que podrían servirle a esta
-      empresa dado su modelo de negocios y su situación financiera, todas enfocadas al cumplimiento de su meta financiera`,
-    evaluation_prompt: `muy bien, ahora vamos a evaluar estas recomendaciones iniciales. Por favor, crea una matriz con las recomendaciones propuestas, evaluándolas según su nivel de personalización para este cliente, su nivel de accionabilidad, y su nivel de alineación con su meta financiera, usando la siguiente estructura:
-
-    recomendación | nivel de personalización (1 = muy genérica, 10 = hiper personalizada) | nivel de accionabilidad (1 = tomaría muchos meses o años, 10 = se podría implementar en unas semanas) | nivel de alineación con su meta financiera (1 = nada alineada, 10 = totalmente alineada al cumplimiento de su meta)
-    
-    Quiero ponderar la alineación con metas con 10 puntos, la accionabilidad con 5 puntos y la personalización con 3 puntos. Con eso en mente, ¿cuáles serían las recomendaciones más adecuadas para incluir en el reporte?`,
-    recomendations_prompt: `muy bien, ahora sí desarrollaremos el 3er entregable: **recomendaciones estratégicas**
-
-    considera lo siguiente:
-    
-    - desarrolla las 3 a 5 mejores recomendaciones de la lista anterior, las que tuvieron el puntaje más alto en la ponderación
-    - usa el siguiente formato: un título seguido de un emoji relacionado, una descripción de una línea, una justificación de por qué decidiste incluir esa recomendación (usa ejemplos específicos de sus finanzas o su modelo de negocio para justificarlo), y una lista de entre 3 y 5 pasos para explicar cómo lograrlo
-    - habla en un idioma natural: considera que los usuarios no tienen experiencia financiera (no uses palabras técnicas financieras como márgenes, utilidad, rentabilidad, ebitda, etc)
-    - si consideras que alguna es algo compleja para personas que no tienen mucho expertise en negocios, incluye "Tips adicionales" donde menciones herramientas específicas a usar o contenido en línea que pueda ayudarles a entenderlo mejor
-    - nunca recomiendes nada relacionado a mejorar la gestión de gastos o el control financiero, ya que eso es lo que estamos haciendo nosotros con los clientes ;)`,
+    bullets_prompt,
+    evaluation_prompt,
+    recomendations_prompt,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
