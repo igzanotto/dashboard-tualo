@@ -110,7 +110,7 @@ export default async function ReportPage({
       <div className='flex flex-col gap-36 mt-10'>
       {orderedCharts.map((chart: any) => (
         <div
-          className={`section-margin flex items-center justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col bg-[#003E52]/10`}
+          className={`section-margin flex items-end justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col bg-[#003E52]/10`}
           id={chart.type} 
           key={chart.id}
         >
@@ -231,9 +231,9 @@ export default async function ReportPage({
             </div>
             <ChartEmbed src={chart.graphy_url} />
           </div>
-          <div className="2xl:w-[40%] xl:w-[50%] rounded-lg px-3 py-5">
+          <div className="2xl:w-[40%] xl:w-[50%] xl:h-[500px] px-3 py-5">
             {chart.insights && (
-              <div>
+              <div className='flex flex-col justify-between'>
                 <h3 className="mb-5 text-center text-2xl font-medium">
                   Análisis
                 </h3>
