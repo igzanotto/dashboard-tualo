@@ -135,7 +135,7 @@ export default async function ReportPage({
                  <TooltipTrigger>
                    <InfoIcon width={20} height={20} />
                  </TooltipTrigger>
-                 <TooltipContent className="xl:w-[500px] max-xl:w-[380px] bg-zinc-50 flex flex-col gap-4">
+                 <TooltipContent className="max-xl:w-[380px] bg-[#252525] text-white flex flex-col gap-4">
                    <p>
                     <span className='font-medium text-base'>Esta gráfica se lee de izquierda a derecha:</span> <br />
                       1. Primero tiene todos tus <span className='font-medium'>ventas</span> en verde. <br />
@@ -159,9 +159,9 @@ export default async function ReportPage({
                <TooltipTrigger>
                  <InfoIcon width={20} height={20} />
                </TooltipTrigger>
-               <TooltipContent className="w-[450px]">
+               <TooltipContent className="max-xl:w-[380px] bg-[#223741] text-white flex flex-col gap-4">
                  <p>
-                  En esta gráfica, cada barra verde son las ventas de cada mes del periodo analizado. 
+                  En esta gráfica, cada <span className='text-green-700 font-medium'>barra verde</span> son las ventas de cada mes del periodo analizado. <br /> 
                   La línea horizontal es el promedio de ventas del periodo, que te sirve para comparar las ventas en cada mes con el promedio general.
                  </p>
                </TooltipContent>
@@ -174,11 +174,11 @@ export default async function ReportPage({
                <TooltipTrigger>
                  <InfoIcon width={20} height={20} />
                </TooltipTrigger>
-               <TooltipContent className="w-[450px]">
+               <TooltipContent className="max-xl:w-[380px] bg-[#362422] text-white flex flex-col gap-4">
                  <p>
-                  En esta gráfica hay dos conjuntos de barras rojas: 
-                  1. La primera, roja claro, representa los costos directos (los que gastas para hacer lo que vendes).
-                  2. La segunda es la de gastos indirectos (los que son operativos)
+                  <span className='font-medium text-base'>En esta gráfica hay dos conjuntos de <span className='text-red-600 text-base font-medium'>barras rojas</span>:</span> <br /> 
+                  1. La primera, roja claro, representa los <span className='font-medium'>costos directos</span> (los que gastas para hacer lo que vendes). <br />
+                  2. La segunda es la de <span className='font-medium'>gastos indirectos</span> (los que son operativos) <br />
                   Además, cada uno tiene su propia línea de promedio para comparar en el periodo.
                  </p>
                </TooltipContent>
@@ -192,11 +192,11 @@ export default async function ReportPage({
                <TooltipTrigger>
                  <InfoIcon width={20} height={20} />
                </TooltipTrigger>
-               <TooltipContent className="w-[450px]">
+               <TooltipContent className="max-xl:w-[380px] bg-[#2b2431] text-white flex flex-col gap-4">
                  <p>
-                  En esta gráfica hay dos datos importantes: las barras moradas y la línea amarilla.
-                  1. Las barras son la utilidad neta, que se mide en dinero y es lo que queda después de descontar todos los costos y gastos. 
-                  2. La línea es el margen neto, que se mide en porcentaje y es lo que la utilidad neta representa de las ventas cada mes. OJO: esta línea está guiada por el eje del lado derecho.
+                  <span className='font-medium text-base'>En esta gráfica hay dos datos importantes: las <span className='text-purple-600 font-medium text-base'>barras moradas</span> y la <span className='text-yellow-600 font-medium text-base'>línea amarilla</span>.</span> <br />
+                  1. Las barras son la <span className='font-medium'>utilidad neta</span>, que se mide en dinero y es lo que queda después de descontar todos los costos y gastos. <br />
+                  2. La línea es el <span className='font-medium'>margen neto</span>, que se mide en porcentaje y es lo que la utilidad neta representa de las ventas cada mes. OJO: esta línea está guiada por el eje del lado derecho. <br />
                   Verlas juntas ayuda a entender tanto en monto como en porcentaje cuánto quedó en la empresa.
                  </p>
                </TooltipContent>
@@ -209,12 +209,12 @@ export default async function ReportPage({
              <TooltipTrigger>
                <InfoIcon width={20} height={20} />
              </TooltipTrigger>
-             <TooltipContent className="w-[450px]">
+             <TooltipContent className="max-xl:w-[380px] bg-[#392e1e] text-white flex flex-col gap-4">
                <p>
-               En esta gráfica hay tres líneas amarillas:
-                  1. La primera es el margen bruto, el % que queda después de restarle costos directos a las ventas.
-                  2. La segunda es el margen operativo, el % que viene al restarle los gastos indirectos a las ventas.
-                  3. La tercera es el margen neto, igual que la gráfica anterior es el % que queda al final de restarle todo a las ventas.
+               <span className='font-medium text-base'>En esta gráfica hay tres <span className='font-medium text-base text-yellow-600'>líneas amarillas</span>:</span> <br />
+                  1. La primera es el <span className='font-medium'>margen bruto</span>, el % que queda después de restarle costos directos a las ventas. <br />
+                  2. La segunda es el <span className='font-medium'>margen operativo</span>, el % que viene al restarle los gastos indirectos a las ventas. <br />
+                  3. La tercera es el <span className='font-medium'>margen neto</span>, igual que la gráfica anterior es el % que queda al final de restarle todo a las ventas.
                </p>
              </TooltipContent>
            </Tooltip>
@@ -226,9 +226,9 @@ export default async function ReportPage({
              <TooltipTrigger>
                <InfoIcon width={20} height={20} />
              </TooltipTrigger>
-             <TooltipContent className="w-[450px]">
+             <TooltipContent className="max-xl:w-[380px] bg-[#252525] text-white flex flex-col gap-4">
                <p>
-                En esta gráfica se ven muchas línea de colores. 
+                <span className='font-medium text-base'>En esta gráfica se ven muchas línea de colores.</span> <br /> 
                 Cada una representa un tipo de gasto diferente como sueldos, renta, marketing, etc. y su evolución en cada mes del periodo analizado.
                </p>
              </TooltipContent>
