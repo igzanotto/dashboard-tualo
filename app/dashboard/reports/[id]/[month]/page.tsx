@@ -244,7 +244,7 @@ export default async function ReportPage({
             {chart.insights && (
               <div>
                 <h3 className="mb-5 text-center text-2xl font-medium">
-                  Resumen
+                  Análisis
                 </h3>
                 <p className="text-lg">
                   {renderTextFromDatabase(chart.insights)}
