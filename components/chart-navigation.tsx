@@ -26,7 +26,7 @@ interface ChartNavigationProps {
 }
 
 const chartOrder = [
-  'Cascada P&L',
+  'Ingresos y egresos',
   'Ventas',
   'Costos y gastos',
   'Utilidad neta',

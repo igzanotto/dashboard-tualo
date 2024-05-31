@@ -13,7 +13,7 @@ import '../../../../globals.css'
 
 
 const chartOrder = [
-  'Cascada P&L',
+  'Ingresos y egresos',
   'Ventas',
   'Costos y gastos',
   'Utilidad neta',
@@ -117,7 +117,7 @@ export default async function ReportPage({
             chart.type === "Utilidad neta y margen neto" ? "bg-[rgba(163,98,238,0.1)]" :
             chart.type === "Márgenes" ? "bg-[rgba(219,103,255,0.1)]" :
             chart.type === "Gastos desglosados" ? "bg-[rgba(248,222,103,0.1)]" :
-            chart.type === "Cascada P&L" ? "bg-[rgba(166,166,166,0.1)]" :
+            chart.type === "Ingresos y egresos" ? "bg-[rgba(166,166,166,0.1)]" :
             "bg-gray-100"
           }`}
           id={chart.type} 
@@ -129,7 +129,7 @@ export default async function ReportPage({
                 {' '}
                 Gráfica de <span>{chart.type}</span>
               </p>
-             {chart.type === "Cascada P&L" ? 
+             {chart.type === "Ingresos y egresos" ? 
                <TooltipProvider>
                <Tooltip>
                  <TooltipTrigger>
