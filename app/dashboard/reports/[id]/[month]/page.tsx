@@ -129,26 +129,114 @@ export default async function ReportPage({
                 {' '}
                 Gráfica de <span>{chart.type}</span>
               </p>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <InfoIcon width={20} height={20} />
-                  </TooltipTrigger>
-                  <TooltipContent className="w-[450px]">
-                    <p>
-                      Esta gráfica se lee de izquierda a derecha: inicia con
-                      ingresos totales, luego se deducen los costos de
-                      producción (los que están directamente relacionado con las
-                      ventas), revelando la utilidad bruta. A continuación, se
-                      restan los gastos operativos (los que son indirectos) para
-                      obtener la utilidad operativa. Por último se deducen los
-                      gastos financieros, para llegar a la utilidad neta. Las
-                      barras verdes suman y las rojas restan, dejando las grises
-                      como subtotales.
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+             {chart.type === "Cascada P&L" ? 
+               <TooltipProvider>
+               <Tooltip>
+                 <TooltipTrigger>
+                   <InfoIcon width={20} height={20} />
+                 </TooltipTrigger>
+                 <TooltipContent className="xl:w-[500px] max-xl:w-[380px] bg-zinc-50 flex flex-col gap-4">
+                   <p>
+                    <span className='font-medium text-base'>Esta gráfica se lee de izquierda a derecha:</span> <br />
+                      1. Primero tiene todos tus <span className='font-medium'>ventas</span> en verde. <br />
+                      2. A eso se le van restando los costos y gastos en rojo. <br />
+                      3. El resultado de cada resta es una <span className='font-medium'>utilidad</span> en gris. <br />
+                          <div className='ml-5'>
+                          a. Primero se restan los <span className='font-medium'>costos directos</span>, que son los directamente relacionados a la venta, y te queda la <span className='font-medium'>utilidad bruta</span>. <br />
+                          b. Después los <span className='font-medium'>gastos indirectos</span>, no directamente relacionados pero que se necesitan para operar (como la renta, por ejemplo), y te queda la <span className='font-medium'>utilidad operativa</span>. <br />
+                          c. Por último se restan los <span className='font-medium'>gastos financieros</span> (todo lo que cobra el banco o el SAT), y te queda la <span className='font-medium'>utilidad neta</span>. <br />
+                          </div>
+
+                   </p>
+                    <p className='text-[#c77d48]'>Lo que está al final, en naranja, es la UTILIDAD NETA, que es lo que realmente ganó o perdió el negocio durante este periodo.</p>
+                 </TooltipContent>
+               </Tooltip>
+             </TooltipProvider> 
+             :
+             chart.type === "Ventas" ? 
+             <TooltipProvider>
+             <Tooltip>
+               <TooltipTrigger>
+                 <InfoIcon width={20} height={20} />
+               </TooltipTrigger>
+               <TooltipContent className="w-[450px]">
+                 <p>
+                  En esta gráfica, cada barra verde son las ventas de cada mes del periodo analizado. 
+                  La línea horizontal es el promedio de ventas del periodo, que te sirve para comparar las ventas en cada mes con el promedio general.
+                 </p>
+               </TooltipContent>
+             </Tooltip>
+           </TooltipProvider>
+           :
+           chart.type === "Costos y gastos" ?
+            <TooltipProvider>
+             <Tooltip>
+               <TooltipTrigger>
+                 <InfoIcon width={20} height={20} />
+               </TooltipTrigger>
+               <TooltipContent className="w-[450px]">
+                 <p>
+                  En esta gráfica hay dos conjuntos de barras rojas: 
+                  1. La primera, roja claro, representa los costos directos (los que gastas para hacer lo que vendes).
+                  2. La segunda es la de gastos indirectos (los que son operativos)
+                  Además, cada uno tiene su propia línea de promedio para comparar en el periodo.
+                 </p>
+               </TooltipContent>
+             </Tooltip>
+           </TooltipProvider>
+            :
+            chart.type === "Utilidad neta" ? 
+            
+            <TooltipProvider>
+             <Tooltip>
+               <TooltipTrigger>
+                 <InfoIcon width={20} height={20} />
+               </TooltipTrigger>
+               <TooltipContent className="w-[450px]">
+                 <p>
+                  En esta gráfica hay dos datos importantes: las barras moradas y la línea amarilla.
+                  1. Las barras son la utilidad neta, que se mide en dinero y es lo que queda después de descontar todos los costos y gastos. 
+                  2. La línea es el margen neto, que se mide en porcentaje y es lo que la utilidad neta representa de las ventas cada mes. OJO: esta línea está guiada por el eje del lado derecho.
+                  Verlas juntas ayuda a entender tanto en monto como en porcentaje cuánto quedó en la empresa.
+                 </p>
+               </TooltipContent>
+             </Tooltip>
+           </TooltipProvider>
+           :
+           chart.type === "Márgenes" ? 
+           <TooltipProvider>
+           <Tooltip>
+             <TooltipTrigger>
+               <InfoIcon width={20} height={20} />
+             </TooltipTrigger>
+             <TooltipContent className="w-[450px]">
+               <p>
+               En esta gráfica hay tres líneas amarillas:
+                  1. La primera es el margen bruto, el % que queda después de restarle costos directos a las ventas.
+                  2. La segunda es el margen operativo, el % que viene al restarle los gastos indirectos a las ventas.
+                  3. La tercera es el margen neto, igual que la gráfica anterior es el % que queda al final de restarle todo a las ventas.
+               </p>
+             </TooltipContent>
+           </Tooltip>
+         </TooltipProvider>
+            : 
+            chart.type === "Gastos desglosados" ?
+            <TooltipProvider>
+           <Tooltip>
+             <TooltipTrigger>
+               <InfoIcon width={20} height={20} />
+             </TooltipTrigger>
+             <TooltipContent className="w-[450px]">
+               <p>
+                En esta gráfica se ven muchas línea de colores. 
+                Cada una representa un tipo de gasto diferente como sueldos, renta, marketing, etc. y su evolución en cada mes del periodo analizado.
+               </p>
+             </TooltipContent>
+           </Tooltip>
+         </TooltipProvider>
+         :
+         <p>Este grafico no tiene tooltip</p>
+            }
             </div>
             <ChartEmbed src={chart.graphy_url} />
           </div>
