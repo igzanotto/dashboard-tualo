@@ -281,6 +281,7 @@ export async function createChartEmbed(formData:FormData){
       }
 
       console.log('Inserted chart data:', newChart);
+      
       return newChart;
     }
   } catch (error) {
