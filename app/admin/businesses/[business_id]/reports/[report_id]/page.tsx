@@ -103,7 +103,7 @@ export default async function ReportPage({
       <form action={updateReport} className="mt-10 flex flex-col gap-20">
         <input type="hidden" name="report_id" value={params.report_id} />
         <div>
-          <p className="mb-4 text-4xl">Perfil de la empresa</p>
+          <p className="mb-4 text-2xl font-semibold text-[#003E52]">Perfil de la empresa</p>
           <textarea
             name="business_resume"
             defaultValue={report.business_resume}
@@ -114,7 +114,7 @@ export default async function ReportPage({
           </button>
         </div>
         <div>
-          <p className="mb-4 text-4xl">Metas financieras</p>
+          <p className="mb-4 text-2xl font-semibold text-[#003E52]">Metas financieras</p>
           <textarea
             name="goals"
             defaultValue={report.goals}
