@@ -11,6 +11,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import '../../../../globals.css'
+import BannerSection from '@/components/bannerSection';
 // import conclusiones from '../../../../../components/images/conlcusiones-financieras.png'
 // import recomendaciones from '../../../../../components/images/recomendaciones.png'
 // import resumen from '../../../../../components/images/resumen-financiero.png'
@@ -89,12 +90,12 @@ export default async function ReportPage({
   return (
     <div className="flex flex-col gap-3 xl:px-2">
 
-      <h1 className={`text-2xl font-semibold xl:w-[80%] mx-auto max-xl:w-[90%] text-[#003E52]`}>
-        Reporte de <span className="capitalize">{report.month}</span>
+      <h1 className={`text-2xl font-semibold xl:w-[80%] mx-auto max-xl:w-[90%] text-[#003E52] ${libreBaskerville.className}`}>
+        Reporte de <span className="capitalize">{report.month} {report.created_at.slice(0, 4)}</span>
       </h1>
 
       <div>
-        <p className="mb-4 text-xl font-semibold xl:text-4xl xl:w-[80%] mx-auto max-xl:w-[90%] text-[#003E52]">
+        <p className={`mb-4 text-xl font-semibold xl:text-4xl xl:w-[80%] mx-auto max-xl:w-[90%] text-[#003E52] ${libreBaskerville.className}`}>
           {report.business.name}
         </p>
       </div>
@@ -117,6 +118,8 @@ export default async function ReportPage({
       </div>
 
       <div className='flex flex-col gap-36 mt-10'>
+      <BannerSection text='Resumen financiero'/>
+
       {orderedCharts.map((chart: any) => (
         <div
           className={`section-margin flex items-end justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col bg-[#003E52]/10`}
@@ -257,10 +260,7 @@ export default async function ReportPage({
       </div>
 
       <div className="flex flex-col gap-28 my-28">
-      {/* <Image src={conclusiones} alt='Conclusiones' width={1000} height={1000} className='w-full'/> */}
-      <div className={`w-full rounded-2xl p-5 bg-gradient-to-r from-[#0065A1] to-[#00AE8D] flex items-center justify-between` }>
-        <p className={`${libreBaskerville.className} text-white text-3xl`} >Conclusiones financieras</p>
-      </div>
+      <BannerSection text='Conclusiones financieras'/>
         <div id="conclusiones" className="section-margin" key={"conclusiones"}>
           <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p>
           <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
@@ -268,6 +268,7 @@ export default async function ReportPage({
           </div>
         </div>
 
+      <BannerSection text='Recomendaciones personalizadas'/>
         <div id="recomendaciones" className="section-margin" key={"recomendaciones"}>
           <p className="mb-4 text-2xl font-semibold text-[#003E52]">Recomendaciones</p>
           <div className="p-3 flex flex-col gap-10">
@@ -280,5 +281,5 @@ export default async function ReportPage({
         </div>
       </div>
     </div>
-  );
+  )
 }
