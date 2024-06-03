@@ -262,7 +262,7 @@ export default async function ReportPage({
       </div>
 
       <div className="flex flex-col gap-28 my-28">
-        <div id="conclusiones" className="section-margin" key={"conclusiones"}>
+        <div id="conclusiones" className='xl:w-[80%] mx-auto  section-margin' key={"conclusiones"}>
         <BannerSection text='Conclusiones financieras'/>
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p> */}
           <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52] mt-16 max-md:w-[96%] max-md:mx-auto">
@@ -270,7 +270,7 @@ export default async function ReportPage({
           </div>
         </div>
 
-        <div id="recomendaciones" className="section-margin" key={"recomendaciones"}>
+        <div id="recomendaciones" className="xl:w-[80%] mx-auto  section-margin" key={"recomendaciones"}>
           <BannerSection text='Recomendaciones personalizadas'/>
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Recomendaciones</p> */}
           <div className="p-3 flex flex-col gap-10 mt-16">
@@ -282,7 +282,7 @@ export default async function ReportPage({
           </div>
         </div>
       </div>
-      <div className='flex flex-col gap-6 max-lg:w-[98%] max-lg:text-center'>
+      <div className='flex flex-col gap-6 max-lg:w-[98%] xl:w-[80%] mx-auto max-lg:text-center'>
         <p className='text-[#00AE8D] font-medium'>Este análisis fue generado con asistencia de inteligencia artificial y debe ser revisado cuidadosamente antes de tomar decisiones basadas en él.</p>
         <p className='text-[#00AE8D] font-medium'>Los ingresos y gastos presentados provienen directamente de los estados de cuenta y pueden no reflejar el monto completo o los impuestos relacionados, como el IVA, de manera estrictamente correcta si estos no fueron detallados explícitamente. El presente debe de tomarse como un reporte financiero y no uno que puede usarse para la contabilidad de la empresa. Se utilizó toda la información proporcionada, en caso de haber omitido algo los reportes pueden tener resultados engañosos o erróneos.</p>
       </div>
