@@ -281,7 +281,7 @@ export async function createChartEmbed(formData:FormData){
       }
 
       console.log('Inserted chart data:', newChart);
-      
+      revalidatePath(`/admin/businesses/2/reports/${report_id}`)
       return newChart;
     }
   } catch (error) {
