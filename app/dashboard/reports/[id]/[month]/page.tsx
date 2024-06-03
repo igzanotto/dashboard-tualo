@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/tooltip"
 import '../../../../globals.css'
 import BannerSection from '@/components/bannerSection';
+import Logo from '@/components/icons/Logo';
 // import conclusiones from '../../../../../components/images/conlcusiones-financieras.png'
 // import recomendaciones from '../../../../../components/images/recomendaciones.png'
 // import resumen from '../../../../../components/images/resumen-financiero.png'
@@ -260,18 +261,18 @@ export default async function ReportPage({
       </div>
 
       <div className="flex flex-col gap-28 my-28">
-      <BannerSection text='Conclusiones financieras'/>
         <div id="conclusiones" className="section-margin" key={"conclusiones"}>
-          <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p>
-          <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
+        <BannerSection text='Conclusiones financieras'/>
+          {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p> */}
+          <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52] mt-16">
             {renderTextFromDatabase(report.analysis)}
           </div>
         </div>
 
-      <BannerSection text='Recomendaciones personalizadas'/>
         <div id="recomendaciones" className="section-margin" key={"recomendaciones"}>
-          <p className="mb-4 text-2xl font-semibold text-[#003E52]">Recomendaciones</p>
-          <div className="p-3 flex flex-col gap-10">
+          <BannerSection text='Recomendaciones personalizadas'/>
+          {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Recomendaciones</p> */}
+          <div className="p-3 flex flex-col gap-10 mt-16">
           {report.recomendations.map((data: any, index:number) => (
             <div key={index} className='bg-[#003E52]/10 flex items-center p-4 rounded-xl text-[#003E52]'>
               {renderTextFromDatabase(`${data.content}`)}
@@ -280,6 +281,17 @@ export default async function ReportPage({
           </div>
         </div>
       </div>
+      <div className='flex flex-col gap-6'>
+        <p className='text-[#00AE8D] font-medium'>Este análisis fue generado con asistencia de inteligencia artificial y debe ser revisado cuidadosamente antes de tomar decisiones basadas en él.</p>
+        <p className='text-[#00AE8D] font-medium'>Los ingresos y gastos presentados provienen directamente de los estados de cuenta y pueden no reflejar el monto completo o los impuestos relacionados, como el IVA, de manera estrictamente correcta si estos no fueron detallados explícitamente. El presente debe de tomarse como un reporte financiero y no uno que puede usarse para la contabilidad de la empresa. Se utilizó toda la información proporcionada, en caso de haber omitido algo los reportes pueden tener resultados engañosos o erróneos.</p>
+      </div>
+
+        <div className='p-8 w-full rounded-3xl bg-[#003E52] flex items-center justify-between mt-10'>
+          <p className='text-[#003E52]'>.</p>
+          <p className={`${libreBaskerville.className} text-white text-3xl text-center`}>Nosotros a tus finanzas y tú a lo tuyo.</p>
+          <Logo/>
+        </div>
+          <p className='text-[#0065A1] text-center pb-2 font-medium'>tualo.mx</p>
     </div>
   )
 }
