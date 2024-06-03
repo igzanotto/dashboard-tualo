@@ -30,11 +30,12 @@ const reorderCharts = (charts:any) => {
 export default async function ReportPage({
   params,
 }: {
-  params: { report_id: string, id:string };
+  params: { report_id: string, id:string, business_id:string };
 }) {
   
   const report = await fetchReportById(params.report_id);
-  const businessName = report.business.name;
+  console.log(report.business_id);
+  
   const orderedCharts = reorderCharts(report.charts);
 
   const renderTextFromDatabase = (text: string | undefined) => {
@@ -186,6 +187,7 @@ export default async function ReportPage({
               <h1 className='text-black'>Crear Gráfico de {type}</h1>
               <form action={createChartEmbed} className='flex flex-col gap-4 xl:w-[60%] mt-10'>
                 <input type="hidden" name="report_id" value={report.id} />
+                <input type="hidden" name="business_id" value={report.business_id} />
                 <input type="hidden" name="type" value={type} />
                 <input
                   type="text"

@@ -219,6 +219,7 @@ const ChartEmbedFormSchema = z.object({
   type: z.string(),
   report_id: z.string(),
   graphy_url: z.string(),
+  business_id: z.string(),
 });
 
 export async function createChartEmbed(formData:FormData){
@@ -226,6 +227,7 @@ export async function createChartEmbed(formData:FormData){
     type: formData.get('type'),
     report_id: formData.get('report_id'),
     graphy_url: formData.get('graphy_url'),
+    business_id: formData.get('business_id')
   });
 
   
@@ -234,9 +236,9 @@ export async function createChartEmbed(formData:FormData){
     throw new Error('Invalid form data');
   }
 
-  const { type, report_id, graphy_url} = parsedData.data;
+  const { type, report_id, graphy_url, business_id} = parsedData.data;
 
-  console.log('Parsed Data:', { type, report_id, graphy_url});
+  console.log('Parsed Data:', { type, report_id, graphy_url, business_id});
 
   const supabase = createClient();
   try {
@@ -266,7 +268,7 @@ export async function createChartEmbed(formData:FormData){
         console.error('Supabase update error:', updateError);
         throw updateError;
       }
-
+      
       console.log('Updated chart data:', updatedChart);
       return updatedChart;
     } else {
@@ -274,14 +276,14 @@ export async function createChartEmbed(formData:FormData){
       const { data: newChart, error: insertError } = await supabase
         .from('charts')
         .insert([{ type, report_id, graphy_url }]);
-
-      if (insertError) {
-        console.error('Supabase insert error:', insertError);
-        throw insertError;
-      }
-
-      console.log('Inserted chart data:', newChart);
-      revalidatePath(`/admin/businesses/2/reports/${report_id}`)
+        
+        if (insertError) {
+          console.error('Supabase insert error:', insertError);
+          throw insertError;
+        }
+        
+        console.log('Inserted chart data:', newChart);
+        revalidatePath(`/admin/businesses/${business_id}/reports/${report_id}`)
       return newChart;
     }
   } catch (error) {
