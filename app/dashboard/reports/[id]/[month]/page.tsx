@@ -101,7 +101,7 @@ export default async function ReportPage({
       </div>
 
       <div className='xl:w-[80%] mx-auto max-xl:w-[90%]'>
-        <div id='resumen' className="section-margin flex flex-col gap-10 my-20" key={'resumen'}>
+        <div id='resumen' className="section-margin flex flex-col gap-10 mb-20 mt-10" key={'resumen'}>
           <div>
             <p className="mb-4 text-2xl font-semibold text-[#003E52]">Perfil de mi empresa</p>
             <div className="rounded-xl bg-[#003E52]/10 p-3">
