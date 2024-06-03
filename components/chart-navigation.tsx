@@ -198,7 +198,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
             }`}
           >
             <PaperClipIcon width={20} height={20} />
-            Anexo
+            Información Adicional
           </Link>
         </div>
       </div>
