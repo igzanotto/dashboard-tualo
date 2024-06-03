@@ -14,10 +14,8 @@ import '../../../../globals.css'
 import BannerSection from '@/components/bannerSection';
 import Logo from '@/components/icons/Logo';
 import BannerReferidos from '@/components/bannerReferidos';
-// import conclusiones from '../../../../../components/images/conlcusiones-financieras.png'
-// import recomendaciones from '../../../../../components/images/recomendaciones.png'
-// import resumen from '../../../../../components/images/resumen-financiero.png'
-// import Image from 'next/image';
+import reporte from '../../../../../components/images/header-reporte.png'
+import Image from 'next/image';
 
 
 const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
@@ -91,8 +89,10 @@ export default async function ReportPage({
 
   return (
     <div className="flex flex-col gap-3 xl:px-2">
-
-      <h1 className={`text-2xl font-semibold xl:w-[80%] mx-auto max-xl:w-[90%] text-[#003E52] ${libreBaskerville.className}`}>
+      <Image width={3000} height={3000} src={reporte} alt='image' className='w-full'/>
+      
+      
+      <h1 className={`text-2xl font-semibold xl:w-[80%] mx-auto max-xl:w-[90%] text-[#003E52] mt-16 ${libreBaskerville.className}`}>
         Reporte de <span className="capitalize">{report.month} {report.created_at.slice(0, 4)}</span>
       </h1>
 
