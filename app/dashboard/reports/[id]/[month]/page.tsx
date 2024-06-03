@@ -13,6 +13,7 @@ import {
 import '../../../../globals.css'
 import BannerSection from '@/components/bannerSection';
 import Logo from '@/components/icons/Logo';
+import BannerReferidos from '@/components/bannerReferidos';
 // import conclusiones from '../../../../../components/images/conlcusiones-financieras.png'
 // import recomendaciones from '../../../../../components/images/recomendaciones.png'
 // import resumen from '../../../../../components/images/resumen-financiero.png'
@@ -285,7 +286,9 @@ export default async function ReportPage({
         <p className='text-[#00AE8D] font-medium'>Este análisis fue generado con asistencia de inteligencia artificial y debe ser revisado cuidadosamente antes de tomar decisiones basadas en él.</p>
         <p className='text-[#00AE8D] font-medium'>Los ingresos y gastos presentados provienen directamente de los estados de cuenta y pueden no reflejar el monto completo o los impuestos relacionados, como el IVA, de manera estrictamente correcta si estos no fueron detallados explícitamente. El presente debe de tomarse como un reporte financiero y no uno que puede usarse para la contabilidad de la empresa. Se utilizó toda la información proporcionada, en caso de haber omitido algo los reportes pueden tener resultados engañosos o erróneos.</p>
       </div>
-
+          <div className='mt-10'>
+            <BannerReferidos text='¡Te descontamos $100 por cada negocio que invites!'/>
+          </div>
         <div className='p-8 w-full rounded-3xl bg-[#003E52] flex items-center justify-between mt-10'>
           <p className='text-[#003E52]'>.</p>
           <p className={`${libreBaskerville.className} text-white text-3xl text-center`}>Nosotros a tus finanzas y tú a lo tuyo.</p>
