@@ -11,7 +11,7 @@ interface FormData {
   goals_close: string;
 }
 
-export default function GoalGenerator({ threadId }: { threadId: any }) {
+export default function GoalsGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
 
   const [statusMessage, setStatusMessage] = useState('');
