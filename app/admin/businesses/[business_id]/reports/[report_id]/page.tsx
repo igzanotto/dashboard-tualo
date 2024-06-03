@@ -3,7 +3,7 @@
 import ChartEmbed from '@/components/charts/ChartEmbed';
 import ChartIcon from '@/components/icons/ChartIcon';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { createChartEmbed, updateReport } from '@/lib/actions';
+import { createChartEmbed, updateReport, updateReportRecommendations } from '@/lib/actions';
 import { fetchReportById } from '@/lib/data';
 import { InfoIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -34,6 +34,8 @@ export default async function ReportPage({
 }) {
   
   const report = await fetchReportById(params.report_id);
+  const recomendations  = report.recomendations.map((data:any) => data.content)
+  
   console.log(report.business_id);
   
   const orderedCharts = reorderCharts(report.charts);
@@ -99,7 +101,7 @@ export default async function ReportPage({
           <p className="mb-4 text-4xl">Resumen</p>
           <textarea
             name="business_resume"
-            defaultValue={report.business_resume || ''}
+            defaultValue={report.business_resume}
             className="w-full h-[500px] border-2 border-zinc-300 shadow-xl p-4 rounded-lg"
           />
           <button type="submit" className="mt-4 bg-blue-800 text-white p-2 rounded-lg">
@@ -110,7 +112,7 @@ export default async function ReportPage({
           <p className="mb-4 text-4xl">Objetivos</p>
           <textarea
             name="goals"
-            defaultValue={report.goals || ''}
+            defaultValue={report.goals}
             className="w-full h-[300px] border-2 border-zinc-300 shadow-xl p-4 rounded-lg"
           />
           <button type="submit" className="mt-4 bg-blue-800 text-white p-2 rounded-lg">
@@ -121,7 +123,22 @@ export default async function ReportPage({
           <p className="mb-4 text-4xl">Análisis</p>
           <textarea
             name="analysis"
-            defaultValue={report.analysis || ''}
+            defaultValue={report.analysis}
+            className="w-full h-[500px] border-2 border-zinc-300 shadow-xl p-4 rounded-lg"
+          />
+          <button type="submit" className="mt-4 bg-blue-800 text-white p-2 rounded-lg">
+            Guardar cambios
+          </button>
+        </div>
+
+      </form>
+      <form action={updateReportRecommendations}>
+        <input type="hidden" name="report_id" value={params.report_id} />
+        <div>
+          <p className="mb-4 text-4xl">ReCOMEND</p>
+          <textarea
+            name="content"
+            defaultValue={recomendations}
             className="w-full h-[500px] border-2 border-zinc-300 shadow-xl p-4 rounded-lg"
           />
           <button type="submit" className="mt-4 bg-blue-800 text-white p-2 rounded-lg">

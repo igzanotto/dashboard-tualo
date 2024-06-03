@@ -470,6 +470,46 @@ export async function updateReport(formData: FormData) {
   }
 }
 
+const RecomendationsUpdateSchema = z.object({
+  report_id: z.string(),
+  content: z.string()
+});
+
+export async function updateReportRecommendations(formData:FormData) {
+  const parsedData = RecomendationsUpdateSchema.safeParse({
+    report_id: formData.get('report_id'),
+    content: formData.get('content')
+  })
+
+  if (!parsedData.success) {
+    console.error('Validation Error:', parsedData.error);
+    throw new Error('Invalid form data');
+  }
+
+  const { report_id, content} = parsedData.data;
+  const supabase = createClient(); // Crear cliente Supabase
+  
+  try {
+    const { data: recommendations, error } = await supabase
+      .from('recomendations')
+      .update({content})
+      .eq('id', report_id)
+      .single();
+
+      if (error) {
+        console.error('Supabase update error:', error);
+        throw error;
+      }
+
+      console.log(recommendations);
+      
+      return recommendations;
+  } catch (error) {
+    console.error('Error updating report recommendations:', error);
+    throw error;
+  }
+}
+
 export const createUser = async (users: any[]) => {
   const supabase = createAdmin();
   
