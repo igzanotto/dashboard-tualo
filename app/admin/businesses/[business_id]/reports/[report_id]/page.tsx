@@ -6,10 +6,11 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { createChartEmbed, updateReport, updateReportRecommendations } from '@/lib/actions';
 import { fetchReportById } from '@/lib/data';
 import { InfoIcon } from 'lucide-react';
+import { Libre_Baskerville } from 'next/font/google';
 import Link from 'next/link';
 
 
-
+const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
 
 const chartOrder = [
   'Ingresos y egresos',
@@ -30,13 +31,11 @@ const reorderCharts = (charts:any) => {
 export default async function ReportPage({
   params,
 }: {
-  params: { report_id: string, id:string, business_id:string };
+  params: { report_id: string, id:string, business_id:string, month:string };
 }) {
   
   const report = await fetchReportById(params.report_id);
   const recomendations  = report.recomendations.map((data:any) => data.content)
-  
-  console.log(report.business_id);
   
   const orderedCharts = reorderCharts(report.charts);
 
@@ -46,7 +45,7 @@ export default async function ReportPage({
     }
   
     const applyStyles = (text: string) => {
-      return <span className="font-bold text-zinc-700">{text}</span>;
+      return <span className="font-bold text-[#003E52]">{text}</span>;
     };
   
     
