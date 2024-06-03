@@ -8,6 +8,9 @@ import { fetchReportById } from '@/lib/data';
 import { InfoIcon } from 'lucide-react';
 import { Libre_Baskerville } from 'next/font/google';
 import Link from 'next/link';
+import reporte from '../../../../../../components/images/header-reporte.png'
+import Image from 'next/image';
+import BannerSection from '@/components/bannerSection';
 
 
 const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
@@ -81,51 +84,59 @@ export default async function ReportPage({
 
 
   return (
-    <div className="flex flex-col gap-3">
-      <h1 className={`text-2xl`}>
-        Reporte de <span className="capitalize">{report.month}</span>
+    <div className="flex flex-col gap-3 xl:px-2">
+      <Image width={3000} height={3000} src={reporte} alt='image' className='w-full'/>
+      
+      
+      <h1 className={`text-2xl font-semibold xl:w-[80%] mx-auto max-xl:w-[90%] text-[#003E52] mt-16 ${libreBaskerville.className}`}>
+        Reporte de <span className="capitalize">{report.month} {report.created_at.slice(0, 4)}</span>
       </h1>
-      {/* <div className='flex items-center justify-between'>
-        <p className="mb-4 text-4xl">{businessName}</p>
-        <Link href={`/admin/businesses/${params.id}/reports/${report.id}/create-chart`} className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white justify-center">
-          Generar gráfico
-          <ChartIcon/>
-        </Link>
-      </div> */}
 
-      <div className="mt-10 flex flex-col gap-8">
+      <div>
+        <p className={`mb-4 text-xl font-semibold xl:text-4xl xl:w-[80%] mx-auto max-xl:w-[90%] text-[#003E52] ${libreBaskerville.className}`}>
+          {report.business.name}
+        </p>
+      </div>
+     
+
+      <div className='xl:w-[80%] mx-auto max-xl:w-[90%]'>
       <form action={updateReport} className="mt-10 flex flex-col gap-20">
         <input type="hidden" name="report_id" value={params.report_id} />
         <div>
-          <p className="mb-4 text-4xl">Resumen</p>
+          <p className="mb-4 text-4xl">Perfil de la empresa</p>
           <textarea
             name="business_resume"
             defaultValue={report.business_resume}
             className="w-full h-[500px] border-2 border-zinc-300 shadow-xl p-4 rounded-lg"
           />
-          <button type="submit" className="mt-4 bg-blue-800 text-white p-2 rounded-lg">
+          <button type="submit" className="mt-4 bg-[#003E52] text-white p-2 rounded-lg w-full">
             Guardar cambios
           </button>
         </div>
         <div>
-          <p className="mb-4 text-4xl">Objetivos</p>
+          <p className="mb-4 text-4xl">Metas financieras</p>
           <textarea
             name="goals"
             defaultValue={report.goals}
             className="w-full h-[300px] border-2 border-zinc-300 shadow-xl p-4 rounded-lg"
           />
-          <button type="submit" className="mt-4 bg-blue-800 text-white p-2 rounded-lg">
+          <button type="submit" className="mt-4 bg-[#003E52] text-white p-2 rounded-lg w-full">
             Guardar cambios
           </button>
         </div>
-        <div>
-          <p className="mb-4 text-4xl">Análisis</p>
+
+      {/* <div className='flex flex-col gap-36 mt-10'>
+        <BannerSection text='Resumen financiero'/>
+      </div> */}
+
+        <div id="conclusiones" className='section-margin flex flex-col gap-4 mb-24' key={"conclusiones"}>
+        <BannerSection text='Conclusiones financieras'/>
           <textarea
             name="analysis"
             defaultValue={report.analysis}
             className="w-full h-[500px] border-2 border-zinc-300 shadow-xl p-4 rounded-lg"
           />
-          <button type="submit" className="mt-4 bg-blue-800 text-white p-2 rounded-lg">
+          <button type="submit" className="mt-4 bg-[#003E52] text-white p-2 rounded-lg">
             Guardar cambios
           </button>
         </div>
@@ -133,39 +144,31 @@ export default async function ReportPage({
       </form>
       <form action={updateReportRecommendations}>
         <input type="hidden" name="report_id" value={params.report_id} />
-        <div>
-          <p className="mb-4 text-4xl">ReCOMEND</p>
+
+        <div id="recomendaciones" className="section-margin flex flex-col gap-4" key={"recomendaciones"}>
+          <BannerSection text='Recomendaciones personalizadas'/>
           <textarea
             name="content"
             defaultValue={recomendations}
             className="w-full h-[500px] border-2 border-zinc-300 shadow-xl p-4 rounded-lg"
           />
-          <button type="submit" className="mt-4 bg-blue-800 text-white p-2 rounded-lg">
+          <button type="submit" className="mt-4 bg-[#003E52] text-white p-2 rounded-lg">
             Guardar cambios
           </button>
         </div>
       </form>
-      <div className="mt-10 flex flex-col gap-36">
+
+
+      <div className='mt-28 mb-16'>
+        <BannerSection text='Resumen financiero'/>
+      </div>
+      <div className="flex flex-col gap-36">
   {chartOrder.map((type:any) => {
     const chart = orderedCharts.find((chart: any) => chart.type === type);
     return (
       <div
         className={`section-margin flex items-center justify-between gap-10 rounded-xl px-3 py-4 max-xl:flex-col 2xl:px-7 
-        ${
-          type === 'Costos y gastos'
-            ? 'bg-[rgba(255,0,0,0.07046568627450978)]'
-            : type === 'Ventas'
-            ? 'bg-[rgba(0,255,0,0.1)]'
-            : type === 'Utilidad neta y margen neto'
-            ? 'bg-[rgba(163,98,238,0.1)]'
-            : type === 'Márgenes'
-            ? 'bg-[rgba(219,103,255,0.1)]'
-            : type === 'Gastos desglosados'
-            ? 'bg-[rgba(248,222,103,0.1)]'
-            : type === 'Cascada P&L'
-            ? 'bg-[rgba(166,166,166,0.1)]'
-            : 'bg-gray-100'
-        }`}
+       bg-[#252525]/10`}
         id={type}
         key={type}
       >
@@ -213,7 +216,7 @@ export default async function ReportPage({
                 />
                 <button
                   type="submit"
-                  className="rounded-xl bg-blue-500 p-3 font-medium text-white"
+                  className="rounded-xl bg-[#003E52] p-3 font-medium text-white"
                 >
                   Crear gráfico
                 </button>
