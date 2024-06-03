@@ -9,8 +9,8 @@ interface Props{
 
 const BannerReferidos = ({text}:Props) => {
   return (
-        <div className={`w-full rounded-2xl p-4 bg-[#FF6C0E] flex items-center max-lg:w-[98%] max-lg:mx-auto justify-center` }>
-        <p className={`${libreBaskerville.className} text-white text-2xl text-center`} >{text}</p>
+        <div className={`w-full rounded-2xl p-4 max-md:p-3 bg-[#FF6C0E] flex items-center max-lg:w-[98%] max-lg:mx-auto justify-center` }>
+        <p className={`${libreBaskerville.className} text-white text-2xl text-center max-md:text-xl`} >{text}</p>
       </div>
   )
 }

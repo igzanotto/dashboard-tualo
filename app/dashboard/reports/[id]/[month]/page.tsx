@@ -265,7 +265,7 @@ export default async function ReportPage({
         <div id="conclusiones" className="section-margin" key={"conclusiones"}>
         <BannerSection text='Conclusiones financieras'/>
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p> */}
-          <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52] mt-16">
+          <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52] mt-16 max-md:w-[96%] max-md:mx-auto">
             {renderTextFromDatabase(report.analysis)}
           </div>
         </div>
@@ -282,17 +282,19 @@ export default async function ReportPage({
           </div>
         </div>
       </div>
-      <div className='flex flex-col gap-6'>
+      <div className='flex flex-col gap-6 max-lg:w-[98%] max-lg:text-center'>
         <p className='text-[#00AE8D] font-medium'>Este análisis fue generado con asistencia de inteligencia artificial y debe ser revisado cuidadosamente antes de tomar decisiones basadas en él.</p>
         <p className='text-[#00AE8D] font-medium'>Los ingresos y gastos presentados provienen directamente de los estados de cuenta y pueden no reflejar el monto completo o los impuestos relacionados, como el IVA, de manera estrictamente correcta si estos no fueron detallados explícitamente. El presente debe de tomarse como un reporte financiero y no uno que puede usarse para la contabilidad de la empresa. Se utilizó toda la información proporcionada, en caso de haber omitido algo los reportes pueden tener resultados engañosos o erróneos.</p>
       </div>
           <div className='mt-10'>
             <BannerReferidos text='¡Te descontamos $100 por cada negocio que invites!'/>
           </div>
-        <div className='p-8 w-full rounded-3xl bg-[#003E52] flex items-center justify-between mt-10'>
+        <div className='p-8 w-full rounded-3xl max-md:rounded-2xl bg-[#003E52] flex items-center justify-between mt-10 max-md:p-4 max-md:w-[98%] max-md:mx-auto'>
           <p className='text-[#003E52]'>.</p>
-          <p className={`${libreBaskerville.className} text-white text-3xl text-center`}>Nosotros a tus finanzas y tú a lo tuyo.</p>
-          <Logo/>
+          <p className={`${libreBaskerville.className} text-white text-3xl text-center max-md:text-xl`}>Nosotros a tus finanzas y tú a lo tuyo.</p>
+          <div className='max-md:hidden'>
+            <Logo/>
+          </div>
         </div>
           <p className='text-[#0065A1] text-center pb-2 font-medium'>tualo.mx</p>
     </div>
