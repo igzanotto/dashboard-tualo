@@ -1,10 +1,10 @@
-import { DM_Sans, Inter, Poppins } from "next/font/google";
+import { DM_Sans, Inter, Montserrat, Poppins } from "next/font/google";
 import { Metadata } from 'next';
 import "./globals.css";
 
 
 const inter = Inter({ subsets: ["latin"] });
-const poppins = Poppins({subsets:["latin"], weight:["100", "200", "300", "400", "500"]})
+const montserrat = Montserrat({subsets:["latin"], weight:["100", "200", "300", "400", "500"]})
 const dmSans = DM_Sans({subsets: ["latin"]})
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={poppins.className}>
+    <html lang="en" className={montserrat.className}>
       <body className={`antialiased`}>
         {children}
       </body>

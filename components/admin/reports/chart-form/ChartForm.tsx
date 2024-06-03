@@ -13,7 +13,7 @@ export default function ChartForm({report_id}:any) {
   console.log(report_id);
   
   const chartTypes = [
-    "Cascada P&L",
+    "Ingresos y egresos",
     "Ventas",
     "Costos y gastos",
     "Márgenes",

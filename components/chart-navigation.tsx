@@ -26,7 +26,7 @@ interface ChartNavigationProps {
 }
 
 const chartOrder = [
-  'Cascada P&L',
+  'Ingresos y egresos',
   'Ventas',
   'Costos y gastos',
   'Utilidad neta',
@@ -198,7 +198,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
             }`}
           >
             <PaperClipIcon width={20} height={20} />
-            Anexo
+            Información Adicional
           </Link>
         </div>
       </div>
