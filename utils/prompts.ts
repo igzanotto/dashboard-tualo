@@ -175,29 +175,8 @@ toma las siguientes consideraciones para hacerlo:
 
 una vez que hayas terminado, pídeme siguientes instrucciones`;
 
-export const followup_recomendations_prompt =
-`muy bien, vamos por el 2do entregable: **recomendaciones estratégicas**
 
-considera lo siguiente:
-
-- haz entre 3 y 5 recomendaciones enfocadas al cumplimiento de la meta financiera de la empresa con el siguiente formato: un título seguido de un emoji relacionado, una descripción de una línea, una justificación de por qué decidiste incluir esa recomendación (usa ejemplos específicos de sus finanzas o su modelo de negocio para justificarlo), y una lista de entre 3 y 5 pasos para explicar cómo lograrlo
-- tomar en cuenta *la continuidad* para hacerlas, no solo inventes nuevas recomendaciones sino considera las anteriores y corrígelas usando el feedback
-    - en caso de que el feedback así lo pida, haz nuevas recomendaciones
-- asegúrate de que sean accionables, que puedan ejecutarse con pasos específicos y que no requieran esperar meses o sean muy etéreas
-- habla en un idioma natural: considera que los usuarios no tienen experiencia financiera (no uses palabras técnicas financieras como márgenes, utilidad, rentabilidad, ebitda, etc)
-- si consideras que alguna es algo compleja para personas que no tienen mucho expertise en negocios, incluye "Tips adicionales" donde menciones herramientas específicas a usar o contenido en línea que pueda ayudarles a entenderlo mejor
-- nunca recomiendes nada relacionado a mejorar la gestión de gastos o el control financiero, ya que eso es lo que estamos haciendo nosotros con los clientes ;)
-
-te recuerdo que las recomendaciones anteriores que hiciste fueron:
-Recomendación 1: Intensificar la Estrategia de Marketing Digital 💻
-Recomendación 2: Fortalecimiento del Equipo mediante Capacitación Continua 📚
-Recomendación 3: Programa de Referidos para Turistas 🌍
-Recomendación 4: Optimización de la Experiencia del Cliente en Tienda 🛍️
-Recomendación 5: Maximizar la Visibilidad en Línea 🌐
-
-una vez hecho eso, me pides siguientes instrucciones`;
-
- export const followup_charts_prompt =
+export const followup_charts_prompt =
  `ahora vamos con el 2do entregable: *comentarios de las gráficas históricas*
  nuevamente genera insights que le ayuden al cliente a interpretar sus resultados financieros de la empresa en caso de que él no pueda llegar a esas conclusiones por su cuenta (facilitarle los insights financieros principales dados los números resultantes este mes)
  pon ejemplos específicos, usa números reales, no solo le expliques cómo interpretarlo sino interpretalo por él
@@ -211,17 +190,48 @@ una vez hecho eso, me pides siguientes instrucciones`;
  5. gráfica de líneas de la evolución de sus gastos mensuales desglosado por tipo de gasto (no incluye los costos ni los gastos financieros, solo gastos operativos)
  `;
 
- export const followup_analysis_prompt =
- `ahora vamos con el 3er entregable: **highlights y análisis del P&L del mes de XXX**
+export const followup_analysis_prompt =
+`ahora vamos con el 3er entregable: **highlights y análisis del P&L del mes de XXX**
 
- toma las siguientes consideraciones para hacerlo:
- 
- - haz 5 bullets con los highlights financieros
- - enfocar el análisis en el mes actual (XXX), no hacer highlights de meses anteriores excepto para hacer comparaciones entre lo que pasó este mes vs lo que había pasado en meses anteriores
- - habla en un idioma natural: considera que los usuarios no tienen experiencia financiera (no uses palabras técnicas financieras como márgenes, utilidad, rentabilidad, ebitda, etc)
- - usa ejemplos específicos para explicar tus hallazgos, mencionando métricas o números
- - enfócate en hacer solamente análisis, nada de recomendaciones
- 
- ——-
- 
- una vez que hayas terminado, pídeme siguientes instrucciones `
+toma las siguientes consideraciones para hacerlo:
+
+- haz 5 bullets con los highlights financieros
+- enfocar el análisis en el mes actual (XXX), no hacer highlights de meses anteriores excepto para hacer comparaciones entre lo que pasó este mes vs lo que había pasado en meses anteriores
+- habla en un idioma natural: considera que los usuarios no tienen experiencia financiera (no uses palabras técnicas financieras como márgenes, utilidad, rentabilidad, ebitda, etc)
+- usa ejemplos específicos para explicar tus hallazgos, mencionando métricas o números
+- enfócate en hacer solamente análisis, nada de recomendaciones
+
+——-
+
+una vez que hayas terminado, pídeme siguientes instrucciones `
+
+export const followup_recomendations_bullets_prompt =
+`muy bien, vamos por el 4to entregable: recomendaciones estratégicas
+lo vamos a hacer paso a paso
+lo primero que haremos es lo siguiente:
+haz una lista en bullets de las recomendaciones que hiciste en el reporte anterior, y cada una con propuestas de cambios, mejora o eliminación (sin desarrollar, solo ideas en bullets) según el feedback que recibimoss`;
+
+export const followup_recomendations_ideas_prompt =
+`ahora, sin considerar esa lista, ayúdame a generar una lluvia de ideas de posibles nuevas recomendaciones que podrían servirle a esta empresa dado su modelo de negocios y su situación financiera del periodo actual, todas enfocadas al cumplimiento de sus metas financieras y las actualizaciones de las mismas`
+
+export const followup_recomendations_evaluation_prompt =
+`muy bien, ahora vamos a evaluar tanto las recomendaciones pasadas como estas nuevas propuestas de recomendaciones. Crea una matriz con todas las recomendaciones, evaluándolas según su nivel de personalización para este cliente, su nivel de accionabilidad, y su nivel de alineación con su meta financiera actualizadas, usando la siguiente estructura:
+
+recomendación | tipo de recomendación (”anterior”, si viene del reporte anterior, o “nueva”, si se generó a partir de este nuevo ejercicio) | nivel de personalización (1 = muy genérica, 10 = hiper personalizada) | nivel de accionabilidad (1 = tomaría muchos meses o años, 10 = se podría implementar en unas semanas) | nivel de alineación con su meta financiera (1 = nada alineada, 10 = totalmente alineada al cumplimiento de su meta)`
+
+export const followup_recomendations_ponderation_prompt =
+`Finalmente, quiero ponderar la alineación con metas con 10 puntos, la accionabilidad con 5 puntos y la personalización con 3 puntos. Con eso en mente, ¿cuáles serían las recomendaciones más adecuadas para incluir en el reporte? Menciona solo las 5 mejores.`
+
+export const followup_recomendations_selection_prompt =
+`Si en esta lista final no están incluidas las recomendaciones de tipo "anterior" cuyo accionable tras el feedback recibido no haya sido eliminarla, amplia la lista para incluirlas tanto como sea necesario. El orden en que las presentes deberá ser: primero las recomendaciones anteriores en el orden en que aparecían antes (excluyendo las eliminadas), y luego las nuevas ordenadas según su puntuación total.`
+
+export const followup_recomendations_generation_prompt =
+`muy bien, ahora sí desarrollaremos el 4to entregable: **recomendaciones estratégicas**
+
+desarrolla las recomendaciones de la lista anterior considerando lo siguiente:
+
+- usa el siguiente formato: un título seguido de un emoji relacionado, una descripción de una línea, una justificación de por qué decidiste incluir esa recomendación (usa ejemplos específicos de sus finanzas o su modelo de negocio para justificarlo), y una lista de entre 3 y 5 pasos para explicar cómo lograrlo
+- tomar en cuenta *la continuidad* para las anteriores: no solo repitas lo que se dijo en el reporte anterior, sino ejecuta lo que dedujiste usando el feedback
+- habla en un idioma natural: considera que los usuarios no tienen experiencia financiera (no uses palabras técnicas financieras como márgenes, utilidad, rentabilidad, ebitda, etc)
+- si consideras que alguna es algo compleja para personas que no tienen mucho expertise en negocios, incluye "Tips adicionales" donde menciones herramientas específicas a usar o contenido en línea que pueda ayudarles a entenderlo mejor
+- nunca recomiendes nada relacionado a mejorar la gestión de gastos o el control financiero, ya que eso es lo que estamos haciendo nosotros con los clientes`;
