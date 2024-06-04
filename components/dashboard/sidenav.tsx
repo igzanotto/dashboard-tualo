@@ -38,20 +38,9 @@ export default async function SideNav() {
             return redirect("/login");
           }}
         >
-          {/* <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:p-2 md:px-3"> */}
-            <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <LogOut width={30} height={30}/>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>
-                      Cerrar sesión
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-          {/* </button> */}
+          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:p-2 md:px-3">
+            <LogOut width={30} height={30}/>
+          </button>
         </form>
       </div>
     </div>
