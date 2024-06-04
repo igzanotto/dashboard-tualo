@@ -102,7 +102,7 @@ export default async function ReportPage({
         </p>
       </div>
 
-      <div className='xl:w-[80%] mx-auto max-xl:w-[90%]'>
+      <div className='xl:w-[80%] mx-auto max-xl:w-[90%] mb-24 max-md:mb-14'>
         <div id='resumen' className="section-margin flex flex-col gap-10 mb-20 mt-10" key={'resumen'}>
           <div>
             <p className="mb-4 text-2xl font-semibold text-[#003E52]">Perfil de mi empresa</p>
@@ -119,8 +119,9 @@ export default async function ReportPage({
         </div>
       </div>
 
-      <div className='flex flex-col gap-36 mt-10'>
+
       <BannerSection text='Resumen financiero'/>
+      <div className='flex flex-col gap-36 mt-10'>
 
       {orderedCharts.map((chart: any) => (
         <div

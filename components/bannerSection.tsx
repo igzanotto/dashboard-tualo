@@ -5,12 +5,14 @@ const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "7
 
 interface Props{
     text:string
+    // icon: JSX.Element
 }
 
 const BannerSection = ({text}:Props) => {
   return (
         <div className={`w-full rounded-2xl p-5 bg-gradient-to-r from-[#0065A1] to-[#00AE8D] flex items-center justify-between max-lg:w-[96%] max-lg:mx-auto` }>
         <p className={`${libreBaskerville.className} text-white text-3xl max-md:text-xl`} >{text}</p>
+        {/* {icon} */}
       </div>
   )
 }
