@@ -131,6 +131,7 @@ export default function ChartNavigation() {
                     {chartOrder.map((chart) => (
                       <SheetClose asChild key={chart}>
                         <Link
+                          key={chart}
                           href={`${pathname}/#${chart}`}
                           onClick={() => handleChartClick(chart)}
                           className={`text rounded-lg bg-[#252525]/10 p-2 font-medium capitalize text-black transition-all`}

@@ -27,11 +27,6 @@ export default async function SideNav() {
      >
        <LogoScrolled/>
      </Link>
-
-      {/* <div>
-        <p>¡Hola <span>{user?.user_metadata.full_name}</span>!</p>
-        <Image width={50} height={50} src={user?.user_metadata.avatar_url} alt='Avatar url'/>
-      </div> */}
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2 mt-10">
         <NavLinks />
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>
@@ -43,7 +38,7 @@ export default async function SideNav() {
             return redirect("/login");
           }}
         >
-          <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:p-2 md:px-3">
+          {/* <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:p-2 md:px-3"> */}
             <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger>
@@ -56,7 +51,7 @@ export default async function SideNav() {
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-          </button>
+          {/* </button> */}
         </form>
       </div>
     </div>

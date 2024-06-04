@@ -59,38 +59,36 @@ export default async function ReportPage({
     if (!text) {
       return <p>Vacío</p>;
     }
-  
+
     const applyStyles = (text: string) => {
       return <span className="font-bold text-[#003E52]">{text}</span>;
     };
-  
-    
+
     const paragraphs = text.split('\n');
     const formattedParagraphs = paragraphs.map((paragraph, index) => {
-      
       const lines = paragraph.split('\n');
       const formattedLines = lines.map((line, lineIndex) => {
         const [firstPart, ...rest] = line.split(':');
-        const secondPart = rest.join(':').trim(); // Por si hay más de un ":" en la línea
-  
+        const secondPart = rest.join(':').trim();
+
         return (
-          <div key={lineIndex}>
-            {applyStyles(firstPart)}{secondPart && `: ${secondPart}`} <br /> 
-          </div>
+          <span key={lineIndex}>
+            {applyStyles(firstPart)}{secondPart && `: ${secondPart}`} <br />
+          </span>
         );
       });
-  
+
       return (
-        <div key={index}>
+        <span key={index}>
           {formattedLines}
-        </div>
+        </span>
       );
     });
-  
+
     return (
-      <div>
+      <>
         {formattedParagraphs}
-      </div>
+      </>
     );
   };
   
@@ -251,7 +249,7 @@ export default async function ReportPage({
          :
          <p>Este grafico no tiene tooltip</p>
             }
-            </div>
+          </div>
             <ChartEmbed src={chart.graphy_url} />
           </div>
           <div className="my-[110px] rounded-lg bg-white px-3 py-5 xl:w-[50%] 2xl:w-[40%]">
@@ -285,7 +283,7 @@ export default async function ReportPage({
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Recomendaciones</p> */}
           <div className="p-3 flex flex-col gap-10 mt-16">
           {report.recomendations.map((data: any, index:number) => (
-            <div key={index} className='bg-[#003E52]/10 flex items-center p-4 rounded-xl text-[#003E52]'>
+            <div key={index} className='bg-[#003E52]/10 flex flex-col p-4 rounded-xl text-[#003E52]'>
               {renderTextFromDatabase(`${data.content}`)}
             </div>
           ))}
