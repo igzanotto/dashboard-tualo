@@ -85,7 +85,7 @@ export default function ChartNavigation() {
               key={chart}
               href={`${pathname}/#${chart}`}
               onClick={() => handleChartClick(chart)}
-              className={`text rounded-lg p-2 font-medium transition-all ${
+              className={`text rounded-lg p-2 font-medium transition-all capitalize ${
                 selectedChart === chart
                   ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
                   : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
@@ -101,7 +101,7 @@ export default function ChartNavigation() {
               key={index}
               href={`${pathname}/#${data}`}
               onClick={() => handleChartClick(data)}
-              className={`text rounded-lg p-2 font-medium transition-all ${
+              className={`text rounded-lg p-2 font-medium transition-all capitalize ${
                 selectedChart === data
                   ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
                   : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
