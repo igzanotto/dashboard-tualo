@@ -252,7 +252,7 @@ export default async function ReportPage({
           </div>
             <ChartEmbed src={chart.graphy_url} />
           </div>
-          <div className="my-[110px] rounded-lg bg-white px-3 py-5 xl:w-[50%] 2xl:w-[40%]">
+          <div className="lg:my-[110px] rounded-lg bg-white px-3 py-5 xl:w-[50%] 2xl:w-[40%]">
           
             {chart.insights && (
               <div className='flex flex-col justify-between'>
