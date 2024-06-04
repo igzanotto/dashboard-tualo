@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/sheet"
 import SuggestIcon from "./icons/SuggestIcon";
 import '../app/globals.css'
+import { usePathname } from "next/navigation";
 
 interface ChartNavigationProps {
   reportId: string;
@@ -38,6 +39,17 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
   const [report, setReport] = useState<any>(null);
   const [selectedChart, setSelectedChart] = useState<string | null>(null);
   const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
+  const pathname = usePathname()
+  const match = pathname.match(/\/dashboard\/reports\/(\d+)\//);
+  const report_id = match ? match[1] : null;
+  console.log(report_id);
+
+  const parts = pathname.split('/');
+  const month = parts[parts.length - 1];
+
+  console.log(month);
+
+
 
   useEffect(() => {
     const getReport = async () => {
@@ -137,7 +149,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
       <div className="flex flex-col justify-center gap-2 max-[1228px]:hidden">
         <div className="flex items-center justify-center gap-2">
           <Link
-            href={`/dashboard/reports/${reportId}/${report.month}/#resumen`}
+            href={`/dashboard/reports/${report_id}/${month}/#resumen`}
             onClick={() => setSelectedChart('resumen')}
             className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
               selectedChart === 'resumen'
@@ -151,7 +163,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
           {orderedCharts.map((chart: any) => (
             <Link
               key={chart.id}
-              href={`/dashboard/reports/${reportId}/${report.month}/#${chart.type}`}
+              href={`/dashboard/reports/${report_id}/${month}/#${chart.type}`}
               onClick={() => handleChartClick(chart.type)}
               className={`text rounded-lg p-2 font-medium transition-all ${
                 selectedChart === chart.type
@@ -165,7 +177,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
         </div>
         <div className="flex items-center justify-center gap-2">
           <Link
-            href={`/dashboard/reports/${reportId}/${report.month}/#conclusiones`}
+            href={`/dashboard/reports/${report_id}/${month}/#conclusiones`}
             onClick={() => setSelectedChart('conclusiones')}
             className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
               selectedChart === 'conclusiones'
@@ -177,7 +189,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
             Conclusiones
           </Link>
           <Link
-            href={`/dashboard/reports/${reportId}/${report.month}/#recomendaciones`}
+            href={`/dashboard/reports/${report_id}/${month}/#recomendaciones`}
             onClick={() => setSelectedChart('recomendaciones')}
             className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
               selectedChart === 'recomendaciones'
@@ -189,7 +201,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
             Recomendaciones
           </Link>
           <Link
-            href={`/dashboard/reports/${reportId}/${report.month}/#anexo`}
+            href={`/dashboard/reports/${report_id}/${month}/#anexo`}
             onClick={() => setSelectedChart('anexo')}
             className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
               selectedChart === 'anexo'
@@ -216,7 +228,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
                 <SheetDescription className="flex flex-col justify-center gap-2">
                   <div className="flex flex-wrap items-center justify-center gap-2">
                     <Link
-                      href={`/dashboard/reports/${reportId}/${report.month}/#resumen`}
+                      href={`/dashboard/reports/${report_id}/${month}/#resumen`}
                       onClick={() => setSelectedChart('resumen')}
                       className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
                         selectedChart === 'resumen'
@@ -230,7 +242,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
                     {orderedCharts.map((chart: any) => (
                       <Link
                         key={chart.id}
-                        href={`/dashboard/reports/${reportId}/${report.month}/#${chart.type}`}
+                        href={`/dashboard/reports/${report_id}/${month}/#${chart.type}`}
                         onClick={() => handleChartClick(chart.type)}
                         className={`text rounded-lg p-2 font-medium transition-all ${
                           selectedChart === chart.type
@@ -244,7 +256,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
                   </div>
                   <div className="flex flex-wrap items-center justify-center gap-2">
           <Link
-            href={`/dashboard/reports/${reportId}/${report.month}/#conclusiones`}
+            href={`/dashboard/reports/${report_id}/${month}/#conclusiones`}
             onClick={() => setSelectedChart('conclusiones')}
             className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
               selectedChart === 'conclusiones'
@@ -256,7 +268,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
             Conclusiones
           </Link>
           <Link
-            href={`/dashboard/reports/${reportId}/${report.month}/#recomendaciones`}
+            href={`/dashboard/reports/${report_id}/${month}/#recomendaciones`}
             onClick={() => setSelectedChart('recomendaciones')}
             className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
               selectedChart === 'recomendaciones'
@@ -268,7 +280,7 @@ export default function ChartNavigation({ reportId }: ChartNavigationProps) {
             Recomendaciones
           </Link>
           <Link
-            href={`/dashboard/reports/${reportId}/${report.month}/#anexo`}
+            href={`/dashboard/reports/${report_id}/${month}/#anexo`}
             onClick={() => setSelectedChart('anexo')}
             className={`text flex items-center gap-2 rounded-lg p-2 font-medium transition-all ${
               selectedChart === 'anexo'

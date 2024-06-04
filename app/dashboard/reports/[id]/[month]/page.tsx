@@ -44,6 +44,8 @@ export default async function ReportPage({
 }) {
   const id = params.id;
   const report = await fetchReportById(id);
+  console.log(report.id);
+  
   const orderedCharts = reorderCharts(report.charts);
 
   
