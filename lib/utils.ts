@@ -37,3 +37,17 @@ export const generatePagination = (currentPage: number, totalPages: number) => {
     totalPages,
   ];
 };
+
+export function translateChartType(type: string) {
+  const chartTypeTranslations: {[key: string]: string} = {
+    'waterfall': 'cascada: P&L',
+    'sales': 'ventas',
+    'costs_and_expenses': 'costos y gastos',
+    'net_profit_and_margins': 'utilidad neta y margen neto',
+    'margins': 'márgenes',
+    'detailed_expenses': 'gastos desglosados'
+  };
+   
+
+  return chartTypeTranslations[type] || type;
+}

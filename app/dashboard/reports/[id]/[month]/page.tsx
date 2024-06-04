@@ -16,6 +16,7 @@ import Logo from '@/components/icons/Logo';
 import BannerReferidos from '@/components/bannerReferidos';
 import reporte from '../../../../../components/images/header-reporte.png'
 import Image from 'next/image';
+import { translateChartType } from '@/lib/utils';
 
 
 const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
@@ -29,20 +30,6 @@ const chartOrder = [
   'margins',
   'detailed_expenses'
 ];
-
-function translateChartType(type: string) {
-  const chartTypeTranslations: {[key: string]: string} = {
-    'waterfall': 'cascada: P&L',
-    'sales': 'ventas',
-    'costs_and_expenses': 'costos y gastos',
-    'net_profit_and_margins': 'utilidad neta y margen neto',
-    'margins': 'márgenes',
-    'detailed_expenses': 'gastos desglosados'
-  };
-   
-
-  return chartTypeTranslations[type] || type;
-}
 
 
 const reorderCharts = (charts:any) => {
