@@ -1,3 +1,4 @@
+
 import ChartEmbed from '@/components/charts/ChartEmbed';
 import ModalDashboard from '@/components/modal/Modal';
 import { fetchReportById } from '@/lib/data';
@@ -17,6 +18,7 @@ import BannerReferidos from '@/components/bannerReferidos';
 import reporte from '../../../../../components/images/header-reporte.png'
 import Image from 'next/image';
 import { translateChartType } from '@/lib/utils';
+import Link from 'next/link';
 
 
 const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
@@ -28,7 +30,8 @@ const chartOrder = [
   'costs_and_expenses',
   'net_profit_and_margins',
   'margins',
-  'detailed_expenses'
+  'detailed_expenses',
+  
 ];
 
 
@@ -47,6 +50,7 @@ export default async function ReportPage({
   const id = params.id;
   const report = await fetchReportById(id);
   console.log(report.id);
+  
   
   const orderedCharts = reorderCharts(report.charts);
 
