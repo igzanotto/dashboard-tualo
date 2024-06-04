@@ -30,6 +30,21 @@ const chartOrder = [
   'detailed_expenses'
 ];
 
+function translateChartType(type: string) {
+  const chartTypeTranslations: {[key: string]: string} = {
+    'waterfall': 'cascada: P&L',
+    'sales': 'ventas',
+    'costs_and_expenses': 'costos y gastos',
+    'net_profit_and_margins': 'utilidad neta y margen neto',
+    'margins': 'márgenes',
+    'detailed_expenses': 'gastos desglosados'
+  };
+   
+
+  return chartTypeTranslations[type] || type;
+}
+
+
 const reorderCharts = (charts:any) => {
   return charts.sort((a:any, b:any) => {
     return chartOrder.indexOf(a.type) - chartOrder.indexOf(b.type);
@@ -133,7 +148,7 @@ export default async function ReportPage({
             <div className="flex items-center gap-2">
               <p className="my-4 text-xl font-semibold xl:text-2xl text-[#003E52]">
                 {' '}
-                Gráfica de <span>{chart.type}</span>
+                Gráfica de <span>{translateChartType(chart.type)}</span>
               </p>
              {chart.type === "waterfall" ? 
                <TooltipProvider>
