@@ -27,12 +27,12 @@ interface ChartNavigationProps {
 }
 
 const chartOrder = [
-  'Ingresos y egresos',
-  'Ventas',
-  'Costos y gastos',
-  'Utilidad neta',
-  'Márgenes',
-  'Gastos desglosados'
+  'waterfall',
+  'sales',
+  'costs_and_expenses',
+  'net_profit_and_margins',
+  'margins',
+  'detailed_expenses'
 ];
 
 export default function ChartNavigation({ reportId }: ChartNavigationProps) {

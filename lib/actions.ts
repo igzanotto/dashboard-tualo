@@ -124,6 +124,7 @@ const BuildAnalysis = ReportFormSchema.omit({id: true, business_id: true, goals:
 export async function buildAnalysis(formData:FormData) {
   const report_id = formData.get('report_id');
   const business_id = formData.get('business_id');
+  const report_type = formData.get('report_type');
 
   const { analysis } = BuildAnalysis.parse({
     analysis: formData.get('analysis'),
@@ -142,6 +143,8 @@ export async function buildAnalysis(formData:FormData) {
     console.log("analisis creado correctamente");
   }
 
+  report_type === "followup" ? 
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-recomendations`) :
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/recomendations`);
 }
 
@@ -219,6 +222,7 @@ const ChartEmbedFormSchema = z.object({
   type: z.string(),
   report_id: z.string(),
   graphy_url: z.string(),
+  business_id: z.string(),
 });
 
 export async function createChartEmbed(formData:FormData){
@@ -226,6 +230,7 @@ export async function createChartEmbed(formData:FormData){
     type: formData.get('type'),
     report_id: formData.get('report_id'),
     graphy_url: formData.get('graphy_url'),
+    business_id: formData.get('business_id')
   });
 
   
@@ -234,9 +239,9 @@ export async function createChartEmbed(formData:FormData){
     throw new Error('Invalid form data');
   }
 
-  const { type, report_id, graphy_url} = parsedData.data;
+  const { type, report_id, graphy_url, business_id} = parsedData.data;
 
-  console.log('Parsed Data:', { type, report_id, graphy_url});
+  console.log('Parsed Data:', { type, report_id, graphy_url, business_id});
 
   const supabase = createClient();
   try {
@@ -266,7 +271,7 @@ export async function createChartEmbed(formData:FormData){
         console.error('Supabase update error:', updateError);
         throw updateError;
       }
-
+      
       console.log('Updated chart data:', updatedChart);
       return updatedChart;
     } else {
@@ -274,13 +279,14 @@ export async function createChartEmbed(formData:FormData){
       const { data: newChart, error: insertError } = await supabase
         .from('charts')
         .insert([{ type, report_id, graphy_url }]);
-
-      if (insertError) {
-        console.error('Supabase insert error:', insertError);
-        throw insertError;
-      }
-
-      console.log('Inserted chart data:', newChart);
+        
+        if (insertError) {
+          console.error('Supabase insert error:', insertError);
+          throw insertError;
+        }
+        
+        console.log('Inserted chart data:', newChart);
+        revalidatePath(`/admin/businesses/${business_id}/reports/${report_id}`)
       return newChart;
     }
   } catch (error) {
@@ -329,6 +335,7 @@ export async function buildChartsInsights(formData:FormData) {
   console.log(formData);
   const report_id = formData.get('report_id');
   const business_id = formData.get('business_id');
+  const report_type = formData.get('report_type');
 
   const {
       waterfall_chart_insights,
@@ -368,7 +375,10 @@ export async function buildChartsInsights(formData:FormData) {
     console.log("graficos generados correctamente");
   }
 
-  redirect(`/admin/businesses/${business_id}/reports/${report_id}/analysis`);
+  console.log("report_type", report_type);
+  report_type === "followup" ? 
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-analysis`) :
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/analysis`) ;
 }
 
 const RecomendationsFormSchema = z.object({
@@ -378,6 +388,7 @@ const RecomendationsFormSchema = z.object({
   second_recomendation: z.string(),
   third_recomendation: z.string(),
   fourth_recomendation: z.string().optional(),
+  fifth_recomendation: z.string().optional(),
 });
 
 const BuildRecomendations = RecomendationsFormSchema.omit({id: true, business_id: true, report_id: true});
@@ -387,17 +398,20 @@ export async function buildRecomendations(formData:FormData) {
   console.log(formData);
   const report_id = formData.get('report_id');
   const business_id = formData.get('business_id');
+  const report_type = formData.get('report_type');
 
   const {
     first_recomendation,
     second_recomendation, 
     third_recomendation, 
     fourth_recomendation, 
+    fifth_recomendation
   } = BuildRecomendations.parse({
     first_recomendation: formData.get('first_recomendation'),
     second_recomendation: formData.get('second_recomendation'),
     third_recomendation: formData.get('third_recomendation'),
     fourth_recomendation: formData.get('fourth_recomendation'),
+    fifth_recomendation: formData.get('fifth_recomendation'),
   });
 
   const recommendations = [
@@ -405,6 +419,7 @@ export async function buildRecomendations(formData:FormData) {
     { content: second_recomendation, report_id: report_id },
     { content: third_recomendation, report_id: report_id },
     { content: fourth_recomendation, report_id: report_id },
+    { content: fifth_recomendation, report_id: report_id },
   ];
 
   // Filter out empty recommendations
@@ -422,6 +437,9 @@ export async function buildRecomendations(formData:FormData) {
     console.log("recomendaciones generadas correctamente");
   }
 
+  
+  report_type === "followup" ? 
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`) :
   redirect(`/admin/businesses/${business_id}/reports/${report_id}`);
 }
 
@@ -467,6 +485,46 @@ export async function updateReport(formData: FormData) {
   }
 }
 
+const RecomendationsUpdateSchema = z.object({
+  report_id: z.string(),
+  content: z.string()
+});
+
+export async function updateReportRecommendations(formData:FormData) {
+  const parsedData = RecomendationsUpdateSchema.safeParse({
+    report_id: formData.get('report_id'),
+    content: formData.get('content')
+  })
+
+  if (!parsedData.success) {
+    console.error('Validation Error:', parsedData.error);
+    throw new Error('Invalid form data');
+  }
+
+  const { report_id, content} = parsedData.data;
+  const supabase = createClient(); // Crear cliente Supabase
+  
+  try {
+    const { data: recommendations, error } = await supabase
+      .from('recomendations')
+      .update({content})
+      .eq('id', report_id)
+      .single();
+
+      if (error) {
+        console.error('Supabase update error:', error);
+        throw error;
+      }
+
+      console.log(recommendations);
+      
+      return recommendations;
+  } catch (error) {
+    console.error('Error updating report recommendations:', error);
+    throw error;
+  }
+}
+
 export const createUser = async (users: any[]) => {
   const supabase = createAdmin();
   
@@ -503,3 +561,99 @@ export const createUser = async (users: any[]) => {
     }
   }
 };
+
+
+
+const FollowupReportFormSchema = z.object({
+  id: z.string(),
+  business_id: z.string(),
+  month: z.string(),
+  highligths_and_PL_analysis_response: z.string(),
+});
+
+const CreateFollowupReport = FollowupReportFormSchema.omit({ id: true});
+
+export async function createFollowupReport(formData:FormData) {
+  console.log("adentro de createReport")
+  console.log(formData);
+  const { month, highligths_and_PL_analysis_response, business_id } = CreateFollowupReport.parse({
+    month: formData.get('month'),
+    highligths_and_PL_analysis_response: formData.get('highligths_and_PL_analysis_response'),
+    business_id: formData.get('business_id'),
+  });
+  console.log("data enviada ",month, highligths_and_PL_analysis_response, business_id);
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('reports')
+    .insert([
+      { month: month, operations_resume: highligths_and_PL_analysis_response, business_id: business_id }
+    ])
+    .select('id');
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  } else {
+    console.log("ID de la fila insertada:", data);
+  }
+
+  if (!data) {
+    return;
+  }
+
+  const report_id = data[0].id;
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
+}
+
+
+
+
+// // todo este es igual al build recomendations excepto el redirect.. habria que unificar
+
+// const BuildFollowupRecomendations = RecomendationsFormSchema.omit({id: true, business_id: true, report_id: true});
+// // este omit del business_id y report_id no esta muy claro por que esta por que si uso esos datos
+
+// export async function buildFollowupRecomendations(formData:FormData) {
+//   console.log("adentro de Followuprecomendations builder")
+//   console.log(formData);
+//   const report_id = formData.get('report_id');
+//   const business_id = formData.get('business_id');
+
+//   const {
+//     first_recomendation,
+//     second_recomendation, 
+//     third_recomendation, 
+//     fourth_recomendation, 
+//   } = BuildFollowupRecomendations.parse({
+//     first_recomendation: formData.get('first_recomendation'),
+//     second_recomendation: formData.get('second_recomendation'),
+//     third_recomendation: formData.get('third_recomendation'),
+//     fourth_recomendation: formData.get('fourth_recomendation'),
+//   });
+
+//   const recommendations = [
+//     { content: first_recomendation, report_id: report_id },
+//     { content: second_recomendation, report_id: report_id },
+//     { content: third_recomendation, report_id: report_id },
+//     { content: fourth_recomendation, report_id: report_id },
+//   ];
+
+//   // Filter out empty recommendations
+//   const nonEmptyRecommendations = recommendations.filter(rec => rec.content);
+
+//   const supabase = createClient();
+
+//   const { data, error } = await supabase
+//     .from('recomendations')
+//     .insert(nonEmptyRecommendations)
+
+//   if (error) {
+//     console.error('Error inserting data:', error);
+//   } else {
+//     console.log("recomendaciones generadas correctamente");
+//   }
+
+//   redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
+// }

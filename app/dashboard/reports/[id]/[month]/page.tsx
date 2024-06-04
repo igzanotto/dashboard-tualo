@@ -22,13 +22,28 @@ const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "7
 
 
 const chartOrder = [
-  'Ingresos y egresos',
-  'Ventas',
-  'Costos y gastos',
-  'Utilidad neta',
-  'Márgenes',
-  'Gastos desglosados'
+  'waterfall',
+  'sales',
+  'costs_and_expenses',
+  'net_profit_and_margins',
+  'margins',
+  'detailed_expenses'
 ];
+
+function translateChartType(type: string) {
+  const chartTypeTranslations: {[key: string]: string} = {
+    'waterfall': 'cascada: P&L',
+    'sales': 'ventas',
+    'costs_and_expenses': 'costos y gastos',
+    'net_profit_and_margins': 'utilidad neta y margen neto',
+    'margins': 'márgenes',
+    'detailed_expenses': 'gastos desglosados'
+  };
+   
+
+  return chartTypeTranslations[type] || type;
+}
+
 
 const reorderCharts = (charts:any) => {
   return charts.sort((a:any, b:any) => {
@@ -127,7 +142,7 @@ export default async function ReportPage({
 
       {orderedCharts.map((chart: any) => (
         <div
-          className={`section-margin flex items-end justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col bg-[#003E52]/10`}
+          className={`section-margin flex  justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col bg-[#003E52]/10`}
           id={chart.type} 
           key={chart.id}
         >
@@ -135,9 +150,9 @@ export default async function ReportPage({
             <div className="flex items-center gap-2">
               <p className="my-4 text-xl font-semibold xl:text-2xl text-[#003E52]">
                 {' '}
-                Gráfica de <span>{chart.type}</span>
+                Gráfica de <span>{translateChartType(chart.type)}</span>
               </p>
-             {chart.type === "Ingresos y egresos" ? 
+             {chart.type === "waterfall" ? 
                <TooltipProvider>
                <Tooltip>
                  <TooltipTrigger>
@@ -161,7 +176,7 @@ export default async function ReportPage({
                </Tooltip>
              </TooltipProvider> 
              :
-             chart.type === "Ventas" ? 
+             chart.type === "sales" ? 
              <TooltipProvider>
              <Tooltip>
                <TooltipTrigger>
@@ -176,7 +191,7 @@ export default async function ReportPage({
              </Tooltip>
            </TooltipProvider>
            :
-           chart.type === "Costos y gastos" ?
+           chart.type === "costs_and_expenses" ?
             <TooltipProvider>
              <Tooltip>
                <TooltipTrigger>
@@ -193,7 +208,7 @@ export default async function ReportPage({
              </Tooltip>
            </TooltipProvider>
             :
-            chart.type === "Utilidad neta" ? 
+            chart.type === "net_profit_and_margins" ? 
             
             <TooltipProvider>
              <Tooltip>
@@ -211,7 +226,7 @@ export default async function ReportPage({
              </Tooltip>
            </TooltipProvider>
            :
-           chart.type === "Márgenes" ? 
+           chart.type === "margins" ? 
            <TooltipProvider>
            <Tooltip>
              <TooltipTrigger>
@@ -228,7 +243,7 @@ export default async function ReportPage({
            </Tooltip>
          </TooltipProvider>
             : 
-            chart.type === "Gastos desglosados" ?
+            chart.type === "detailed_expenses" ?
             <TooltipProvider>
            <Tooltip>
              <TooltipTrigger>
@@ -248,7 +263,8 @@ export default async function ReportPage({
             </div>
             <ChartEmbed src={chart.graphy_url} />
           </div>
-          <div className="2xl:w-[40%] xl:w-[50%] xl:h-[500px] px-3 py-5">
+          <div className="my-[110px] rounded-lg bg-white px-3 py-5 xl:w-[50%] 2xl:w-[40%]">
+          
             {chart.insights && (
               <div className='flex flex-col justify-between'>
                 <h3 className="mb-5 text-center text-2xl font-medium">

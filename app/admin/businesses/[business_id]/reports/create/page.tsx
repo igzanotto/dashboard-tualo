@@ -14,7 +14,7 @@ export default function CreateReportPage({ params }: { params: any }) {
   const { business_id } = params;
   console.log('business_id', business_id);
 
-  const handleMonthChange = (event) => {
+  const handleMonthChange = (event: any) => {
     setSelectedMonth(event.target.value);
   };
 
