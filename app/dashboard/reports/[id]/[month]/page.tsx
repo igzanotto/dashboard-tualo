@@ -1,3 +1,4 @@
+
 import ChartEmbed from '@/components/charts/ChartEmbed';
 import ModalDashboard from '@/components/modal/Modal';
 import { fetchReportById } from '@/lib/data';
@@ -16,19 +17,23 @@ import Logo from '@/components/icons/Logo';
 import BannerReferidos from '@/components/bannerReferidos';
 import reporte from '../../../../../components/images/header-reporte.png'
 import Image from 'next/image';
+import { translateChartType } from '@/lib/utils';
+import Link from 'next/link';
 
 
 const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
 
 
 const chartOrder = [
-  'Ingresos y egresos',
-  'Ventas',
-  'Costos y gastos',
-  'Utilidad neta',
-  'Márgenes',
-  'Gastos desglosados'
+  'waterfall',
+  'sales',
+  'costs_and_expenses',
+  'net_profit_and_margins',
+  'margins',
+  'detailed_expenses',
+  
 ];
+
 
 const reorderCharts = (charts:any) => {
   return charts.sort((a:any, b:any) => {
@@ -44,6 +49,9 @@ export default async function ReportPage({
 }) {
   const id = params.id;
   const report = await fetchReportById(id);
+  console.log(report.id);
+  
+  
   const orderedCharts = reorderCharts(report.charts);
 
   
@@ -51,38 +59,36 @@ export default async function ReportPage({
     if (!text) {
       return <p>Vacío</p>;
     }
-  
+
     const applyStyles = (text: string) => {
       return <span className="font-bold text-[#003E52]">{text}</span>;
     };
-  
-    
+
     const paragraphs = text.split('\n');
     const formattedParagraphs = paragraphs.map((paragraph, index) => {
-      
       const lines = paragraph.split('\n');
       const formattedLines = lines.map((line, lineIndex) => {
         const [firstPart, ...rest] = line.split(':');
-        const secondPart = rest.join(':').trim(); // Por si hay más de un ":" en la línea
-  
+        const secondPart = rest.join(':').trim();
+
         return (
-          <div key={lineIndex}>
-            {applyStyles(firstPart)}{secondPart && `: ${secondPart}`} <br /> 
-          </div>
+          <span key={lineIndex}>
+            {applyStyles(firstPart)}{secondPart && `: ${secondPart}`} <br />
+          </span>
         );
       });
-  
+
       return (
-        <div key={index}>
+        <span key={index}>
           {formattedLines}
-        </div>
+        </span>
       );
     });
-  
+
     return (
-      <div>
+      <>
         {formattedParagraphs}
-      </div>
+      </>
     );
   };
   
@@ -102,7 +108,7 @@ export default async function ReportPage({
         </p>
       </div>
 
-      <div className='xl:w-[80%] mx-auto max-xl:w-[90%]'>
+      <div className='xl:w-[80%] mx-auto max-xl:w-[90%] mb-24 max-md:mb-14'>
         <div id='resumen' className="section-margin flex flex-col gap-10 mb-20 mt-10" key={'resumen'}>
           <div>
             <p className="mb-4 text-2xl font-semibold text-[#003E52]">Perfil de mi empresa</p>
@@ -119,12 +125,13 @@ export default async function ReportPage({
         </div>
       </div>
 
-      <div className='flex flex-col gap-36 mt-10'>
+
       <BannerSection text='Resumen financiero'/>
+      <div className='flex flex-col gap-36 mt-10'>
 
       {orderedCharts.map((chart: any) => (
         <div
-          className={`section-margin flex items-end justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col bg-[#003E52]/10`}
+          className={`section-margin flex  justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col bg-[#003E52]/10`}
           id={chart.type} 
           key={chart.id}
         >
@@ -132,9 +139,9 @@ export default async function ReportPage({
             <div className="flex items-center gap-2">
               <p className="my-4 text-xl font-semibold xl:text-2xl text-[#003E52]">
                 {' '}
-                Gráfica de <span>{chart.type}</span>
+                Gráfica de <span>{translateChartType(chart.type)}</span>
               </p>
-             {chart.type === "Ingresos y egresos" ? 
+             {chart.type === "waterfall" ? 
                <TooltipProvider>
                <Tooltip>
                  <TooltipTrigger>
@@ -158,7 +165,7 @@ export default async function ReportPage({
                </Tooltip>
              </TooltipProvider> 
              :
-             chart.type === "Ventas" ? 
+             chart.type === "sales" ? 
              <TooltipProvider>
              <Tooltip>
                <TooltipTrigger>
@@ -173,7 +180,7 @@ export default async function ReportPage({
              </Tooltip>
            </TooltipProvider>
            :
-           chart.type === "Costos y gastos" ?
+           chart.type === "costs_and_expenses" ?
             <TooltipProvider>
              <Tooltip>
                <TooltipTrigger>
@@ -190,7 +197,7 @@ export default async function ReportPage({
              </Tooltip>
            </TooltipProvider>
             :
-            chart.type === "Utilidad neta" ? 
+            chart.type === "net_profit_and_margins" ? 
             
             <TooltipProvider>
              <Tooltip>
@@ -208,7 +215,7 @@ export default async function ReportPage({
              </Tooltip>
            </TooltipProvider>
            :
-           chart.type === "Márgenes" ? 
+           chart.type === "margins" ? 
            <TooltipProvider>
            <Tooltip>
              <TooltipTrigger>
@@ -225,7 +232,7 @@ export default async function ReportPage({
            </Tooltip>
          </TooltipProvider>
             : 
-            chart.type === "Gastos desglosados" ?
+            chart.type === "detailed_expenses" ?
             <TooltipProvider>
            <Tooltip>
              <TooltipTrigger>
@@ -242,10 +249,11 @@ export default async function ReportPage({
          :
          <p>Este grafico no tiene tooltip</p>
             }
-            </div>
+          </div>
             <ChartEmbed src={chart.graphy_url} />
           </div>
-          <div className="2xl:w-[40%] xl:w-[50%] xl:h-[500px] px-3 py-5">
+          <div className="lg:my-[110px] rounded-lg bg-white px-3 py-5 xl:w-[50%] 2xl:w-[40%]">
+          
             {chart.insights && (
               <div className='flex flex-col justify-between'>
                 <h3 className="mb-5 text-center text-2xl font-medium">
@@ -275,7 +283,7 @@ export default async function ReportPage({
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Recomendaciones</p> */}
           <div className="p-3 flex flex-col gap-10 mt-16">
           {report.recomendations.map((data: any, index:number) => (
-            <div key={index} className='bg-[#003E52]/10 flex items-center p-4 rounded-xl text-[#003E52]'>
+            <div key={index} className='bg-[#003E52]/10 flex flex-col p-4 rounded-xl text-[#003E52]'>
               {renderTextFromDatabase(`${data.content}`)}
             </div>
           ))}
@@ -286,9 +294,9 @@ export default async function ReportPage({
         <p className='text-[#00AE8D] font-medium'>Este análisis fue generado con asistencia de inteligencia artificial y debe ser revisado cuidadosamente antes de tomar decisiones basadas en él.</p>
         <p className='text-[#00AE8D] font-medium'>Los ingresos y gastos presentados provienen directamente de los estados de cuenta y pueden no reflejar el monto completo o los impuestos relacionados, como el IVA, de manera estrictamente correcta si estos no fueron detallados explícitamente. El presente debe de tomarse como un reporte financiero y no uno que puede usarse para la contabilidad de la empresa. Se utilizó toda la información proporcionada, en caso de haber omitido algo los reportes pueden tener resultados engañosos o erróneos.</p>
       </div>
-          <div className='mt-10'>
+          {/* <div className='mt-10'>
             <BannerReferidos text='¡Te descontamos $100 por cada negocio que invites!'/>
-          </div>
+          </div> */}
         <div className='p-8 w-full rounded-3xl max-md:rounded-2xl bg-[#003E52] flex items-center justify-between mt-10 max-md:p-4 max-md:w-[98%] max-md:mx-auto'>
           <p className='text-[#003E52]'>.</p>
           <p className={`${libreBaskerville.className} text-white text-3xl text-center max-md:text-xl`}>Nosotros a tus finanzas y tú a lo tuyo.</p>

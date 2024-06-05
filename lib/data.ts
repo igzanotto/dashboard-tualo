@@ -57,7 +57,7 @@ export async function fetchFilteredReports(
       
       .eq('id', reportId)
       .single();
-      console.log("report>>>>>>", report);
+      console.log("report>>>>>>", reportId);
       return report;
     } catch (error) {
       console.error('Failed to fetch report by id:', error);
