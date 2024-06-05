@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/button';
 import { createReport } from '@/lib/actions';
-import { SetStateAction, useState } from 'react';
+import { useState } from 'react';
 
 interface FormData {
   QA_prompt: string;
