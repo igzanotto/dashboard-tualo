@@ -294,9 +294,9 @@ export default async function ReportPage({
         <p className='text-[#00AE8D] font-medium'>Este análisis fue generado con asistencia de inteligencia artificial y debe ser revisado cuidadosamente antes de tomar decisiones basadas en él.</p>
         <p className='text-[#00AE8D] font-medium'>Los ingresos y gastos presentados provienen directamente de los estados de cuenta y pueden no reflejar el monto completo o los impuestos relacionados, como el IVA, de manera estrictamente correcta si estos no fueron detallados explícitamente. El presente debe de tomarse como un reporte financiero y no uno que puede usarse para la contabilidad de la empresa. Se utilizó toda la información proporcionada, en caso de haber omitido algo los reportes pueden tener resultados engañosos o erróneos.</p>
       </div>
-          <div className='mt-10'>
+          {/* <div className='mt-10'>
             <BannerReferidos text='¡Te descontamos $100 por cada negocio que invites!'/>
-          </div>
+          </div> */}
         <div className='p-8 w-full rounded-3xl max-md:rounded-2xl bg-[#003E52] flex items-center justify-between mt-10 max-md:p-4 max-md:w-[98%] max-md:mx-auto'>
           <p className='text-[#003E52]'>.</p>
           <p className={`${libreBaskerville.className} text-white text-3xl text-center max-md:text-xl`}>Nosotros a tus finanzas y tú a lo tuyo.</p>
