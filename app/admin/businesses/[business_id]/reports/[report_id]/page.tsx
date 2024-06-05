@@ -192,9 +192,9 @@ export default async function ReportPage({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  {chart ? (
-                    <div className='flex flex-col gap-10 w-full'>
-                      <div >
+                  {chart.graphy_url ? (
+                    <div className="flex w-full flex-col gap-10">
+                      <div>
                         <ChartEmbed src={chart.graphy_url} />
                       </div>
                       <div>
@@ -203,7 +203,7 @@ export default async function ReportPage({
                             <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
                               Análisis
                             </h3>
-                            <p className="text-lg text-[#003E52]" >
+                            <p className="text-lg text-[#003E52]">
                               {renderTextFromDatabase(chart.insights)}
                             </p>
                           </div>
@@ -217,7 +217,7 @@ export default async function ReportPage({
                       </h1>
                       <form
                         action={createChartEmbed}
-                        className="mt-10 flex flex-col gap-4 xl:w-[60%]"
+                        className="mt-10 flex flex-col gap-4"
                       >
                         <input
                           type="hidden"
@@ -234,28 +234,28 @@ export default async function ReportPage({
                           type="text"
                           name="graphy_url"
                           placeholder="Url del gráfico"
-                          className="rounded-xl p-2"
+                          className="rounded-xl p-2 w-full"
                         />
                         <button
                           type="submit"
-                          className="rounded-xl bg-[#003E52] p-3 font-medium text-white"
+                          className="rounded-xl bg-[#003E52] p-3 font-medium text-white w-full"
                         >
                           Crear gráfico
                         </button>
                       </form>
                     </div>
                   )}
-                </div>
-                {/* {chart && chart.insights && (
-                  <div className="rounded-lg bg-white px-3 py-5 xl:w-[50%] 2xl:w-[40%]">
-                    <h3 className="mb-5 text-center text-2xl font-medium">
+                {!chart.graphy_url && chart.insights && (
+                  <div className='mt-12'>
+                    <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
                       Análisis
                     </h3>
-                    <p className="text-lg">
+                    <p className="text-lg text-[#003E52]">
                       {renderTextFromDatabase(chart.insights)}
                     </p>
                   </div>
-                )} */}
+                )}
+                </div>
               </div>
             );
           })}
