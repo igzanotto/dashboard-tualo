@@ -18,6 +18,7 @@ import Link from 'next/link';
 import reporte from '../../../../../../components/images/header-reporte.png';
 import Image from 'next/image';
 import BannerSection from '@/components/bannerSection';
+import { translateChartType } from '@/lib/utils';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -126,7 +127,7 @@ export default async function ReportPage({
             </button>
           </div>
         </form>
-        <div>
+        <div className="mt-12 xl:mt-24">
           <p className="mb-4 text-2xl font-semibold text-[#003E52]">
             Metas financieras
           </p>
@@ -149,7 +150,7 @@ export default async function ReportPage({
         <div className="mb-16 mt-28">
           <BannerSection text="Resumen financiero" />
         </div>
-        <div className="flex flex-col gap-36">
+        <div className="flex flex-col gap-16 xl:gap-36">
           {chartOrder.map((type: any) => {
             const chart = orderedCharts.find(
               (chart: any) => chart.type === type,
@@ -165,7 +166,10 @@ export default async function ReportPage({
                   <div className="flex items-center gap-2">
                     <p className="my-4 text-xl font-semibold text-zinc-700 xl:text-2xl">
                       {' '}
-                      Gráfica de <span>{type}</span>
+                      Gráfica de{' '}
+                      <span className="capitalize">
+                        {translateChartType(type)}
+                      </span>
                     </p>
                     <TooltipProvider>
                       <Tooltip>
@@ -193,7 +197,9 @@ export default async function ReportPage({
                     <ChartEmbed src={chart.graphy_url} />
                   ) : (
                     <div>
-                      <h1 className="text-black">Crear Gráfico de {}</h1>
+                      <h1 className="text-black">
+                        Crear Gráfico de {translateChartType(type)}
+                      </h1>
                       <form
                         action={createChartEmbed}
                         className="mt-10 flex flex-col gap-4 xl:w-[60%]"
@@ -239,11 +245,10 @@ export default async function ReportPage({
             );
           })}
         </div>
-        
 
         <div
           id="conclusiones"
-          className="section-margin mb-24 flex flex-col gap-4"
+          className="section-margin my-28 flex flex-col gap-4"
           key={'conclusiones'}
         >
           <BannerSection text="Conclusiones financieras" />
@@ -256,37 +261,36 @@ export default async function ReportPage({
             />
             <button
               type="submit"
-              className="mt-4 rounded-lg bg-[#003E52] p-2 text-white"
+              className="mt-4 rounded-lg bg-[#003E52] p-2 text-white w-full"
             >
               Guardar cambios
             </button>
           </form>
         </div>
 
-        <form action={updateReportRecommendations}>
-          <input type="hidden" name="report_id" value={params.report_id} />
-
-          <div
-            id="recomendaciones"
-            className="section-margin flex flex-col gap-4"
-            key={'recomendaciones'}
-          >
-            <BannerSection text="Recomendaciones personalizadas" />
-            <textarea
-              name="content"
-              defaultValue={recomendations}
-              className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl"
-            />
-            <button
-              type="submit"
-              className="mt-4 rounded-lg bg-[#003E52] p-2 text-white"
-            >
-              Guardar cambios
-            </button>
-          </div>
-        </form>
-
-        
+        <BannerSection text="Recomendaciones personalizadas" />
+        <div
+          id="recomendaciones"
+          className="section-margin flex flex-col xl:gap-24 gap-20 mt-16"
+          key={'recomendaciones'}
+        >
+          {report.recomendations.map((data: any) => (
+            <form action={updateReportRecommendations} className='flex flex-col gap-4'>
+              <input type="hidden" name="report_id" value={params.report_id} />
+              <textarea
+                name="content"
+                defaultValue={data.content}
+                className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl"
+              />
+              <button
+                type="submit"
+                className="mt-4 rounded-lg bg-[#003E52] p-2 text-white"
+              >
+                Guardar cambios
+              </button>
+            </form>
+          ))}
+        </div>
       </div>
     </div>
   );
