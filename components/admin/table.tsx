@@ -1,5 +1,5 @@
 import { fetchFilteredBusiness} from '@/lib/data';
-import { BuildingOfficeIcon } from '@heroicons/react/24/outline';
+import { BriefcaseIcon, BuildingOfficeIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
 export type BussinesTableProps = {
@@ -21,7 +21,7 @@ export default async function BusinessTable({query, currentPage}:BussinesTablePr
             businesses.map(business => (
               <div key={business.id} className='border-2 border-slate-200 p-2 rounded-xl'>
                 <Link href={`/admin/businesses/${business.id}`} className='flex items-center gap-2'>
-                  <BuildingOfficeIcon className='w-7 h-7'/>
+                  <BriefcaseIcon className='w-7 h-7'/>
                   <p>{business.name}</p>
                 </Link>
               </div>

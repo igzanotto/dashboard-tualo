@@ -6,6 +6,7 @@ import {
   DocumentDuplicateIcon,
   BuildingOfficeIcon,
   DocumentIcon,
+  BriefcaseIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -17,7 +18,7 @@ const links = [
   {
     name: 'Negocios',
     href: '/admin/businesses',
-    icon: BuildingOfficeIcon,
+    icon: BriefcaseIcon,
   },
   
 ];
@@ -39,8 +40,8 @@ export default function AdminNavLinks() {
               },
             )}
           >
-            <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
+            <LinkIcon className="w-6 mx-auto" />
+            {/* <p className="xl:hidden">{link.name}</p> */}
           </Link>
         );
       })}
