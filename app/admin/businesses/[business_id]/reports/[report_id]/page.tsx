@@ -22,6 +22,7 @@ import { translateChartType } from '@/lib/utils';
 import ChartNavigation from '@/components/chart-navigation';
 import MonthButtonAdmin from '@/components/admin/monthButton';
 import MonthButtonsAdmin from '@/components/admin/monthButton';
+import { Button } from '@/components/button';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -323,12 +324,12 @@ export default async function ReportPage({
                 defaultValue={data.content}
                 className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
               />
-              <button
+              <Button
                 type="submit"
                 className="mt-4 rounded-lg bg-[#003E52] p-2 text-white"
               >
                 Guardar cambios
-              </button>
+              </Button>
             </form>
           ))}
         </div>
