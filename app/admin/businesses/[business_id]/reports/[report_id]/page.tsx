@@ -311,8 +311,9 @@ export default async function ReportPage({
           className="section-margin mt-16 flex flex-col gap-20 xl:gap-24"
           key={'recomendaciones'}
         >
-          {report.recomendations.map((data: any) => (
+          {report.recomendations.map((data: any, index: number) => (
             <form
+              key={index}
               action={updateReportRecommendations}
               className="flex flex-col gap-4"
             >
