@@ -4,6 +4,7 @@ import { Button } from '@/components/button';
 import { buildGoals } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
+import { goals_prompt, goals_transcript, goals_close } from '@/utils/prompts';
 
 interface FormData {
   goals_prompt: string;
@@ -15,11 +16,11 @@ export default function GoalsGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
 
   const [statusMessage, setStatusMessage] = useState('');
+  
   const [formData, setFormData] = useState<FormData>({
-    goals_prompt:
-      'Le pedí al emprendedor que eligiera la(s) opción(es) que más correspondieran a sus metas actuales desde el punto de vista de las finanzas de su empresa. A continuación su respuesta:',
-    goals_transcript:'definitivamente necesito vender más, no necesariamente porque sí creo que soy muy eficiente. Por otro lado, también necesito mejorar mi flujo porque tengo muy poco dinero en el banco y eso tiene que cambiar.',
-    goals_close: 'dame un resumen de esto',
+    goals_prompt,
+    goals_transcript,
+    goals_close,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -79,7 +80,10 @@ export default function GoalsGenerator({ threadId }: { threadId: any }) {
     const result = await response.json();
     console.log('Mensajes obtenidos con exito', result);
 
-    const responseBusinessResume = result.messagesData[3].content;
+    
+    const messagesData = result.messagesData;
+    const responseBusinessResume = messagesData[messagesData.length - 1]?.content;
+    
 
     if (!goals) {
       return;

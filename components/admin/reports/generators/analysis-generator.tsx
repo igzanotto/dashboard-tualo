@@ -4,6 +4,7 @@ import { Button } from '@/components/button';
 import { buildAnalysis } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
+import { analysis_prompt } from '@/utils/prompts';
 
 interface FormData {
   analysis_prompt: string;
@@ -15,16 +16,7 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
 
   const [statusMessage, setStatusMessage] = useState('');
   const [formData, setFormData] = useState<FormData>({
-    analysis_prompt:
-      `vamos con el 2do entregable: **highlights y análisis del P&L**
-      usando lo aprendido en las gráficas anteriores del 1er entregable, resume las conclusiones e insights más importantes en un análisis financiero
-      
-      toma las siguientes consideraciones para hacerlo:
-      
-      - haz 5 bullets con los highlights financieros
-      - usa ejemplos específicos para explicar tus hallazgos, mencionando métricas o números
-      - habla en un idioma natural: considera que los usuarios no tienen experiencia financiera (no uses palabras técnicas financieras como márgenes, utilidad, rentabilidad, ebitda, etc)
-      - enfócate en hacer solamente análisis, nada de recomendaciones`,
+    analysis_prompt
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -81,13 +73,14 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
     const result = await response.json();
     console.log('Mensajes obtenidos con exito', result);
 
-    const responseBusinessResume = result.messagesData[9].content;
+    const messagesData = result.messagesData;
+    const responseContent = messagesData[messagesData.length - 1]?.content;
 
     if (!analysis) {
       return;
     }
 
-    analysis.innerHTML = responseBusinessResume;
+    analysis.innerHTML = responseContent;
   };
 
   return (

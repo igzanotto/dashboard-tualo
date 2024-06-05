@@ -135,13 +135,14 @@ export default function RecomendationsGenerator({
     const result = await response.json();
     console.log('Mensajes obtenidos con exito', result);
 
-    const responseRecomendations = result.messagesData[17].content;
+    const messagesData = result.messagesData;
+    const responseContent = messagesData[messagesData.length - 1]?.content;
 
     if (!recomendations) {
       return;
     }
 
-    recomendations.innerHTML = responseRecomendations;
+    recomendations.innerHTML = responseContent;
   };
 
   const handleRetrieveThreadMessagesBullet = async (e: React.FormEvent) => {
@@ -164,13 +165,14 @@ export default function RecomendationsGenerator({
     const result = await response.json();
     console.log('Mensajes obtenidos con exito', result);
 
-    const responseRecomendations = result.messagesData[13].content;
+    const messagesData = result.messagesData;
+    const responseContent = messagesData[messagesData.length - 1]?.content;
 
     if (!bullets_response) {
       return;
     }
 
-    bullets_response.innerHTML = responseRecomendations;
+    bullets_response.innerHTML = responseContent;
   };
 
   const handleRetrieveThreadMessagesEvaluation = async (e: React.FormEvent) => {
@@ -193,13 +195,14 @@ export default function RecomendationsGenerator({
     const result = await response.json();
     console.log('Mensajes obtenidos con exito', result);
 
-    const responseRecomendations = result.messagesData[15].content;
+    const messagesData = result.messagesData;
+    const responseContent = messagesData[messagesData.length - 1]?.content;
 
     if (!evaluation_response) {
       return;
     }
 
-    evaluation_response.innerHTML = responseRecomendations;
+    evaluation_response.innerHTML = responseContent;
   };
 
   return (
@@ -350,9 +353,9 @@ export default function RecomendationsGenerator({
             />
 
             <div className="my-2 flex justify-end">
-              <button className="rounded-md bg-blue-600 px-3 py-2 text-white  disabled:opacity-50">
-                continuer con gráficos
-              </button>
+              <Button className="rounded-md bg-blue-600 px-3 py-2 text-white  disabled:opacity-50">
+                Finalizar reporte
+              </Button>
             </div>
           </div>
         </div>
