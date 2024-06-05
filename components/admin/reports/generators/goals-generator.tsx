@@ -16,6 +16,7 @@ export default function GoalsGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
 
   const [statusMessage, setStatusMessage] = useState('');
+  
   const [formData, setFormData] = useState<FormData>({
     goals_prompt,
     goals_transcript,

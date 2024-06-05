@@ -127,13 +127,14 @@ export default function CreateReportPage({ params }: { params: any }) {
           Generador de Reportes
         </h2>
         <textarea
-          name="QA_prompt"
+          name="initial_QA_prompt"
           value={formData.initial_QA_prompt}
           onChange={handleChange}
           className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
         />
         <textarea
-          name="QA_transcript"
+          name="initial_QA_transcript"
           value={formData.initial_QA_transcript}
           onChange={handleChange}
           rows={12}
@@ -142,7 +143,7 @@ export default function CreateReportPage({ params }: { params: any }) {
           placeholder=">>> ingresar el transcript del Q&A <<<"
         />
         <textarea
-          name="QA_close"
+          name="initial_QA_close"
           value={formData.initial_QA_close}
           onChange={handleChange}
           className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"

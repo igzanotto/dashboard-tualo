@@ -94,7 +94,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
       </h2>
 
       <textarea
-        name="PL_prompt"
+        name="initial_charts_prompt"
         rows={15}
         value={formData.initial_charts_prompt}
         onChange={handleChange}
