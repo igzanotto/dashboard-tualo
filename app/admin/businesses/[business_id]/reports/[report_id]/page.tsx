@@ -16,12 +16,12 @@ import BannerSection from '@/components/bannerSection';
 const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
 
 const chartOrder = [
-  'Ingresos y egresos',
-  'Ventas',
-  'Costos y gastos',
-  'Utilidad neta',
-  'Márgenes',
-  'Gastos desglosados'
+  'waterfall',
+  'sales',
+  'costs_and_expenses',
+  'net_profit_and_margins',
+  'margins',
+  'detailed_expenses',
 ];
 
 const reorderCharts = (charts:any) => {
