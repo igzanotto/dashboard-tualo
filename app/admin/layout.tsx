@@ -24,11 +24,11 @@ export default async function Layout({
   
   return (
     <div className={`flex h-screen flex-col md:flex-row md:overflow-hidden w-full`}>
-      <div className="w-full flex-none md:w-64">
+      <div className="flex-none w-[100px]">
         <AdminSideNav />
         <SideBarMobile/>
       </div>
-      <div className="md:overflow-y-auto md:px-4 w-full">{children}</div>
+      <div className="md:overflow-y-auto md:px-4 w-full px-2">{children}</div>
     </div>
   );
 }

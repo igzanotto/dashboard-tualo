@@ -40,8 +40,8 @@ export default function AdminNavLinks() {
               },
             )}
           >
-            <LinkIcon className="w-6" />
-            <p className="hidden md:block">{link.name}</p>
+            <LinkIcon className="w-6 mx-auto" />
+            {/* <p className="xl:hidden">{link.name}</p> */}
           </Link>
         );
       })}
