@@ -93,9 +93,11 @@ export default async function ReportPage({
 
   return (
     <div className='flex flex-col'>
-      <nav className="sticky top-0 z-50 flex items-center max-[1228px]:justify-center mb-10 md:gap-10 rounded-b-xl p-2 md:p-4 bg-white shadow-lg">
+      <nav className="sticky top-0 z-50 flex items-center mb-10 md:gap-10 rounded-b-xl p-2 md:p-4 bg-white shadow-lg">
         <MonthButtonsAdmin business_id={business_id}/>
-        <ChartNavigation/>
+        <div className='justify-center self-center mx-auto'>
+          <ChartNavigation/>
+        </div>
       </nav>
       <div className="flex flex-col gap-3 xl:px-2">
       <Image
