@@ -2,57 +2,57 @@
 export const initial_QA_prompt =
 'primero te daré el transcript de la sesión de Q&A que tuve con el emprendedor:';
 
-export const initial_QA_transcript = 
-`1. ¿Cómo te llamas y cuál es tu posición en la empresa?
-Ana Carolina Salcedo, dueña
-2. ¿Cuál es el nombre de tu empresa y en qué industria o sector opera?
-Amïn Condesa
-sector alimenticio
-3. Pensando en el modelo de negocios de tu empresa, ¿qué tipo de empresa tienes? Escribe solo la letra que más se ajuste a tu empresa:
-**a. Venta de bienes tangibles (como minoristas, restaurantes, o fabricantes)**
-b. Prestación de servicios (como consultoría, educación, salud)
-****c. Productos de software y tecnología (empresas como SaaS o hardware)
-d. Bienes raíces y construcción
-****e. Instituciones financieras (que ganan dinero a través de intereses de préstamos e inversiones)
-f. Empresas de energía y servicios públicos (que venden electricidad, agua, gas, etc.)
-4. ¿Podrías describir brevemente tu modelo de negocio y cómo haces dinero? ¿Qué tipo de bienes o servicios ofreces? Si son más de un bien o servicio, por favor haz una lista completa.
-Ofrezco café, pan dulce y pan salado, bebidas frías y calientes, tisanas, desayunos y tapas o sándwiches, además estoy haciendo mi nueva línea de productos: croissants rellenos (dulces y salados)
-básicamente vendemos bebidas y comida en mi cafetería
-5. ¿Podrías describir tu target de clientes? ¿A qué segmentos estás dirigido?
-doble A, no tanto triple A
-edades: quiero acaparar el mercado juvenil pero aun no lo tengo, de licenciatura en adelante
-6. Podrías describir el manejo de cuentas bancarias en tu empresa: ¿Tienen una o varias cuentas dedicadas? ¿Utilizan tarjetas de crédito de la empresa, realizan operaciones en efectivo frecuentemente, etc.? ¿Usas algún software de ventas? Si tienes más de una cuenta, haz una lista de todas mencionando el banco y qué tipo de uso le dan.
-uso un software de venta, sistema operativo, que se llama AMDIT
-hay dos cuentas bancarias: 
-- Santander: la uso para darles tarjeta a empleados y se hacen compras en Costco y Sam’s
-- Inbursa: es mi cuenta principal, y la tengo porque la terminal cobra las menores comisiones, también para compras en Walmart, la abrí en junio de este año
-opero con tarjetas de crédito, tengo terminal de Inbursa
-el efectivo que ingresamos se usa para pagar algunos insumos y caja chica
-7. ¿Tienes algún tipo de deuda o financiamiento? Si sí, describe brevemente las condiciones (plazo, fecha de contratación, monto inicial, tasa de interés, tipo de interés, quién fue el prestador, etc).
-sí, un crédito con Santander ligado a la cuenta del negocio
-monto: 1mdp
-originación: nov 2022, renovado en julio 2023
-crédito de pymes
-tasa de interés variable: me habían ofrecido 18.9% pero varía dependiendo la tasa de referencia
-me lo cobran mensualmente a mi cuenta fiscal, $25,138.34 pago cada mes de capital y el interés varía
-plazo: 48 meses a partir de julio 2023
-8. ¿Cómo describirías el nivel de estrés financiero que tu empresa está experimentando actualmente? ¿Qué lo está causando y cómo planean manejarlo?
-de agosto a septiembre hubo una variación a la baja de 10%
-de mayo a junio aprox una baja de 15%
-es decir, de mayo a septiembre, aprox ha bajado 25%
-lo está causando el estrés económico general del país, y no he tocado los precios hace un año, tengo que modificarlos y también tengo que innovar con mi nueva línea de productos y con servicio enfocado más hacia la tarde/noche (tengo bien cubierto lo de la mañana y mediodía con los productos que vendo); planeo incorporar alcohol hasta las 5pm 
-9. ¿Cuál es la meta financiera más importante para tu empresa actualmente? Por favor, elige una de las siguientes opciones, explicando porqué la elegiste.
-**a. "Necesito vender más o gastar menos": Puede ser que quieras aumentar tus ingresos, ya sea encontrando más clientes, vendiendo más productos o servicios, o reduciendo tus gastos actuales.**
-b. "Necesito más dinero en el banco": Podría ser que quieras mejorar tu flujo de efectivo o tener más ahorros para emergencias o futuras inversiones.
-c. "Necesito obtener un préstamo o encontrar inversionistas": Para algunas empresas pequeñas, un objetivo clave puede ser obtener financiamiento externo.
-**d. "Necesito crecer mi negocio": Esto podría implicar contratar más personal, abrir una nueva sucursal, o expandir tu oferta de productos o servicios.**
-e. "Otro": 
-justificación: tengo ambas, porque sí necesito cubrir tardes y noche de venta, aumentar la venta, en función de los productos que ofrezco ya que el local está muy bien ubicado y hay afluencia. hay un restaurante al lado muy grande y variado pero yo tengo lo que ellos no tienen. y claro: me encantaría replicarlo, pero lo haría con algo más establecido (con una cocina, etc), acá me aventé más pronto pero ya tengo más aprendida la línea para uno nuevo
-10. Bonus: ¿algo más que creas relevante añadir?
-- soy persona física con actividad empresarial, y manejo otros negocios (manejo departamentos en renta en Tulúm)
-- sé que lo que necesito es un menú con imágenes más atractivas y que el cliente vea lo que vendo, que sea vistoso y que le de opciones al cliente para decidir
-- necesito saber los costos que varían de mis recetas para en función a eso ir variando los precios de mis productos, porque sé que ahorita ya me rebasaron los costos vs mis precios
-- necesito llevar un inventario más estrictamente para que genere la menor merma, un control de inventarios`;
+export const initial_QA_transcript = ``
+// `1. ¿Cómo te llamas y cuál es tu posición en la empresa?
+// Ana Carolina Salcedo, dueña
+// 2. ¿Cuál es el nombre de tu empresa y en qué industria o sector opera?
+// Amïn Condesa
+// sector alimenticio
+// 3. Pensando en el modelo de negocios de tu empresa, ¿qué tipo de empresa tienes? Escribe solo la letra que más se ajuste a tu empresa:
+// **a. Venta de bienes tangibles (como minoristas, restaurantes, o fabricantes)**
+// b. Prestación de servicios (como consultoría, educación, salud)
+// ****c. Productos de software y tecnología (empresas como SaaS o hardware)
+// d. Bienes raíces y construcción
+// ****e. Instituciones financieras (que ganan dinero a través de intereses de préstamos e inversiones)
+// f. Empresas de energía y servicios públicos (que venden electricidad, agua, gas, etc.)
+// 4. ¿Podrías describir brevemente tu modelo de negocio y cómo haces dinero? ¿Qué tipo de bienes o servicios ofreces? Si son más de un bien o servicio, por favor haz una lista completa.
+// Ofrezco café, pan dulce y pan salado, bebidas frías y calientes, tisanas, desayunos y tapas o sándwiches, además estoy haciendo mi nueva línea de productos: croissants rellenos (dulces y salados)
+// básicamente vendemos bebidas y comida en mi cafetería
+// 5. ¿Podrías describir tu target de clientes? ¿A qué segmentos estás dirigido?
+// doble A, no tanto triple A
+// edades: quiero acaparar el mercado juvenil pero aun no lo tengo, de licenciatura en adelante
+// 6. Podrías describir el manejo de cuentas bancarias en tu empresa: ¿Tienen una o varias cuentas dedicadas? ¿Utilizan tarjetas de crédito de la empresa, realizan operaciones en efectivo frecuentemente, etc.? ¿Usas algún software de ventas? Si tienes más de una cuenta, haz una lista de todas mencionando el banco y qué tipo de uso le dan.
+// uso un software de venta, sistema operativo, que se llama AMDIT
+// hay dos cuentas bancarias: 
+// - Santander: la uso para darles tarjeta a empleados y se hacen compras en Costco y Sam’s
+// - Inbursa: es mi cuenta principal, y la tengo porque la terminal cobra las menores comisiones, también para compras en Walmart, la abrí en junio de este año
+// opero con tarjetas de crédito, tengo terminal de Inbursa
+// el efectivo que ingresamos se usa para pagar algunos insumos y caja chica
+// 7. ¿Tienes algún tipo de deuda o financiamiento? Si sí, describe brevemente las condiciones (plazo, fecha de contratación, monto inicial, tasa de interés, tipo de interés, quién fue el prestador, etc).
+// sí, un crédito con Santander ligado a la cuenta del negocio
+// monto: 1mdp
+// originación: nov 2022, renovado en julio 2023
+// crédito de pymes
+// tasa de interés variable: me habían ofrecido 18.9% pero varía dependiendo la tasa de referencia
+// me lo cobran mensualmente a mi cuenta fiscal, $25,138.34 pago cada mes de capital y el interés varía
+// plazo: 48 meses a partir de julio 2023
+// 8. ¿Cómo describirías el nivel de estrés financiero que tu empresa está experimentando actualmente? ¿Qué lo está causando y cómo planean manejarlo?
+// de agosto a septiembre hubo una variación a la baja de 10%
+// de mayo a junio aprox una baja de 15%
+// es decir, de mayo a septiembre, aprox ha bajado 25%
+// lo está causando el estrés económico general del país, y no he tocado los precios hace un año, tengo que modificarlos y también tengo que innovar con mi nueva línea de productos y con servicio enfocado más hacia la tarde/noche (tengo bien cubierto lo de la mañana y mediodía con los productos que vendo); planeo incorporar alcohol hasta las 5pm 
+// 9. ¿Cuál es la meta financiera más importante para tu empresa actualmente? Por favor, elige una de las siguientes opciones, explicando porqué la elegiste.
+// **a. "Necesito vender más o gastar menos": Puede ser que quieras aumentar tus ingresos, ya sea encontrando más clientes, vendiendo más productos o servicios, o reduciendo tus gastos actuales.**
+// b. "Necesito más dinero en el banco": Podría ser que quieras mejorar tu flujo de efectivo o tener más ahorros para emergencias o futuras inversiones.
+// c. "Necesito obtener un préstamo o encontrar inversionistas": Para algunas empresas pequeñas, un objetivo clave puede ser obtener financiamiento externo.
+// **d. "Necesito crecer mi negocio": Esto podría implicar contratar más personal, abrir una nueva sucursal, o expandir tu oferta de productos o servicios.**
+// e. "Otro": 
+// justificación: tengo ambas, porque sí necesito cubrir tardes y noche de venta, aumentar la venta, en función de los productos que ofrezco ya que el local está muy bien ubicado y hay afluencia. hay un restaurante al lado muy grande y variado pero yo tengo lo que ellos no tienen. y claro: me encantaría replicarlo, pero lo haría con algo más establecido (con una cocina, etc), acá me aventé más pronto pero ya tengo más aprendida la línea para uno nuevo
+// 10. Bonus: ¿algo más que creas relevante añadir?
+// - soy persona física con actividad empresarial, y manejo otros negocios (manejo departamentos en renta en Tulúm)
+// - sé que lo que necesito es un menú con imágenes más atractivas y que el cliente vea lo que vendo, que sea vistoso y que le de opciones al cliente para decidir
+// - necesito saber los costos que varían de mis recetas para en función a eso ir variando los precios de mis productos, porque sé que ahorita ya me rebasaron los costos vs mis precios
+// - necesito llevar un inventario más estrictamente para que genere la menor merma, un control de inventarios`;
 
 export const initial_QA_close = 
 'si te queda claro, hazme un resumen de esto y pídeme la información de sus metas financieras';
@@ -70,8 +70,8 @@ c. "Necesito obtener un préstamo o encontrar inversores": Para algunas empresas
 d. "Necesito crecer mi negocio": Esto podría implicar contratar más personal, abrir una nueva sucursal, o expandir tu oferta de productos o servicios.
 e. "Otro":`;
 
-export const goals_transcript =
-`definitivamente necesito vender más, no necesariamente porque sí creo que soy muy eficiente. Por otro lado, también necesito mejorar mi flujo porque tengo muy poco dinero en el banco y eso tiene que cambiar.`;
+export const goals_transcript =``
+// `definitivamente necesito vender más, no necesariamente porque sí creo que soy muy eficiente. Por otro lado, también necesito mejorar mi flujo porque tengo muy poco dinero en el banco y eso tiene que cambiar.`;
 
 export const goals_close =
 `si te queda claro, dame un resumen de esto y pídeme su P&L`;
@@ -81,37 +81,37 @@ export const goals_close =
 export const initial_PL_prompt =
 'A continuación una tabla con su P&L:';
 
-export const initial_PL_transcript =
-`Estado de Resultados, moneda: MXN, año: 2023-2024																													
-    Categoria principal	sub categoria		ene 2023	feb 2023	mar 2023	abr 2023	may 2023	jun 2023	jul 2023	ago 2023	sep 2023	oct 2023	nov 2023	dic 2023	ene 2024	feb 2024	mar 2024	abr 2024	may 2024	jun 2024	jul 2024	ago 2024	sep 2024	oct 2024	nov 2024	dic 2024		 Año completo 2023	 % ventas
-    Venta Total	Venta Total		 $ 315,066 	 $ 260,997 	 $ 286,362 	 $ 321,005 	 $ 394,868 	 $ 386,656 	 $ 278,755 	 $ 338,363 	 $ 262,182 	 $ 412,303 	 $ 558,354 	 $ 500,800 	 $ 366,833 	 $ 426,633 	 $ 450,989 	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -		 $ 5,560,166 	 $ 10,805,267 
-    Venta Total	Venta tarjeta		 $ 255,565 	 $ 201,845 	 $ 226,983 	 $ 277,818 	 $ 350,758 	 $ 334,893 	 $ 246,047 	 $ 290,893 	 $ 227,034 	 $ 378,471 	 $ 504,935 	 $ 492,955 	 $ 326,803 	 $ 389,361 	 $ 393,652 											 $ 4,898,012 	 $ 9,540,458 
-    Venta Total	Venta efectivo		 $ 27,169 	 $ 37,702 	 $ 48,225 	 $ 43,187 	 $ 44,111 	 $ 44,763 	 $ 32,709 	 $ 47,470 	 $ 35,148 	 $ 33,833 	 $ 53,420 	 $ 7,845 	 $ 40,030 	 $ 37,272 	 $ 57,338 											 $ 590,219 	 $ 1,153,269 
-    Venta Total	Franquicia		$32,332	$21,450	$11,154	$ -	$ -	$7,000	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -											$71,936	$111,540
+export const initial_PL_transcript =``;
+// `Estado de Resultados, moneda: MXN, año: 2023-2024																													
+//     Categoria principal	sub categoria		ene 2023	feb 2023	mar 2023	abr 2023	may 2023	jun 2023	jul 2023	ago 2023	sep 2023	oct 2023	nov 2023	dic 2023	ene 2024	feb 2024	mar 2024	abr 2024	may 2024	jun 2024	jul 2024	ago 2024	sep 2024	oct 2024	nov 2024	dic 2024		 Año completo 2023	 % ventas
+//     Venta Total	Venta Total		 $ 315,066 	 $ 260,997 	 $ 286,362 	 $ 321,005 	 $ 394,868 	 $ 386,656 	 $ 278,755 	 $ 338,363 	 $ 262,182 	 $ 412,303 	 $ 558,354 	 $ 500,800 	 $ 366,833 	 $ 426,633 	 $ 450,989 	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -		 $ 5,560,166 	 $ 10,805,267 
+//     Venta Total	Venta tarjeta		 $ 255,565 	 $ 201,845 	 $ 226,983 	 $ 277,818 	 $ 350,758 	 $ 334,893 	 $ 246,047 	 $ 290,893 	 $ 227,034 	 $ 378,471 	 $ 504,935 	 $ 492,955 	 $ 326,803 	 $ 389,361 	 $ 393,652 											 $ 4,898,012 	 $ 9,540,458 
+//     Venta Total	Venta efectivo		 $ 27,169 	 $ 37,702 	 $ 48,225 	 $ 43,187 	 $ 44,111 	 $ 44,763 	 $ 32,709 	 $ 47,470 	 $ 35,148 	 $ 33,833 	 $ 53,420 	 $ 7,845 	 $ 40,030 	 $ 37,272 	 $ 57,338 											 $ 590,219 	 $ 1,153,269 
+//     Venta Total	Franquicia		$32,332	$21,450	$11,154	$ -	$ -	$7,000	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -											$71,936	$111,540
                                                               
-    Costos Totales	Costos Totales		-$ 171,983 	-$ 87,910 	-$ 63,531 	-$ 91,027 	-$ 138,776 	-$ 145,540 	-$ 85,932 	-$ 46,950 	-$ 63,709 	-$ 119,336 	-$ 180,471 	-$ 175,816 	-$ 122,719 	-$ 111,833 	-$ 190,966 	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -		-$ 1,796,498 	-$ 3,421,013 
-    Costos Totales	Productos		-$ 130,924 	-$ 79,097 	-$ 48,420 	-$ 70,191 	-$ 121,761 	-$ 111,624 	-$ 71,983 	-$ 27,643 	-$ 40,810 	-$ 94,372 	-$ 158,435 	-$ 117,120 	-$ 82,120 	-$ 83,304 	-$ 172,760 											-$ 1,410,563 	-$ 2,690,203 
-    Costos Totales	Envíos		-$ 18,600 	-$ 2,000 	-$ 5,000 	-$ 11,700 	-$ 4,500 	-$ 21,435 	-$ 4,900 	-$ 7,551 	-$ 13,200 	-$ 9,050 	-$ 5,750 	-$ 26,670 	-$ 10,425 	-$ 5,540 	-$ 6,689 											-$ 153,010 	-$ 287,419 
-    Costos Totales	Material		-$ 14,792 	-$ 758 	-$ 3,302 	-$ 802 	-$ 1,992 	-$ 2,435 	-$ 1,470 	-$ 3,028 	-$ 2,888 	-$ 489 	-$ 982 	-$ 17,291 	-$ 22,319 	-$ 5,716 	-$ 51 											-$ 78,314 	-$ 141,836 
-    Costos Totales	Terminal		-$7,667	-$6,055	-$6,809	-$8,335	-$10,523	-$10,047	-$7,580	-$8,727	-$6,811	-$15,425	-$15,303	-$14,735	-$7,855	-$17,272	-$11,466											-$154,611	-$301,554
+//     Costos Totales	Costos Totales		-$ 171,983 	-$ 87,910 	-$ 63,531 	-$ 91,027 	-$ 138,776 	-$ 145,540 	-$ 85,932 	-$ 46,950 	-$ 63,709 	-$ 119,336 	-$ 180,471 	-$ 175,816 	-$ 122,719 	-$ 111,833 	-$ 190,966 	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -		-$ 1,796,498 	-$ 3,421,013 
+//     Costos Totales	Productos		-$ 130,924 	-$ 79,097 	-$ 48,420 	-$ 70,191 	-$ 121,761 	-$ 111,624 	-$ 71,983 	-$ 27,643 	-$ 40,810 	-$ 94,372 	-$ 158,435 	-$ 117,120 	-$ 82,120 	-$ 83,304 	-$ 172,760 											-$ 1,410,563 	-$ 2,690,203 
+//     Costos Totales	Envíos		-$ 18,600 	-$ 2,000 	-$ 5,000 	-$ 11,700 	-$ 4,500 	-$ 21,435 	-$ 4,900 	-$ 7,551 	-$ 13,200 	-$ 9,050 	-$ 5,750 	-$ 26,670 	-$ 10,425 	-$ 5,540 	-$ 6,689 											-$ 153,010 	-$ 287,419 
+//     Costos Totales	Material		-$ 14,792 	-$ 758 	-$ 3,302 	-$ 802 	-$ 1,992 	-$ 2,435 	-$ 1,470 	-$ 3,028 	-$ 2,888 	-$ 489 	-$ 982 	-$ 17,291 	-$ 22,319 	-$ 5,716 	-$ 51 											-$ 78,314 	-$ 141,836 
+//     Costos Totales	Terminal		-$7,667	-$6,055	-$6,809	-$8,335	-$10,523	-$10,047	-$7,580	-$8,727	-$6,811	-$15,425	-$15,303	-$14,735	-$7,855	-$17,272	-$11,466											-$154,611	-$301,554
                                                               
-    Cálculo de utilidad	Utilidad Bruta (1)		$143,082	$173,087	$222,830	$229,978	$256,093	$241,116	$192,823	$291,413	$198,473	$292,968	$377,883	$324,984	$244,114	$314,800	$260,024	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -		$3,188,845	
-    cálculo de márgen	Margen Bruto (1)		45.40%	66.30%	77.80%	71.60%	64.90%	62.40%	69.20%	86.10%	75.70%	71.10%	67.70%	64.90%	66.50%	73.80%	57.70%											68.10%	
+//     Cálculo de utilidad	Utilidad Bruta (1)		$143,082	$173,087	$222,830	$229,978	$256,093	$241,116	$192,823	$291,413	$198,473	$292,968	$377,883	$324,984	$244,114	$314,800	$260,024	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -		$3,188,845	
+//     cálculo de márgen	Margen Bruto (1)		45.40%	66.30%	77.80%	71.60%	64.90%	62.40%	69.20%	86.10%	75.70%	71.10%	67.70%	64.90%	66.50%	73.80%	57.70%											68.10%	
                                                               
-    Gastos Totales	Gastos Totales		-$ 162,335 	-$ 152,290 	-$ 152,818 	-$ 164,831 	-$ 155,307 	-$ 171,168 	-$ 240,254 	-$ 192,495 	-$ 193,647 	-$ 204,967 	-$ 192,766 	-$ 245,399 	-$ 222,459 	-$ 195,074 	-$ 218,902 	 $ -   	 $ -   	 $ -   	 $ -   	 $ -   	 $ -   	 $ -   	 $ -   	 $ -   		-$ 2,864,713 	-$ 5,567,091 
-    Gastos Totales	Sueldo Empleados		-$ 49,600 	-$ 33,850 	-$ 37,440 	-$ 29,180 	-$ 42,740 	-$ 42,800 	-$ 58,710 	-$ 39,440 	-$ 47,022 	-$ 53,977 	-$ 49,434 	-$ 73,057 	-$ 74,161 	-$ 44,737 	-$ 48,564 											-$ 724,712 	-$ 1,399,824 
-    Gastos Totales	Renta		-$ 47,150 	-$ 47,150 	-$ 47,150 	-$ 47,150 	-$ 48,150 	-$ 48,150 	-$ 48,150 	-$ 53,625 	-$ 51,983 	-$ 52,800 	-$ 52,813 	-$ 53,185 	-$ 52,993 	-$ 53,993 	-$ 53,993 											-$ 758,433 	-$ 1,469,715 
-    Gastos Totales	Sueldo Emprendedor		-$ 60,000 	-$ 60,000 	-$ 60,000 	-$ 61,942 	-$ 60,000 	-$ 70,000 	-$ 70,000 	-$ 70,000 	-$ 70,000 	-$ 70,000 	-$ 75,000 	-$ 105,000 	-$ 80,000 	-$ 80,000 	-$ 100,000 											-$ 1,091,942 	-$ 2,123,884 
-    Gastos Totales	Marketing		-$ 557 	-$ 5,420 	-$ 350 	-$ 946 	-$ 545 	-$ 2,124 	-$ 39,414 	-$ 20,915 	-$ 1,890 	-$ 6,876 	-$ 5,622 	-$ 3,631 	-$ 2,223 	-$ 2,479 	-$ 429 											-$ 93,421 	-$ 186,285 
-    Gastos Totales	Mantenimiento		-$ 200 	-$ 2,770 	-$ 358 	-$ 5,464 	-$ 435 	-$ 1,960 	-$ 15,966 	-$ 4,529 	-$ 1,310 	-$ 4,879 	-$ 200 	 $ -	-$ 1,900 	-$ 429 	-$ 1,020 											-$ 41,419 	-$ 82,639 
-    Gastos Totales	Servicios		-$ 1,628 	-$ 3,322 	-$ 2,884 	-$ 4,727 	-$ 1,852 	-$ 2,178 	-$ 4,197 	-$ 3,370 	-$ 3,160 	-$ 3,558 	-$ 2,667 	-$ 4,618 	-$ 3,285 	-$ 4,216 	-$ 2,954 											-$ 48,616 	-$ 95,604 
-    Gastos Totales	Tecnología		 $ -	 $ -	 $ -	 $ -	-$ 500 	 $ -	 $ -	 $ -	 $ -	 $ -	-$ 411 	 $ -	 $ -	-$ 757 	 $ -											-$ 1,668 	-$ 3,336 
-    Gastos Totales	Gastos Administrativos		-$ 600 	-$ 600 	-$ 600 	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	-$ 800 	-$ 800 	-$ 800 	-$ 1,199 	-$ 1,199 	-$ 800 											-$ 7,398 	-$ 14,196 
-    Gastos Totales	Transporte		-$ 400 	-$ 288 	-$ 1,600 	-$ 12,912 	-$ 356 	-$ 2,132 	-$ 2,170 	 $ -	-$ 11,350 	-$ 6,494 	-$ 658 	-$ 657 	-$ 6,004 	-$ 1,850 	-$ 8,457 											-$ 55,328 	-$ 110,256 
-    Gastos Totales	Otros Gastos		-$2,200	$1,109	-$2,435	-$2,510	-$729	-$1,824	-$1,647	-$616	-$6,933	-$5,584	-$5,161	-$4,451	-$695	-$5,415	-$2,686											-$41,776	-$81,352
+//     Gastos Totales	Gastos Totales		-$ 162,335 	-$ 152,290 	-$ 152,818 	-$ 164,831 	-$ 155,307 	-$ 171,168 	-$ 240,254 	-$ 192,495 	-$ 193,647 	-$ 204,967 	-$ 192,766 	-$ 245,399 	-$ 222,459 	-$ 195,074 	-$ 218,902 	 $ -   	 $ -   	 $ -   	 $ -   	 $ -   	 $ -   	 $ -   	 $ -   	 $ -   		-$ 2,864,713 	-$ 5,567,091 
+//     Gastos Totales	Sueldo Empleados		-$ 49,600 	-$ 33,850 	-$ 37,440 	-$ 29,180 	-$ 42,740 	-$ 42,800 	-$ 58,710 	-$ 39,440 	-$ 47,022 	-$ 53,977 	-$ 49,434 	-$ 73,057 	-$ 74,161 	-$ 44,737 	-$ 48,564 											-$ 724,712 	-$ 1,399,824 
+//     Gastos Totales	Renta		-$ 47,150 	-$ 47,150 	-$ 47,150 	-$ 47,150 	-$ 48,150 	-$ 48,150 	-$ 48,150 	-$ 53,625 	-$ 51,983 	-$ 52,800 	-$ 52,813 	-$ 53,185 	-$ 52,993 	-$ 53,993 	-$ 53,993 											-$ 758,433 	-$ 1,469,715 
+//     Gastos Totales	Sueldo Emprendedor		-$ 60,000 	-$ 60,000 	-$ 60,000 	-$ 61,942 	-$ 60,000 	-$ 70,000 	-$ 70,000 	-$ 70,000 	-$ 70,000 	-$ 70,000 	-$ 75,000 	-$ 105,000 	-$ 80,000 	-$ 80,000 	-$ 100,000 											-$ 1,091,942 	-$ 2,123,884 
+//     Gastos Totales	Marketing		-$ 557 	-$ 5,420 	-$ 350 	-$ 946 	-$ 545 	-$ 2,124 	-$ 39,414 	-$ 20,915 	-$ 1,890 	-$ 6,876 	-$ 5,622 	-$ 3,631 	-$ 2,223 	-$ 2,479 	-$ 429 											-$ 93,421 	-$ 186,285 
+//     Gastos Totales	Mantenimiento		-$ 200 	-$ 2,770 	-$ 358 	-$ 5,464 	-$ 435 	-$ 1,960 	-$ 15,966 	-$ 4,529 	-$ 1,310 	-$ 4,879 	-$ 200 	 $ -	-$ 1,900 	-$ 429 	-$ 1,020 											-$ 41,419 	-$ 82,639 
+//     Gastos Totales	Servicios		-$ 1,628 	-$ 3,322 	-$ 2,884 	-$ 4,727 	-$ 1,852 	-$ 2,178 	-$ 4,197 	-$ 3,370 	-$ 3,160 	-$ 3,558 	-$ 2,667 	-$ 4,618 	-$ 3,285 	-$ 4,216 	-$ 2,954 											-$ 48,616 	-$ 95,604 
+//     Gastos Totales	Tecnología		 $ -	 $ -	 $ -	 $ -	-$ 500 	 $ -	 $ -	 $ -	 $ -	 $ -	-$ 411 	 $ -	 $ -	-$ 757 	 $ -											-$ 1,668 	-$ 3,336 
+//     Gastos Totales	Gastos Administrativos		-$ 600 	-$ 600 	-$ 600 	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	-$ 800 	-$ 800 	-$ 800 	-$ 1,199 	-$ 1,199 	-$ 800 											-$ 7,398 	-$ 14,196 
+//     Gastos Totales	Transporte		-$ 400 	-$ 288 	-$ 1,600 	-$ 12,912 	-$ 356 	-$ 2,132 	-$ 2,170 	 $ -	-$ 11,350 	-$ 6,494 	-$ 658 	-$ 657 	-$ 6,004 	-$ 1,850 	-$ 8,457 											-$ 55,328 	-$ 110,256 
+//     Gastos Totales	Otros Gastos		-$2,200	$1,109	-$2,435	-$2,510	-$729	-$1,824	-$1,647	-$616	-$6,933	-$5,584	-$5,161	-$4,451	-$695	-$5,415	-$2,686											-$41,776	-$81,352
                                                               
-    Cálculo de utilidad	Utilidad Operativa (2)		-$19,253	$20,797	$70,012	$65,147	$100,786	$69,948	-$47,431	$98,919	$4,825	$88,000	$185,117	$79,584	$21,656	$119,726	$41,121	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -		$738,108	
-    cálculo de márgen	Margen Operativo (2)		-6.10%	8.00%	24.40%	20.30%	25.50%	18.10%	-17.00%	29.20%	1.80%	21.30%	33.20%	15.90%	5.90%	28.10%	9.10%											15.80%	`;
+//     Cálculo de utilidad	Utilidad Operativa (2)		-$19,253	$20,797	$70,012	$65,147	$100,786	$69,948	-$47,431	$98,919	$4,825	$88,000	$185,117	$79,584	$21,656	$119,726	$41,121	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -	$ -		$738,108	
+//     cálculo de márgen	Margen Operativo (2)		-6.10%	8.00%	24.40%	20.30%	25.50%	18.10%	-17.00%	29.20%	1.80%	21.30%	33.20%	15.90%	5.90%	28.10%	9.10%											15.80%	`;
 
 export const initial_PL_close =
 'si te queda claro, respóndeme solamente con un resumen que sintetice lo anterior y pídeme siguientes instrucciones';
