@@ -21,11 +21,11 @@ export default async function Layout({
   }
   
   return (
-    <div className={`flex h-screen flex-col md:flex-row md:overflow-hidden`}>
+    <div className={`flex h-screen flex-col md:flex-row md:overflow-hidden w-full`}>
       <div className="w-full flex-none md:w-64">
         <AdminSideNav />
       </div>
-      <div className="md:overflow-y-auto md:p-4">{children}</div>
+      <div className="md:overflow-y-auto md:p-4 w-full">{children}</div>
     </div>
   );
 }

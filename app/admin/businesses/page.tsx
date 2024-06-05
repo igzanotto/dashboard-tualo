@@ -18,7 +18,7 @@ export default async function BusinessesPage({searchParams,}: {searchParams?: { 
   const totalPagesOrDefault = totalPages || 0;
   
   return (
-    <div className="w-full">
+    <div className="w-full text-[#003E52]">
       <div className="flex w-full items-center justify-between">
         <h1 className={`text-2xl`}>Negocios</h1>
       </div>

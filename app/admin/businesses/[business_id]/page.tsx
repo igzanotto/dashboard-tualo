@@ -4,6 +4,13 @@ import AddIcon from '@/components/icons/AddIcon';
 import { InvoicesTableSkeleton } from '@/components/skeletons';
 import Link from 'next/link';
 import { Suspense } from 'react';
+import { Libre_Baskerville } from 'next/font/google';
+
+
+const libreBaskerville = Libre_Baskerville({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 interface BusinessPageProps {
   params: {
@@ -25,8 +32,8 @@ export default async function BusinessPage({
   const business = await fetchBusinessById(business_id);
 
   return (
-    <div className="flex flex-col gap-3">
-      <h1 className="text-xl md:text-2xl xl:text-5xl">{business.name}</h1>
+    <div className="flex flex-col gap-3 text-[#003E52]">
+      <h1 className={`text-xl md:text-2xl xl:text-5xl text-[#003E52] ${libreBaskerville.className}`}>{business.name}</h1>
       <p>{business.description}</p>
       <div className="mt-10 flex flex-col">
         <div className="mb-4 flex items-center justify-between">
