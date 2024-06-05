@@ -117,7 +117,7 @@ export default async function ReportPage({
             <textarea
               name="business_resume"
               defaultValue={report.business_resume}
-              className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl"
+              className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl text-[#003E52]"
             />
             <button
               type="submit"
@@ -136,7 +136,7 @@ export default async function ReportPage({
             <textarea
               name="goals"
               defaultValue={report.goals}
-              className="h-[300px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl"
+              className="h-[300px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl text-[#003E52]"
             />
             <button
               type="submit"
@@ -157,17 +157,16 @@ export default async function ReportPage({
             );
             return (
               <div
-                className={`section-margin flex items-center justify-between gap-10 rounded-xl bg-[#252525]/10 px-3 py-4 max-xl:flex-col 
-                2xl:px-7`}
+                className={`section-margin flex items-center justify-between gap-10 rounded-xl bg-[#252525]/10 px-3 py-4 max-xl:flex-col `}
                 id={type}
                 key={type}
               >
-                <div className="max-xl:w-full xl:w-[50%] 2xl:w-[50%]">
+                <div className="">
                   <div className="flex items-center gap-2">
-                    <p className="my-4 text-xl font-semibold text-zinc-700 xl:text-2xl">
+                    <p className="my-4 text-xl font-semibold text-[#003E52] xl:text-2xl">
                       {' '}
                       Gráfica de{' '}
-                      <span className="capitalize">
+                      <span className="capitalize text-[#003E52]">
                         {translateChartType(type)}
                       </span>
                     </p>
@@ -194,7 +193,23 @@ export default async function ReportPage({
                     </TooltipProvider>
                   </div>
                   {chart ? (
-                    <ChartEmbed src={chart.graphy_url} />
+                    <div className='flex flex-col gap-10 w-full'>
+                      <div >
+                        <ChartEmbed src={chart.graphy_url} />
+                      </div>
+                      <div>
+                        {chart && chart.insights && (
+                          <div>
+                            <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
+                              Análisis
+                            </h3>
+                            <p className="text-lg text-[#003E52]" >
+                              {renderTextFromDatabase(chart.insights)}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   ) : (
                     <div>
                       <h1 className="text-black">
@@ -231,7 +246,7 @@ export default async function ReportPage({
                     </div>
                   )}
                 </div>
-                {chart && chart.insights && (
+                {/* {chart && chart.insights && (
                   <div className="rounded-lg bg-white px-3 py-5 xl:w-[50%] 2xl:w-[40%]">
                     <h3 className="mb-5 text-center text-2xl font-medium">
                       Análisis
@@ -240,7 +255,7 @@ export default async function ReportPage({
                       {renderTextFromDatabase(chart.insights)}
                     </p>
                   </div>
-                )}
+                )} */}
               </div>
             );
           })}
@@ -257,7 +272,7 @@ export default async function ReportPage({
             <textarea
               name="analysis"
               defaultValue={report.analysis}
-              className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl"
+              className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl text-[#003E52]"
             />
             <button
               type="submit"
@@ -280,7 +295,7 @@ export default async function ReportPage({
               <textarea
                 name="content"
                 defaultValue={data.content}
-                className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl"
+                className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl text-[#003E52]"
               />
               <button
                 type="submit"
