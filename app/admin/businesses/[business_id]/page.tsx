@@ -30,6 +30,8 @@ export default async function BusinessPage({
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
   const business = await fetchBusinessById(business_id);
+  
+  
 
   return (
     <div className="flex flex-col gap-3 text-[#003E52]">

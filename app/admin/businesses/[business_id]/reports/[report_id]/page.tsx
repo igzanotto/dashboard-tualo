@@ -11,7 +11,7 @@ import {
   updateReport,
   updateReportRecommendations,
 } from '@/lib/actions';
-import { fetchReportById } from '@/lib/data';
+import { fetchBusinessById, fetchReportById, fetchReportsByBusiness } from '@/lib/data';
 import { InfoIcon } from 'lucide-react';
 import { Libre_Baskerville } from 'next/font/google';
 import Link from 'next/link';
@@ -19,6 +19,9 @@ import reporte from '../../../../../../components/images/header-reporte.png';
 import Image from 'next/image';
 import BannerSection from '@/components/bannerSection';
 import { translateChartType } from '@/lib/utils';
+import ChartNavigation from '@/components/chart-navigation';
+import MonthButtonAdmin from '@/components/admin/monthButton';
+import MonthButtonsAdmin from '@/components/admin/monthButton';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -40,13 +43,20 @@ const reorderCharts = (charts: any) => {
   });
 };
 
+
+
+
 export default async function ReportPage({
   params,
 }: {
   params: { report_id: string; id: string; business_id: string; month: string };
 }) {
   const report = await fetchReportById(params.report_id);
-  const recomendations = report.recomendations.map((data: any) => data.content);
+  console.log(report);
+  
+  const { business_id } = params;
+  
+  
 
   const orderedCharts = reorderCharts(report.charts);
 
@@ -80,8 +90,14 @@ export default async function ReportPage({
     return <>{formattedParagraphs}</>;
   };
 
+
   return (
-    <div className="flex flex-col gap-3 xl:px-2">
+    <div className='flex flex-col'>
+      <nav className="sticky top-0 z-50 flex items-center max-[1228px]:justify-center mb-10 md:gap-10 rounded-b-xl p-2 md:p-4 bg-white shadow-lg">
+        <MonthButtonsAdmin business_id={business_id}/>
+        <ChartNavigation/>
+      </nav>
+      <div className="flex flex-col gap-3 xl:px-2">
       <Image
         width={3000}
         height={3000}
@@ -314,6 +330,7 @@ export default async function ReportPage({
           ))}
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -1,6 +1,8 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import AdminSideNav from '@/components/admin/admin-sidenav';
+import SideBarMobile from '@/components/admin/sidebar-mobile';
+import ChartNavigation from '@/components/chart-navigation';
 
 export default async function Layout({
   children,
@@ -24,8 +26,9 @@ export default async function Layout({
     <div className={`flex h-screen flex-col md:flex-row md:overflow-hidden w-full`}>
       <div className="w-full flex-none md:w-64">
         <AdminSideNav />
+        <SideBarMobile/>
       </div>
-      <div className="md:overflow-y-auto md:p-4 w-full">{children}</div>
+      <div className="md:overflow-y-auto md:px-4 w-full">{children}</div>
     </div>
   );
 }

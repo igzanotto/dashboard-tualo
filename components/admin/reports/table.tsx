@@ -10,6 +10,8 @@ type ReportsTableProps = {
 
 export default async function ReportsTable({ business_id}:ReportsTableProps) {
   const reports = await fetchReportsByBusiness(business_id)
+  console.log(reports);
+  
   
   return (
     <div className="flow-root">
