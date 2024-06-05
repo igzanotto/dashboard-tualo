@@ -12,12 +12,12 @@ import Link from 'next/link';
 
 
 const chartOrder = [
-  'Ingresos y egresos',
-  'Ventas',
-  'Costos y gastos',
-  'Utilidad neta',
-  'Márgenes',
-  'Gastos desglosados'
+  'waterfall',
+  'sales',
+  'costs_and_expenses',
+  'net_profit_and_margins',
+  'margins',
+  'detailed_expenses'
 ];
 
 const reorderCharts = (charts:any) => {
@@ -153,17 +153,17 @@ export default async function ReportPage({
       <div
         className={`section-margin flex items-center justify-between gap-10 rounded-xl px-3 py-4 max-xl:flex-col 2xl:px-7 
         ${
-          type === 'Costos y gastos'
+          type === 'costs_and_expenses'
             ? 'bg-[rgba(255,0,0,0.07046568627450978)]'
-            : type === 'Ventas'
+            : type === 'sales'
             ? 'bg-[rgba(0,255,0,0.1)]'
-            : type === 'Utilidad neta y margen neto'
+            : type === 'net_profit_and_margins'
             ? 'bg-[rgba(163,98,238,0.1)]'
-            : type === 'Márgenes'
+            : type === 'margins'
             ? 'bg-[rgba(219,103,255,0.1)]'
-            : type === 'Gastos desglosados'
+            : type === 'detailed_expenses'
             ? 'bg-[rgba(248,222,103,0.1)]'
-            : type === 'Cascada P&L'
+            : type === 'waterfall'
             ? 'bg-[rgba(166,166,166,0.1)]'
             : 'bg-gray-100'
         }`}

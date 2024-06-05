@@ -3,17 +3,19 @@ import { PowerIcon } from '@heroicons/react/24/outline';
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import AdminNavLinks from './admin-nav-links';
+import LogoScrolled from '../icons/LogoScrolled';
 
 
 
 export default function AdminSideNav() {
   return (
-    <div className="flex h-full flex-col px-3 py-4 md:px-2">
-      <Link
-        className="mb-2 flex h-20 items-end justify-start rounded-md bg-blue-600 p-4 md:h-40"
-        href="/"
-      >
-      </Link>
+    <div className="flex h-full flex-col justify-center px-3 py-4 md:px-2 shadow-lg max-md:hidden">
+    <Link
+    className='mb-3 self-center'
+      href="/dashboard"
+    >
+      <LogoScrolled/>
+    </Link>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
         <AdminNavLinks />
         <div className="hidden h-auto w-full grow rounded-md bg-gray-50 md:block"></div>

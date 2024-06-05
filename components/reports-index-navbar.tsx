@@ -22,15 +22,14 @@ console.log(reportId);
       <div className='md:hidden self-start'>
       <SideNavDrawer/>
       </div>
-     
+
       <div className='max-md:hidden'>
         {reports && <MonthButton reports={reports}/>}
-
       </div>
       
       <div className='flex items-center gap-4 chart-space max-md:hidden'>
         {reports && reports.length > 0 && (
-            <ChartNavigation reportId={reports[0].id} />
+            <ChartNavigation/>
         )}
       </div>
 
@@ -40,7 +39,7 @@ console.log(reportId);
       
       <div className='flex items-center gap-4 chart-space'>
         {reports && reports.length > 0 && (
-            <ChartNavigation reportId={reports[0].id} />
+            <ChartNavigation />
         )}
       </div>
     </div>

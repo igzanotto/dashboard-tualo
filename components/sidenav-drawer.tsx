@@ -29,11 +29,12 @@ type SheetSide = (typeof SHEET_SIDES)[number];
 
 export default async function SideNavDrawer() {
   const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: { user }} = await supabase.auth.getUser();
+
+
   console.log(user);
 
+  
   return (
     <div>
       {SHEET_SIDES.map((side) => (
@@ -76,21 +77,8 @@ export default async function SideNavDrawer() {
                   }}
                 >
                   <button className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:p-2 md:px-3">
-                    <div className='max-md:hidden'>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <LogOut width={30} height={30} />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Cerrar sesión</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                    </div>
                     <div className='md:hidden'>
-                    <LogOut width={30} height={30} />
-                      
+                      <LogOut width={30} height={30} /> 
                     </div>
                     <p className='md:hidden'>Cerrar sesión</p>
                   </button>
