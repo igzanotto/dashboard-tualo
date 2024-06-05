@@ -33,21 +33,21 @@ export default async function BusinessPage({
           <p className="text-2xl">Reportes</p>
           <Link
             href={`/admin/businesses/${business.id}/reports/create`}
-            className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white"
+            className="flex w-[220px] items-center gap-2 rounded-xl bg-teal-600 p-2 text-white"
           >
             <AddIcon />
             Nuevo reporte inicial
           </Link>
           <Link
             href={`/admin/businesses/${business.id}/reports/create-follow-up`}
-            className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white"
+            className="flex w-[220px] items-center gap-2 rounded-xl bg-teal-600 p-2 text-white"
           >
             <AddIcon />
             Nuevo reporte
           </Link>
           <Link
             href={`/admin/businesses/${business.id}/users/add`}
-            className="flex w-[220px] items-center gap-2 rounded-xl bg-blue-800 p-2 text-white"
+            className="flex w-[220px] items-center gap-2 rounded-xl bg-teal-600 p-2 text-white"
           >
             <AddIcon />
             Agregar usuario
