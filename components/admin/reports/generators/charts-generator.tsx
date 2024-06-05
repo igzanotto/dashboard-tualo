@@ -4,9 +4,10 @@ import { Button } from '@/components/button';
 import { buildChartsInsights } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
+import { initial_charts_prompt } from '@/utils/prompts';
 
 interface FormData {
-  charts_prompt: string;
+  initial_charts_prompt: string;
 }
 
 export default function ChartsGenerator({ threadId }: { threadId: any }) {
@@ -15,20 +16,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
 
   const [statusMessage, setStatusMessage] = useState('');
   const [formData, setFormData] = useState<FormData>({
-    charts_prompt: `
-      ahora vamos con el 1er entregable: *comentarios de las gráficas*
-      necesito insights que le ayuden al cliente a interpretar sus resultados financieros de la empresa en caso de que él no pueda llegar a esas conclusiones por su cuenta (facilitarle los insights financieros principales dados los números resultantes este mes)
-      pon ejemplos específicos, usa números reales, no solo le expliques cómo interpretarlo sino interpretalo por él
-      menciona los tres insights más importantes de cada una en bullets y hazlos personalizados
-      las gráficas del reporte son:
-
-      - waterfall chart que representa su P&L acumulado. las barras son: primero los ingresos, luego los costos, luego gastos, y finalmente gastos financieros; y los subtotales que van quedando son primero la utilidad bruta, luego la operativa y luego la neta. no hay números individuales de cada mes, sino del periodo completo
-      - gráfica de barras de sus ventas mensuales con una línea para el promedio
-      - gráfica de barras de sus costos mensuales y gastos mensuales, con líneas para cada uno de los promedios
-      - gráfica de barras que muestra la utilidad neta en el eje izquierdo, y el margen neto en gráfica de línea en el eje derecho
-      - gráfica de líneas con la evolución de los tres márgenes principales: margen bruto, margen operativo, y margen neto
-      - gráfica de líneas de la evolución de sus gastos mensuales desglosado por tipo de gasto (no incluye los costos ni los financieros, solo gastos)
-    `,
+    initial_charts_prompt,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -50,7 +38,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        content: formData.charts_prompt,
+        content: formData.initial_charts_prompt,
         threadId: threadId,
       }),
     });
@@ -88,13 +76,15 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
     const result = await response.json();
     console.log('Mensajes obtenidos con exito', result);
 
-    const responseBusinessResume = result.messagesData[7].content;
+    const messagesData = result.messagesData;
+    const responseContent = messagesData[messagesData.length - 1]?.content;
+    
 
     if (!chartsResponse) {
       return;
     }
 
-    chartsResponse.innerHTML = responseBusinessResume;
+    chartsResponse.innerHTML = responseContent;
   };
 
   return (
@@ -104,9 +94,9 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
       </h2>
 
       <textarea
-        name="PL_prompt"
+        name="initial_charts_prompt"
         rows={15}
-        value={formData.charts_prompt}
+        value={formData.initial_charts_prompt}
         onChange={handleChange}
         className="w-full rounded-md bg-blue-100 px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         autoFocus
