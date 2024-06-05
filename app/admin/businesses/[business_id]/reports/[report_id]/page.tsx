@@ -117,7 +117,7 @@ export default async function ReportPage({
             <textarea
               name="business_resume"
               defaultValue={report.business_resume}
-              className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl text-[#003E52]"
+              className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
             />
             <button
               type="submit"
@@ -136,7 +136,7 @@ export default async function ReportPage({
             <textarea
               name="goals"
               defaultValue={report.goals}
-              className="h-[300px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl text-[#003E52]"
+              className="h-[300px] w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
             />
             <button
               type="submit"
@@ -192,13 +192,28 @@ export default async function ReportPage({
                       </Tooltip>
                     </TooltipProvider>
                   </div>
-                  {chart.graphy_url ? (
-                    <div className="flex w-full flex-col gap-10">
-                      <div>
-                        <ChartEmbed src={chart.graphy_url} />
+                  {chart ? (
+                    chart.graphy_url ? (
+                      <div className="flex w-full flex-col gap-10">
+                        <div>
+                          <ChartEmbed src={chart.graphy_url} />
+                        </div>
+                        <div>
+                          {chart.insights && (
+                            <div>
+                              <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
+                                Análisis
+                              </h3>
+                              <p className="text-lg text-[#003E52]">
+                                {renderTextFromDatabase(chart.insights)}
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       </div>
+                    ) : (
                       <div>
-                        {chart && chart.insights && (
+                        {chart.insights && (
                           <div>
                             <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
                               Análisis
@@ -208,53 +223,42 @@ export default async function ReportPage({
                             </p>
                           </div>
                         )}
-                      </div>
-                    </div>
-                  ) : (
-                    <div>
-                      <h1 className="text-black">
-                        Crear Gráfico de {translateChartType(type)}
-                      </h1>
-                      <form
-                        action={createChartEmbed}
-                        className="mt-10 flex flex-col gap-4"
-                      >
-                        <input
-                          type="hidden"
-                          name="report_id"
-                          value={report.id}
-                        />
-                        <input
-                          type="hidden"
-                          name="business_id"
-                          value={report.business_id}
-                        />
-                        <input type="hidden" name="type" value={type} />
-                        <input
-                          type="text"
-                          name="graphy_url"
-                          placeholder="Url del gráfico"
-                          className="rounded-xl p-2 w-full"
-                        />
-                        <button
-                          type="submit"
-                          className="rounded-xl bg-[#003E52] p-3 font-medium text-white w-full"
+                        <h1 className="text-black">
+                          Crear Gráfico de {translateChartType(type)}
+                        </h1>
+                        <form
+                          action={createChartEmbed}
+                          className="mt-10 flex flex-col gap-4"
                         >
-                          Crear gráfico
-                        </button>
-                      </form>
-                    </div>
+                          <input
+                            type="hidden"
+                            name="report_id"
+                            value={report.id}
+                          />
+                          <input
+                            type="hidden"
+                            name="business_id"
+                            value={report.business_id}
+                          />
+                          <input type="hidden" name="type" value={type} />
+                          <input
+                            type="text"
+                            name="graphy_url"
+                            placeholder="Url del gráfico"
+                            className="w-full rounded-xl p-2"
+                          />
+                          <button
+                            type="submit"
+                            className="w-full rounded-xl bg-[#003E52] p-3 font-medium text-white"
+                          >
+                            Crear gráfico
+                          </button>
+                        </form>
+                      </div>
+                    )
+                  ) : (
+                    <p>No hay gráficos creados.</p>
                   )}
-                {!chart.graphy_url && chart.insights && (
-                  <div className='mt-12'>
-                    <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
-                      Análisis
-                    </h3>
-                    <p className="text-lg text-[#003E52]">
-                      {renderTextFromDatabase(chart.insights)}
-                    </p>
-                  </div>
-                )}
                 </div>
               </div>
             );
@@ -272,11 +276,11 @@ export default async function ReportPage({
             <textarea
               name="analysis"
               defaultValue={report.analysis}
-              className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl text-[#003E52]"
+              className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
             />
             <button
               type="submit"
-              className="mt-4 rounded-lg bg-[#003E52] p-2 text-white w-full"
+              className="mt-4 w-full rounded-lg bg-[#003E52] p-2 text-white"
             >
               Guardar cambios
             </button>
@@ -286,16 +290,19 @@ export default async function ReportPage({
         <BannerSection text="Recomendaciones personalizadas" />
         <div
           id="recomendaciones"
-          className="section-margin flex flex-col xl:gap-24 gap-20 mt-16"
+          className="section-margin mt-16 flex flex-col gap-20 xl:gap-24"
           key={'recomendaciones'}
         >
           {report.recomendations.map((data: any) => (
-            <form action={updateReportRecommendations} className='flex flex-col gap-4'>
+            <form
+              action={updateReportRecommendations}
+              className="flex flex-col gap-4"
+            >
               <input type="hidden" name="report_id" value={params.report_id} />
               <textarea
                 name="content"
                 defaultValue={data.content}
-                className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 shadow-xl text-[#003E52]"
+                className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
               />
               <button
                 type="submit"
