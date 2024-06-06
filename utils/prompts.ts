@@ -195,7 +195,7 @@ vamos a hacer lo siguiente:
 con base en esas tres cosas haremos un análisis detallado del mes
 recuerda que tus respuestas deben de ser concisas y el lenguaje que uses debe de ser para gente no-financiera, que sea fácil de entender e interpretar
 
-si te parece bien, y para estar seguros de que tienes toda la información a la mano, lo primero que quiero es que hagas un resumen de máximo 500 palabras del reporte anterior`;
+si te parece bien, y para estar seguros de que tienes toda la información a la mano, lo primero que quiero es que hagas un resumen de máximo 500 palabras del reporte anterior en formato bullets`;
 
 export const recomendations_feedback_prompt = 
 `le pedí al emprendedor que respondiera las siguientes preguntas de cada una de las recomendaciones que le hicimos en el reporte del mes anterior:
@@ -215,10 +215,7 @@ export const recomendations_feedback_close =
 si te quedó claro, no necesito un resumen y solo pídeme el P&L de este mes`;
 
 export const QA_transcript = 
-`primero te mando el Q&A de la información del mes:
-
-———
-
+`
 *Operaciones y Ventas*
 
 1. ¿Hubo algún producto o servicio nuevo que se lanzó este mes?
@@ -264,23 +261,31 @@ export const QA_transcript =
 1. ¿Se establecieron o terminaron alianzas o asociaciones estratégicas?
     
     No
-    
-———
+`;
 
+export const followup_goals_start =
+`———
 Por otro lado, te recuerdo que la meta financiera de la empresa era:
+`;
 
-"Necesitar vender más o gastar menos”
+export const followup_goals_transcript = `Necesitar vender más o gastar menos`;
 
-———
+export const observations_prompt = `
+____
+y nos hicieron observaciones:`;
 
+export const followup_QA_close =
+`
+_______
 si te queda claro, hazme un resumen de esto en bullets y pídeme después el follow up de las recomendaciones pasadas`;
 
-export const PL_transcript = 
+export const followup_PL_prompt =
 `te voy a mandar el P&L del cliente con toda la historia, pero recuerda que el mes que estamos analizando es el último
 
-———
+———`
 
-Venta Total	Venta tarjeta	248994.05
+export const PL_transcript = 
+`Venta Total	Venta tarjeta	248994.05
 Venta Total	Venta efectivo	110368.97
 Venta Total	Franquicia	0
 Venta Total		
@@ -306,13 +311,14 @@ Gastos Financieros Totales	Rendimientos (+)	0
 Gastos Financieros Totales	Efectivo (-)	0
 Gastos Financieros Totales	Otros	0
 Gastos Financieros Totales	Impuestos (-)	0
-Utilidad Neta (3)
+Utilidad Neta (3)`;
 
+export const followup_PL_close = `
 ———
 
-si te queda claro, respóndeme con la tabla resumida y pídeme siguientes instrucciones`;
+si te queda claro, respóndeme con la tabla resumida y pídeme siguientes instrucciones`
 
-export const highligths_and_PL_analysis_prompt =
+export const highlights_and_PL_analysis_prompt =
 `lo siguiente será empezar con el primer entregable: **highlights y análisis del P&L del mes de enero**
 
 toma las siguientes consideraciones para hacerlo:
@@ -327,18 +333,29 @@ una vez que hayas terminado, pídeme siguientes instrucciones`;
 
 
 export const followup_charts_prompt =
- `ahora vamos con el 2do entregable: *comentarios de las gráficas históricas*
- nuevamente genera insights que le ayuden al cliente a interpretar sus resultados financieros de la empresa en caso de que él no pueda llegar a esas conclusiones por su cuenta (facilitarle los insights financieros principales dados los números resultantes este mes)
- pon ejemplos específicos, usa números reales, no solo le expliques cómo interpretarlo sino interpretalo por él
- menciona los tres insights más importantes de cada una en bullets y hazlos personalizados
- **las gráficas son las siguientes:
- 
- 1. gráfica de barras de sus ventas mensuales con una línea para el promedio, resaltando las ventas del mes actual
- 2. gráfica de barras de sus costos mensuales y gastos mensuales, con líneas para cada uno de los promedios, resaltando los correspondientes al mes actual
- 3. gráfica de barras que muestra la utilidad neta en el eje izquierdo, y el margen neto en gráfica de línea en el eje derecho, resaltando los resultados del mes actual
- 4. gráfica de líneas con la evolución de los tres márgenes principales: margen bruto, margen operativo, y margen neto, resaltando los del mes actual
- 5. gráfica de líneas de la evolución de sus gastos mensuales desglosado por tipo de gasto (no incluye los costos ni los gastos financieros, solo gastos operativos)
+ `lo siguiente será empezar con el 1er entregable: *comentarios de las gráficas del mes*
+necesito insights que le ayuden al cliente a interpretar sus resultados financieros de la empresa en caso de que él no pueda llegar a esas conclusiones por su cuenta (facilitarle los insights financieros principales dados los números resultantes este mes)
+pon ejemplos específicos, usa números reales, no solo le expliques cómo interpretarlo sino interpretalo por él
+menciona los tres insights más importantes de cada una en bullets y hazlos personalizados
+las gráficas son las siguientes:
+
+1. waterfall chart del P&L del mes actual de sus ingresos y egresos. cada barra es un rubro de ingresos, costos o gastos, y va quedando primero la utilidad bruta, luego la operativa y luego la neta.
+2. gráfica de barras con dos series: la primera es el mes actual y la segunda es el promedio de los meses anteriores; y hay 6 categorías en el eje X: ventas, costos, utilidad bruta, gastos, utilidad operativa, gastos financieros, y utilidad neta
+3. gráfica de barras con dos series: la primera es el mes actual y la segunda es el promedio de los meses anteriores; y hay 3 categorías en el eje X: margen bruto, margen operativo y margen neto
  `;
+
+export const history_charts_prompt =
+`ahora vamos con el 2do entregable: *comentarios de las gráficas históricas*
+nuevamente genera insights que le ayuden al cliente a interpretar sus resultados financieros de la empresa en caso de que él no pueda llegar a esas conclusiones por su cuenta (facilitarle los insights financieros principales dados los números resultantes este mes)
+pon ejemplos específicos, usa números reales, no solo le expliques cómo interpretarlo sino interpretalo por él
+menciona los tres insights más importantes de cada una en bullets y hazlos personalizados
+**las gráficas son las siguientes:
+
+1. gráfica de barras de sus ventas mensuales con una línea para el promedio, resaltando las ventas del mes actual
+2. gráfica de barras de sus costos mensuales y gastos mensuales, con líneas para cada uno de los promedios, resaltando los correspondientes al mes actual
+3. gráfica de barras que muestra la utilidad neta en el eje izquierdo, y el margen neto en gráfica de línea en el eje derecho, resaltando los resultados del mes actual
+4. gráfica de líneas con la evolución de los tres márgenes principales: margen bruto, margen operativo, y margen neto, resaltando los del mes actual
+5. gráfica de líneas de la evolución de sus gastos mensuales desglosado por tipo de gasto (no incluye los costos ni los gastos financieros, solo gastos operativos)`
 
 export const followup_analysis_prompt =
 `ahora vamos con el 3er entregable: **highlights y análisis del P&L del mes de XXX**
