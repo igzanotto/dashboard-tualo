@@ -114,7 +114,7 @@ export default async function ReportPage({
             <div>
               {
                 !report.business_resume || report.business_resume.length < 0 ? (
-                  <p className="mb-4 text-2xl font-semibold text-[#003E52]">Reporte de seguimiento</p>
+                  <p className="mb-4 text-2xl font-semibold text-[#003E52]">Resumen de las operaciones de <span className='capitalize'>{report.month}</span></p>
                 ) : 
                   <p className="mb-4 text-2xl font-semibold text-[#003E52]">Perfil de mi empresa</p>
               }
