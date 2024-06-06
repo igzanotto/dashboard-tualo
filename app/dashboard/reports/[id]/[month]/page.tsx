@@ -111,7 +111,14 @@ export default async function ReportPage({
       <div className='xl:w-[80%] mx-auto max-xl:w-[90%] mb-24 max-md:mb-14'>
         <div id='resumen' className="section-margin flex flex-col gap-10 mb-20 mt-10" key={'resumen'}>
           <div>
-            <p className="mb-4 text-2xl font-semibold text-[#003E52]">Perfil de mi empresa</p>
+            <div>
+              {
+                !report.business_resume || report.business_resume.length < 0 ? (
+                  <p className="mb-4 text-2xl font-semibold text-[#003E52]">Reporte de seguimiento</p>
+                ) : 
+                  <p className="mb-4 text-2xl font-semibold text-[#003E52]">Perfil de mi empresa</p>
+              }
+            </div>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
               {
                 !report.business_resume || report.business_resume.length < 0 ? (
