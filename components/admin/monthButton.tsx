@@ -69,7 +69,6 @@ export default function MonthButtonsAdmin({ business_id}:Props) {
     //         </Link>
     //       </div>
     //     ))}
-      
     // </div>
     <div className="flex flex-col items-center space-x-4">
     <Popover open={open} onOpenChange={setOpen}>
@@ -86,7 +85,7 @@ export default function MonthButtonsAdmin({ business_id}:Props) {
             <CommandEmpty>No hay reportes encontrados.</CommandEmpty>
             <CommandGroup>
               {reports?.map((report) => (
-                <Link key={report.id} href={`/admin/businesses/${business_id}/reports/${report.id}`} passHref>
+                <Link key={report.id} href={`/admin/businesses/${business_id}/reports/${report.id}/${report.month}`} passHref>
                   <CommandItem
                   className="cursor-pointer"
                     value={report.id}
