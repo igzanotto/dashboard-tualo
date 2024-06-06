@@ -19,7 +19,7 @@ import {
 import { InfoIcon } from 'lucide-react';
 import { Libre_Baskerville } from 'next/font/google';
 import Link from 'next/link';
-import reporte from '../../../../../../components/images/header-reporte.png';
+import reporte from '../../../../../../../components/images/header-reporte.png';
 import Image from 'next/image';
 import BannerSection from '@/components/bannerSection';
 import { translateChartType } from '@/lib/utils';

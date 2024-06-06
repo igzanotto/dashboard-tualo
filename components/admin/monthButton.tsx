@@ -86,7 +86,7 @@ export default function MonthButtonsAdmin({ business_id}:Props) {
             <CommandEmpty>No hay reportes encontrados.</CommandEmpty>
             <CommandGroup>
               {reports?.map((report) => (
-                <Link key={report.id} href={`/admin/businesses/${business_id}/reports/${report.id}`} passHref>
+                <Link key={report.id} href={`/admin/businesses/${business_id}/reports/${report.id}/${report.month}`} passHref>
                   <CommandItem
                   className="cursor-pointer"
                     value={report.id}
