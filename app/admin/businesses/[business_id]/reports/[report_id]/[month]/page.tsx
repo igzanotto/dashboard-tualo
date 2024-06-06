@@ -125,13 +125,27 @@ export default async function ReportPage({
 
         <div className="mx-auto max-xl:w-[90%] xl:w-[80%]">
           {!report.business_resume ? (
-            <div id='resumen' key={'resumen'}>
-              <form action={updateReport} className="mt-10 flex flex-col gap-20">
-                <input type="hidden" name="report_id" value={params.report_id}/>
+            <div id="resumen" key={'resumen'}>
+              <form
+                action={updateReport}
+                className="mt-10 flex flex-col gap-20"
+              >
+                <input
+                  type="hidden"
+                  name="report_id"
+                  value={params.report_id}
+                />
                 <div>
-                  <p className="mb-4 text-2xl font-semibold text-[#003E52]">
-                    Perfil de la empresa
-                  </p>
+                  {!report.business_resume ? (
+                    <p className="mb-4 text-2xl font-semibold text-[#003E52]">
+                      Resumen de las operaciones de{' '}
+                      <span className="capitalize">{report.month}</span>
+                    </p>
+                  ) : (
+                    <p className="mb-4 text-2xl font-semibold text-[#003E52]">
+                      Perfil de mi empresa
+                    </p>
+                  )}
                   <textarea
                     name="operations_resume"
                     defaultValue={report.operations_resume}
@@ -147,9 +161,16 @@ export default async function ReportPage({
               </form>
             </div>
           ) : (
-            <div id='resumen' key={'resumen'}>
-              <form action={updateReport} className="mt-10 flex flex-col gap-20">
-                <input type="hidden" name="report_id" value={params.report_id}/>
+            <div id="resumen" key={'resumen'}>
+              <form
+                action={updateReport}
+                className="mt-10 flex flex-col gap-20"
+              >
+                <input
+                  type="hidden"
+                  name="report_id"
+                  value={params.report_id}
+                />
                 <div>
                   <p className="mb-4 text-2xl font-semibold text-[#003E52]">
                     Perfil de la empresa
@@ -329,35 +350,39 @@ export default async function ReportPage({
             </form>
           </div>
 
-        <BannerSection text="Recomendaciones personalizadas" />
-        <div
-          id="recomendaciones"
-          className="section-margin mt-16 flex flex-col gap-20 xl:gap-24"
-          key={'recomendaciones'}
-        >
-          {report.recomendations.map((data: any) => (
-            <form
-              key={data.id}
-              action={updateReportRecommendations}
-              className="flex flex-col gap-4"
-            >
-              <input type="hidden" name="report_id" value={params.report_id} />
-              <textarea
-                name="content"
-                defaultValue={data.content}
-                className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
-              />
-              <button
-                type="submit"
-                className="mt-4 rounded-lg bg-[#003E52] p-2 text-white"
+          <BannerSection text="Recomendaciones personalizadas" />
+          <div
+            id="recomendaciones"
+            className="section-margin mt-16 flex flex-col gap-20 xl:gap-24"
+            key={'recomendaciones'}
+          >
+            {report.recomendations.map((data: any) => (
+              <form
+                key={data.id}
+                action={updateReportRecommendations}
+                className="flex flex-col gap-4"
               >
-                Guardar cambios
-              </button>
-            </form>
-          ))}
+                <input
+                  type="hidden"
+                  name="report_id"
+                  value={params.report_id}
+                />
+                <textarea
+                  name="content"
+                  defaultValue={data.content}
+                  className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
+                />
+                <button
+                  type="submit"
+                  className="mt-4 rounded-lg bg-[#003E52] p-2 text-white"
+                >
+                  Guardar cambios
+                </button>
+              </form>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }
