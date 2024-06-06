@@ -1,17 +1,22 @@
 "use client"
 
 import { createUser } from "@/lib/actions";
+import { useParams } from "next/navigation";
 
 export default function CreateUserPage() {
+  const business_id = useParams().business_id as string;
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+
+
     const formData = new FormData(event.target);
     const users = [
       { name: formData.get('name-1'), email: formData.get('email-1') },
       { name: formData.get('name-2'), email: formData.get('email-2') },
       { name: formData.get('name-3'), email: formData.get('email-3') },
     ];
-    await createUser(users);
+    await createUser(users, business_id);
   };
 
   return (

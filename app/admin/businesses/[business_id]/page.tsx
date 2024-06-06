@@ -1,11 +1,10 @@
-import { fetchBusinessById } from '@/lib/data';
+import { fetchBusinessById, fetchBusinessUsers } from '@/lib/data';
 import ReportsTable from '@/components/admin/reports/table';
 import AddIcon from '@/components/icons/AddIcon';
 import { InvoicesTableSkeleton } from '@/components/skeletons';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { Libre_Baskerville } from 'next/font/google';
-
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -30,15 +29,26 @@ export default async function BusinessPage({
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
   const business = await fetchBusinessById(business_id);
-  
-  
+  // const business_users = await fetchBusinessUsers(business_id);
 
   return (
-    <div className="flex flex-col gap-3 text-[#003E52] my-10">
-      <h1 className={`text-xl md:text-2xl xl:text-5xl text-[#003E52] ${libreBaskerville.className}`}>{business.name}</h1>
-      <p>{business.description}</p>
+    <div className="my-10 flex flex-col gap-3 text-[#003E52]">
+      <div className="flex justify-around">
+        <h1
+          className={`text-xl text-[#003E52] md:text-2xl xl:text-5xl ${libreBaskerville.className}`}
+        >
+          {business.name}
+        </h1>
+        {/* <p>Usuarios:</p>
+        <ul>
+          {business_users &&
+            business_users.map((user, index) => (
+              <li key={index}>{user.email}</li>
+            ))}
+        </ul> */}
+      </div>
       <div className="mt-10 flex flex-col">
-        <div className="mb-4 flex items-center justify-between max-lg:flex-col max-lg:gap-4">
+        <div className="mb-4 flex items-center justify-around max-lg:flex-col max-lg:gap-4">
           <p className="text-2xl">Reportes</p>
           <Link
             href={`/admin/businesses/${business.id}/reports/create`}
@@ -54,13 +64,13 @@ export default async function BusinessPage({
             <AddIcon />
             Nuevo reporte
           </Link>
-          <Link
-            href={`/admin/businesses/${business.id}/users/add`}
-            className="flex w-[220px] items-center gap-2 rounded-xl bg-teal-600 p-2 text-white"
-          >
-            <AddIcon />
-            Agregar usuario
-          </Link>
+        <Link
+          href={`/admin/businesses/${business.id}/users/add`}
+          className="flex w-[220px] items-center gap-2 rounded-xl bg-teal-600 p-2 text-white"
+        >
+          <AddIcon />
+          Agregar usuario
+        </Link>
         </div>
         <Suspense
           key={query + currentPage}

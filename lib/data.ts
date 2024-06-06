@@ -239,8 +239,6 @@ export async function fetchChartById(chartId: string) {
 
 
 
-
-
   interface ProfileData {
     business_id: number; // Ajusta el tipo según el tipo real en tu base de datos
   }
@@ -293,3 +291,19 @@ export async function fetchChartById(chartId: string) {
     }
   }
   
+
+  export async function fetchBusinessUsers(business_id:string) {
+    try {
+      const supabase = createClient();
+      const { data: businessUsers, error } = await supabase
+      .from("profiles")
+      .select("email")
+      .eq('business_id', business_id);  
+      
+      console.log("businessUsers", businessUsers);
+      return businessUsers;
+  
+    } catch (error) {
+      console.error('Failed to fetch business users:', error);
+    }
+  }
