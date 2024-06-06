@@ -29,7 +29,7 @@ export default async function BusinessPage({
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
   const business = await fetchBusinessById(business_id);
-  const business_users = await fetchBusinessUsers(business_id);
+  // const business_users = await fetchBusinessUsers(business_id);
 
   return (
     <div className="my-10 flex flex-col gap-3 text-[#003E52]">
@@ -39,20 +39,13 @@ export default async function BusinessPage({
         >
           {business.name}
         </h1>
-        <p>Usuarios:</p>
+        {/* <p>Usuarios:</p>
         <ul>
           {business_users &&
             business_users.map((user, index) => (
               <li key={index}>{user.email}</li>
             ))}
-        </ul>
-        <Link
-          href={`/admin/businesses/${business.id}/users/add`}
-          className="flex w-[220px] items-center gap-2 rounded-xl bg-teal-600 p-2 text-white"
-        >
-          <AddIcon />
-          Agregar usuario
-        </Link>
+        </ul> */}
       </div>
       <div className="mt-10 flex flex-col">
         <div className="mb-4 flex items-center justify-around max-lg:flex-col max-lg:gap-4">
@@ -71,6 +64,13 @@ export default async function BusinessPage({
             <AddIcon />
             Nuevo reporte
           </Link>
+        <Link
+          href={`/admin/businesses/${business.id}/users/add`}
+          className="flex w-[220px] items-center gap-2 rounded-xl bg-teal-600 p-2 text-white"
+        >
+          <AddIcon />
+          Agregar usuario
+        </Link>
         </div>
         <Suspense
           key={query + currentPage}

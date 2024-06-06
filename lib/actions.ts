@@ -181,9 +181,9 @@ export async function createChart(formData:FormData) {
   console.log(chart);
   
   // clear this cache and trigger a new request to the server for the path to see the new report
-  revalidatePath('/dashbord/reports');
+  revalidatePath('/dashboard/reports');
 
-  redirect('/dashbord/reports');
+  redirect('/dashboard/reports');
 }
 
 
@@ -525,10 +525,10 @@ export async function updateReportRecommendations(formData:FormData) {
   }
 }
 
-export const createUser = async (users: any[]) => {
+export const createUser = async (users: any[], business_id: string) => {
   const supabase = createAdmin();
   
-  // Filtrar los usuarios que tienen un email no vacío
+  // Filter users with non-empty emails
   const validUsers = users.filter(user => user.email.trim() !== '');
   
   for (const user of validUsers) {
@@ -545,21 +545,25 @@ export const createUser = async (users: any[]) => {
       // Adding the profile with name and business_id
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .update({ name: user.name, business_id: 1 })
+        .update({ name: user.name, business_id: business_id })
         .eq('id', userData.user.id)
         .single();
 
       if (profileError) {
         console.error(`Error creating profile for ${user.email}:`, profileError);
         throw profileError;
-      } else {
-        console.log(`Profile created for ${profileData}`);
-      }
+      } 
+
+      console.log(`Profile created for ${profileData}`);
+      console.log(`User ${user.email} added to business ${business_id}`);
       
     } catch (err) {
       console.error(`Unexpected error for user ${user.email}:`, err);
     }
   }
+
+  // Redirect after processing all users
+  redirect('/admin/businesses');
 };
 
 
