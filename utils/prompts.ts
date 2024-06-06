@@ -333,18 +333,29 @@ una vez que hayas terminado, pídeme siguientes instrucciones`;
 
 
 export const followup_charts_prompt =
- `ahora vamos con el 2do entregable: *comentarios de las gráficas históricas*
- nuevamente genera insights que le ayuden al cliente a interpretar sus resultados financieros de la empresa en caso de que él no pueda llegar a esas conclusiones por su cuenta (facilitarle los insights financieros principales dados los números resultantes este mes)
- pon ejemplos específicos, usa números reales, no solo le expliques cómo interpretarlo sino interpretalo por él
- menciona los tres insights más importantes de cada una en bullets y hazlos personalizados
- **las gráficas son las siguientes:
- 
- 1. gráfica de barras de sus ventas mensuales con una línea para el promedio, resaltando las ventas del mes actual
- 2. gráfica de barras de sus costos mensuales y gastos mensuales, con líneas para cada uno de los promedios, resaltando los correspondientes al mes actual
- 3. gráfica de barras que muestra la utilidad neta en el eje izquierdo, y el margen neto en gráfica de línea en el eje derecho, resaltando los resultados del mes actual
- 4. gráfica de líneas con la evolución de los tres márgenes principales: margen bruto, margen operativo, y margen neto, resaltando los del mes actual
- 5. gráfica de líneas de la evolución de sus gastos mensuales desglosado por tipo de gasto (no incluye los costos ni los gastos financieros, solo gastos operativos)
+ `lo siguiente será empezar con el 1er entregable: *comentarios de las gráficas del mes*
+necesito insights que le ayuden al cliente a interpretar sus resultados financieros de la empresa en caso de que él no pueda llegar a esas conclusiones por su cuenta (facilitarle los insights financieros principales dados los números resultantes este mes)
+pon ejemplos específicos, usa números reales, no solo le expliques cómo interpretarlo sino interpretalo por él
+menciona los tres insights más importantes de cada una en bullets y hazlos personalizados
+las gráficas son las siguientes:
+
+1. waterfall chart del P&L del mes actual de sus ingresos y egresos. cada barra es un rubro de ingresos, costos o gastos, y va quedando primero la utilidad bruta, luego la operativa y luego la neta.
+2. gráfica de barras con dos series: la primera es el mes actual y la segunda es el promedio de los meses anteriores; y hay 6 categorías en el eje X: ventas, costos, utilidad bruta, gastos, utilidad operativa, gastos financieros, y utilidad neta
+3. gráfica de barras con dos series: la primera es el mes actual y la segunda es el promedio de los meses anteriores; y hay 3 categorías en el eje X: margen bruto, margen operativo y margen neto
  `;
+
+export const history_charts_prompt =
+`ahora vamos con el 2do entregable: *comentarios de las gráficas históricas*
+nuevamente genera insights que le ayuden al cliente a interpretar sus resultados financieros de la empresa en caso de que él no pueda llegar a esas conclusiones por su cuenta (facilitarle los insights financieros principales dados los números resultantes este mes)
+pon ejemplos específicos, usa números reales, no solo le expliques cómo interpretarlo sino interpretalo por él
+menciona los tres insights más importantes de cada una en bullets y hazlos personalizados
+**las gráficas son las siguientes:
+
+1. gráfica de barras de sus ventas mensuales con una línea para el promedio, resaltando las ventas del mes actual
+2. gráfica de barras de sus costos mensuales y gastos mensuales, con líneas para cada uno de los promedios, resaltando los correspondientes al mes actual
+3. gráfica de barras que muestra la utilidad neta en el eje izquierdo, y el margen neto en gráfica de línea en el eje derecho, resaltando los resultados del mes actual
+4. gráfica de líneas con la evolución de los tres márgenes principales: margen bruto, margen operativo, y margen neto, resaltando los del mes actual
+5. gráfica de líneas de la evolución de sus gastos mensuales desglosado por tipo de gasto (no incluye los costos ni los gastos financieros, solo gastos operativos)`
 
 export const followup_analysis_prompt =
 `ahora vamos con el 3er entregable: **highlights y análisis del P&L del mes de XXX**

@@ -4,23 +4,20 @@ import { Button } from '@/components/button';
 import { buildChartsInsights } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import { followup_charts_prompt } from '@/utils/prompts';
+import { followup_charts_prompt } from '@/utils/prompts'
+
 
 interface FormData {
   followup_charts_prompt: string;
 }
 
-export default function FollowupChartsGenerator({
-  threadId,
-}: {
-  threadId: any;
-}) {
+export default function FollowupChartsGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
   const business_id = useParams().business_id as string;
 
   const [statusMessage, setStatusMessage] = useState('');
   const [formData, setFormData] = useState<FormData>({
-    followup_charts_prompt,
+   followup_charts_prompt,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -59,6 +56,7 @@ export default function FollowupChartsGenerator({
     setStatusMessage('mensaje creado con exito!');
   };
 
+
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
     e.preventDefault();
     const chartsResponse = document.getElementById('chartsResponse');
@@ -81,6 +79,7 @@ export default function FollowupChartsGenerator({
 
     const messagesData = result.messagesData;
     const responseContent = messagesData[messagesData.length - 1]?.content;
+    
 
     if (!chartsResponse) {
       return;
@@ -100,7 +99,7 @@ export default function FollowupChartsGenerator({
         rows={15}
         value={formData.followup_charts_prompt}
         onChange={handleChange}
-        className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+        className="w-full rounded-md bg-blue-100 px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         autoFocus
       />
 
@@ -108,12 +107,7 @@ export default function FollowupChartsGenerator({
         <Button onClick={handleCreateMessage}>crear mensaje</Button>
         <span>{statusMessage}</span>
         <Button onClick={handleRetrieveThreadMessages}>obtener mensajes</Button>
-        <input
-          type="text"
-          defaultValue={threadId}
-          name="thread_id"
-          className=" border-2 border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-600"
-        />
+        <input type="text" defaultValue={threadId} name="thread_id" className=' border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none' />
       </div>
 
       <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
@@ -146,7 +140,7 @@ export default function FollowupChartsGenerator({
               rows={30}
               id="chartsResponse"
               name="chartsResponse"
-              className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
             />
           </div>
 
@@ -156,35 +150,63 @@ export default function FollowupChartsGenerator({
               name="waterfall_chart_insights"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> insights del grafico de cascada <<<"
             />
-            <label htmlFor="actual_vs_average_chart_insights">
-              grafico actual vs promedio
-            </label>
+            <label htmlFor="sales_chart_insights">grafico de ventas</label>
             <textarea
-              name="actual_vs_average_chart_insights"
+              name="sales_chart_insights"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> insights del grafico de ventas <<<"
             />
-            <label htmlFor="actual_vs_average_2_chart_insights">
-              grafico 2 actual vs promedio
+            <label htmlFor="costs_and_expenses_chart_insights">
+              grafico de costos y gastos
             </label>
             <textarea
-              name="actual_vs_average_2_chart_insights"
+              name="costs_and_expenses_chart_insights"
               onChange={handleChange}
               rows={4}
-              className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               autoFocus
               placeholder=">>> insights del grafico de costos y gastos <<<"
             />
-
+            <label htmlFor="net_profit_and_margins_chart_insights">
+              grafico de utilidad neta y margen neto
+            </label>
+            <textarea
+              name="net_profit_and_margins_chart_insights"
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              autoFocus
+              placeholder=">>> insights del grafico de utilidad neta y margen neto <<<"
+            />
+            <label htmlFor="margins_chart_insights">grafico de margenes</label>
+            <textarea
+              name="margins_chart_insights"
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              autoFocus
+              placeholder=">>> insights del grafico de margenes <<<"
+            />
+            <label htmlFor="detailed_expenses_chart_insights">
+              grafico de costos desglosados
+            </label>
+            <textarea
+              name="detailed_expenses_chart_insights"
+              onChange={handleChange}
+              rows={4}
+              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              autoFocus
+              placeholder=">>> insights del grafico de costos desglosados <<<"
+            />
             <div className="my-2 flex justify-end">
-              <button className="rounded-md border-2 border-blue-400 bg-blue-600 px-3  py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
+              <button className="rounded-md bg-blue-600 px-3 py-2 text-white  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:opacity-50">
                 continuar con analisis
               </button>
             </div>

@@ -318,12 +318,14 @@ export async function addThreadToBusiness(thread_id: string, business_id: string
 
 const ChartsFormSchema = z.object({
   id: z.string(),
-  waterfall_chart_insights: z.string(),
-  sales_chart_insights: z.string(),
-  costs_and_expenses_chart_insights: z.string(),
-  net_profit_and_margins_chart_insights: z.string(),
-  margins_chart_insights: z.string(),
-  detailed_expenses_chart_insights: z.string(),
+  waterfall_chart_insights: z.string().optional(),
+  sales_chart_insights: z.string().optional(),
+  costs_and_expenses_chart_insights: z.string().optional(),
+  net_profit_and_margins_chart_insights: z.string().optional(),
+  margins_chart_insights: z.string().optional(),
+  detailed_expenses_chart_insights: z.string().optional(),
+  actual_vs_average_chart_insights: z.string().optional(),
+  actual_vs_average_2_chart_insights: z.string().optional(),
   report_id: z.string(),
   business_id: z.string(),
 });
@@ -337,22 +339,17 @@ export async function buildChartsInsights(formData:FormData) {
   const business_id = formData.get('business_id');
   const report_type = formData.get('report_type');
 
+  if (report_type === "followup") {
   const {
       waterfall_chart_insights,
-      sales_chart_insights, 
-      costs_and_expenses_chart_insights, 
-      net_profit_and_margins_chart_insights, 
-      margins_chart_insights,
-      detailed_expenses_chart_insights,
+      actual_vs_average_chart_insights,
+      actual_vs_average_2_chart_insights,
    } = BuildChartsInsights.parse({
     waterfall_chart_insights: formData.get('waterfall_chart_insights'),
-    sales_chart_insights: formData.get('sales_chart_insights'),
-    costs_and_expenses_chart_insights: formData.get('costs_and_expenses_chart_insights'),
-    net_profit_and_margins_chart_insights: formData.get('net_profit_and_margins_chart_insights'),
-    margins_chart_insights: formData.get('margins_chart_insights'),
-    detailed_expenses_chart_insights: formData.get('detailed_expenses_chart_insights'),
+    actual_vs_average_chart_insights: formData.get('actual_vs_average_chart_insights'),
+    actual_vs_average_2_chart_insights: formData.get('actual_vs_average_2_chart_insights'),
 
-  });
+  })
 
   const supabase = createClient();
 
@@ -360,25 +357,94 @@ export async function buildChartsInsights(formData:FormData) {
     .from('charts')
     .insert([
       { type: "waterfall", insights: waterfall_chart_insights, report_id: report_id },
-      { type: "sales", insights: sales_chart_insights, report_id: report_id },
-      { type: "costs_and_expenses", insights: costs_and_expenses_chart_insights, report_id: report_id },
-      { type: "net_profit_and_margins", insights: net_profit_and_margins_chart_insights, report_id: report_id },
-      { type: "margins", insights: margins_chart_insights, report_id: report_id },
-      { type: "detailed_expenses", insights: detailed_expenses_chart_insights, report_id: report_id },
+      { type: "actual_vs_average", insights: actual_vs_average_chart_insights, report_id: report_id },
+      { type: "actual_vs_average_2", insights: actual_vs_average_2_chart_insights, report_id: report_id },
     ])
+
+    if (error) {
+      console.error('Error inserting data:', error);
+    } else {
+      console.log("graficos generados correctamente");
+    }
+  
     
+    redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-history-charts`)
+ 
+    
+  } else if (report_type === "followup-history") {
+    const {
+        sales_chart_insights, 
+        costs_and_expenses_chart_insights, 
+        net_profit_and_margins_chart_insights, 
+        margins_chart_insights,
+        detailed_expenses_chart_insights,
+      } = BuildChartsInsights.parse({
+        sales_chart_insights: formData.get('sales_chart_insights'),
+        costs_and_expenses_chart_insights: formData.get('costs_and_expenses_chart_insights'),
+        net_profit_and_margins_chart_insights: formData.get('net_profit_and_margins_chart_insights'),
+        margins_chart_insights: formData.get('margins_chart_insights'),
+        detailed_expenses_chart_insights: formData.get('detailed_expenses_chart_insights'),
+    
+      })
 
+      const supabase = createClient();
 
-  if (error) {
-    console.error('Error inserting data:', error);
+    const { data, error } = await supabase
+      .from('charts')
+      .insert([
+        { type: "sales", insights: sales_chart_insights, report_id: report_id },
+        { type: "costs_and_expenses", insights: costs_and_expenses_chart_insights, report_id: report_id },
+        { type: "net_profit_and_margins", insights: net_profit_and_margins_chart_insights, report_id: report_id },
+        { type: "margins", insights: margins_chart_insights, report_id: report_id },
+        { type: "detailed_expenses", insights: detailed_expenses_chart_insights, report_id: report_id },
+      ])
+      
+      if (error) {
+        console.error('Error inserting data:', error);
+      } else {
+        console.log("graficos generados correctamente");
+      }
+    
+      redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-analysis`) 
+
   } else {
-    console.log("graficos generados correctamente");
-  }
+    const {
+      waterfall_chart_insights,
+      sales_chart_insights, 
+      costs_and_expenses_chart_insights, 
+      net_profit_and_margins_chart_insights, 
+      margins_chart_insights,
+      detailed_expenses_chart_insights,
+    } = BuildChartsInsights.parse({
+      waterfall_chart_insights: formData.get('waterfall_chart_insights'),
+      sales_chart_insights: formData.get('sales_chart_insights'),
+      costs_and_expenses_chart_insights: formData.get('costs_and_expenses_chart_insights'),
+      net_profit_and_margins_chart_insights: formData.get('net_profit_and_margins_chart_insights'),
+      margins_chart_insights: formData.get('margins_chart_insights'),
+      detailed_expenses_chart_insights: formData.get('detailed_expenses_chart_insights'),
+    });
 
-  console.log("report_type", report_type);
-  report_type === "followup" ? 
-  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-analysis`) :
-  redirect(`/admin/businesses/${business_id}/reports/${report_id}/analysis`) ;
+    const supabase = createClient();
+
+    const { data, error } = await supabase
+      .from('charts')
+      .insert([
+        { type: "waterfall", insights: waterfall_chart_insights, report_id: report_id },
+        { type: "sales", insights: sales_chart_insights, report_id: report_id },
+        { type: "costs_and_expenses", insights: costs_and_expenses_chart_insights, report_id: report_id },
+        { type: "net_profit_and_margins", insights: net_profit_and_margins_chart_insights, report_id: report_id },
+        { type: "margins", insights: margins_chart_insights, report_id: report_id },
+        { type: "detailed_expenses", insights: detailed_expenses_chart_insights, report_id: report_id },
+      ])
+      
+      if (error) {
+        console.error('Error inserting data:', error);
+      } else {
+        console.log("graficos generados correctamente");
+      }
+    
+      redirect(`/admin/businesses/${business_id}/reports/${report_id}/analysis`) ;
+  }
 }
 
 const RecomendationsFormSchema = z.object({
