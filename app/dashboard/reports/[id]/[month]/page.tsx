@@ -113,7 +113,7 @@ export default async function ReportPage({
           <div>
             <div>
               {
-                !report.business_resume || report.business_resume.length < 0 ? (
+                !report.business_resume ? (
                   <p className="mb-4 text-2xl font-semibold text-[#003E52]">Resumen de las operaciones de <span className='capitalize'>{report.month}</span></p>
                 ) : 
                   <p className="mb-4 text-2xl font-semibold text-[#003E52]">Perfil de mi empresa</p>
@@ -121,7 +121,7 @@ export default async function ReportPage({
             </div>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
               {
-                !report.business_resume || report.business_resume.length < 0 ? (
+                !report.business_resume ? (
                   <div>
                     {renderTextFromDatabase(report.operations_resume)}
                   </div>

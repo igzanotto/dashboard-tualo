@@ -124,7 +124,7 @@ export default async function ReportPage({
         </div>
 
         <div className="mx-auto max-xl:w-[90%] xl:w-[80%]">
-          {!report.business_resume || report.business_resume.length < 0 ? (
+          {!report.business_resume ? (
             <div id='resumen' key={'resumen'}>
               <form action={updateReport} className="mt-10 flex flex-col gap-20">
                 <input type="hidden" name="report_id" value={params.report_id}/>
