@@ -2,7 +2,9 @@ import OpenAI from "openai";
 import { NextResponse } from "next/server";
 import { addThreadToBusiness } from "@/lib/actions";
 
-const openai = new OpenAI();
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(request: Request) {
   try {
