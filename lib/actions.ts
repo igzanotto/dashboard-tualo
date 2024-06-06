@@ -446,31 +446,46 @@ export async function buildRecomendations(formData:FormData) {
 const ReportUpdateSchema = z.object({
   report_id: z.string(),
   business_resume: z.string().optional(),
+  operations_resume: z.string().optional(),
   goals: z.string().optional(),
   analysis: z.string().optional(),
 });
 
 // Función para actualizar el reporte en Supabase
 export async function updateReport(formData: FormData) {
-  const parsedData = ReportUpdateSchema.safeParse({
+  const updateData: any = {
     report_id: formData.get('report_id'),
-    business_resume: formData.get('business_resume'),
-    goals: formData.get('goals'),
-    analysis: formData.get('analysis'),
-  });
+  };
+
+  const business_resume = formData.get('business_resume');
+  const operations_resume = formData.get('operations_resume')
+  const goals = formData.get('goals');
+  const analysis = formData.get('analysis');
+
+  if (business_resume !== null) updateData.business_resume = business_resume;
+  if (operations_resume !== null) updateData.operations_resume = operations_resume;
+  if (goals !== null) updateData.goals = goals;
+  if (analysis !== null) updateData.analysis = analysis;
+
+  const parsedData = ReportUpdateSchema.safeParse(updateData);
 
   if (!parsedData.success) {
     console.error('Validation Error:', parsedData.error);
     throw new Error('Invalid form data');
   }
 
-  const { report_id, business_resume, goals, analysis } = parsedData.data;
+  const { report_id, business_resume: br, operations_resume: op, goals: gl, analysis: an } = parsedData.data;
   const supabase = createClient();
 
   try {
     const { data, error } = await supabase
       .from('reports')
-      .update({ business_resume, goals, analysis })
+      .update({
+        ...(br !== undefined && { business_resume: br }),
+        ...(op !== undefined && { operations_resume: op }),
+        ...(gl !== undefined && { goals: gl }),
+        ...(an !== undefined && { analysis: an })
+      })
       .eq('id', report_id)
       .single();
 
