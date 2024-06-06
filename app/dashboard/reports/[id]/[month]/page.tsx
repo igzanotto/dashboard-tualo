@@ -113,7 +113,18 @@ export default async function ReportPage({
           <div>
             <p className="mb-4 text-2xl font-semibold text-[#003E52]">Perfil de mi empresa</p>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
-              {renderTextFromDatabase(report.business_resume)}
+              {
+                !report.business_resume || report.business_resume.length < 0 ? (
+                  <div>
+                    {renderTextFromDatabase(report.operations_resume)}
+                  </div>
+                ) :
+                (
+                  <div>
+                    {renderTextFromDatabase(report.business_resume)}
+                  </div>
+                )
+              }
             </div>
           </div>
           <div>
