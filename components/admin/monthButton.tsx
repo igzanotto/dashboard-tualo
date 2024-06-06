@@ -69,7 +69,6 @@ export default function MonthButtonsAdmin({ business_id}:Props) {
     //         </Link>
     //       </div>
     //     ))}
-      
     // </div>
     <div className="flex flex-col items-center space-x-4">
     <Popover open={open} onOpenChange={setOpen}>
