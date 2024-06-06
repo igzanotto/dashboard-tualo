@@ -195,7 +195,7 @@ vamos a hacer lo siguiente:
 con base en esas tres cosas haremos un análisis detallado del mes
 recuerda que tus respuestas deben de ser concisas y el lenguaje que uses debe de ser para gente no-financiera, que sea fácil de entender e interpretar
 
-si te parece bien, y para estar seguros de que tienes toda la información a la mano, lo primero que quiero es que hagas un resumen de máximo 500 palabras del reporte anterior`;
+si te parece bien, y para estar seguros de que tienes toda la información a la mano, lo primero que quiero es que hagas un resumen de máximo 500 palabras del reporte anterior en formato bullets`;
 
 export const recomendations_feedback_prompt = 
 `le pedí al emprendedor que respondiera las siguientes preguntas de cada una de las recomendaciones que le hicimos en el reporte del mes anterior:
@@ -215,10 +215,7 @@ export const recomendations_feedback_close =
 si te quedó claro, no necesito un resumen y solo pídeme el P&L de este mes`;
 
 export const QA_transcript = 
-`primero te mando el Q&A de la información del mes:
-
-———
-
+`
 *Operaciones y Ventas*
 
 1. ¿Hubo algún producto o servicio nuevo que se lanzó este mes?
@@ -264,23 +261,31 @@ export const QA_transcript =
 1. ¿Se establecieron o terminaron alianzas o asociaciones estratégicas?
     
     No
-    
-———
+`;
 
+export const followup_goals_start =
+`———
 Por otro lado, te recuerdo que la meta financiera de la empresa era:
+`;
 
-"Necesitar vender más o gastar menos”
+export const followup_goals_transcript = `Necesitar vender más o gastar menos`;
 
-———
+export const observations_prompt = `
+____
+y nos hicieron observaciones:`;
 
+export const followup_QA_close =
+`
+_______
 si te queda claro, hazme un resumen de esto en bullets y pídeme después el follow up de las recomendaciones pasadas`;
 
-export const PL_transcript = 
+export const followup_PL_prompt =
 `te voy a mandar el P&L del cliente con toda la historia, pero recuerda que el mes que estamos analizando es el último
 
-———
+———`
 
-Venta Total	Venta tarjeta	248994.05
+export const PL_transcript = 
+`Venta Total	Venta tarjeta	248994.05
 Venta Total	Venta efectivo	110368.97
 Venta Total	Franquicia	0
 Venta Total		
@@ -306,13 +311,14 @@ Gastos Financieros Totales	Rendimientos (+)	0
 Gastos Financieros Totales	Efectivo (-)	0
 Gastos Financieros Totales	Otros	0
 Gastos Financieros Totales	Impuestos (-)	0
-Utilidad Neta (3)
+Utilidad Neta (3)`;
 
+export const followup_PL_close = `
 ———
 
-si te queda claro, respóndeme con la tabla resumida y pídeme siguientes instrucciones`;
+si te queda claro, respóndeme con la tabla resumida y pídeme siguientes instrucciones`
 
-export const highligths_and_PL_analysis_prompt =
+export const highlights_and_PL_analysis_prompt =
 `lo siguiente será empezar con el primer entregable: **highlights y análisis del P&L del mes de enero**
 
 toma las siguientes consideraciones para hacerlo:

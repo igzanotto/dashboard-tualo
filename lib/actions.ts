@@ -583,7 +583,7 @@ const FollowupReportFormSchema = z.object({
   id: z.string(),
   business_id: z.string(),
   month: z.string(),
-  highligths_and_PL_analysis_response: z.string(),
+  highlights_and_PL_analysis_response: z.string(),
 });
 
 const CreateFollowupReport = FollowupReportFormSchema.omit({ id: true});
@@ -591,19 +591,19 @@ const CreateFollowupReport = FollowupReportFormSchema.omit({ id: true});
 export async function createFollowupReport(formData:FormData) {
   console.log("adentro de createReport")
   console.log(formData);
-  const { month, highligths_and_PL_analysis_response, business_id } = CreateFollowupReport.parse({
+  const { month, highlights_and_PL_analysis_response, business_id } = CreateFollowupReport.parse({
     month: formData.get('month'),
-    highligths_and_PL_analysis_response: formData.get('highligths_and_PL_analysis_response'),
+    highlights_and_PL_analysis_response: formData.get('highlights_and_PL_analysis_response'),
     business_id: formData.get('business_id'),
   });
-  console.log("data enviada ",month, highligths_and_PL_analysis_response, business_id);
+  console.log("data enviada ",month, highlights_and_PL_analysis_response, business_id);
 
   const supabase = createClient();
 
   const { data, error } = await supabase
     .from('reports')
     .insert([
-      { month: month, operations_resume: highligths_and_PL_analysis_response, business_id: business_id }
+      { month: month, operations_resume: highlights_and_PL_analysis_response, business_id: business_id }
     ])
     .select('id');
 
