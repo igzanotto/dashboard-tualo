@@ -676,3 +676,55 @@ export async function createFollowupReport(formData:FormData) {
 
 //   redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
 // }
+
+// const UploadImageSchema = z.object({
+//   report_id: z.string(),
+//   image: z.string(),
+// });
+
+interface UploadImageResponse {
+  data: any;
+  error: Error | null;
+}
+
+export async function uploadImage(formData: FormData): Promise<UploadImageResponse> {
+  const report_id = formData.get('report_id') as string;
+  const image = formData.get('image') as File | null;
+  const business_id = formData.get('business_id')
+
+  if (!image) {
+    throw new Error('No image file provided');
+  }
+
+  const supabase = createClient()
+
+  try {
+    // Subir la imagen al bucket 'images'
+    const filePath = `${report_id}/${image.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(filePath, image);
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    // Generar la URL de la imagen
+    const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/images/${filePath}`;
+
+    // Guardar la URL en la columna additional_info de la tabla reports
+    const { data: reportData, error: reportError } = await supabase
+      .from('reports')
+      .update({ additional_info: imageUrl })
+      .eq('id', report_id);
+
+    if (reportError) {
+      throw reportError;
+    }
+     revalidatePath(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`)
+    return { data: { uploadData, reportData }, error: null };
+  } catch (error) {
+    console.error('Error uploading image:', (error as Error).message);
+    return { data: null, error: error as Error };
+  }
+}

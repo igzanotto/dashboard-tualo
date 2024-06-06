@@ -10,6 +10,7 @@ import {
   createChartEmbed,
   updateReport,
   updateReportRecommendations,
+  uploadImage,
 } from '@/lib/actions';
 import {
   fetchBusinessById,
@@ -380,6 +381,23 @@ export default async function ReportPage({
                 </button>
               </form>
             ))}
+          </div>
+
+          <div id='informacion-adicional' className='section-margin my-28'>
+            <form action={uploadImage}>
+              <input type="hidden" name="report_id" value={params.report_id}/>
+              <input type="hidden" name="business_id" value={params.business_id}/>
+              <input name='image' type="file" placeholder='Selecciona un imagen'/>
+
+              <button className='w-[100px] bg-black text-white' type='submit'>Subir imagen</button>
+            </form>
+            {
+              report.additional_info ? (
+                <Image src={report.additional_info} alt='image' width={60} height={60}/>
+              ) : (
+                null
+              )
+            }
           </div>
         </div>
       </div>
