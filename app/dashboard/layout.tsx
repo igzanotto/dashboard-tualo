@@ -17,9 +17,6 @@ export default async function Layout({
   if (!user) {
     return redirect('/login');
   }
-
-  const { data }= await supabase.from('profiles').select('business_id').single();
-  const business_id = data?.business_id;
   
   return (
     <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
@@ -27,7 +24,6 @@ export default async function Layout({
         <SideNav />
       </div>
       <div className="flex-grow md:overflow-y-auto 2xl:px-12 px-2 py-0 max-md:p-0">
-        <ReportsIndexNavbar business_id={business_id} />
         {children}
       </div>
     </div>

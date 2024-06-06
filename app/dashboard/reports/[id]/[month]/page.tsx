@@ -19,6 +19,7 @@ import reporte from '../../../../../components/images/header-reporte.png'
 import Image from 'next/image';
 import { translateChartType } from '@/lib/utils';
 import Link from 'next/link';
+import ReportsIndexNavbar from '@/components/reports-index-navbar';
 
 
 const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
@@ -49,7 +50,7 @@ export default async function ReportPage({
 }) {
   const id = params.id;
   const report = await fetchReportById(id);
-  console.log(report.id);
+  console.log(report.business_id);
   
   
   const orderedCharts = reorderCharts(report.charts);
@@ -95,6 +96,7 @@ export default async function ReportPage({
 
   return (
     <div className="flex flex-col gap-3 xl:px-2">
+      <ReportsIndexNavbar business_id={report.business_id}/>
       <Image width={3000} height={3000} src={reporte} alt='image' className='w-full'/>
       
       
