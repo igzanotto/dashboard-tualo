@@ -721,8 +721,64 @@ export async function uploadImage(formData: FormData): Promise<UploadImageRespon
     if (reportError) {
       throw reportError;
     }
-     revalidatePath(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`)
+    console.log({data: { uploadData, reportData }});
+    revalidatePath(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`)
     return { data: { uploadData, reportData }, error: null };
+  } catch (error) {
+    console.error('Error uploading image:', (error as Error).message);
+    return { data: null, error: error as Error };
+  }
+}
+
+export async function uploadImageChart(formData: FormData): Promise<UploadImageResponse> {
+  const report_id = formData.get('report_id') as string;
+  const id = formData.get('id') as string;
+  const image = formData.get('image') as File | null;
+  const business_id = formData.get('business_id') as string;
+
+  if (!image) {
+    throw new Error('No image file provided');
+  }
+
+  const supabase = createClient();
+
+  try {
+    // Subir la imagen al bucket 'charts_images'
+    const filePath = `${report_id}/${image.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('charts_images')
+      .upload(filePath, image);
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    console.log('Image uploaded successfully:', uploadData);
+
+    // Generar la URL de la imagen
+    const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/charts_images/${filePath}`;
+    console.log('Generated image URL:', imageUrl);
+
+    // Guardar la URL en la columna graphy_url de la tabla charts
+    const { data: chartData, error: chartError } = await supabase
+      .from('charts')
+      .update({ graphy_url: imageUrl })
+      .eq('id', id);
+
+    console.log('Report ID:', report_id);
+    console.log('cHART ID:', id);
+    console.log('Image URL:', imageUrl);
+    console.log('Chart Data:', chartData);
+
+    if (chartError) {
+      throw chartError;
+    }
+
+    // Revalidar la ruta especificada
+    revalidatePath(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
+    console.log({ data: { uploadData, chartData } });
+
+    return { data: { uploadData, chartData }, error: null };
   } catch (error) {
     console.error('Error uploading image:', (error as Error).message);
     return { data: null, error: error as Error };
