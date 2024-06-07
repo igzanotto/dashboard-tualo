@@ -506,7 +506,7 @@ export async function buildRecomendations(formData:FormData) {
   
   report_type === "followup" ? 
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`) :
-  redirect(`/admin/businesses/${business_id}/reports`);
+  redirect(`/admin/businesses/${business_id}`);
 }
 
 const ReportUpdateSchema = z.object({
