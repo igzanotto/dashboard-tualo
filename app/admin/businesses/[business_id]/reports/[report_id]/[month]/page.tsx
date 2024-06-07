@@ -430,7 +430,7 @@ export default async function ReportPage({
             ))}
           </div>
 
-          <div id='informacion-adicional' className='section-margin my-28'>
+          <div id='información adicional' className='section-margin my-28'>
             <BannerSection text='Información adicional'/>
             {
               report.additional_info ? (
