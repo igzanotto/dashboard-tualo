@@ -694,6 +694,46 @@ export async function createFollowupReport(formData:FormData) {
 
 
 
+const EditInsightsFormSchema = z.object({
+  insights: z.string(),
+  id: z.string(),
+  
+});
+
+export async function editInsights(formData:FormData) {
+  const parsedData = EditInsightsFormSchema.safeParse({
+    id: formData.get('id'),
+    insights: formData.get('insights')
+  })
+
+  if (!parsedData.success) {
+    console.error('Validation Error:', parsedData.error);
+    throw new Error('Invalid form data');
+  }
+
+  const { id, insights} = parsedData.data;
+  const supabase = createClient(); // Crear cliente Supabase
+  
+  try {
+    const { data: chartInsights, error } = await supabase
+      .from('charts')
+      .update({insights})
+      .eq('id', id)
+      .single();
+
+      if (error) {
+        console.error('Supabase update error:', error);
+        throw error;
+      }
+
+      console.log(chartInsights);
+      
+      return chartInsights;
+  } catch (error) {
+    console.error('Error updating report chartInsights:', error);
+    throw error;
+  }
+}
 
 // // todo este es igual al build recomendations excepto el redirect.. habria que unificar
 
