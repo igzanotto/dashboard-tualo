@@ -384,20 +384,20 @@ export default async function ReportPage({
           </div>
 
           <div id='informacion-adicional' className='section-margin my-28'>
-            <form action={uploadImage}>
-              <input type="hidden" name="report_id" value={params.report_id}/>
-              <input type="hidden" name="business_id" value={params.business_id}/>
-              <input name='image' type="file" placeholder='Selecciona un imagen'/>
-
-              <button className='w-[100px] bg-black text-white' type='submit'>Subir imagen</button>
-            </form>
+            <BannerSection text='Información adicional'/>
             {
               report.additional_info ? (
-                <Image src={report.additional_info} alt='image' width={60} height={60}/>
+                <Image src={report.additional_info} alt='image' width={200} height={200} className='xl:w-[50%] mx-auto my-5 rounded-xl'/>
               ) : (
                 null
               )
             }
+            <form action={uploadImage} className='bg-[#252525]/10 p-4 rounded-xl flex flex-col gap-4 mt-12'>
+              <input type="hidden" name="report_id" value={params.report_id}/>
+              <input type="hidden" name="business_id" value={params.business_id}/>
+              <input name='image' type="file" className='text-[#003E52]'/>
+              <button className="rounded-lg bg-[#003E52] p-2 text-white" type='submit'>Guardar imagen</button>
+            </form>
           </div>
         </div>
       </div>
