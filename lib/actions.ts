@@ -653,7 +653,9 @@ const FollowupReportFormSchema = z.object({
   id: z.string(),
   business_id: z.string(),
   month: z.string(),
-  highlights_and_PL_analysis_response: z.string(),
+  thread_id: z.string(),
+  assistant_id: z.string(),
+
 });
 
 const CreateFollowupReport = FollowupReportFormSchema.omit({ id: true});
@@ -661,19 +663,20 @@ const CreateFollowupReport = FollowupReportFormSchema.omit({ id: true});
 export async function createFollowupReport(formData:FormData) {
   console.log("adentro de createReport")
   console.log(formData);
-  const { month, highlights_and_PL_analysis_response, business_id } = CreateFollowupReport.parse({
+  const { business_id, month, thread_id, assistant_id } = CreateFollowupReport.parse({
     month: formData.get('month'),
-    highlights_and_PL_analysis_response: formData.get('highlights_and_PL_analysis_response'),
     business_id: formData.get('business_id'),
+    thread_id: formData.get('thread_id'),
+    assistant_id: formData.get('assistant_id'),
   });
-  console.log("data enviada ",month, highlights_and_PL_analysis_response, business_id);
+  console.log("data enviada ",month, business_id, thread_id, assistant_id);
 
   const supabase = createClient();
 
   const { data, error } = await supabase
     .from('reports')
     .insert([
-      { month: month, operations_resume: highlights_and_PL_analysis_response, business_id: business_id }
+      { month: month, business_id: business_id }
     ])
     .select('id');
 
@@ -689,56 +692,37 @@ export async function createFollowupReport(formData:FormData) {
 
   const report_id = data[0].id;
 
-  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
+  const { error: businessError } = await supabase
+  .from('businesses')
+  .update({ thread_id: thread_id, assistant_id: assistant_id })
+  .eq('id', business_id);
+
+if (businessError) {
+  console.error('Error updating business table:', businessError);
+  return;
+}
+
+redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-resume`);
 }
 
 
+export async function buildFollowupResume(formData:FormData) {
+  const report_id = formData.get('report_id');
+  const business_id = formData.get('business_id');
+  const resume = formData.get('highlights_and_PL_analysis_response');
+  const goals = formData.get('followup_goals_transcript');
 
+  const supabase = createClient();
 
-// // todo este es igual al build recomendations excepto el redirect.. habria que unificar
+  const { data, error } = await supabase
+    .from('reports')
+    .update({ operations_resume: resume, goals: goals })
+    .eq('id', report_id)
 
-// const BuildFollowupRecomendations = RecomendationsFormSchema.omit({id: true, business_id: true, report_id: true});
-// // este omit del business_id y report_id no esta muy claro por que esta por que si uso esos datos
+  if (error) {
+    console.error('Error inserting data:', error);
+  }
 
-// export async function buildFollowupRecomendations(formData:FormData) {
-//   console.log("adentro de Followuprecomendations builder")
-//   console.log(formData);
-//   const report_id = formData.get('report_id');
-//   const business_id = formData.get('business_id');
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
+}
 
-//   const {
-//     first_recomendation,
-//     second_recomendation, 
-//     third_recomendation, 
-//     fourth_recomendation, 
-//   } = BuildFollowupRecomendations.parse({
-//     first_recomendation: formData.get('first_recomendation'),
-//     second_recomendation: formData.get('second_recomendation'),
-//     third_recomendation: formData.get('third_recomendation'),
-//     fourth_recomendation: formData.get('fourth_recomendation'),
-//   });
-
-//   const recommendations = [
-//     { content: first_recomendation, report_id: report_id },
-//     { content: second_recomendation, report_id: report_id },
-//     { content: third_recomendation, report_id: report_id },
-//     { content: fourth_recomendation, report_id: report_id },
-//   ];
-
-//   // Filter out empty recommendations
-//   const nonEmptyRecommendations = recommendations.filter(rec => rec.content);
-
-//   const supabase = createClient();
-
-//   const { data, error } = await supabase
-//     .from('recomendations')
-//     .insert(nonEmptyRecommendations)
-
-//   if (error) {
-//     console.error('Error inserting data:', error);
-//   } else {
-//     console.log("recomendaciones generadas correctamente");
-//   }
-
-//   redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
-// }
