@@ -340,32 +340,32 @@ export async function buildChartsInsights(formData:FormData) {
   const report_type = formData.get('report_type');
 
   if (report_type === "followup") {
-  const {
-      waterfall_chart_insights,
-      actual_vs_average_chart_insights,
-      actual_vs_average_2_chart_insights,
-   } = BuildChartsInsights.parse({
-    waterfall_chart_insights: formData.get('waterfall_chart_insights'),
-    actual_vs_average_chart_insights: formData.get('actual_vs_average_chart_insights'),
-    actual_vs_average_2_chart_insights: formData.get('actual_vs_average_2_chart_insights'),
+    const {
+        waterfall_chart_insights,
+        actual_vs_average_chart_insights,
+        actual_vs_average_2_chart_insights,
+    } = BuildChartsInsights.parse({
+      waterfall_chart_insights: formData.get('waterfall_chart_insights'),
+      actual_vs_average_chart_insights: formData.get('actual_vs_average_chart_insights'),
+      actual_vs_average_2_chart_insights: formData.get('actual_vs_average_2_chart_insights'),
 
-  })
+    })
 
-  const supabase = createClient();
+    const supabase = createClient();
 
-  const { data, error } = await supabase
-    .from('charts')
-    .insert([
-      { type: "waterfall", insights: waterfall_chart_insights, report_id: report_id },
-      { type: "actual_vs_average", insights: actual_vs_average_chart_insights, report_id: report_id },
-      { type: "actual_vs_average_2", insights: actual_vs_average_2_chart_insights, report_id: report_id },
-    ])
+    const { data, error } = await supabase
+      .from('charts')
+      .insert([
+        { type: "waterfall", insights: waterfall_chart_insights, report_id: report_id },
+        { type: "actual_vs_average", insights: actual_vs_average_chart_insights, report_id: report_id },
+        { type: "actual_vs_average_2", insights: actual_vs_average_2_chart_insights, report_id: report_id },
+      ])
 
-    if (error) {
-      console.error('Error inserting data:', error);
-    } else {
-      console.log("graficos generados correctamente");
-    }
+      if (error) {
+        console.error('Error inserting data:', error);
+      } else {
+        console.log("graficos generados correctamente");
+      }
   
     
     redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-history-charts`)
