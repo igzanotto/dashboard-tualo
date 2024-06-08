@@ -4,11 +4,11 @@ import { Button } from '@/components/button';
 import { buildChartsInsights } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
-import { followup_charts_prompt } from '@/utils/prompts'
+import { history_charts_prompt } from '@/utils/prompts'
 
 
 interface FormData {
-  followup_charts_prompt: string;
+  history_charts_prompt: string;
 }
 
 export default function FollowupChartsGenerator({ threadId }: { threadId: any }) {
@@ -17,7 +17,7 @@ export default function FollowupChartsGenerator({ threadId }: { threadId: any })
 
   const [statusMessage, setStatusMessage] = useState('');
   const [formData, setFormData] = useState<FormData>({
-   followup_charts_prompt,
+   history_charts_prompt,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -39,7 +39,7 @@ export default function FollowupChartsGenerator({ threadId }: { threadId: any })
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        content: formData.followup_charts_prompt,
+        content: formData.history_charts_prompt,
         threadId: threadId,
       }),
     });
@@ -97,7 +97,7 @@ export default function FollowupChartsGenerator({ threadId }: { threadId: any })
       <textarea
         name="PL_prompt"
         rows={15}
-        value={formData.followup_charts_prompt}
+        value={formData.history_charts_prompt}
         onChange={handleChange}
         className="w-full rounded-md bg-blue-100 px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
         autoFocus
@@ -120,7 +120,7 @@ export default function FollowupChartsGenerator({ threadId }: { threadId: any })
             <input
               type="text"
               name="report_type"
-              defaultValue="followup"
+              defaultValue="followup-history"
               hidden
             />
             <input
@@ -145,15 +145,6 @@ export default function FollowupChartsGenerator({ threadId }: { threadId: any })
           </div>
 
           <div className="w-1/2 pl-4">
-            <label htmlFor="waterfall_chart_insights">grafico de cascada</label>
-            <textarea
-              name="waterfall_chart_insights"
-              onChange={handleChange}
-              rows={4}
-              className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
-              autoFocus
-              placeholder=">>> insights del grafico de cascada <<<"
-            />
             <label htmlFor="sales_chart_insights">grafico de ventas</label>
             <textarea
               name="sales_chart_insights"
