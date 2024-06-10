@@ -19,7 +19,7 @@ import {
   fetchReportById,
   fetchReportsByBusiness,
 } from '@/lib/data';
-import { InfoIcon } from 'lucide-react';
+import { Edit2Icon, InfoIcon } from 'lucide-react';
 import { Libre_Baskerville } from 'next/font/google';
 import Link from 'next/link';
 import reporte from '../../../../../../../components/images/header-reporte.png';
@@ -42,6 +42,8 @@ const chartOrder = [
   'net_profit_and_margins',
   'margins',
   'detailed_expenses',
+  'actual_vs_average',
+  'actual_vs_average_2'
 ];
 
 const reorderCharts = (charts: any) => {
@@ -227,8 +229,11 @@ export default async function ReportPage({
                   id={type}
                   key={type}
                 >
-                  <div className="">
-                    <div className="flex items-center gap-2">
+                  
+                    {chart ? (
+                      chart.graphy_url ? (
+                    <div className='flex flex-col'>
+                      <div className="flex items-center gap-2">
                       <p className="my-4 text-xl font-semibold text-[#003E52] xl:text-2xl">
                         {' '}
                         Gráfica de{' '}
@@ -236,39 +241,48 @@ export default async function ReportPage({
                           {translateChartType(type)}
                         </span>
                       </p>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <InfoIcon width={20} height={20} />
-                          </TooltipTrigger>
-                          <TooltipContent className="w-[450px]">
-                            <p>
-                              Esta gráfica se lee de izquierda a derecha: inicia
-                              con ingresos totales, luego se deducen los costos
-                              de producción (los que están directamente
-                              relacionado con las ventas), revelando la utilidad
-                              bruta. A continuación, se restan los gastos
-                              operativos (los que son indirectos) para obtener
-                              la utilidad operativa. Por último se deducen los
-                              gastos financieros, para llegar a la utilidad
-                              neta. Las barras verdes suman y las rojas restan,
-                              dejando las grises como subtotales.
-                            </p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
                     </div>
-                    {chart ? (
-                      chart.graphy_url ? (
-                        <div className="flex w-full flex-col gap-10">
-                          <div>
+                        <div className="flex w-full gap-10">
+                          <div className='flex flex-col'>
                             <Image
                               src={chart.graphy_url}
                               alt="image"
-                              width={200}
-                              height={200}
-                              className="mx-auto my-5 rounded-xl xl:w-[50%]"
+                              width={1000}
+                              height={1000}
+                              className="mx-auto my-5 rounded-xl"
                             />
+                          <p>Actualizar imagen</p>
+                          <form
+                              action={uploadImageChart}
+                              className="mt-2 flex flex-col gap-4 rounded-xl bg-[#252525]/10 p-4"
+                            >
+                              <input
+                                type="hidden"
+                                name="report_id"
+                                value={params.report_id}
+                              />
+                              <input
+                                type="hidden"
+                                name="id"
+                                value={chart.id}
+                              />
+                              <input
+                                type="hidden"
+                                name="business_id"
+                                value={params.business_id}
+                              />
+                              <input
+                                name="image"
+                                type="file"
+                                className="text-[#003E52]"
+                              />
+                              <button
+                                className="rounded-lg bg-[#003E52] p-2 text-white"
+                                type="submit"
+                              >
+                                Guardar imagen
+                              </button>
+                          </form>
                           </div>
                           <div className='w-full'>
                             {chart.insights && (
@@ -281,7 +295,7 @@ export default async function ReportPage({
                                 <textarea 
                                   defaultValue={chart.insights} 
                                   name='insights' 
-                                  className="w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
+                                  className="rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl h-[300px]"
                                 />
                                   {/* {renderTextFromDatabase(chart.insights)} */}
                                 <button className="w-full rounded-xl bg-[#003E52] p-3 font-medium text-white" type='submit'>Guardar</button>
@@ -290,8 +304,46 @@ export default async function ReportPage({
                             )}
                           </div>
                         </div>
+                    </div>
                       ) : (
-                        <div className='w-full'>
+                        <div className='flex justify-between w-full'>
+                          
+                          <div className='flex flex-col gap-4'>
+                            <h1 className="text-black">
+                              Crear Gráfico de {translateChartType(type)}
+                            </h1>
+                            <form
+                              action={uploadImageChart}
+                              className="mt-12 flex flex-col gap-4 rounded-xl bg-[#252525]/10 p-4"
+                            >
+                              <input
+                                type="hidden"
+                                name="report_id"
+                                value={params.report_id}
+                              />
+                              <input
+                                type="hidden"
+                                name="id"
+                                value={chart.id}
+                              />
+                              <input
+                                type="hidden"
+                                name="business_id"
+                                value={params.business_id}
+                              />
+                              <input
+                                name="image"
+                                type="file"
+                                className="text-[#003E52]"
+                              />
+                              <button
+                                className="rounded-lg bg-[#003E52] p-2 text-white"
+                                type="submit"
+                              >
+                                Guardar imagen
+                              </button>
+                          </form>
+                          </div>
                           {chart.insights && (
                             <div className=''>
                               <form action={editInsights}>
@@ -302,91 +354,19 @@ export default async function ReportPage({
                                 <textarea 
                                   defaultValue={chart.insights} 
                                   name='insights' 
-                                  className="w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
+                                  className="rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl h-[300px]"
                                 />
-                                  {/* {renderTextFromDatabase(chart.insights)} */}
+                                  
                                 <button className="w-full rounded-xl bg-[#003E52] p-3 font-medium text-white" type='submit'>Guardar</button>
                               </form>
                             </div>
                           )}
-                          <h1 className="text-black">
-                            Crear Gráfico de {translateChartType(type)}
-                          </h1>
-                          {/* {chart.graphy_url ? (
-                            <Image
-                              src={chart.graphy_url}
-                              alt="image"
-                              width={200}
-                              height={200}
-                              className="mx-auto my-5 rounded-xl xl:w-[50%]"
-                            />
-                          ) : null} */}
-                          <form
-                            action={uploadImageChart}
-                            className="mt-12 flex flex-col gap-4 rounded-xl bg-[#252525]/10 p-4"
-                          >
-                            <input
-                              type="hidden"
-                              name="report_id"
-                              value={params.report_id}
-                            />
-                            <input
-                              type="hidden"
-                              name="id"
-                              value={chart.id}
-                            />
-                            <input
-                              type="hidden"
-                              name="business_id"
-                              value={params.business_id}
-                            />
-                            <input
-                              name="image"
-                              type="file"
-                              className="text-[#003E52]"
-                            />
-                            <button
-                              className="rounded-lg bg-[#003E52] p-2 text-white"
-                              type="submit"
-                            >
-                              Guardar imagen
-                            </button>
-                          </form>
-                          {/* <form
-                            action={createChartEmbed}
-                            className="mt-10 flex flex-col gap-4"
-                          >
-                            <input
-                              type="hidden"
-                              name="report_id"
-                              value={report.id}
-                            />
-                            <input
-                              type="hidden"
-                              name="business_id"
-                              value={report.business_id}
-                            />
-                            <input type="hidden" name="type" value={type} />
-                            <input
-                              type="text"
-                              name="graphy_url"
-                              placeholder="Url del gráfico"
-                              className="w-full rounded-xl p-2"
-                            />
-                            <button
-                              type="submit"
-                              className="w-full rounded-xl bg-[#003E52] p-3 font-medium text-white"
-                            >
-                              Crear gráfico
-                            </button>
-                          </form> */}
                         </div>
                       )
                     ) : (
                       <p>No hay gráficos creados.</p>
                     )}
                   </div>
-                </div>
               );
             })}
           </div>
