@@ -29,6 +29,7 @@ import { translateChartType } from '@/lib/utils';
 import ChartNavigation from '@/components/chart-navigation';
 import MonthButtonAdmin from '@/components/admin/monthButton';
 import MonthButtonsAdmin from '@/components/admin/monthButton';
+import { EyeIcon } from '@heroicons/react/24/outline';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -120,6 +121,7 @@ export default async function ReportPage({
           </span>
         </h1>
 
+
         <div>
           <p
             className={`mx-auto mb-4 text-xl font-semibold text-[#003E52] max-xl:w-[90%] xl:w-[80%] xl:text-4xl ${libreBaskerville.className}`}
@@ -129,6 +131,10 @@ export default async function ReportPage({
         </div>
 
         <div className="mx-auto max-xl:w-[90%] xl:w-[80%]">
+        <Link href={`/admin/businesses/${business_id}/reports/${report.id}/${report.month}/preview`} className='p-3 rounded-lg bg-[#EC7700] flex items-center gap-2 text-white w-[150px]'>
+          <EyeIcon width={20} height={20}/>
+          Vista previa
+        </Link>
           {!report.business_resume ? (
             <div id="resumen" key={'resumen'}>
               <form
