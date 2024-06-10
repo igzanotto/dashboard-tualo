@@ -20,6 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={montserrat.className}>
+      <link rel="shortcut icon" href="/favicon/favicon.ico" />
       <body className={`antialiased`}>
         {children}
       </body>
