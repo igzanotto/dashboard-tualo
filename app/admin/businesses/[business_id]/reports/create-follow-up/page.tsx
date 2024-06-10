@@ -8,7 +8,8 @@ export default async function CreateReportFollowPage({
 }) {
   const { business_id } = params;
   const threadId = await fetchBusinessThreadId(business_id);
-  const assistant_id = await fetchBusinessAssistantId(business_id);
+  const assistant_id = await fetchBusinessAssistantId(business_id) || 'asst_0V6hfQlTylOonYoF18PlXJoT';
+  
 
   return (
     <main>
