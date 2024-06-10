@@ -14,6 +14,8 @@ import {
 import ChartEmbed from "@/components/charts/ChartEmbed";
 import Logo from "@/components/icons/Logo";
 import { translateChartType } from "@/lib/utils";
+import MonthButtonsAdmin from "@/components/admin/monthButton";
+import ChartNavigation from "@/components/chart-navigation";
 
 const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
 
@@ -87,6 +89,14 @@ export default async function PreviewPage({
     
     return(
       <div className="flex flex-col gap-3 xl:px-2">
+
+      <nav className="sticky top-0 z-50 mb-10 flex items-center rounded-b-xl bg-white p-2 shadow-lg md:gap-10 md:p-4">
+        <MonthButtonsAdmin business_id={business_id} />
+        <div className="mx-auto justify-center self-center">
+          <ChartNavigation />
+        </div>
+      </nav>
+
       <Image width={3000} height={3000} src={reporte} alt='image' className='w-full'/>
       
       

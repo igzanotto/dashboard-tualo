@@ -290,10 +290,10 @@ export default async function ReportPage({
                               </button>
                           </form>
                           </div>
-                          <div className='w-full'>
+                          <div className='w-[50%]'>
                             {chart.insights && (
-                              <div >
-                                <form action={editInsights}>
+                              <div className='w-full'>
+                                <form action={editInsights} className='w-full'>
                                 <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
                                   Análisis
                                 </h3>
@@ -301,7 +301,7 @@ export default async function ReportPage({
                                 <textarea 
                                   defaultValue={chart.insights} 
                                   name='insights' 
-                                  className="rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl h-[300px]"
+                                  className="rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl h-[300px] w-full"
                                 />
                                   {/* {renderTextFromDatabase(chart.insights)} */}
                                 <button className="w-full rounded-xl bg-[#003E52] p-3 font-medium text-white" type='submit'>Guardar</button>
@@ -351,8 +351,8 @@ export default async function ReportPage({
                           </form>
                           </div>
                           {chart.insights && (
-                            <div className=''>
-                              <form action={editInsights}>
+                            <div className='w-[50%]'>
+                              <form action={editInsights} className='w-full'>
                                 <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
                                   Análisis
                                 </h3>
@@ -360,7 +360,7 @@ export default async function ReportPage({
                                 <textarea 
                                   defaultValue={chart.insights} 
                                   name='insights' 
-                                  className="rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl h-[300px]"
+                                  className="rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl h-[300px] w-full"
                                 />
                                   
                                 <button className="w-full rounded-xl bg-[#003E52] p-3 font-medium text-white" type='submit'>Guardar</button>
