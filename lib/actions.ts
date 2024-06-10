@@ -340,32 +340,32 @@ export async function buildChartsInsights(formData:FormData) {
   const report_type = formData.get('report_type');
 
   if (report_type === "followup") {
-  const {
-      waterfall_chart_insights,
-      actual_vs_average_chart_insights,
-      actual_vs_average_2_chart_insights,
-   } = BuildChartsInsights.parse({
-    waterfall_chart_insights: formData.get('waterfall_chart_insights'),
-    actual_vs_average_chart_insights: formData.get('actual_vs_average_chart_insights'),
-    actual_vs_average_2_chart_insights: formData.get('actual_vs_average_2_chart_insights'),
+    const {
+        waterfall_chart_insights,
+        actual_vs_average_chart_insights,
+        actual_vs_average_2_chart_insights,
+    } = BuildChartsInsights.parse({
+      waterfall_chart_insights: formData.get('waterfall_chart_insights'),
+      actual_vs_average_chart_insights: formData.get('actual_vs_average_chart_insights'),
+      actual_vs_average_2_chart_insights: formData.get('actual_vs_average_2_chart_insights'),
 
-  })
+    })
 
-  const supabase = createClient();
+    const supabase = createClient();
 
-  const { data, error } = await supabase
-    .from('charts')
-    .insert([
-      { type: "waterfall", insights: waterfall_chart_insights, report_id: report_id },
-      { type: "actual_vs_average", insights: actual_vs_average_chart_insights, report_id: report_id },
-      { type: "actual_vs_average_2", insights: actual_vs_average_2_chart_insights, report_id: report_id },
-    ])
+    const { data, error } = await supabase
+      .from('charts')
+      .insert([
+        { type: "waterfall", insights: waterfall_chart_insights, report_id: report_id },
+        { type: "actual_vs_average", insights: actual_vs_average_chart_insights, report_id: report_id },
+        { type: "actual_vs_average_2", insights: actual_vs_average_2_chart_insights, report_id: report_id },
+      ])
 
-    if (error) {
-      console.error('Error inserting data:', error);
-    } else {
-      console.log("graficos generados correctamente");
-    }
+      if (error) {
+        console.error('Error inserting data:', error);
+      } else {
+        console.log("graficos generados correctamente");
+      }
   
     
     redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-history-charts`)
@@ -653,7 +653,9 @@ const FollowupReportFormSchema = z.object({
   id: z.string(),
   business_id: z.string(),
   month: z.string(),
-  highlights_and_PL_analysis_response: z.string(),
+  thread_id: z.string(),
+  assistant_id: z.string(),
+
 });
 
 const CreateFollowupReport = FollowupReportFormSchema.omit({ id: true});
@@ -661,19 +663,20 @@ const CreateFollowupReport = FollowupReportFormSchema.omit({ id: true});
 export async function createFollowupReport(formData:FormData) {
   console.log("adentro de createReport")
   console.log(formData);
-  const { month, highlights_and_PL_analysis_response, business_id } = CreateFollowupReport.parse({
+  const { business_id, month, thread_id, assistant_id } = CreateFollowupReport.parse({
     month: formData.get('month'),
-    highlights_and_PL_analysis_response: formData.get('highlights_and_PL_analysis_response'),
     business_id: formData.get('business_id'),
+    thread_id: formData.get('thread_id'),
+    assistant_id: formData.get('assistant_id'),
   });
-  console.log("data enviada ",month, highlights_and_PL_analysis_response, business_id);
+  console.log("data enviada ",month, business_id, thread_id, assistant_id);
 
   const supabase = createClient();
 
   const { data, error } = await supabase
     .from('reports')
     .insert([
-      { month: month, operations_resume: highlights_and_PL_analysis_response, business_id: business_id }
+      { month: month, business_id: business_id }
     ])
     .select('id');
 
@@ -689,9 +692,39 @@ export async function createFollowupReport(formData:FormData) {
 
   const report_id = data[0].id;
 
-  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
+  const { error: businessError } = await supabase
+  .from('businesses')
+  .update({ thread_id: thread_id, assistant_id: assistant_id })
+  .eq('id', business_id);
+
+if (businessError) {
+  console.error('Error updating business table:', businessError);
+  return;
 }
 
+redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-resume`);
+}
+
+
+export async function buildFollowupResume(formData:FormData) {
+  const report_id = formData.get('report_id');
+  const business_id = formData.get('business_id');
+  const resume = formData.get('highlights_and_PL_analysis_response');
+  const goals = formData.get('followup_goals_transcript');
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('reports')
+    .update({ operations_resume: resume, goals: goals })
+    .eq('id', report_id)
+
+  if (error) {
+    console.error('Error inserting data:', error);
+  }
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
+}
 
 
 const EditInsightsFormSchema = z.object({
@@ -735,50 +768,107 @@ export async function editInsights(formData:FormData) {
   }
 }
 
-// // todo este es igual al build recomendations excepto el redirect.. habria que unificar
 
-// const BuildFollowupRecomendations = RecomendationsFormSchema.omit({id: true, business_id: true, report_id: true});
-// // este omit del business_id y report_id no esta muy claro por que esta por que si uso esos datos
+interface UploadImageResponse {
+  data: any;
+  error: Error | null;
+}
 
-// export async function buildFollowupRecomendations(formData:FormData) {
-//   console.log("adentro de Followuprecomendations builder")
-//   console.log(formData);
-//   const report_id = formData.get('report_id');
-//   const business_id = formData.get('business_id');
+export async function uploadImage(formData: FormData): Promise<UploadImageResponse> {
+  const report_id = formData.get('report_id') as string;
+  const image = formData.get('image') as File | null;
+  const business_id = formData.get('business_id')
 
-//   const {
-//     first_recomendation,
-//     second_recomendation, 
-//     third_recomendation, 
-//     fourth_recomendation, 
-//   } = BuildFollowupRecomendations.parse({
-//     first_recomendation: formData.get('first_recomendation'),
-//     second_recomendation: formData.get('second_recomendation'),
-//     third_recomendation: formData.get('third_recomendation'),
-//     fourth_recomendation: formData.get('fourth_recomendation'),
-//   });
+  if (!image) {
+    throw new Error('No image file provided');
+  }
 
-//   const recommendations = [
-//     { content: first_recomendation, report_id: report_id },
-//     { content: second_recomendation, report_id: report_id },
-//     { content: third_recomendation, report_id: report_id },
-//     { content: fourth_recomendation, report_id: report_id },
-//   ];
+  const supabase = createClient()
 
-//   // Filter out empty recommendations
-//   const nonEmptyRecommendations = recommendations.filter(rec => rec.content);
+  try {
+    // Subir la imagen al bucket 'images'
+    const filePath = `${report_id}/${image.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('images')
+      .upload(filePath, image);
 
-//   const supabase = createClient();
+    if (uploadError) {
+      throw uploadError;
+    }
 
-//   const { data, error } = await supabase
-//     .from('recomendations')
-//     .insert(nonEmptyRecommendations)
+    // Generar la URL de la imagen
+    const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/images/${filePath}`;
 
-//   if (error) {
-//     console.error('Error inserting data:', error);
-//   } else {
-//     console.log("recomendaciones generadas correctamente");
-//   }
+    // Guardar la URL en la columna additional_info de la tabla reports
+    const { data: reportData, error: reportError } = await supabase
+      .from('reports')
+      .update({ additional_info: imageUrl })
+      .eq('id', report_id);
 
-//   redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
-// }
+    if (reportError) {
+      throw reportError;
+    }
+    console.log({data: { uploadData, reportData }});
+    revalidatePath(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`)
+    return { data: { uploadData, reportData }, error: null };
+  } catch (error) {
+    console.error('Error uploading image:', (error as Error).message);
+    return { data: null, error: error as Error };
+  }
+}
+
+export async function uploadImageChart(formData: FormData): Promise<UploadImageResponse> {
+  const report_id = formData.get('report_id') as string;
+  const id = formData.get('id') as string;
+  const image = formData.get('image') as File | null;
+  const business_id = formData.get('business_id') as string;
+
+  if (!image) {
+    throw new Error('No image file provided');
+  }
+
+  const supabase = createClient();
+
+  try {
+    // Subir la imagen al bucket 'charts_images'
+    const filePath = `${report_id}/${image.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('charts_images')
+      .upload(filePath, image);
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    console.log('Image uploaded successfully:', uploadData);
+
+    // Generar la URL de la imagen
+    const imageUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/charts_images/${filePath}`;
+    console.log('Generated image URL:', imageUrl);
+
+    // Guardar la URL en la columna graphy_url de la tabla charts
+    const { data: chartData, error: chartError } = await supabase
+      .from('charts')
+      .update({ graphy_url: imageUrl })
+      .eq('id', id);
+
+    console.log('Report ID:', report_id);
+    console.log('cHART ID:', id);
+    console.log('Image URL:', imageUrl);
+    console.log('Chart Data:', chartData);
+
+    if (chartError) {
+      throw chartError;
+    }
+
+    // Revalidar la ruta especificada
+    revalidatePath(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
+    console.log({ data: { uploadData, chartData } });
+
+    return { data: { uploadData, chartData }, error: null };
+  } catch (error) {
+    console.error('Error uploading image:', (error as Error).message);
+    return { data: null, error: error as Error };
+  }
+}
+

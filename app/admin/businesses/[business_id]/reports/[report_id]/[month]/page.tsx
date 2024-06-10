@@ -11,6 +11,8 @@ import {
   editInsights,
   updateReport,
   updateReportRecommendations,
+  uploadImage,
+  uploadImageChart,
 } from '@/lib/actions';
 import {
   fetchBusinessById,
@@ -54,7 +56,7 @@ export default async function ReportPage({
   params: { report_id: string; id: string; business_id: string; month: string };
 }) {
   const report = await fetchReportById(params.report_id);
-  console.log(report);
+  console.log(report.charts);
 
   const { business_id } = params;
 
@@ -260,7 +262,13 @@ export default async function ReportPage({
                       chart.graphy_url ? (
                         <div className="flex w-full flex-col gap-10">
                           <div>
-                            <ChartEmbed src={chart.graphy_url} />
+                            <Image
+                              src={chart.graphy_url}
+                              alt="image"
+                              width={200}
+                              height={200}
+                              className="mx-auto my-5 rounded-xl xl:w-[50%]"
+                            />
                           </div>
                           <div className='w-full bg-teal-600'>
                             {chart.insights && (
@@ -304,7 +312,47 @@ export default async function ReportPage({
                           <h1 className="text-black">
                             Crear Gráfico de {translateChartType(type)}
                           </h1>
+                          {/* {chart.graphy_url ? (
+                            <Image
+                              src={chart.graphy_url}
+                              alt="image"
+                              width={200}
+                              height={200}
+                              className="mx-auto my-5 rounded-xl xl:w-[50%]"
+                            />
+                          ) : null} */}
                           <form
+                            action={uploadImageChart}
+                            className="mt-12 flex flex-col gap-4 rounded-xl bg-[#252525]/10 p-4"
+                          >
+                            <input
+                              type="hidden"
+                              name="report_id"
+                              value={params.report_id}
+                            />
+                            <input
+                              type="hidden"
+                              name="id"
+                              value={chart.id}
+                            />
+                            <input
+                              type="hidden"
+                              name="business_id"
+                              value={params.business_id}
+                            />
+                            <input
+                              name="image"
+                              type="file"
+                              className="text-[#003E52]"
+                            />
+                            <button
+                              className="rounded-lg bg-[#003E52] p-2 text-white"
+                              type="submit"
+                            >
+                              Guardar imagen
+                            </button>
+                          </form>
+                          {/* <form
                             action={createChartEmbed}
                             className="mt-10 flex flex-col gap-4"
                           >
@@ -331,7 +379,7 @@ export default async function ReportPage({
                             >
                               Crear gráfico
                             </button>
-                          </form>
+                          </form> */}
                         </div>
                       )
                     ) : (
@@ -395,6 +443,23 @@ export default async function ReportPage({
                 </button>
               </form>
             ))}
+          </div>
+
+          <div id='información adicional' className='section-margin my-28'>
+            <BannerSection text='Información adicional'/>
+            {
+              report.additional_info ? (
+                <Image src={report.additional_info} alt='image' width={200} height={200} className='xl:w-[50%] mx-auto my-5 rounded-xl'/>
+              ) : (
+                null
+              )
+            }
+            <form action={uploadImage} className='bg-[#252525]/10 p-4 rounded-xl flex flex-col gap-4 mt-12'>
+              <input type="hidden" name="report_id" value={params.report_id}/>
+              <input type="hidden" name="business_id" value={params.business_id}/>
+              <input name='image' type="file" className='text-[#003E52]'/>
+              <button className="rounded-lg bg-[#003E52] p-2 text-white" type='submit'>Guardar imagen</button>
+            </form>
           </div>
         </div>
       </div>
