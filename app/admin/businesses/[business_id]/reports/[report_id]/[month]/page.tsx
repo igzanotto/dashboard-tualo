@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/tooltip';
 import {
   createChartEmbed,
+  editInsights,
   updateReport,
   updateReportRecommendations,
   uploadImage,
@@ -222,7 +223,7 @@ export default async function ReportPage({
               );
               return (
                 <div
-                  className={`section-margin flex items-center justify-between gap-10 rounded-xl bg-[#252525]/10 px-3 py-4 max-xl:flex-col `}
+                  className={`section-margin flex items-center justify-between gap-10 rounded-xl bg-[#252525]/10 px-3 py-4 max-xl:flex-col`}
                   id={type}
                   key={type}
                 >
@@ -269,29 +270,43 @@ export default async function ReportPage({
                               className="mx-auto my-5 rounded-xl xl:w-[50%]"
                             />
                           </div>
-                          <div>
+                          <div className='w-full bg-teal-600'>
                             {chart.insights && (
-                              <div>
+                              <div >
+                                <form action={editInsights}>
                                 <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
                                   Análisis
                                 </h3>
-                                <p className="text-lg text-[#003E52]">
-                                  {renderTextFromDatabase(chart.insights)}
-                                </p>
+                                <input type="hidden" name="id" value={chart.id} />
+                                <textarea 
+                                  defaultValue={chart.insights} 
+                                  name='insights' 
+                                  className="w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
+                                />
+                                  {/* {renderTextFromDatabase(chart.insights)} */}
+                                <button className="w-full rounded-xl bg-[#003E52] p-3 font-medium text-white" type='submit'>Guardar</button>
+                              </form>
                               </div>
                             )}
                           </div>
                         </div>
                       ) : (
-                        <div>
+                        <div className='w-full bg-teal-600'>
                           {chart.insights && (
-                            <div>
-                              <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
-                                Análisis
-                              </h3>
-                              <p className="text-lg text-[#003E52]">
-                                {renderTextFromDatabase(chart.insights)}
-                              </p>
+                            <div className='bg-blue-500'>
+                              <form action={editInsights}>
+                                <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
+                                  Análisis
+                                </h3>
+                                <input type="hidden" name="id" value={chart.id} />
+                                <textarea 
+                                  defaultValue={chart.insights} 
+                                  name='insights' 
+                                  className="w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
+                                />
+                                  {/* {renderTextFromDatabase(chart.insights)} */}
+                                <button className="w-full rounded-xl bg-[#003E52] p-3 font-medium text-white" type='submit'>Guardar</button>
+                              </form>
                             </div>
                           )}
                           <h1 className="text-black">
