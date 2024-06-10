@@ -1,12 +1,20 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
+import { fetchBusinessAssistantId } from "@/lib/data";
 
-const openai = new OpenAI();
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 export async function POST(req: Request) {
-    const { threadId } = await req.json()
-    const assistant_id = "asst_JZUAqqBJOH1EEbjcSYNWWPY8"
+    const { threadId, businessId } = await req.json()
 
+    let assistant_id = "asst_Jg0yJBog46387NrZIZgsb2ec"
+
+    if (businessId) {
+      assistant_id = await fetchBusinessAssistantId(businessId)
+    }
+   
   try {
     const run = await openai.beta.threads.runs.createAndPoll(
         threadId,

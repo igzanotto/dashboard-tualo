@@ -48,7 +48,7 @@ export default function NavLinks() {
                 <DocumentChartBarIcon width={30} height={30} />
               </TooltipTrigger>
               <TooltipContent>
-                <p>Resumen</p>
+                <p>Reportes</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

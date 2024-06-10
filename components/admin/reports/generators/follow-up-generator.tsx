@@ -1,26 +1,40 @@
 'use client';
 
 import { Button } from '@/components/button';
-import { createFollowupReport } from '@/lib/actions';
+import { buildFollowupResume } from '@/lib/actions';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import {
   previous_resume_prompt,
   recomendations_feedback_prompt,
   QA_transcript,
+  followup_goals_start,
+  followup_goals_transcript,
+  observations_prompt,
+  followup_QA_close,
   recomendations_feedback_close,
+  followup_PL_prompt,
   PL_transcript,
-  highligths_and_PL_analysis_prompt,
+  followup_PL_close,
+  highlights_and_PL_analysis_prompt,
 } from '@/utils/prompts';
 
 interface FormData {
   previous_resume_prompt: string;
+  QA_start: string;
   QA_transcript: string;
+  followup_goals_start: string;
+  followup_goals_transcript: string;
+  observations_prompt: string;
+  followup_QA_close: string;
+  observations_transcript: string;
   recomendations_feedback_prompt: string;
   recomendations_QA_transcript: string;
   recomendations_feedback_close: string;
+  followup_PL_prompt: string;
   PL_transcript: string;
-  highligths_and_PL_analysis_prompt: string;
+  followup_PL_close: string;
+  highlights_and_PL_analysis_prompt: string;
 
   [key: string]: string;
 }
@@ -29,20 +43,25 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
   const business_id = useParams().business_id as string;
 
-  const handleMonthChange = (event: any) => {
-    setSelectedMonth(event.target.value);
-  };
 
-  const [selectedMonth, setSelectedMonth] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
   const [formData, setFormData] = useState<FormData>({
     previous_resume_prompt,
+    QA_start: `primero te mando el Q&A de la informacion del mes:
+    `,
     QA_transcript,
+    followup_goals_start,
+    followup_goals_transcript,
+    observations_prompt,
+    observations_transcript: '',
+    followup_QA_close,
     recomendations_feedback_prompt,
     recomendations_QA_transcript: '',
     recomendations_feedback_close,
+    followup_PL_prompt,
     PL_transcript,
-    highligths_and_PL_analysis_prompt,
+    followup_PL_close,
+    highlights_and_PL_analysis_prompt,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -64,16 +83,25 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
     if (elementId === 'previous_resume_create_button') {
       input_message = formData.previous_resume_prompt;
     } else if (elementId === 'QA_transcript_create_button') {
-      input_message = formData.QA_transcript;
+      input_message = formData.QA_start +
+        formData.QA_transcript +
+        formData.followup_goals_start +
+        formData.followup_goals_transcript +
+        formData.observations_prompt +
+        formData.observations_transcript +
+        formData.followup_QA_close;
     } else if (elementId === 'recomendations_feedback_create_button') {
       input_message =
         formData.recomendations_feedback_prompt +
         formData.recomendations_QA_transcript +
         formData.recomendations_feedback_close;
     } else if (elementId === 'PL_transcript_create_button') {
-      input_message = formData.PL_transcript;
-    } else if (elementId === 'highligths_and_PL_analysis_create_button') {
-      input_message = formData.highligths_and_PL_analysis_prompt;
+      input_message = 
+      formData.followup_PL_prompt +
+      formData.PL_transcript +
+      formData.followup_PL_close;
+    } else if (elementId === 'highlights_and_PL_analysis_create_button') {
+      input_message = formData.highlights_and_PL_analysis_prompt;
     }
 
     setStatusMessage('generando mensaje...');
@@ -183,6 +211,14 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
       <div id="month_QA_section">
         <h3>Q&A del mes</h3>
         <textarea
+          name="QA_start"
+          rows={1}
+          value={formData.QA_start}
+          onChange={handleChange}
+          className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <textarea
           name="QA_transcript"
           rows={10}
           value={formData.QA_transcript}
@@ -190,7 +226,44 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
           className="w-full rounded-md border-2 border-blue-400 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           autoFocus
         />
-         <div className="my-2 flex justify-between">
+        <textarea
+          name="followup_goals_start"
+          value={formData.followup_goals_start}
+          onChange={handleChange}
+          className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <textarea
+          name="followup_goals_transcript"
+          rows={4}
+          value={formData.followup_goals_transcript}
+          onChange={handleChange}
+          className="w-full rounded-md border-2 border-blue-400 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <textarea
+          name="observations_prompt"
+          value={formData.observations_prompt}
+          onChange={handleChange}
+          className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <textarea
+          name="observations_transcript"
+          rows={4}
+          value={formData.observations_transcript}
+          onChange={handleChange}
+          className="w-full rounded-md border-2 border-blue-400 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <textarea
+          name="followup_QA_close"
+          value={formData.followup_QA_close}
+          onChange={handleChange}
+          className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <div className="my-2 flex justify-between">
           <Button
             onClick={handleCreateMessage}
             id="QA_transcript_create_button"
@@ -214,9 +287,7 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
           placeholder=">>> respuesta de api <<<"
           className="w-full rounded-md border-2 border-blue-400 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
-
       </div>
-
 
       <div id="recomendations_feedback_section" className="my-4">
         <h3>Feedback de recomendaciones</h3>
@@ -228,11 +299,11 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
           className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           autoFocus
         />
-         <textarea
+        <textarea
           name="recomendations_QA_transcript"
           rows={10}
           value={formData.recomendations_QA_transcript}
-          placeholder='>>> transcript de feedback de recomendaciones <<<'
+          placeholder=">>> transcript de feedback de recomendaciones <<<"
           onChange={handleChange}
           className="w-full rounded-md border-2 border-blue-400 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           autoFocus
@@ -275,11 +346,27 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
       <div id="PL_transcript_section">
         <h3>Transcript de P&L</h3>
         <textarea
+          name="followup_PL_prompt"
+          rows={1}
+          value={formData.followup_PL_prompt}
+          onChange={handleChange}
+          className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <textarea
           name="PL_transcript"
           rows={10}
           value={formData.PL_transcript}
           onChange={handleChange}
           className="w-full rounded-md border-2 border-blue-400 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+          autoFocus
+        />
+        <textarea
+          name="followup_PL_close"
+          rows={2}
+          value={formData.followup_PL_close}
+          onChange={handleChange}
+          className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           autoFocus
         />
         <div className="my-2 flex justify-between">
@@ -308,12 +395,12 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
         />
       </div>
 
-      <div id="highligths_and_PL_analysis_section">
+      <div id="highlights_and_PL_analysis_section">
         <h3>Highlights y analisis del P&L</h3>
         <textarea
-          name="highligths_and_PL_analysis_prompt"
+          name="highlights_and_PL_analysis_prompt"
           rows={10}
-          value={formData.highligths_and_PL_analysis_prompt}
+          value={formData.highlights_and_PL_analysis_prompt}
           onChange={handleChange}
           className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
           autoFocus
@@ -321,37 +408,36 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
         <div className="my-2 flex justify-between">
           <Button
             onClick={handleCreateMessage}
-            id="highligths_and_PL_analysis_create_button"
+            id="highlights_and_PL_analysis_create_button"
           >
             crear mensaje
           </Button>
           <p>{statusMessage}</p>
           <Button
             onClick={handleRetrieveThreadMessages}
-            id="highligths_and_PL_analysis_retrieve_button"
+            id="highlights_and_PL_analysis_retrieve_button"
           >
             obtener mensajes
           </Button>
           <input type="text" defaultValue={threadId} name="thread_id" />
         </div>
-
-        {/* <textarea
-          rows={8}
-          id="highligths_and_PL_analysis_response"
-          name="highligths_and_PL_analysis_response"
-          placeholder=">>> respuesta de api <<<"
-          className="w-full rounded-md border-2 border-blue-400 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-        /> */}
       </div>
 
       <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
-        Highligts del mes
+        Highlights del mes
       </h2>
-      <form action={createFollowupReport}>
+      <form action={buildFollowupResume}>
         <textarea
           rows={9}
-          id="highligths_and_PL_analysis_response"
-          name="highligths_and_PL_analysis_response"
+          id="highlights_and_PL_analysis_response"
+          name="highlights_and_PL_analysis_response"
+          className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+        />
+        <h1>metas del mes</h1>
+        <textarea
+          name="followup_goals_transcript"
+          onChange={handleChange}
+          value={formData.followup_goals_transcript}
           className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
         <input
@@ -363,29 +449,9 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
         <input type="text" name="report_id" defaultValue={report_id} hidden />
 
         <div className="space-between my-2 flex items-center justify-around">
-          <select
-            name="month"
-            className="w-1/2 rounded-md bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-            value={selectedMonth}
-            onChange={handleMonthChange}
-          >
-            <option value="">Seleccione un mes</option>
-            <option value="Enero">Enero</option>
-            <option value="Febrero">Febrero</option>
-            <option value="Marzo">Marzo</option>
-            <option value="Abril">Abril</option>
-            <option value="Mayo">Mayo</option>
-            <option value="Junio">Junio</option>
-            <option value="Julio">Julio</option>
-            <option value="Agosto">Agosto</option>
-            <option value="Septiembre">Septiembre</option>
-            <option value="Octubre">Octubre</option>
-            <option value="Noviembre">Noviembre</option>
-            <option value="Diciembre">Diciembre</option>
-          </select>
+         
           <button
             className="rounded-md border-2 border-blue-400 bg-blue-600 px-3  py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50"
-            disabled={!selectedMonth}
           >
             guardar en DB
           </button>

@@ -12,7 +12,7 @@ export default function AdminSideNav() {
   return (
     <div className="flex h-full flex-col justify-center px-3 py-4 md:px-2 shadow-lg max-md:hidden w-[100px]">
       <Link
-        className='mb-3 self-start'
+        className='mb-3 self-center'
         href="/admin"
      >
        <LogoScrolled/>

@@ -220,8 +220,26 @@ export async function fetchBusinessThreadId(businessId:string) {
     console.error('Failed to fetch thread ID:', error);
   }
 }
-          
 
+export async function fetchBusinessAssistantId(businessId:string) { 
+  try {
+    const supabase = createClient();
+    const { data: assistant, error } = await supabase
+      .from('businesses')
+      .select('assistant_id')
+      .eq('id', businessId)
+      .single();
+
+    if (error) {
+      throw new Error('Failed to fetch assistant ID.');
+    }
+    return assistant.assistant_id;
+  }
+  catch (error) {
+    console.error('Failed to fetch assistant ID:', error);
+  }
+}
+          
 export async function fetchChartById(chartId: string) {
   try {
     const supabase = createClient();
