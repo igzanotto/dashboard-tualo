@@ -47,33 +47,6 @@ export default function FollowupRecomendationsGenerator({
     });
   };
 
-  // const handleCreateMessage = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   setStatusMessage('creando recomendaciones filtradas...');
-  //   const response = await fetch('/api/message/create', {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({
-  //       content: formData.followup_recomendations_bullets_prompt,
-  //       threadId: threadId,
-  //     }),
-  //   });
-
-  //   if (!response.ok) {
-  //     console.error('Error al agregar menssage al thread');
-  //     setStatusMessage('Error al crear mensaje');
-  //     return;
-  //   }
-
-  //   const result = await response.json();
-  //   console.log('message creado con exito', result);
-  //   setStatusMessage('recomendaciones generadas con exito!');
-  // };
-
   const handleCreateMessage = async (e: React.FormEvent) => {
     e.preventDefault();
 
