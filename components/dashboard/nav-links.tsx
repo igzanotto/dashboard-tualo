@@ -38,7 +38,7 @@ export default function NavLinks() {
       <Link
         href={`/dashboard/reports/${latestReport?.id}/${latestReport?.month}`}
         className={clsx(
-          'flex h-[48px] grow items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-center  md:p-2 md:px-3',
+          'flex h-[48px] grow items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-[#00AE8D]/20 hover:text-[#0065A1] md:flex-none md:justify-center  md:p-2 md:px-3',
         )}
       >
         <div className="max-md:hidden">
