@@ -7,6 +7,7 @@ import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { SubmitButton } from './submit-button';
+import LogoScrolled from '../icons/LogoScrolled';
 
 export default function EmailLoginForm({
   searchParams,
@@ -63,9 +64,12 @@ export default function EmailLoginForm({
 
   return (
     <form className="space-y-3">
-        <h1 className={` mb-3 text-2xl`}>
-          Please log in to continue.
-        </h1>
+        <div className='flex justify-center'>
+          <LogoScrolled/>
+        </div>
+        {/* <p className={`mb-3 text-lg`}>
+          Inicie sesión para continuar
+        </p> */}
         <div className="w-full">
           <div>
             <label
@@ -80,18 +84,18 @@ export default function EmailLoginForm({
                 id="email"
                 type="email"
                 name="email"
-                placeholder="Enter your email address"
+                placeholder="Ingrese su dirección de email"
                 required
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
-          <div className="mt-4">
+          <div className="mt-4 mb-6">
             <label
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="password"
             >
-              Password
+              Contraseña
             </label>
             <div className="relative">
               <input
@@ -99,7 +103,7 @@ export default function EmailLoginForm({
                 id="password"
                 type="password"
                 name="password"
-                placeholder="Enter password"
+                placeholder="Ingrese su contraseña"
                 required
                 minLength={6}
               />
@@ -107,20 +111,22 @@ export default function EmailLoginForm({
             </div>
           </div>
         </div>
+        <div className='flex flex-col gap-6 mt-8'>
         <SubmitButton
           formAction={signIn}
-          className="mt-4 w-full"
-          pendingText="Signing In..."
+          className="w-full"
+          pendingText="Iniciando sesión..."
         >
-          Sign In
+          Iniciar sesión
         </SubmitButton>
         <SubmitButton
           formAction={signUp}
-          className="mt-4 w-full"
-          pendingText="Signing Up..."
+          className="w-full bg-slate-500"
+          pendingText="Registrando..."
         >
-          Sign Up
+          Registrarse
         </SubmitButton>
+        </div>
         {searchParams?.message && (
           <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
             {searchParams.message}
