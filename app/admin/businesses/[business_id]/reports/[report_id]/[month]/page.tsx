@@ -270,7 +270,7 @@ export default async function ReportPage({
                               className="mx-auto my-5 rounded-xl xl:w-[50%]"
                             />
                           </div>
-                          <div className='w-full bg-teal-600'>
+                          <div className='w-full'>
                             {chart.insights && (
                               <div >
                                 <form action={editInsights}>
