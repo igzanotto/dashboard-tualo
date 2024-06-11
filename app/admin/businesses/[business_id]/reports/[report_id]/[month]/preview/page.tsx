@@ -22,7 +22,7 @@ import CostsExpensesTooltip from '@/components/tooltips/costs-expenses';
 import ProfitMarginsTooltip from '@/components/tooltips/profit-margins';
 import MarginsTooltip from '@/components/tooltips/margins';
 import ExpensesTooltip from '@/components/tooltips/detailed-expenses';
-import { uploadImageChart } from '@/lib/actions';
+import { uploadImage, uploadImageChart } from '@/lib/actions';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -267,6 +267,40 @@ export default async function PreviewPage({
             ))}
           </div>
         </div>
+
+        <div className="section-margin my-28">
+            <BannerSection
+              text="Información adicional"
+              id="información adicional"
+            />
+            {report.additional_info ? (
+              <Image
+                src={report.additional_info}
+                alt="image"
+                width={1000}
+                height={1000}
+                className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
+              />
+            ) : null}
+            <form
+              action={uploadImage}
+              className="mt-12 flex flex-col gap-4 rounded-xl bg-[#252525]/10 p-4"
+            >
+              <input type="hidden" name="report_id" value={params.report_id} />
+              <input
+                type="hidden"
+                name="business_id"
+                value={params.business_id}
+              />
+              <input name="image" type="file" className="text-[#003E52]" />
+              <button
+                className="rounded-lg bg-[#003E52] p-2 text-white"
+                type="submit"
+              >
+                Guardar imagen
+              </button>
+            </form>
+          </div>
       </div>
       <div className="mx-auto flex flex-col gap-6 max-lg:w-[98%] max-lg:text-center xl:w-[80%]">
         <p className="font-medium text-[#00AE8D]">
