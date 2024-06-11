@@ -135,8 +135,9 @@ export default async function ReportPage({
           <EyeIcon width={20} height={20}/>
           Vista previa
         </Link>
+          <div id="resumen" key={'resumen'} className='section-margin'>
           {!report.business_resume ? (
-            <div id="resumen" key={'resumen'}>
+            <div>
               <form
                 action={updateReport}
                 className="mt-10 flex flex-col gap-20"
@@ -172,7 +173,7 @@ export default async function ReportPage({
               </form>
             </div>
           ) : (
-            <div id="resumen" key={'resumen'}>
+            <div>
               <form
                 action={updateReport}
                 className="mt-10 flex flex-col gap-20"
@@ -201,6 +202,7 @@ export default async function ReportPage({
               </form>
             </div>
           )}
+          </div>
           <div className="mt-12 xl:mt-24">
             <p className="mb-4 text-2xl font-semibold text-[#003E52]">
               Metas financieras
@@ -378,11 +380,11 @@ export default async function ReportPage({
           </div>
 
           <div
-            id="conclusiones"
+            
             className="section-margin my-28 flex flex-col gap-4"
             key={'conclusiones'}
           >
-            <BannerSection text="Conclusiones financieras" />
+            <BannerSection text="Conclusiones financieras" id="conclusiones"/>
             <form action={updateReport}>
               <input type="hidden" name="report_id" value={params.report_id} />
               <textarea
@@ -399,9 +401,8 @@ export default async function ReportPage({
             </form>
           </div>
 
-          <BannerSection text="Recomendaciones personalizadas" />
+          <BannerSection text="Recomendaciones personalizadas" id="recomendaciones"/>
           <div
-            id="recomendaciones"
             className="section-margin mt-16 flex flex-col gap-20 xl:gap-24"
             key={'recomendaciones'}
           >
@@ -431,8 +432,8 @@ export default async function ReportPage({
             ))}
           </div>
 
-          <div id='información adicional' className='section-margin my-28'>
-            <BannerSection text='Información adicional'/>
+          <div className='section-margin my-28'>
+            <BannerSection text='Información adicional' id='información adicional'/>
             {
               report.additional_info ? (
                 <Image src={report.additional_info} alt='image' width={200} height={200} className='xl:w-[50%] mx-auto my-5 rounded-xl'/>
