@@ -163,13 +163,9 @@ export default async function PreviewPage({
       <BannerSection text="Resumen financiero" />
       <div className="mt-10 flex flex-col gap-36">
         {orderedCharts.map((chart: any) => (
-          <div
-            className={`section-margin flex justify-between gap-10 rounded-xl bg-[#003E52]/10 px-3 py-4 max-xl:flex-col 2xl:px-7`}
-            id={chart.type}
-            key={chart.id}
-          >
-            <div className="">
-              <div className="flex items-center gap-2">
+          <div className={`section-margin flex bg-[#252525]/10 p-3 rounded-xl gap-10 max-xl:flex-col`} id={chart.type} key={chart.id}>
+            <div className='flex flex-col w-full'>
+              <div className='flex items-center gap-2'>
                 <p className="my-4 text-xl font-semibold text-[#003E52] xl:text-2xl">
                   {' '}
                   Gráfica de <span>{translateChartType(chart.type)}</span>
@@ -190,53 +186,51 @@ export default async function PreviewPage({
                   <p>Este grafico no tiene tooltip</p>
                 )}
               </div>
-              <div className='flex justify-center w-full max-2xl:flex-col 2xl:justify-between'>
-              <div className="flex flex-col">
-                <img
-                  src={chart.graphy_url}
-                  alt="image"
-                  width={1000}
-                  height={1000}
-                  className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
+
+              <img
+                src={chart.graphy_url}
+                alt="image"
+                width={1000}
+                height={1000}
+                className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
+              />
+              <p>Actualizar imagen</p>
+              <form
+                action={uploadImageChart}
+                className="mt-2 flex flex-col gap-4 rounded-xl bg-[#252525]/10 p-4"
+              >
+                <input
+                  type="hidden"
+                  name="report_id"
+                  value={params.report_id}
                 />
-                <p>Actualizar imagen</p>
-                <form
-                  action={uploadImageChart}
-                  className="mt-2 flex flex-col gap-4 rounded-xl bg-[#252525]/10 p-4"
+                <input type="hidden" name="id" value={chart.id} />
+                <input
+                  type="hidden"
+                  name="business_id"
+                  value={params.business_id}
+                />
+                <input name="image" type="file" className="text-[#003E52]" />
+                <button
+                  className="rounded-lg bg-[#003E52] p-2 text-white"
+                  type="submit"
                 >
-                  <input
-                    type="hidden"
-                    name="report_id"
-                    value={params.report_id}
-                  />
-                  <input type="hidden" name="id" value={chart.id} />
-                  <input
-                    type="hidden"
-                    name="business_id"
-                    value={params.business_id}
-                  />
-                  <input name="image" type="file" className="text-[#003E52]" />
-                  <button
-                    className="rounded-lg bg-[#003E52] p-2 text-white"
-                    type="submit"
-                  >
-                    Guardar imagen
-                  </button>
-                </form>
-              </div>
-              <div className="lg:my-10">
-                {chart.insights && (
-                  <div className="flex flex-col justify-between">
-                    <h3 className="mb-5 text-center text-2xl font-medium">
-                      Análisis
-                    </h3>
-                    <p className="text-lg">
-                      {renderTextFromDatabase(chart.insights)}
-                    </p>
-                  </div>
-                )}
-              </div>
-              </div>
+                  Guardar imagen
+                </button>
+              </form>
+            </div>
+
+            <div className='flex mx-auto mt-[50px] w-[80%]'>
+              {chart.insights && (
+                <div>
+                  <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
+                    Análisis
+                  </h3>
+                  <p className="text-lg">
+                    {renderTextFromDatabase(chart.insights)}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         ))}

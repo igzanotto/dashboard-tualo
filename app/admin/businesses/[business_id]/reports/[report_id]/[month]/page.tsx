@@ -252,7 +252,7 @@ export default async function ReportPage({
                     </div>
                         <div className="flex w-full gap-10 max-2xl:flex-col justify-center 2xl:justify-between">
                           <div className='flex flex-col'>
-                            <img src={chart.graphy_url}  className="mx-auto my-5 rounded-xl"/>
+                          <Image src={chart.graphy_url} alt={chart.type}  className="mx-auto my-5 rounded-xl w-full h-full" width={1000} height={1000}/>
                           <p>Actualizar imagen</p>
                           <form
                               action={uploadImageChart}
