@@ -220,6 +220,18 @@ export default async function ReportPage({
           ))}
           </div>
         </div>
+
+        <div className="xl:w-[80%] mx-auto  section-margin">
+          <BannerSection text='Información adicional' id="informacion adicional" key={"informacion adicional"}/>
+          <Image
+            src={report.additional_info}
+            alt="image"
+            width={1000}
+            height={1000}
+            className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
+          />
+          
+        </div>
       </div>
       <div className='flex flex-col gap-6 max-lg:w-[98%] xl:w-[80%] mx-auto max-lg:text-center'>
         <p className='text-[#00AE8D] font-medium'>Este análisis fue generado con asistencia de inteligencia artificial y debe ser revisado cuidadosamente antes de tomar decisiones basadas en él.</p>
