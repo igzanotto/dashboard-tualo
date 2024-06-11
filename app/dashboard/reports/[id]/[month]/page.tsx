@@ -268,7 +268,7 @@ export default async function ReportPage({
          <p>Este grafico no tiene tooltip</p>
             }
           </div>
-            <ChartEmbed src={chart.graphy_url} />
+            <img src={chart.graphy_url}  className="mx-auto my-5 rounded-xl"/>
           </div>
           <div className="lg:my-[110px] rounded-lg bg-white px-3 py-5 xl:w-[50%] 2xl:w-[40%]">
           
