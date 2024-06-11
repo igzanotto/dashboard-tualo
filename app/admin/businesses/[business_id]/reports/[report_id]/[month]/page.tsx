@@ -400,7 +400,7 @@ export default async function ReportPage({
                       </div>
                     )
                   ) : (
-                    <p>No hay gráficos creados.</p>
+                    <p>No hay gráficos creados para <span className='capitalize font-medium'>{translateChartType(type)}</span>.</p>
                   )}
                 </div>
               );
@@ -471,9 +471,9 @@ export default async function ReportPage({
               <Image
                 src={report.additional_info}
                 alt="image"
-                width={200}
-                height={200}
-                className="mx-auto my-5 rounded-xl xl:w-[50%]"
+                width={1000}
+                height={1000}
+                className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
               />
             ) : null}
             <form
