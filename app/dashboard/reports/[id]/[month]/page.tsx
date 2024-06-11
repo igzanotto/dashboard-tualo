@@ -155,7 +155,7 @@ export default async function ReportPage({
 
       {orderedCharts.map((chart: any) => (
         <div
-          className={`section-margin flex  justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col bg-[#003E52]/10`}
+          className={`section-margin flex items-center justify-between gap-10 px-3 2xl:px-7 py-4 rounded-xl max-xl:flex-col bg-[#003E52]/10`}
           id={chart.type} 
           key={chart.id}
         >
