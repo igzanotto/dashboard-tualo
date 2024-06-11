@@ -113,7 +113,7 @@ export default async function ReportPage({
         />
 
         <h1
-          className={`mx-auto mt-16 text-2xl font-semibold text-[#003E52] max-xl:w-[90%] xl:w-[80%] ${libreBaskerville.className}`}
+          className={`mx-auto mt-16 text-2xl font-semibold text-[#003E52] max-xl:w-[90%] w-[95%] ${libreBaskerville.className}`}
         >
           Reporte de{' '}
           <span className="capitalize">
@@ -124,13 +124,13 @@ export default async function ReportPage({
 
         <div>
           <p
-            className={`mx-auto mb-4 text-xl font-semibold text-[#003E52] max-xl:w-[90%] xl:w-[80%] xl:text-4xl ${libreBaskerville.className}`}
+            className={`mx-auto mb-4 text-xl font-semibold text-[#003E52] w-[95%] xl:text-4xl ${libreBaskerville.className}`}
           >
             {report.business.name}
           </p>
         </div>
 
-        <div className="mx-auto max-xl:w-[90%] xl:w-[80%]">
+        <div className="mx-auto w-[95%]">
         <Link href={`/admin/businesses/${business_id}/reports/${report.id}/${report.month}/preview`} className='p-3 rounded-lg bg-[#EC7700] flex items-center gap-2 text-white w-[150px]'>
           <EyeIcon width={20} height={20}/>
           Vista previa
@@ -233,7 +233,7 @@ export default async function ReportPage({
               );
               return (
                 <div
-                  className={`section-margin flex items-center justify-between gap-10 rounded-xl bg-[#252525]/10 px-3 py-4 max-xl:flex-col`}
+                  className={`section-margin flex items-center justify-center gap-10 rounded-xl bg-[#252525]/10 px-3 py-4 max-2xl:flex-col`}
                   id={type}
                   key={type}
                 >
@@ -250,14 +250,14 @@ export default async function ReportPage({
                         </span>
                       </p>
                     </div>
-                        <div className="flex w-full gap-10">
+                        <div className="flex w-full gap-10 max-2xl:flex-col justify-center 2xl:justify-between">
                           <div className='flex flex-col'>
                             <Image
                               src={chart.graphy_url}
                               alt="image"
                               width={1000}
                               height={1000}
-                              className="mx-auto my-5 rounded-xl"
+                              className="mx-auto my-5 rounded-xl xl:w-[1000px] h-[100%]"
                             />
                           <p>Actualizar imagen</p>
                           <form
@@ -292,7 +292,7 @@ export default async function ReportPage({
                               </button>
                           </form>
                           </div>
-                          <div className='w-[50%]'>
+                          <div>
                             {chart.insights && (
                               <div className='w-full'>
                                 <form action={editInsights} className='w-full'>
@@ -303,9 +303,9 @@ export default async function ReportPage({
                                 <textarea 
                                   defaultValue={chart.insights} 
                                   name='insights' 
-                                  className="rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl h-[300px] w-full"
+                                  className="rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl w-[100%]"
                                 />
-                                  {/* {renderTextFromDatabase(chart.insights)} */}
+                                  
                                 <button className="w-full rounded-xl bg-[#003E52] p-3 font-medium text-white" type='submit'>Guardar</button>
                               </form>
                               </div>
@@ -314,7 +314,7 @@ export default async function ReportPage({
                         </div>
                     </div>
                       ) : (
-                        <div className='flex justify-between w-full'>
+                        <div className='flex justify-center w-full max-2xl:flex-col 2xl:justify-between'>
                           
                           <div className='flex flex-col gap-4'>
                             <h1 className="text-black">
@@ -353,7 +353,7 @@ export default async function ReportPage({
                           </form>
                           </div>
                           {chart.insights && (
-                            <div className='w-[50%]'>
+                            <div className='w-full]'>
                               <form action={editInsights} className='w-full'>
                                 <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
                                   Análisis
@@ -362,7 +362,7 @@ export default async function ReportPage({
                                 <textarea 
                                   defaultValue={chart.insights} 
                                   name='insights' 
-                                  className="rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl h-[300px] w-full"
+                                  className="rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl w-[100%]"
                                 />
                                   
                                 <button className="w-full rounded-xl bg-[#003E52] p-3 font-medium text-white" type='submit'>Guardar</button>
