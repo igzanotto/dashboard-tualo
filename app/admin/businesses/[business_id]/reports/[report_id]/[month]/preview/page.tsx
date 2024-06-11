@@ -89,14 +89,13 @@ export default async function PreviewPage({
     
     return(
       <div className="flex flex-col gap-3 xl:px-2">
-
       <nav className="sticky top-0 z-50 mb-10 flex items-center rounded-b-xl bg-white p-2 shadow-lg md:gap-10 md:p-4">
         <MonthButtonsAdmin business_id={business_id} />
         <div className="mx-auto justify-center self-center">
           <ChartNavigation />
         </div>
       </nav>
-
+      
       <Image width={3000} height={3000} src={reporte} alt='image' className='w-full'/>
       
       
@@ -290,16 +289,16 @@ export default async function PreviewPage({
       </div>
 
       <div className="flex flex-col gap-28 my-28">
-        <div id="conclusiones" className='xl:w-[80%] mx-auto  section-margin' key={"conclusiones"}>
-        <BannerSection text='Conclusiones financieras'/>
+        <div className='xl:w-[80%] mx-auto' key={"conclusiones"}>
+        <BannerSection text='Conclusiones financieras' id="conclusiones" key={"conclusiones"}/>
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p> */}
           <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52] mt-16 max-md:w-[96%] max-md:mx-auto">
             {renderTextFromDatabase(report.analysis)}
           </div>
         </div>
 
-        <div id="recomendaciones" className="xl:w-[80%] mx-auto  section-margin" key={"recomendaciones"}>
-          <BannerSection text='Recomendaciones personalizadas'/>
+        <div className="xl:w-[80%] mx-auto  section-margin">
+          <BannerSection text='Recomendaciones personalizadas' id="recomendaciones" key={"recomendaciones"}/>
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Recomendaciones</p> */}
           <div className="p-3 flex flex-col gap-10 mt-16">
           {report.recomendations.map((data: any, index:number) => (
