@@ -45,7 +45,9 @@ export function translateChartType(type: string) {
     'costs_and_expenses': 'costos y gastos',
     'net_profit_and_margins': 'utilidad neta',
     'margins': 'márgenes',
-    'detailed_expenses': 'gastos desglosados'
+    'detailed_expenses': 'gastos desglosados',
+    'actual_vs_average' : 'actual-average',
+    'actual_vs_average_2': 'actual-average2'
   };
    
 

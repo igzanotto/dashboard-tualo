@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {ChevronDownIcon} from "lucide-react";
+import { ChevronDownIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,8 +20,6 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-
-
 interface Report {
   id: string;
   month: string;
@@ -39,6 +37,12 @@ export default function MonthButton({ reports }: MonthDropdownProps) {
   const pathnameParts = pathname.split('/');
   const reportMonth = decodeURIComponent(pathnameParts[pathnameParts.length - 1]);
 
+  const handleSelect = (url: string) => {
+    setSelectedStatus(reports.find((r) => r.id === url.split('/').slice(-2, -1)[0]) || null);
+    setOpen(false);
+    // Navigate to the new URL and then force a reload
+    window.location.href = url;
+  };
 
   return (
     <div className="flex flex-col items-center space-x-4">
@@ -46,7 +50,7 @@ export default function MonthButton({ reports }: MonthDropdownProps) {
         <PopoverTrigger asChild>
           <Button variant="outline" size="sm" className="w-[120px] capitalize flex items-center justify-between">
             {reportMonth}
-            <ChevronDownIcon width={20} height={20}/>
+            <ChevronDownIcon width={20} height={20} />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0 w-[120px]">
@@ -56,18 +60,14 @@ export default function MonthButton({ reports }: MonthDropdownProps) {
               <CommandEmpty>No hay reportes encontrados.</CommandEmpty>
               <CommandGroup>
                 {reports.map((report) => (
-                  <Link key={report.id} href={`/dashboard/reports/${report.id}/${report.month}`} passHref>
-                    <CommandItem
+                  <CommandItem
+                    key={report.id}
                     className="cursor-pointer"
-                      value={report.id}
-                      onSelect={(value) => {
-                        setSelectedStatus(reports.find((r) => r.id === value) || null);
-                        setOpen(false);
-                      }}
-                    >
-                      <span className="capitalize">{report.month}</span>
-                    </CommandItem>
-                  </Link>
+                    value={report.id}
+                    onSelect={() => handleSelect(`/dashboard/reports/${report.id}/${report.month}`)}
+                  >
+                    <span className="capitalize">{report.month}</span>
+                  </CommandItem>
                 ))}
               </CommandGroup>
             </CommandList>

@@ -19,6 +19,12 @@ import reporte from '../../../../../components/images/header-reporte.png'
 import Image from 'next/image';
 import { translateChartType } from '@/lib/utils';
 import Link from 'next/link';
+import WaterfallTooltip from '@/components/tooltips/waterfall';
+import SalesTooltip from '@/components/tooltips/sales';
+import CostsExpensesTooltip from '@/components/tooltips/costs-expenses';
+import ProfitMarginsTooltip from '@/components/tooltips/profit-margins';
+import MarginsTooltip from '@/components/tooltips/margins';
+import ExpensesTooltip from '@/components/tooltips/detailed-expenses';
 
 
 const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
@@ -159,116 +165,23 @@ export default async function ReportPage({
                 {' '}
                 Gráfica de <span>{translateChartType(chart.type)}</span>
               </p>
-             {chart.type === "waterfall" ? 
-               <TooltipProvider>
-               <Tooltip>
-                 <TooltipTrigger>
-                   <InfoIcon width={20} height={20} />
-                 </TooltipTrigger>
-                 <TooltipContent className="max-xl:w-[380px] bg-[#252525] text-white flex flex-col gap-4">
-                   <p>
-                    <span className='font-medium text-base'>Esta gráfica se lee de izquierda a derecha:</span> <br />
-                      1. Primero tiene todos tus <span className='font-medium'>ventas</span> en verde. <br />
-                      2. A eso se le van restando los costos y gastos en rojo. <br />
-                      3. El resultado de cada resta es una <span className='font-medium'>utilidad</span> en gris. <br />
-                          <div className='ml-5'>
-                          a. Primero se restan los <span className='font-medium'>costos directos</span>, que son los directamente relacionados a la venta, y te queda la <span className='font-medium'>utilidad bruta</span>. <br />
-                          b. Después los <span className='font-medium'>gastos indirectos</span>, no directamente relacionados pero que se necesitan para operar (como la renta, por ejemplo), y te queda la <span className='font-medium'>utilidad operativa</span>. <br />
-                          c. Por último se restan los <span className='font-medium'>gastos financieros</span> (todo lo que cobra el banco o el SAT), y te queda la <span className='font-medium'>utilidad neta</span>. <br />
-                          </div>
-
-                   </p>
-                    <p className='text-[#c77d48]'>Lo que está al final, en naranja, es la UTILIDAD NETA, que es lo que realmente ganó o perdió el negocio durante este periodo.</p>
-                 </TooltipContent>
-               </Tooltip>
-             </TooltipProvider> 
-             :
-             chart.type === "sales" ? 
-             <TooltipProvider>
-             <Tooltip>
-               <TooltipTrigger>
-                 <InfoIcon width={20} height={20} />
-               </TooltipTrigger>
-               <TooltipContent className="max-xl:w-[380px] bg-[#223741] text-white flex flex-col gap-4">
-                 <p>
-                  En esta gráfica, cada <span className='text-green-700 font-medium'>barra verde</span> son las ventas de cada mes del periodo analizado. <br /> 
-                  La línea horizontal es el promedio de ventas del periodo, que te sirve para comparar las ventas en cada mes con el promedio general.
-                 </p>
-               </TooltipContent>
-             </Tooltip>
-           </TooltipProvider>
-           :
-           chart.type === "costs_and_expenses" ?
-            <TooltipProvider>
-             <Tooltip>
-               <TooltipTrigger>
-                 <InfoIcon width={20} height={20} />
-               </TooltipTrigger>
-               <TooltipContent className="max-xl:w-[380px] bg-[#362422] text-white flex flex-col gap-4">
-                 <p>
-                  <span className='font-medium text-base'>En esta gráfica hay dos conjuntos de <span className='text-red-600 text-base font-medium'>barras rojas</span>:</span> <br /> 
-                  1. La primera, roja claro, representa los <span className='font-medium'>costos directos</span> (los que gastas para hacer lo que vendes). <br />
-                  2. La segunda es la de <span className='font-medium'>gastos indirectos</span> (los que son operativos) <br />
-                  Además, cada uno tiene su propia línea de promedio para comparar en el periodo.
-                 </p>
-               </TooltipContent>
-             </Tooltip>
-           </TooltipProvider>
-            :
-            chart.type === "net_profit_and_margins" ? 
-            
-            <TooltipProvider>
-             <Tooltip>
-               <TooltipTrigger>
-                 <InfoIcon width={20} height={20} />
-               </TooltipTrigger>
-               <TooltipContent className="max-xl:w-[380px] bg-[#2b2431] text-white flex flex-col gap-4">
-                 <p>
-                  <span className='font-medium text-base'>En esta gráfica hay dos datos importantes: las <span className='text-purple-600 font-medium text-base'>barras moradas</span> y la <span className='text-yellow-600 font-medium text-base'>línea amarilla</span>.</span> <br />
-                  1. Las barras son la <span className='font-medium'>utilidad neta</span>, que se mide en dinero y es lo que queda después de descontar todos los costos y gastos. <br />
-                  2. La línea es el <span className='font-medium'>margen neto</span>, que se mide en porcentaje y es lo que la utilidad neta representa de las ventas cada mes. OJO: esta línea está guiada por el eje del lado derecho. <br />
-                  Verlas juntas ayuda a entender tanto en monto como en porcentaje cuánto quedó en la empresa.
-                 </p>
-               </TooltipContent>
-             </Tooltip>
-           </TooltipProvider>
-           :
-           chart.type === "margins" ? 
-           <TooltipProvider>
-           <Tooltip>
-             <TooltipTrigger>
-               <InfoIcon width={20} height={20} />
-             </TooltipTrigger>
-             <TooltipContent className="max-xl:w-[380px] bg-[#392e1e] text-white flex flex-col gap-4">
-               <p>
-               <span className='font-medium text-base'>En esta gráfica hay tres <span className='font-medium text-base text-yellow-600'>líneas amarillas</span>:</span> <br />
-                  1. La primera es el <span className='font-medium'>margen bruto</span>, el % que queda después de restarle costos directos a las ventas. <br />
-                  2. La segunda es el <span className='font-medium'>margen operativo</span>, el % que viene al restarle los gastos indirectos a las ventas. <br />
-                  3. La tercera es el <span className='font-medium'>margen neto</span>, igual que la gráfica anterior es el % que queda al final de restarle todo a las ventas.
-               </p>
-             </TooltipContent>
-           </Tooltip>
-         </TooltipProvider>
-            : 
-            chart.type === "detailed_expenses" ?
-            <TooltipProvider>
-           <Tooltip>
-             <TooltipTrigger>
-               <InfoIcon width={20} height={20} />
-             </TooltipTrigger>
-             <TooltipContent className="max-xl:w-[380px] bg-[#252525] text-white flex flex-col gap-4">
-               <p>
-                <span className='font-medium text-base'>En esta gráfica se ven muchas línea de colores.</span> <br /> 
-                Cada una representa un tipo de gasto diferente como sueldos, renta, marketing, etc. y su evolución en cada mes del periodo analizado.
-               </p>
-             </TooltipContent>
-           </Tooltip>
-         </TooltipProvider>
-         :
-         <p>Este grafico no tiene tooltip</p>
-            }
+              {chart.type === 'waterfall' ? (
+                  <WaterfallTooltip />
+                ) : chart.type === 'sales' ? (
+                  <SalesTooltip />
+                ) : chart.type === 'costs_and_expenses' ? (
+                  <CostsExpensesTooltip />
+                ) : chart.type === 'net_profit_and_margins' ? (
+                  <ProfitMarginsTooltip />
+                ) : chart.type === 'margins' ? (
+                  <MarginsTooltip />
+                ) : chart.type === 'detailed_expenses' ? (
+                  <ExpensesTooltip />
+                ) : (
+                  <p>Este grafico no tiene tooltip</p>
+                )}
           </div>
-            <ChartEmbed src={chart.graphy_url} />
+            <img src={chart.graphy_url} alt={chart.type} width={1000} height={1000} className="mx-auto my-5 rounded-xl"/>
           </div>
           <div className="lg:my-[110px] rounded-lg bg-white px-3 py-5 xl:w-[50%] 2xl:w-[40%]">
           
@@ -288,16 +201,16 @@ export default async function ReportPage({
       </div>
 
       <div className="flex flex-col gap-28 my-28">
-        <div id="conclusiones" className='xl:w-[80%] mx-auto  section-margin' key={"conclusiones"}>
-        <BannerSection text='Conclusiones financieras'/>
+        <div className='xl:w-[80%] mx-auto' key={"conclusiones"}>
+        <BannerSection text='Conclusiones financieras' id="conclusiones" key={"conclusiones"}/>
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p> */}
           <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52] mt-16 max-md:w-[96%] max-md:mx-auto">
             {renderTextFromDatabase(report.analysis)}
           </div>
         </div>
 
-        <div id="recomendaciones" className="xl:w-[80%] mx-auto  section-margin" key={"recomendaciones"}>
-          <BannerSection text='Recomendaciones personalizadas'/>
+        <div className="xl:w-[80%] mx-auto  section-margin">
+          <BannerSection text='Recomendaciones personalizadas' id="recomendaciones" key={"recomendaciones"}/>
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Recomendaciones</p> */}
           <div className="p-3 flex flex-col gap-10 mt-16">
           {report.recomendations.map((data: any, index:number) => (
