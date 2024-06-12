@@ -15,7 +15,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from './ui/button';
-import { ChevronDownIcon } from 'lucide-react';
+import { ArrowUpDownIcon, ChevronDownIcon } from 'lucide-react';
 
 const chartOrder = [
   'resumen',
@@ -28,6 +28,8 @@ const chartOrder = [
 ];
 
 const reportLinks = [
+  // 'actual_vs_average',
+  // 'actual_vs_average_2',
   'conclusiones',
   'recomendaciones',
   'información adicional',
@@ -96,6 +98,31 @@ export default function ChartNavigation() {
           ))}
         </div>
         <div className="flex items-center justify-center gap-2">
+          <Link 
+            href={`${pathname}/#actual_vs_average`}
+            onClick={() => handleChartClick("actual_vs_average")}
+              className={`text rounded-lg p-2 font-medium transition-all capitalize flex items-center gap-2 ${
+                selectedChart === "actual_vs_average"
+                  ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                  : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+              }`}
+          >
+            <ArrowUpDownIcon width={18} height={18} className='rotate-90'/>
+            resumen
+          </Link>
+
+          <Link 
+            href={`${pathname}/#actual_vs_average_2`}
+            onClick={() => handleChartClick("actual_vs_average_2")}
+              className={`text rounded-lg p-2 font-medium transition-all capitalize flex items-center gap-2 ${
+                selectedChart === "actual_vs_average_2"
+                  ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                  : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+              }`}
+          >
+            <ArrowUpDownIcon width={18} height={18} className='rotate-90'/>
+            márgenes
+          </Link>
           {reportLinks.map((data, index) => (
             <Link
               key={index}
@@ -110,6 +137,7 @@ export default function ChartNavigation() {
               {translateChartType(data)}
             </Link>
           ))}
+          
         </div>
       </div>
       <div className="chart-navigation-responsive flex">
