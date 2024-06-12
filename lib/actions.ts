@@ -567,13 +567,13 @@ export async function updateReport(formData: FormData) {
 }
 
 const RecomendationsUpdateSchema = z.object({
-  report_id: z.string(),
+  id: z.string(),
   content: z.string()
 });
 
 export async function updateReportRecommendations(formData:FormData) {
   const parsedData = RecomendationsUpdateSchema.safeParse({
-    report_id: formData.get('report_id'),
+    id: formData.get('id'),
     content: formData.get('content')
   })
 
@@ -582,14 +582,14 @@ export async function updateReportRecommendations(formData:FormData) {
     throw new Error('Invalid form data');
   }
 
-  const { report_id, content} = parsedData.data;
+  const { id, content} = parsedData.data;
   const supabase = createClient(); // Crear cliente Supabase
   
   try {
     const { data: recommendations, error } = await supabase
       .from('recomendations')
       .update({content})
-      .eq('id', report_id)
+      .eq('id', id)
       .single();
 
       if (error) {

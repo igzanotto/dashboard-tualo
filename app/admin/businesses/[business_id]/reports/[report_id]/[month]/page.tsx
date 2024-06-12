@@ -66,7 +66,7 @@ export default async function ReportPage({
   params: { report_id: string; id: string; business_id: string; month: string };
 }) {
   const report = await fetchReportById(params.report_id);
-  console.log(report.charts);
+  console.log(report.recomendations.map((data:any) => data));
 
   const { business_id } = params;
 
@@ -465,14 +465,15 @@ export default async function ReportPage({
               >
                 <input
                   type="hidden"
-                  name="report_id"
-                  value={params.report_id}
+                  name="id"
+                  value={data.id}
                 />
                 <textarea
                   name="content"
                   defaultValue={data.content}
                   className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
                 />
+                
                 <button
                   type="submit"
                   className="mt-4 rounded-lg bg-[#003E52] p-2 text-white"
