@@ -23,6 +23,7 @@ import ProfitMarginsTooltip from '@/components/tooltips/profit-margins';
 import MarginsTooltip from '@/components/tooltips/margins';
 import ExpensesTooltip from '@/components/tooltips/detailed-expenses';
 import { uploadImage, uploadImageChart } from '@/lib/actions';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -88,6 +89,35 @@ export default async function PreviewPage({
     return <>{formattedParagraphs}</>;
   };
 
+  const processText = (text: string) => {
+    const regex = /(\#\#\#\# .+? (.*))|(\*\*[^*]+\*\*)|([^\*#]+)/g;
+    const matches = text.match(regex);
+  
+    return matches?.map((match, index) => {
+      if (match.startsWith('####')) {
+        return (
+          <p key={index} className="font-medium text-2xl mb-4">
+            {match.replace('#### ', '')}
+          </p>
+        );
+      } else if (match.startsWith('**')) {
+        return (
+          <span key={index} className="font-semibold">
+            {match.replace(/\*\*/g, '')}
+          </span>
+        );
+      } else if (match.includes(':')) {
+        return (
+          <span key={index}>
+            {match}
+          </span>
+        );
+      } else {
+        return <span key={index}>{match}</span>;
+      }
+    });
+  };
+
   return (
     <div className="flex flex-col gap-3 xl:px-2">
       <nav className="sticky top-0 z-50 mb-10 flex items-center rounded-b-xl bg-white p-2 shadow-lg md:gap-10 md:p-4">
@@ -143,9 +173,13 @@ export default async function PreviewPage({
             </div>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
               {!report.business_resume ? (
-                <div>{renderTextFromDatabase(report.operations_resume)}</div>
+                <div className='whitespace-pre-wrap'>
+                  {processText(report.operations_resume)}
+                </div>
               ) : (
-                <div>{renderTextFromDatabase(report.business_resume)}</div>
+                <div>
+                  {renderTextFromDatabase(report.business_resume)}
+                </div>
               )}
             </div>
           </div>
@@ -154,7 +188,9 @@ export default async function PreviewPage({
               Metas financieras
             </p>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
-              {renderTextFromDatabase(report.goals)}
+            <div className='whitespace-pre-wrap'>
+                  {processText(report.goals)}
+                </div>
             </div>
           </div>
         </div>
@@ -163,76 +199,69 @@ export default async function PreviewPage({
       <BannerSection text="Resumen financiero" />
       <div className="mt-10 flex flex-col gap-36">
         {orderedCharts.map((chart: any) => (
-          <div className={`section-margin flex bg-[#252525]/10 p-3 rounded-xl gap-10 max-xl:flex-col`} id={chart.type} key={chart.id}>
-            <div className='flex flex-col w-full'>
-              <div className='flex items-center gap-2'>
-                <p className="my-4 text-xl font-semibold text-[#003E52] xl:text-2xl">
-                  {' '}
-                  Gráfica de <span>{translateChartType(chart.type)}</span>
-                </p>
-                {chart.type === 'waterfall' ? (
-                  <WaterfallTooltip />
-                ) : chart.type === 'sales' ? (
-                  <SalesTooltip />
-                ) : chart.type === 'costs_and_expenses' ? (
-                  <CostsExpensesTooltip />
-                ) : chart.type === 'net_profit_and_margins' ? (
-                  <ProfitMarginsTooltip />
-                ) : chart.type === 'margins' ? (
-                  <MarginsTooltip />
-                ) : chart.type === 'detailed_expenses' ? (
-                  <ExpensesTooltip />
-                ) : (
-                  <p>Este grafico no tiene tooltip</p>
-                )}
-              </div>
-
-              <img
-                src={chart.graphy_url}
-                alt="image"
-                width={1000}
-                height={1000}
-                className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
-              />
-              <p>Actualizar imagen</p>
-              <form
-                action={uploadImageChart}
-                className="mt-2 flex flex-col gap-4 rounded-xl bg-[#252525]/10 p-4"
-              >
-                <input
-                  type="hidden"
-                  name="report_id"
-                  value={params.report_id}
-                />
-                <input type="hidden" name="id" value={chart.id} />
-                <input
-                  type="hidden"
-                  name="business_id"
-                  value={params.business_id}
-                />
-                <input name="image" type="file" className="text-[#003E52]" />
-                <button
-                  className="rounded-lg bg-[#003E52] p-2 text-white"
-                  type="submit"
-                >
-                  Guardar imagen
-                </button>
-              </form>
-            </div>
-
-            <div className='flex mx-auto mt-[50px] w-[80%]'>
-              {chart.insights && (
-                <div>
-                  <h3 className="mb-5 text-center text-2xl font-medium text-[#003E52]">
-                    Análisis
-                  </h3>
-                  <p className="text-lg">
-                    {renderTextFromDatabase(chart.insights)}
-                  </p>
-                </div>
+          <div
+          className={`section-margin flex items-center justify-between rounded-xl bg-[#003E52]/10 px-3 py-4 max-xl:flex-col 2xl:px-7`}
+          id={chart.type}
+          key={chart.id}
+        >
+          <div className="max-xl:w-full">
+            <div className="flex items-center gap-2">
+              <p className="text-xl font-semibold text-[#003E52] xl:text-2xl">
+                {' '}
+                Gráfica de <span>{translateChartType(chart.type)}</span>
+              </p>
+              {chart.type === 'waterfall' ? (
+                <WaterfallTooltip />
+              ) : chart.type === 'sales' ? (
+                <SalesTooltip />
+              ) : chart.type === 'costs_and_expenses' ? (
+                <CostsExpensesTooltip />
+              ) : chart.type === 'net_profit_and_margins' ? (
+                <ProfitMarginsTooltip />
+              ) : chart.type === 'margins' ? (
+                <MarginsTooltip />
+              ) : chart.type === 'detailed_expenses' ? (
+                <ExpensesTooltip />
+              ) : (
+                <p>Este grafico no tiene tooltip</p>
               )}
             </div>
+            <div className="flex items-center gap-10 max-xl:flex-col">
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={chart.graphy_url}
+                    alt={chart.type}
+                    width={1000}
+                    height={1000}
+                    className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px] max-xl:w-full"
+                  />
+                </DialogTrigger>
+                <DialogContent>
+                  <img
+                    src={chart.graphy_url}
+                    alt={chart.type}
+                    width={2000}
+                    height={1000}
+                    className="mx-auto h-full w-full rounded-xl"
+                  />
+                </DialogContent>
+              </Dialog>
+              <div className="w-full rounded-lg bg-white px-3 py-5 xl:h-[450px] 2xl:h-full xl:w-[50%] xl:overflow-y-auto 2xl:w-[40%] max-md:h-[400px] max-md:overflow-y-auto">
+                {chart.insights && (
+                  <div className="flex flex-col justify-between">
+                    <h3 className="mb-5 text-center text-2xl font-medium">
+                      Análisis
+                    </h3>
+                    <p className="text-lg">
+                      {renderTextFromDatabase(chart.insights)}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
+        </div>
         ))}
       </div>
 
@@ -269,38 +298,38 @@ export default async function PreviewPage({
         </div>
 
         <div className="section-margin my-28">
-            <BannerSection
-              text="Información adicional"
-              id="información adicional"
+          <BannerSection
+            text="Información adicional"
+            id="información adicional"
+          />
+          {report.additional_info ? (
+            <Image
+              src={report.additional_info}
+              alt="image"
+              width={1000}
+              height={1000}
+              className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
             />
-            {report.additional_info ? (
-              <Image
-                src={report.additional_info}
-                alt="image"
-                width={1000}
-                height={1000}
-                className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
-              />
-            ) : null}
-            <form
-              action={uploadImage}
-              className="mt-12 flex flex-col gap-4 rounded-xl bg-[#252525]/10 p-4"
+          ) : null}
+          <form
+            action={uploadImage}
+            className="mt-12 flex flex-col gap-4 rounded-xl bg-[#252525]/10 p-4"
+          >
+            <input type="hidden" name="report_id" value={params.report_id} />
+            <input
+              type="hidden"
+              name="business_id"
+              value={params.business_id}
+            />
+            <input name="image" type="file" className="text-[#003E52]" />
+            <button
+              className="rounded-lg bg-[#003E52] p-2 text-white"
+              type="submit"
             >
-              <input type="hidden" name="report_id" value={params.report_id} />
-              <input
-                type="hidden"
-                name="business_id"
-                value={params.business_id}
-              />
-              <input name="image" type="file" className="text-[#003E52]" />
-              <button
-                className="rounded-lg bg-[#003E52] p-2 text-white"
-                type="submit"
-              >
-                Guardar imagen
-              </button>
-            </form>
-          </div>
+              Guardar imagen
+            </button>
+          </form>
+        </div>
       </div>
       <div className="mx-auto flex flex-col gap-6 max-lg:w-[98%] max-lg:text-center xl:w-[80%]">
         <p className="font-medium text-[#00AE8D]">

@@ -15,7 +15,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from './ui/button';
-import { ChevronDownIcon } from 'lucide-react';
+import { ArrowUpDownIcon, ChevronDownIcon } from 'lucide-react';
 
 const chartOrder = [
   'resumen',
@@ -28,6 +28,8 @@ const chartOrder = [
 ];
 
 const reportLinks = [
+  // 'actual_vs_average',
+  // 'actual_vs_average_2',
   'conclusiones',
   'recomendaciones',
   'información adicional',
@@ -85,7 +87,7 @@ export default function ChartNavigation() {
               key={chart}
               href={`${pathname}/#${chart}`}
               onClick={() => handleChartClick(chart)}
-              className={`text rounded-lg p-2 font-medium transition-all capitalize ${
+              className={`text rounded-lg p-2 font-medium capitalize transition-all ${
                 selectedChart === chart
                   ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
                   : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
@@ -96,12 +98,37 @@ export default function ChartNavigation() {
           ))}
         </div>
         <div className="flex items-center justify-center gap-2">
+          <Link
+            href={`${pathname}/#actual_vs_average`}
+            onClick={() => handleChartClick('actual_vs_average')}
+            className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
+              selectedChart === 'actual_vs_average'
+                ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+            }`}
+          >
+            <ArrowUpDownIcon width={18} height={18} className="rotate-90" />
+            resumen
+          </Link>
+
+          <Link
+            href={`${pathname}/#actual_vs_average_2`}
+            onClick={() => handleChartClick('actual_vs_average_2')}
+            className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
+              selectedChart === 'actual_vs_average_2'
+                ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+            }`}
+          >
+            <ArrowUpDownIcon width={18} height={18} className="rotate-90" />
+            márgenes
+          </Link>
           {reportLinks.map((data, index) => (
             <Link
               key={index}
               href={`${pathname}/#${data}`}
               onClick={() => handleChartClick(data)}
-              className={`text rounded-lg p-2 font-medium transition-all capitalize ${
+              className={`text rounded-lg p-2 font-medium capitalize transition-all ${
                 selectedChart === data
                   ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
                   : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
@@ -138,20 +165,53 @@ export default function ChartNavigation() {
                         >
                           {translateChartType(chart)}
                         </Link>
-                    </SheetClose>
+                      </SheetClose>
                     ))}
                   </div>
                   <div className="flex flex-wrap items-center justify-center gap-2">
+                    <Link
+                      href={`${pathname}/#actual_vs_average`}
+                      onClick={() => handleChartClick('actual_vs_average')}
+                      className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
+                        selectedChart === 'actual_vs_average'
+                          ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                          : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+                      }`}
+                    >
+                      <ArrowUpDownIcon
+                        width={18}
+                        height={18}
+                        className="rotate-90"
+                      />
+                      resumen
+                    </Link>
+
+                    <Link
+                      href={`${pathname}/#actual_vs_average_2`}
+                      onClick={() => handleChartClick('actual_vs_average_2')}
+                      className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
+                        selectedChart === 'actual_vs_average_2'
+                          ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                          : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+                      }`}
+                    >
+                      <ArrowUpDownIcon
+                        width={18}
+                        height={18}
+                        className="rotate-90"
+                      />
+                      márgenes
+                    </Link>
                     {reportLinks.map((data) => (
                       <SheetClose asChild key={data}>
-                      <Link
-                        key={data}
-                        href={`${pathname}/#${data}`}
-                        onClick={() => handleChartClick(data)}
-                        className={`text rounded-lg bg-[#252525]/10 p-2 font-medium capitalize text-black transition-all`}
-                      >
-                        {translateChartType(data)}
-                      </Link>
+                        <Link
+                          key={data}
+                          href={`${pathname}/#${data}`}
+                          onClick={() => handleChartClick(data)}
+                          className={`text rounded-lg bg-[#252525]/10 p-2 font-medium capitalize text-black transition-all`}
+                        >
+                          {translateChartType(data)}
+                        </Link>
                       </SheetClose>
                     ))}
                   </div>
