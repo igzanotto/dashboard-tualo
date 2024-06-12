@@ -84,6 +84,37 @@ export default async function ReportPage({
     return <>{formattedParagraphs}</>;
   };
 
+  const processText = (text: string) => {
+    const regex = /(\#\#\#\# .+? (.*))|(\*\*[^*]+\*\*)|([^\*#]+)/g;
+    const matches = text.match(regex);
+  
+    return matches?.map((match, index) => {
+      if (match.startsWith('####')) {
+        return (
+          <p key={index} className="font-medium text-2xl mb-4">
+            {match.replace('#### ', '')}
+          </p>
+        );
+      } else if (match.startsWith('**')) {
+        return (
+          <span key={index} className="font-semibold">
+            {match.replace(/\*\*/g, '')}
+          </span>
+        );
+      } else if (match.includes(':')) {
+        return (
+          <span key={index}>
+            {match}
+          </span>
+        );
+      } else {
+        return <span key={index}>{match}</span>;
+      }
+    });
+  };
+  
+
+
   return (
     <div className="flex flex-col gap-3 xl:px-2">
       <Image
@@ -132,7 +163,7 @@ export default async function ReportPage({
             </div>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
               {!report.business_resume ? (
-                <div>{renderTextFromDatabase(report.operations_resume)}</div>
+                <div className='whitespace-pre-wrap'>{processText(report.operations_resume)}</div>
               ) : (
                 <div>{renderTextFromDatabase(report.business_resume)}</div>
               )}
@@ -246,7 +277,9 @@ export default async function ReportPage({
                 key={index}
                 className="flex flex-col rounded-xl bg-[#003E52]/10 p-4 text-[#003E52]"
               >
-                {renderTextFromDatabase(`${data.content}`)}
+                <div className='whitespace-pre-wrap'>
+                  {processText(data.content)}
+                </div>
               </div>
             ))}
           </div>
