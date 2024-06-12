@@ -10,11 +10,11 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
-import '../../../../globals.css'
+import '../../../../globals.css';
 import BannerSection from '@/components/bannerSection';
 import Logo from '@/components/icons/Logo';
 import BannerReferidos from '@/components/bannerReferidos';
-import reporte from '../../../../../components/images/header-reporte.png'
+import reporte from '../../../../../components/images/header-reporte.png';
 import Image from 'next/image';
 import WaterfallTooltip from '@/components/tooltips/waterfall';
 import SalesTooltip from '@/components/tooltips/sales';
@@ -23,9 +23,10 @@ import ProfitMarginsTooltip from '@/components/tooltips/profit-margins';
 import MarginsTooltip from '@/components/tooltips/margins';
 import ExpensesTooltip from '@/components/tooltips/detailed-expenses';
 
-
-const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
-
+const libreBaskerville = Libre_Baskerville({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+});
 
 const chartOrder = [
   'waterfall',
@@ -34,30 +35,25 @@ const chartOrder = [
   'net_profit_and_margins',
   'margins',
   'detailed_expenses',
-  
 ];
 
-
-const reorderCharts = (charts:any) => {
-  return charts.sort((a:any, b:any) => {
+const reorderCharts = (charts: any) => {
+  return charts.sort((a: any, b: any) => {
     return chartOrder.indexOf(a.type) - chartOrder.indexOf(b.type);
   });
 };
 
-
 export default async function ReportPage({
   params,
 }: {
-  params: { id: string, month:string };
+  params: { id: string; month: string };
 }) {
   const id = params.id;
   const report = await fetchReportById(id);
   console.log(report.id);
-  
-  
+
   const orderedCharts = reorderCharts(report.charts);
 
-  
   const renderTextFromDatabase = (text: string | undefined) => {
     if (!text) {
       return <p>Vacío</p>;
@@ -76,25 +72,17 @@ export default async function ReportPage({
 
         return (
           <span key={lineIndex}>
-            {applyStyles(firstPart)}{secondPart && `: ${secondPart}`} <br />
+            {applyStyles(firstPart)}
+            {secondPart && `: ${secondPart}`} <br />
           </span>
         );
       });
 
-      return (
-        <span key={index}>
-          {formattedLines}
-        </span>
-      );
+      return <span key={index}>{formattedLines}</span>;
     });
 
-    return (
-      <>
-        {formattedParagraphs}
-      </>
-    );
+    return <>{formattedParagraphs}</>;
   };
-  
 
   return (
     <div className="flex flex-col gap-3 xl:px-2">
@@ -162,16 +150,17 @@ export default async function ReportPage({
       </div>
 
       <BannerSection text="Resumen financiero" />
+      <div className='px-3'>
       <div className="mt-10 flex flex-col gap-36">
         {orderedCharts.map((chart: any) => (
           <div
-            className={`section-margin flex items-center justify-between gap-10 rounded-xl bg-[#003E52]/10 px-3 py-4 max-xl:flex-col 2xl:px-7`}
+            className={`section-margin flex items-center justify-between rounded-xl bg-[#003E52]/10 px-3 py-4 max-xl:flex-col 2xl:px-7`}
             id={chart.type}
             key={chart.id}
           >
-            <div className="max-xl:w-full xl:w-[50%] 2xl:w-[50%]">
+            <div className="max-xl:w-full">
               <div className="flex items-center gap-2">
-                <p className="my-4 text-xl font-semibold text-[#003E52] xl:text-2xl">
+                <p className="text-xl font-semibold text-[#003E52] xl:text-2xl">
                   {' '}
                   Gráfica de <span>{translateChartType(chart.type)}</span>
                 </p>
@@ -191,41 +180,44 @@ export default async function ReportPage({
                   <p>Este grafico no tiene tooltip</p>
                 )}
               </div>
-              <Dialog>
-                <DialogTrigger>
-                  <img
-                    src={chart.graphy_url}
-                    alt={chart.type}
-                    width={1000}
-                    height={1000}
-                    className="mx-auto my-5 rounded-xl"
-                  />
-                </DialogTrigger>
-                <DialogContent>
-                  <img
-                    src={chart.graphy_url}
-                    alt={chart.type}
-                    width={2000}
-                    height={1000}
-                    className="mx-auto rounded-xl w-full h-full"
-                  />
-                </DialogContent>
-              </Dialog>
-            </div>
-            <div className="rounded-lg bg-white px-3 py-5 lg:my-[110px] xl:w-[50%] 2xl:w-[40%]">
-              {chart.insights && (
-                <div className="flex flex-col justify-between">
-                  <h3 className="mb-5 text-center text-2xl font-medium">
-                    Análisis
-                  </h3>
-                  <p className="text-lg">
-                    {renderTextFromDatabase(chart.insights)}
-                  </p>
+              <div className="flex items-center gap-10 max-xl:flex-col">
+                <Dialog>
+                  <DialogTrigger>
+                    <img
+                      src={chart.graphy_url}
+                      alt={chart.type}
+                      width={1000}
+                      height={1000}
+                      className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px] max-xl:w-full"
+                    />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <img
+                      src={chart.graphy_url}
+                      alt={chart.type}
+                      width={2000}
+                      height={1000}
+                      className="mx-auto h-full w-full rounded-xl"
+                    />
+                  </DialogContent>
+                </Dialog>
+                <div className="w-full rounded-lg bg-white px-3 py-5 xl:h-[450px] 2xl:h-full xl:w-[50%] xl:overflow-y-auto 2xl:w-[40%] max-md:h-[400px] max-md:overflow-y-auto">
+                  {chart.insights && (
+                    <div className="flex flex-col justify-between">
+                      <h3 className="mb-5 text-center text-2xl font-medium">
+                        Análisis
+                      </h3>
+                      <p className="text-lg">
+                        {renderTextFromDatabase(chart.insights)}
+                      </p>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
         ))}
+      </div>
       </div>
 
       <div className="my-28 flex flex-col gap-28">
@@ -263,8 +255,8 @@ export default async function ReportPage({
         <div className="section-margin mx-auto  xl:w-[80%]">
           <BannerSection
             text="Información adicional"
-            id="informacion adicional"
-            key={'informacion adicional'}
+            id="información adicional"
+            key={'información adicional'}
           />
           <Image
             src={report.additional_info}

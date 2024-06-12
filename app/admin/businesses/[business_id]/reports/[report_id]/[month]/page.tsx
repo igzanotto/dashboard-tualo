@@ -36,6 +36,7 @@ import CostsExpensesTooltip from '@/components/tooltips/costs-expenses';
 import ProfitMarginsTooltip from '@/components/tooltips/profit-margins';
 import MarginsTooltip from '@/components/tooltips/margins';
 import ExpensesTooltip from '@/components/tooltips/detailed-expenses';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -272,14 +273,27 @@ export default async function ReportPage({
                                 <p>Este grafico no tiene tooltip</p>
                               )}
                             </div>
-
-                            <img
-                              src={chart.graphy_url}
-                              alt="image"
-                              width={1000}
-                              height={1000}
-                              className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
-                            />
+                            <Dialog>
+                              <DialogTrigger>
+                                <img
+                                  src={chart.graphy_url}
+                                  alt="image"
+                                  width={1000}
+                                  height={1000}
+                                  className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
+                                />
+                              </DialogTrigger>
+                              <DialogContent>
+                                <img
+                                  src={chart.graphy_url}
+                                  alt="image"
+                                  width={1000}
+                                  height={1000}
+                                  className="mx-auto h-full w-full rounded-xl"
+                                />
+                              </DialogContent>
+                            </Dialog>
+                            
                             <p>Actualizar imagen</p>
                             <form
                               action={uploadImageChart}
@@ -324,7 +338,7 @@ export default async function ReportPage({
                                 <textarea
                                   defaultValue={chart.insights}
                                   name="insights"
-                                  className="w-[100%] rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl 2xl:h-5/6 xl:h-[80%] lg:h-[200px]"
+                                  className="w-[100%] rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl lg:h-[200px] xl:h-[80%] 2xl:h-5/6"
                                 />
 
                                 <button
@@ -339,10 +353,11 @@ export default async function ReportPage({
                         </div>
                       </div>
                     ) : (
-                      <div 
+                      <div
                         className={`section-margin flex gap-10 rounded-xl bg-[#252525]/10 p-3 max-xl:flex-col`}
                         id={chart.type}
-                        key={chart.id}>
+                        key={chart.id}
+                      >
                         <div className="flex flex-col gap-4">
                           <h1 className="text-black">
                             Crear Gráfico de {translateChartType(type)}
@@ -400,7 +415,13 @@ export default async function ReportPage({
                       </div>
                     )
                   ) : (
-                    <p>No hay gráficos creados para <span className='capitalize font-medium'>{translateChartType(type)}</span>.</p>
+                    <p>
+                      No hay gráficos creados para{' '}
+                      <span className="font-medium capitalize">
+                        {translateChartType(type)}
+                      </span>
+                      .
+                    </p>
                   )}
                 </div>
               );
