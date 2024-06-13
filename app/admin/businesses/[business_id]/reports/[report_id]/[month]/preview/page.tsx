@@ -1,27 +1,29 @@
-import { fetchReportById } from '@/lib/data';
-import { translateChartType } from '@/lib/utils';
-import { Libre_Baskerville } from 'next/font/google';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-
-import '../../../../globals.css';
 import BannerSection from '@/components/bannerSection';
-import Logo from '@/components/icons/Logo';
-import BannerReferidos from '@/components/bannerReferidos';
-import reporte from '../../../../../components/images/header-reporte.png';
+import { fetchReportById } from '@/lib/data';
+import { Libre_Baskerville } from 'next/font/google';
 import Image from 'next/image';
+import reporte from '../../../../../../../../components/images/header-reporte.png';
+import { InfoIcon } from 'lucide-react';
+
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import ChartEmbed from '@/components/charts/ChartEmbed';
+import Logo from '@/components/icons/Logo';
+import { translateChartType } from '@/lib/utils';
+import MonthButtonsAdmin from '@/components/admin/monthButton';
+import ChartNavigation from '@/components/chart-navigation';
 import WaterfallTooltip from '@/components/tooltips/waterfall';
 import SalesTooltip from '@/components/tooltips/sales';
 import CostsExpensesTooltip from '@/components/tooltips/costs-expenses';
 import ProfitMarginsTooltip from '@/components/tooltips/profit-margins';
 import MarginsTooltip from '@/components/tooltips/margins';
 import ExpensesTooltip from '@/components/tooltips/detailed-expenses';
+import { uploadImage, uploadImageChart } from '@/lib/actions';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -35,6 +37,8 @@ const chartOrder = [
   'net_profit_and_margins',
   'margins',
   'detailed_expenses',
+  'actual_vs_average',
+  'actual_vs_average_2',
 ];
 
 const reorderCharts = (charts: any) => {
@@ -43,14 +47,15 @@ const reorderCharts = (charts: any) => {
   });
 };
 
-export default async function ReportPage({
+export default async function PreviewPage({
   params,
 }: {
-  params: { id: string; month: string };
+  params: { report_id: string; id: string; business_id: string; month: string };
 }) {
-  const id = params.id;
-  const report = await fetchReportById(id);
-  console.log(report.id);
+  const report = await fetchReportById(params.report_id);
+  console.log(report.charts);
+
+  const { business_id } = params;
 
   const orderedCharts = reorderCharts(report.charts);
 
@@ -112,11 +117,18 @@ export default async function ReportPage({
       }
     });
   };
-  
 
+  
 
   return (
     <div className="flex flex-col gap-3 xl:px-2">
+      <nav className="sticky top-0 z-50 mb-10 flex items-center rounded-b-xl bg-white p-2 shadow-lg md:gap-10 md:p-4">
+        <MonthButtonsAdmin business_id={business_id} />
+        <div className="mx-auto justify-center self-center">
+          <ChartNavigation />
+        </div>
+      </nav>
+
       <Image
         width={3000}
         height={3000}
@@ -163,9 +175,13 @@ export default async function ReportPage({
             </div>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
               {!report.business_resume ? (
-                <div className='whitespace-pre-wrap'>{processText(report.operations_resume)}</div>
+                <div className='whitespace-pre-wrap'>
+                  {processText(report.operations_resume)}
+                </div>
               ) : (
-                <div>{renderTextFromDatabase(report.business_resume)}</div>
+                <div className='whitespace-pre-wrap'>
+                  {processText(report.business_resume)}
+                </div>
               )}
             </div>
           </div>
@@ -174,81 +190,82 @@ export default async function ReportPage({
               Metas financieras
             </p>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
-              {renderTextFromDatabase(report.goals)}
+            <div className='whitespace-pre-wrap'>
+                  {processText(report.goals)}
+                </div>
             </div>
           </div>
         </div>
       </div>
 
       <BannerSection text="Resumen financiero" />
-      <div className='px-3'>
       <div className="mt-10 flex flex-col gap-36">
         {orderedCharts.map((chart: any) => (
           <div
-            className={`section-margin flex items-center justify-between rounded-xl bg-[#003E52]/10 px-3 py-4 max-xl:flex-col 2xl:px-7`}
-            id={chart.type}
-            key={chart.id}
-          >
-            <div className="max-xl:w-full">
-              <div className="flex items-center gap-2">
-                <p className="text-xl font-semibold text-[#003E52] xl:text-2xl">
-                  {' '}
-                  Gráfica de <span>{translateChartType(chart.type)}</span>
-                </p>
-                {chart.type === 'waterfall' ? (
-                  <WaterfallTooltip />
-                ) : chart.type === 'sales' ? (
-                  <SalesTooltip />
-                ) : chart.type === 'costs_and_expenses' ? (
-                  <CostsExpensesTooltip />
-                ) : chart.type === 'net_profit_and_margins' ? (
-                  <ProfitMarginsTooltip />
-                ) : chart.type === 'margins' ? (
-                  <MarginsTooltip />
-                ) : chart.type === 'detailed_expenses' ? (
-                  <ExpensesTooltip />
-                ) : (
-                  <p>Este grafico no tiene tooltip</p>
-                )}
-              </div>
-              <div className="flex items-center gap-10 max-xl:flex-col">
-                <Dialog>
-                  <DialogTrigger>
-                    <img
-                      src={chart.graphy_url}
-                      alt={chart.type}
-                      width={1000}
-                      height={1000}
-                      className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px] max-xl:w-full"
-                    />
-                  </DialogTrigger>
-                  <DialogContent>
-                    <img
-                      src={chart.graphy_url}
-                      alt={chart.type}
-                      width={2000}
-                      height={1000}
-                      className="mx-auto h-full w-full rounded-xl"
-                    />
-                  </DialogContent>
-                </Dialog>
-                <div className="w-full rounded-lg bg-white px-3 py-5 xl:h-[450px] 2xl:h-full xl:w-[50%] xl:overflow-y-auto 2xl:w-[40%] max-md:h-[400px] max-md:overflow-y-auto">
-                  {chart.insights && (
-                    <div className="flex flex-col justify-between">
-                      <h3 className="mb-5 text-center text-2xl font-medium">
-                        Análisis
-                      </h3>
-                      <p className="text-lg">
-                        {renderTextFromDatabase(chart.insights)}
-                      </p>
+          className={`section-margin flex items-center justify-between rounded-xl bg-[#003E52]/10 px-3 py-4 max-xl:flex-col 2xl:px-7`}
+          id={chart.type}
+          key={chart.id}
+        >
+          <div className="max-xl:w-full">
+            <div className="flex items-center gap-2">
+              <p className="text-xl font-semibold text-[#003E52] xl:text-2xl">
+                {' '}
+                Gráfica de <span>{translateChartType(chart.type)}</span>
+              </p>
+              {chart.type === 'waterfall' ? (
+                <WaterfallTooltip />
+              ) : chart.type === 'sales' ? (
+                <SalesTooltip />
+              ) : chart.type === 'costs_and_expenses' ? (
+                <CostsExpensesTooltip />
+              ) : chart.type === 'net_profit_and_margins' ? (
+                <ProfitMarginsTooltip />
+              ) : chart.type === 'margins' ? (
+                <MarginsTooltip />
+              ) : chart.type === 'detailed_expenses' ? (
+                <ExpensesTooltip />
+              ) : (
+                <p>Este grafico no tiene tooltip</p>
+              )}
+            </div>
+            <div className="flex items-center gap-10 max-xl:flex-col">
+              <Dialog>
+                <DialogTrigger>
+                  <img
+                    src={chart.graphy_url}
+                    alt={chart.type}
+                    width={1000}
+                    height={1000}
+                    className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px] max-xl:w-full"
+                  />
+                </DialogTrigger>
+                <DialogContent>
+                  <img
+                    src={chart.graphy_url}
+                    alt={chart.type}
+                    width={2000}
+                    height={1000}
+                    className="mx-auto h-full w-full rounded-xl"
+                  />
+                </DialogContent>
+              </Dialog>
+              <div className="w-full rounded-lg bg-white px-3 py-5 xl:h-[450px] 2xl:h-full xl:w-[50%] xl:overflow-y-auto 2xl:w-[40%] max-md:h-[400px] max-md:overflow-y-auto">
+                {chart.insights && (
+                  <div className="flex flex-col justify-between">
+                    <h3 className="mb-5 text-center text-2xl font-medium">
+                      Análisis
+                    </h3>
+                    
+                    <div className='whitespace-pre-wrap text-[#003E52]'>
+                    {processText(chart.insights)}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
+        </div>
         ))}
-      </div>
       </div>
 
       <div className="my-28 flex flex-col gap-28">
@@ -260,7 +277,9 @@ export default async function ReportPage({
           />
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p> */}
           <div className="mt-16 rounded-xl bg-[#003E52]/10 p-3 text-[#003E52] max-md:mx-auto max-md:w-[96%]">
-            {renderTextFromDatabase(report.analysis)}
+            <div className='whitespace-pre-wrap'>
+              {processText(report.analysis)}
+            </div>
           </div>
         </div>
 
@@ -278,26 +297,46 @@ export default async function ReportPage({
                 className="flex flex-col rounded-xl bg-[#003E52]/10 p-4 text-[#003E52]"
               >
                 <div className='whitespace-pre-wrap'>
-                  {processText(data.content)}
+                  {processText(`${data.content}`)}
                 </div>
+                
               </div>
             ))}
           </div>
         </div>
 
-        <div className="section-margin mx-auto  xl:w-[80%]">
+        <div className="section-margin my-28">
           <BannerSection
             text="Información adicional"
             id="información adicional"
-            key={'información adicional'}
           />
-          <Image
-            src={report.additional_info}
-            alt="image"
-            width={1000}
-            height={1000}
-            className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
-          />
+          {report.additional_info ? (
+            <Image
+              src={report.additional_info}
+              alt="image"
+              width={1000}
+              height={1000}
+              className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
+            />
+          ) : null}
+          <form
+            action={uploadImage}
+            className="mt-12 flex flex-col gap-4 rounded-xl bg-[#252525]/10 p-4"
+          >
+            <input type="hidden" name="report_id" value={params.report_id} />
+            <input
+              type="hidden"
+              name="business_id"
+              value={params.business_id}
+            />
+            <input name="image" type="file" className="text-[#003E52]" />
+            <button
+              className="rounded-lg bg-[#003E52] p-2 text-white"
+              type="submit"
+            >
+              Guardar imagen
+            </button>
+          </form>
         </div>
       </div>
       <div className="mx-auto flex flex-col gap-6 max-lg:w-[98%] max-lg:text-center xl:w-[80%]">

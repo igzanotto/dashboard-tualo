@@ -9,7 +9,7 @@ export default function LoginPage({
 }) {
 
   return (
-    <div className="mx-auto gap-2 p-8 sm:max-w-md bg-[#252525]/10 mt-[10%] justify-center rounded-xl shadow-lg">
+    <div className="mx-auto gap-2 p-8 sm:max-w-md bg-[#252525]/10 mt-[5%] justify-center rounded-xl shadow-lg">
       <EmailLoginForm searchParams={searchParams} />
       <GoogleLoginButton />
     </div>

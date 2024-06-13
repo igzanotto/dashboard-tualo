@@ -16,7 +16,6 @@ import {
   followup_PL_prompt,
   PL_transcript,
   followup_PL_close,
-  highlights_and_PL_analysis_prompt,
 } from '@/utils/prompts';
 
 interface FormData {
@@ -34,7 +33,7 @@ interface FormData {
   followup_PL_prompt: string;
   PL_transcript: string;
   followup_PL_close: string;
-  highlights_and_PL_analysis_prompt: string;
+  QA_highlgts: string;
 
   [key: string]: string;
 }
@@ -42,7 +41,6 @@ interface FormData {
 export default function FollowUpGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
   const business_id = useParams().business_id as string;
-
 
   const [statusMessage, setStatusMessage] = useState('');
   const [formData, setFormData] = useState<FormData>({
@@ -61,7 +59,7 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
     followup_PL_prompt,
     PL_transcript,
     followup_PL_close,
-    highlights_and_PL_analysis_prompt,
+    QA_highlgts: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -83,7 +81,8 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
     if (elementId === 'previous_resume_create_button') {
       input_message = formData.previous_resume_prompt;
     } else if (elementId === 'QA_transcript_create_button') {
-      input_message = formData.QA_start +
+      input_message =
+        formData.QA_start +
         formData.QA_transcript +
         formData.followup_goals_start +
         formData.followup_goals_transcript +
@@ -96,12 +95,10 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
         formData.recomendations_QA_transcript +
         formData.recomendations_feedback_close;
     } else if (elementId === 'PL_transcript_create_button') {
-      input_message = 
-      formData.followup_PL_prompt +
-      formData.PL_transcript +
-      formData.followup_PL_close;
-    } else if (elementId === 'highlights_and_PL_analysis_create_button') {
-      input_message = formData.highlights_and_PL_analysis_prompt;
+      input_message =
+        formData.followup_PL_prompt +
+        formData.PL_transcript +
+        formData.followup_PL_close;
     }
 
     setStatusMessage('generando mensaje...');
@@ -163,7 +160,14 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
       return;
     }
 
-    response_input.innerHTML = responseContent;
+    if (elementId === 'QA_transcript_retrieve_button') {
+      setFormData({
+        ...formData,
+        QA_highlgts: responseContent,
+      });
+    } else {
+      response_input.innerHTML = responseContent;
+    }
   };
 
   return (
@@ -285,6 +289,8 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
           id="QA_transcript_response"
           name="QA_transcript_response"
           placeholder=">>> respuesta de api <<<"
+          value={formData.QA_highlgts}
+          onChange={handleChange}
           className="w-full rounded-md border-2 border-blue-400 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
       </div>
@@ -395,42 +401,16 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
         />
       </div>
 
-      <div id="highlights_and_PL_analysis_section">
-        <h3>Highlights y analisis del P&L</h3>
-        <textarea
-          name="highlights_and_PL_analysis_prompt"
-          rows={10}
-          value={formData.highlights_and_PL_analysis_prompt}
-          onChange={handleChange}
-          className="w-full rounded-md border-2 border-blue-400 bg-blue-100 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
-          autoFocus
-        />
-        <div className="my-2 flex justify-between">
-          <Button
-            onClick={handleCreateMessage}
-            id="highlights_and_PL_analysis_create_button"
-          >
-            crear mensaje
-          </Button>
-          <p>{statusMessage}</p>
-          <Button
-            onClick={handleRetrieveThreadMessages}
-            id="highlights_and_PL_analysis_retrieve_button"
-          >
-            obtener mensajes
-          </Button>
-          <input type="text" defaultValue={threadId} name="thread_id" />
-        </div>
-      </div>
-
       <h2 className="mt-5 text-center text-2xl font-bold text-blue-600">
-        Highlights del mes
+        Highlights del QA para el reporte
       </h2>
       <form action={buildFollowupResume}>
         <textarea
           rows={9}
           id="highlights_and_PL_analysis_response"
           name="highlights_and_PL_analysis_response"
+          value={formData.QA_highlgts}
+          onChange={handleChange}
           className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
         <h1>metas del mes</h1>
@@ -449,10 +429,7 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
         <input type="text" name="report_id" defaultValue={report_id} hidden />
 
         <div className="space-between my-2 flex items-center justify-around">
-         
-          <button
-            className="rounded-md border-2 border-blue-400 bg-blue-600 px-3  py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50"
-          >
+          <button className="rounded-md border-2 border-blue-400 bg-blue-600 px-3  py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:opacity-50">
             guardar en DB
           </button>
         </div>

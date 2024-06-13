@@ -52,7 +52,7 @@ export async function fetchFilteredReports(
         *,
         business:business_id (name),
         charts(type, insights, graphy_url, id),
-        recomendations(content)
+        recomendations(content, id, report_id)
       `)
       
       .eq('id', reportId)

@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import {fetchReportsByBusiness} from '@/lib/data';
+import { fetchReportsByBusiness } from '@/lib/data';
 import Link from 'next/link';
 import * as React from "react";
-import {ChevronDownIcon} from "lucide-react";
+import { ChevronDownIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,12 +27,12 @@ type Props = {
 
 type Report = {
   id: string;
-  business_id:string
-  // Agrega otras propiedades del reporte según sea necesario
+  business_id: string;
+  month: string; // Asegúrate de que `month` esté definido aquí
 };
 
-export default function MonthButtonsAdmin({ business_id}:Props) {
-  const [reports, setReports] = React.useState<any[]>([]);
+export default function MonthButtonsAdmin({ business_id }: Props) {
+  const [reports, setReports] = React.useState<Report[]>([]);
   const [open, setOpen] = React.useState(false);
   const [selectedStatus, setSelectedStatus] = React.useState<Report | null>(null);
 
@@ -44,65 +44,54 @@ export default function MonthButtonsAdmin({ business_id}:Props) {
     const fetchReports = async () => {
       const reportsData = await fetchReportsByBusiness(business_id);
       console.log(reportsData);
-      
+
       if (reportsData) {
         setReports(reportsData);
       } else {
         setReports([]);
       }
     };
-
-    
-    
     fetchReports();
   }, [business_id]);
   console.log(reports);
-  
 
-  
+  const handleSelect = (url: string) => {
+    setSelectedStatus(reports.find((r) => r.id === url.split('/').slice(-2, -1)[0]) || null);
+    setOpen(false);
+    // Navigate to the new URL and then force a reload
+    window.location.href = url;
+  };
+
   return (
-    // <div >
-    //     {reports && reports.map(report => (
-    //       <div className='' key={report.id}>
-    //         <Link href={`/admin/businesses/${business_id}/reports/${report.id}`} className='flex items-center gap-2'>
-    //           <p>{report.month}</p>
-    //         </Link>
-    //       </div>
-    //     ))}
-    // </div>
     <div className="flex flex-col items-center space-x-4">
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="w-[120px] capitalize flex items-center justify-between">
-          {reportMonth}
-          <ChevronDownIcon width={20} height={20}/>
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="p-0 w-[120px]">
-        <Command>
-          <CommandInput placeholder="Buscar..." />
-          <CommandList>
-            <CommandEmpty>No hay reportes encontrados.</CommandEmpty>
-            <CommandGroup>
-              {reports?.map((report) => (
-                <Link key={report.id} href={`/admin/businesses/${business_id}/reports/${report.id}/${report.month}`} passHref>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline" size="sm" className="w-[120px] capitalize flex items-center justify-between">
+            {reportMonth}
+            <ChevronDownIcon width={20} height={20} />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="p-0 w-[120px]">
+          <Command>
+            <CommandInput placeholder="Buscar..." />
+            <CommandList>
+              <CommandEmpty>No hay reportes encontrados.</CommandEmpty>
+              <CommandGroup>
+                {reports?.map((report) => (
                   <CommandItem
-                  className="cursor-pointer"
+                    key={report.id}
+                    className="cursor-pointer"
                     value={report.id}
-                    onSelect={(value) => {
-                      setSelectedStatus(reports.find((r) => r.id === value) || null);
-                      setOpen(false);
-                    }}
+                    onSelect={() => handleSelect(`/admin/businesses/${business_id}/reports/${report.id}/${report.month}`)}
                   >
                     <span className="capitalize">{report.month}</span>
                   </CommandItem>
-                </Link>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
-  </div>
+                ))}
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 }
