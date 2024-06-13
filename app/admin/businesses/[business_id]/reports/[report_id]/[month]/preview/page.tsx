@@ -118,6 +118,8 @@ export default async function PreviewPage({
     });
   };
 
+  
+
   return (
     <div className="flex flex-col gap-3 xl:px-2">
       <nav className="sticky top-0 z-50 mb-10 flex items-center rounded-b-xl bg-white p-2 shadow-lg md:gap-10 md:p-4">
@@ -177,8 +179,8 @@ export default async function PreviewPage({
                   {processText(report.operations_resume)}
                 </div>
               ) : (
-                <div>
-                  {renderTextFromDatabase(report.business_resume)}
+                <div className='whitespace-pre-wrap'>
+                  {processText(report.business_resume)}
                 </div>
               )}
             </div>
@@ -253,9 +255,10 @@ export default async function PreviewPage({
                     <h3 className="mb-5 text-center text-2xl font-medium">
                       Análisis
                     </h3>
-                    <p className="text-lg">
-                      {renderTextFromDatabase(chart.insights)}
-                    </p>
+                    
+                    <div className='whitespace-pre-wrap text-[#003E52]'>
+                    {processText(chart.insights)}
+                    </div>
                   </div>
                 )}
               </div>
@@ -274,7 +277,9 @@ export default async function PreviewPage({
           />
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p> */}
           <div className="mt-16 rounded-xl bg-[#003E52]/10 p-3 text-[#003E52] max-md:mx-auto max-md:w-[96%]">
-            {renderTextFromDatabase(report.analysis)}
+            <div className='whitespace-pre-wrap'>
+              {processText(report.analysis)}
+            </div>
           </div>
         </div>
 
@@ -291,7 +296,10 @@ export default async function PreviewPage({
                 key={index}
                 className="flex flex-col rounded-xl bg-[#003E52]/10 p-4 text-[#003E52]"
               >
-                {renderTextFromDatabase(`${data.content}`)}
+                <div className='whitespace-pre-wrap'>
+                  {processText(`${data.content}`)}
+                </div>
+                
               </div>
             ))}
           </div>
