@@ -240,9 +240,9 @@ export default async function ReportPage({
                       <h3 className="mb-5 text-center text-2xl font-medium">
                         Análisis
                       </h3>
-                      <p className="text-lg">
-                        {renderTextFromDatabase(chart.insights)}
-                      </p>
+                        
+                        <div className='whitespace-pre-wrap text-[#003E52]'>{processText(chart.insights)}</div>
+                     
                     </div>
                   )}
                 </div>
