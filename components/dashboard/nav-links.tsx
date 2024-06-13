@@ -16,16 +16,19 @@ import MovementIcon from '../icons/MovementIcon';
 interface ReportData {
   id: number;
   month: string;
+  business_id?:string;
 }
 
 export default function NavLinks() {
   const [latestReport, setLatestReport] = useState<ReportData | null>(null);
-
+  
+  
   useEffect(() => {
     const fetchLastReport = async () => {
       try {
         const report = await getLastReport();
         setLatestReport(report);
+        
       } catch (error) {
         console.error('Error fetching last report:', error);
         // Puedes manejar el error de alguna manera, por ejemplo, redireccionando a una página de error.
@@ -42,16 +45,18 @@ export default function NavLinks() {
     },
     {
       name: 'Movimientos',
-      href: '/dashboard/movements',
+      href: `/dashboard/movements/${latestReport?.business_id}`,
       icon: <MovementIcon />,
     },
   ];
+
+  
   return (
     <>
     {
       navlinks.map((link) => (
         <Link
-          key={link.name}
+          key={link.href}
           href={link.href}
           className={clsx(
             'flex h-[48px] grow items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-[#00AE8D]/20 hover:text-[#0065A1] md:flex-none md:justify-center  md:p-2 md:px-3',
