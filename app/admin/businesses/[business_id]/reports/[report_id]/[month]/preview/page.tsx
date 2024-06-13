@@ -24,6 +24,8 @@ import MarginsTooltip from '@/components/tooltips/margins';
 import ExpensesTooltip from '@/components/tooltips/detailed-expenses';
 import { uploadImage, uploadImageChart } from '@/lib/actions';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import CompareResultsTooltip from '@/components/tooltips/compare-results';
+import CompareMarginsTooltip from '@/components/tooltips/compare-margins';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -213,20 +215,24 @@ export default async function PreviewPage({
                 Gráfica de <span>{translateChartType(chart.type)}</span>
               </p>
               {chart.type === 'waterfall' ? (
-                <WaterfallTooltip />
-              ) : chart.type === 'sales' ? (
-                <SalesTooltip />
-              ) : chart.type === 'costs_and_expenses' ? (
-                <CostsExpensesTooltip />
-              ) : chart.type === 'net_profit_and_margins' ? (
-                <ProfitMarginsTooltip />
-              ) : chart.type === 'margins' ? (
-                <MarginsTooltip />
-              ) : chart.type === 'detailed_expenses' ? (
-                <ExpensesTooltip />
-              ) : (
-                <p>Este grafico no tiene tooltip</p>
-              )}
+                    <WaterfallTooltip />
+                  ) : chart.type === 'actual_vs_average' ? (
+                    <CompareResultsTooltip />
+                  ) : chart.type === 'actual_vs_average_2' ? (
+                    <CompareMarginsTooltip />
+                  ) : chart.type === 'sales' ? (
+                    <SalesTooltip />
+                  ) : chart.type === 'costs_and_expenses' ? (
+                    <CostsExpensesTooltip />
+                  ) : chart.type === 'net_profit_and_margins' ? (
+                    <ProfitMarginsTooltip />
+                  ) : chart.type === 'margins' ? (
+                    <MarginsTooltip />
+                  ) : chart.type === 'detailed_expenses' ? (
+                    <ExpensesTooltip />
+                  ) : (
+                    <p>Este grafico no tiene tooltip</p>
+                  )}
             </div>
             <div className="flex items-center gap-10 max-xl:flex-col">
               <Dialog>
