@@ -30,6 +30,8 @@ const libreBaskerville = Libre_Baskerville({
 
 const chartOrder = [
   'waterfall',
+  'actual_vs_average',
+  'actual_vs_average_2',
   'sales',
   'costs_and_expenses',
   'net_profit_and_margins',
