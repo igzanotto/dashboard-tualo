@@ -279,7 +279,7 @@ export async function fetchChartById(chartId: string) {
         .single();
   
       if (profileError) {
-        throw profileError;
+        throw profileError; 
       }
   
       if (!profileData) {

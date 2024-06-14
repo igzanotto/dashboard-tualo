@@ -13,7 +13,7 @@ export default async function LoginPage({
     'use server';
 
     const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
+    const confirmationCode = formData.get('confirmationCode') as string;
     const supabase = createClient();
 
     const {
@@ -21,16 +21,16 @@ export default async function LoginPage({
       error,
     } = await supabase.auth.verifyOtp({
       email: email,
-      token: password,
+      token: confirmationCode,
       type: 'email',
     });
 
     if (error) {
       console.log('error login', error);
-      return redirect(`/login?message=${error}`);
+      return redirect(`/confirm-invite?message=${error}`);
     }
 
-    return redirect('/admin');
+    return redirect('auth/set-password');
   };
 
 
@@ -65,7 +65,7 @@ export default async function LoginPage({
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="password"
             >
-              Contraseña
+              Código de confirmación
             </label>
             <div className="relative">
             <input
@@ -87,7 +87,7 @@ export default async function LoginPage({
           className="w-full"
           pendingText="Iniciando sesión..."
         >
-          Iniciar sesión
+          Confirmar
         </SubmitButton>
         
         </div>
