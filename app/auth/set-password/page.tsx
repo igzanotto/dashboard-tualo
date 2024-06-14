@@ -50,7 +50,7 @@ const SetPassword = () => {
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="new-password"
             >
-              Establecer contraseña
+              Establezca su contraseña
             </label>
             <div className="relative">
               <input

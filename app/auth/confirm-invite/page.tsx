@@ -27,10 +27,10 @@ export default async function LoginPage({
 
     if (error) {
       console.log('error login', error);
-      return redirect(`/confirm-invite?message=${error}`);
+      return redirect(`/auth/confirm-invite?message=${error}`);
     }
 
-    return redirect('auth/set-password');
+    return redirect('/auth/set-password');
   };
 
 
