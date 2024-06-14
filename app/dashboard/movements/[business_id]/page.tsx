@@ -1,6 +1,6 @@
 'use client';
 
-import { fetchBankAccountsByBusinessId, fetchBusinessById } from '@/lib/data';
+import { fetchBankAccountsByBusinessId, fetchBusinessById, fetchDocumentsByBankId } from '@/lib/data';
 import { EventHandler, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 import PdfIcon from '@/components/icons/PdfIcon';
 import { EventEmitter } from 'stream';
 import AddIcon from '@/components/icons/AddIcon';
+import Link from 'next/link';
 
 type MovementsPageProps = {
   params: {
@@ -25,20 +26,25 @@ type MovementsPageProps = {
 type Business = {
   id: string;
   name: string;
-  // add other relevant fields
 };
 
 type BankAccount = {
   id: string;
   business_id: string;
   name: string;
-  // add other relevant fields
 };
+
+type Document = {
+    id: string;
+    closing: Date;
+    bank_id:string;
+    pdf:string
+}
 
 export default function MovementsPage({ params }: MovementsPageProps) {
   const [business, setBusiness] = useState<Business | null>(null);
-  const [pdfFile, setPdfFile] = useState<File | null>(null);
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
+  const [document, setDocument] = useState<Document[] | null>([])
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -50,9 +56,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
       try {
         setLoading(true);
         const business = await fetchBusinessById(params.business_id);
-        const bankAccounts = await fetchBankAccountsByBusinessId(
-          params.business_id,
-        );
+        const bankAccounts = await fetchBankAccountsByBusinessId(params.business_id);
         setBusiness(business);
         setBankAccounts(bankAccounts);
       } catch (error) {
@@ -148,7 +152,9 @@ export default function MovementsPage({ params }: MovementsPageProps) {
             key={account.id}
             className="flex h-[200px] w-[300px] flex-col justify-between rounded-xl bg-[#252525]/10 p-4"
           >
-            <h3 className="text-lg font-medium">{account.name}</h3>
+            <Link href={`/dashboard/movements/${business?.id}/${account.id}`}>
+                <h3 className="text-lg font-medium">{account.name}</h3>
+            </Link>
 
             <form action={uploadPDF} className="flex flex-col justify-between">
               <input
