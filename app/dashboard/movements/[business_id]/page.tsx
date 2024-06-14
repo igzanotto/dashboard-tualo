@@ -146,17 +146,28 @@ export default function MovementsPage({ params }: MovementsPageProps) {
         </div>
       )}
 
-      <div className="flex flex-col gap-10 mt-12">
+      <div className="flex items-center flex-wrap gap-10 mt-12">
         {bankAccounts.map((account) => (
           <div
             key={account.id}
-            className="flex h-[200px] w-[300px] flex-col justify-between rounded-xl bg-[#252525]/10 p-4"
+            className="flex h-[180px] w-[300px] flex-col justify-center gap-5 rounded-xl bg-[#252525]/10 p-4"
           >
             <Link href={`/dashboard/movements/${business?.id}/${account.id}`}>
-                <h3 className="text-lg font-medium">{account.name}</h3>
+                <h3 className="text-lg font-medium text-center">{account.name}</h3>
             </Link>
-
-            <form action={uploadPDF} className="flex flex-col justify-between">
+            <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline" className='bg-[#ec7700] flex items-center gap-2 text-white hover:bg-[#ec7700]/80 hover:text-white'>
+                <AddIcon/>
+                Agregar movimiento
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader className="mb-5">
+                <DialogTitle>Agregar movimiento en {account.name}</DialogTitle>
+              </DialogHeader>
+              <div>
+              <form action={uploadPDF} className="flex flex-col justify-between">
               <input
                 type="hidden"
                 name="business_id"
@@ -188,6 +199,9 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                 Guardar archivo
               </Button>
             </form>
+              </div>
+            </DialogContent>
+          </Dialog>
           </div>
         ))}
       </div>
