@@ -1,6 +1,7 @@
 import { DM_Sans, Inter, Montserrat, Poppins, Libre_Baskerville } from "next/font/google";
 import { Metadata } from 'next';
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner"
 
 
 const montserrat = Montserrat({subsets:["latin"], weight:["100", "200", "300", "400", "500"]})
@@ -25,6 +26,7 @@ export default function RootLayout({
       <meta property="og:image" content="https://res.cloudinary.com/drsrva2kp/image/upload/v1715901071/logo_xk117r.png" />
       <body className={`antialiased`}>
         {children}
+        <Toaster />
       </body>
     </html>
   );
