@@ -901,9 +901,14 @@ export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> 
   const business_id = formData.get('business_id') as string;
   const id = formData.get('id') as string;
   const pdf = formData.get('pdf') as File | null;
+  const closing = formData.get('closing') as Date | null;
 
   if (!pdf) {
     throw new Error('No PDF file provided');
+  }
+
+  if (!closing) {
+    throw new Error('No closing date provided');
   }
 
   const supabase = createClient();
@@ -930,10 +935,11 @@ export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> 
     // Guardar la URL en la columna graphy_url de la tabla charts
     const { data: pdfData, error: chartError } = await supabase
       .from('documents')
-      .insert({ pdf: pdfUrl, bank_id: id })
+      .insert({ pdf: pdfUrl, bank_id: id, closing: closing })
       .eq('id', id);
 
     console.log('bussines ID:', business_id);
+    console.log('CLOSING:', closing);
     console.log('Bank ID:', id);
     console.log('PDF URL:', pdfUrl);
     console.log('PDF Data:', pdfData);
@@ -943,10 +949,11 @@ export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> 
     }
 
     // Revalidar la ruta especificada
-    // revalidatePath(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
     console.log({ data: { uploadData, pdfData } });
-
-    return { data: { uploadData, pdfData }, error: null };
+    revalidatePath(`/dashboard/movements/${business_id}`);
+    redirect(`/dashboard/movements/${business_id}/${id}`)
+    
+    // return { data: { uploadData, pdfData }, error: null };
   } catch (error) {
     console.error('Error uploading pdf:', (error as Error).message);
     return { data: null, error: error as Error };

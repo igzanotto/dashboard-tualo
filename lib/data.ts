@@ -357,3 +357,19 @@ export async function fetchChartById(chartId: string) {
   
     return data;
   }
+
+  export async function fetchBankAccountById (id:string){
+    const supabase = createClient();
+  
+    const { data, error } = await supabase
+      .from('bank_accounts')
+      .select('*')
+      .eq('id', id);
+  
+    if (error) {
+      console.error('Error fetching bank documents:', error);
+      throw error;
+    }
+  
+    return data;
+  }

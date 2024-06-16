@@ -1,6 +1,10 @@
 'use client';
 
-import { fetchBankAccountsByBusinessId, fetchBusinessById, fetchDocumentsByBankId } from '@/lib/data';
+import {
+  fetchBankAccountsByBusinessId,
+  fetchBusinessById,
+  fetchDocumentsByBankId,
+} from '@/lib/data';
 import { EventHandler, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -35,16 +39,16 @@ type BankAccount = {
 };
 
 type Document = {
-    id: string;
-    closing: Date;
-    bank_id:string;
-    pdf:string
-}
+  id: string;
+  closing: Date;
+  bank_id: string;
+  pdf: string;
+};
 
 export default function MovementsPage({ params }: MovementsPageProps) {
   const [business, setBusiness] = useState<Business | null>(null);
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
-  const [document, setDocument] = useState<Document[] | null>([])
+  const [document, setDocument] = useState<Document[] | null>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -56,7 +60,9 @@ export default function MovementsPage({ params }: MovementsPageProps) {
       try {
         setLoading(true);
         const business = await fetchBusinessById(params.business_id);
-        const bankAccounts = await fetchBankAccountsByBusinessId(params.business_id);
+        const bankAccounts = await fetchBankAccountsByBusinessId(
+          params.business_id,
+        );
         setBusiness(business);
         setBankAccounts(bankAccounts);
       } catch (error) {
@@ -105,13 +111,19 @@ export default function MovementsPage({ params }: MovementsPageProps) {
   return (
     <div>
       {business && (
-        <div className='flex justify-between'>
-          <h1 className='font-medium text-2xl text-[#003E52]'>{business.name}</h1>
+        <div className="flex justify-between">
+          <h1 className="text-2xl font-medium text-[#003E52]">
+            {business.name}
+          </h1>
 
           <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline" onClick={() => setDialogOpen(true)} className='bg-[#ec7700] flex items-center gap-2 text-white hover:bg-[#ec7700]/80 hover:text-white'>
-                <AddIcon/>
+              <Button
+                variant="outline"
+                onClick={() => setDialogOpen(true)}
+                className="flex items-center gap-2 bg-[#ec7700] text-white hover:bg-[#ec7700]/80 hover:text-white"
+              >
+                <AddIcon />
                 Añadir banco
               </Button>
             </DialogTrigger>
@@ -146,62 +158,86 @@ export default function MovementsPage({ params }: MovementsPageProps) {
         </div>
       )}
 
-      <div className="flex items-center flex-wrap gap-10 mt-12">
+      <div className="mt-12 flex flex-wrap items-center gap-10">
         {bankAccounts.map((account) => (
           <div
             key={account.id}
             className="flex h-[180px] w-[300px] flex-col justify-center gap-5 rounded-xl bg-[#252525]/10 p-4"
           >
             <Link href={`/dashboard/movements/${business?.id}/${account.id}`}>
-                <h3 className="text-lg font-medium text-center">{account.name}</h3>
+              <h3 className="text-center text-lg font-medium">
+                {account.name}
+              </h3>
             </Link>
             <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" className='bg-[#ec7700] flex items-center gap-2 text-white hover:bg-[#ec7700]/80 hover:text-white'>
-                <AddIcon/>
-                Agregar movimiento
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader className="mb-5">
-                <DialogTitle>Agregar movimiento en {account.name}</DialogTitle>
-              </DialogHeader>
-              <div>
-              <form action={uploadPDF} className="flex flex-col justify-between">
-              <input
-                type="hidden"
-                name="business_id"
-                value={params.business_id}
-              />
-              <input type="hidden" name="id" value={account.id} />
-              <label
-                htmlFor="pdfUpload"
-                className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#252525]/10 p-2"
-              >
-                <PdfIcon />
-                <span>Seleccionar archivo PDF</span>
-                <input
-                  id="pdfUpload"
-                  type="file"
-                  name="pdf"
-                  accept="application/pdf"
-                  onChange={handleFileChange}
-                  required
-                  className="hidden"
-                />
-              </label>
-              {selectedFileName && (
-                <div className="my-2 text-sm text-gray-600 text-center">
-                  {selectedFileName}
+              <DialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="flex items-center gap-2 bg-[#ec7700] text-white hover:bg-[#ec7700]/80 hover:text-white"
+                >
+                  <AddIcon />
+                  Agregar movimiento
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader className="mb-5">
+                  <DialogTitle>
+                    Agregar movimiento en {account.name}
+                  </DialogTitle>
+                </DialogHeader>
+                <div>
+                  <form
+                    action={uploadPDF}
+                    className="flex flex-col justify-between gap-4"
+                  >
+                    <input
+                      type="hidden"
+                      name="business_id"
+                      value={params.business_id}
+                    />
+                    <input type="hidden" name="id" value={account.id} />
+                    <div className="flex flex-col gap-2">
+                      <label>Fecha de cierre</label>
+                      <input
+                        type="date"
+                        name='closing'
+                        className="rounded-lg bg-[#252525]/10 p-2"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label>Movimiento</label>
+                      <label
+                        htmlFor="pdfUpload"
+                        className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#252525]/10 p-2"
+                      >
+                        <PdfIcon />
+                        <span>Seleccionar archivo PDF</span>
+                        <input
+                          id="pdfUpload"
+                          type="file"
+                          name="pdf"
+                          accept="application/pdf"
+                          onChange={handleFileChange}
+                          required
+                          className="hidden"
+                        />
+                      </label>
+                      {selectedFileName && (
+                        <div className="my-2 text-center text-sm text-gray-600">
+                          {selectedFileName}
+                        </div>
+                      )}
+                    </div>
+                    <Button
+                      type="submit"
+                      className="mt-4 w-full rounded-xl bg-[#003E52]"
+                    >
+                      Guardar archivo
+                    </Button>
+                  </form>
                 </div>
-              )}
-              <Button type="submit" className="w-full rounded-xl bg-[#003E52] mt-4">
-                Guardar archivo
-              </Button>
-            </form>
-              </div>
-            </DialogContent>
-          </Dialog>
+              </DialogContent>
+            </Dialog>
           </div>
         ))}
       </div>
