@@ -114,7 +114,7 @@ export default function ChartNavigation() {
               className={`text rounded-lg p-2 font-medium capitalize transition-all ${
                 selectedChart === chart
                   ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
-                  : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+                  : 'bg-gray-200 text-black hover:bg-[#72B9AC] hover:text-white'
               }`}
             >
               {translateChartType(chart)}
@@ -129,7 +129,7 @@ export default function ChartNavigation() {
               className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
                 selectedChart === 'actual_vs_average'
                   ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
-                  : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+                  : 'bg-gray-200 text-black hover:bg-[#72B9AC] hover:text-white'
               }`}
             >
               comp resumen
@@ -142,12 +142,13 @@ export default function ChartNavigation() {
               className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
                 selectedChart === 'actual_vs_average_2'
                   ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
-                  : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+                  : 'bg-gray-200 text-black hover:bg-[#72B9AC] hover:text-white'
               }`}
             >
               comp márgenes
             </Link>
           )}
+
           {reportLinks.map((data, index) => (
             <Link
               key={index}
@@ -156,7 +157,7 @@ export default function ChartNavigation() {
               className={`text rounded-lg p-2 font-medium capitalize transition-all ${
                 selectedChart === data
                   ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
-                  : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+                  : 'bg-gray-200 text-black hover:bg-[#72B9AC] hover:text-white'
               }`}
             >
               {translateChartType(data)}
@@ -200,7 +201,7 @@ export default function ChartNavigation() {
                       className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
                         selectedChart === 'actual_vs_average'
                           ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
-                          : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+                          : 'bg-gray-200 text-black hover:bg-[#72B9AC] hover:text-white'
                       }`}
                     >
                       <ArrowUpDownIcon
@@ -217,7 +218,7 @@ export default function ChartNavigation() {
                       className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
                         selectedChart === 'actual_vs_average_2'
                           ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
-                          : 'bg-gray-200 text-black hover:bg-[#00AE8D] hover:px-4 hover:text-white'
+                          : 'bg-gray-200 text-black hover:bg-[#72B9AC] hover:text-white'
                       }`}
                     >
                       <ArrowUpDownIcon

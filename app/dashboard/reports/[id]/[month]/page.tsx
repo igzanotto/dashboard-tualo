@@ -218,7 +218,7 @@ export default async function ReportPage({
                 <div className="flex items-center gap-10 max-xl:flex-col">
                   <Dialog>
                     <DialogTrigger>
-                      <img
+                      <Image
                         src={chart.graphy_url}
                         alt={chart.type}
                         width={1000}
@@ -227,7 +227,7 @@ export default async function ReportPage({
                       />
                     </DialogTrigger>
                     <DialogContent>
-                      <img
+                      <Image
                         src={chart.graphy_url}
                         alt={chart.type}
                         width={2000}
