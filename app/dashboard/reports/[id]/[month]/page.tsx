@@ -290,6 +290,7 @@ export default async function ReportPage({
           </div>
         </div>
 
+        {report.additional_info && (
         <div className="section-margin mx-auto  xl:w-[80%]">
           <BannerSection
             text="Información adicional"
@@ -304,6 +305,8 @@ export default async function ReportPage({
             className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
           />
         </div>
+        )}
+
       </div>
       <div className="mx-auto flex flex-col gap-6 max-lg:w-[98%] max-lg:text-center xl:w-[80%]">
         <p className="font-medium text-[#00AE8D]">
