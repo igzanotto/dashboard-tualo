@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname} from 'next/navigation';
 import { translateChartType } from '@/lib/utils';
 import {
   Sheet,
@@ -16,6 +16,8 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from './ui/button';
 import { ArrowUpDownIcon, ChevronDownIcon } from 'lucide-react';
+import { fetchReportById } from '@/lib/data';
+
 
 const chartOrder = [
   'resumen',
@@ -28,8 +30,6 @@ const chartOrder = [
 ];
 
 const reportLinks = [
-  // 'actual_vs_average',
-  // 'actual_vs_average_2',
   'conclusiones',
   'recomendaciones',
   'información adicional',
@@ -37,8 +37,17 @@ const reportLinks = [
 
 export default function ChartNavigation() {
   const [selectedChart, setSelectedChart] = useState<string | null>(null);
+  const [actualVsAverageCharts, setActualVsAverageCharts] = useState<string[]>(
+    [],
+  );
   const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
   const pathname = usePathname();
+  const pathSegments = pathname.split('/');
+    
+    
+  
+
+  
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -65,6 +74,21 @@ export default function ChartNavigation() {
       }
     });
 
+    const fetchById = async () => {
+      const reportId = pathSegments[pathSegments.indexOf('reports') + 1];
+      const report = await fetchReportById(reportId);
+      const filteredCharts = report.charts
+      .map((data: any) => data.type)
+      .filter(
+        (type: string) =>
+          type === 'actual_vs_average' || type === 'actual_vs_average_2',
+      );
+      setActualVsAverageCharts(filteredCharts);
+      console.log(filteredCharts);
+    };
+    
+    fetchById();
+    
     return () => {
       sectionRefs.current.forEach((section) => observer.unobserve(section));
     };
@@ -98,31 +122,33 @@ export default function ChartNavigation() {
           ))}
         </div>
         <div className="flex items-center justify-center gap-2">
-          <Link
-            href={`${pathname}/#actual_vs_average`}
-            onClick={() => handleChartClick('actual_vs_average')}
-            className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
-              selectedChart === 'actual_vs_average'
-                ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
-                : 'bg-gray-200 text-black hover:bg-[#72B9AC] hover:text-white'
-            }`}
-          >
-            <ArrowUpDownIcon width={18} height={18} className="rotate-90" />
-            resumen
-          </Link>
+          {actualVsAverageCharts.includes('actual_vs_average') && (
+            <Link
+              href={`${pathname}/#actual_vs_average`}
+              onClick={() => handleChartClick('actual_vs_average')}
+              className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
+                selectedChart === 'actual_vs_average'
+                  ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                  : 'bg-gray-200 text-black hover:bg-[#72B9AC] hover:text-white'
+              }`}
+            >
+              comp resumen
+            </Link>
+          )}
+          {actualVsAverageCharts.includes('actual_vs_average_2') && (
+            <Link
+              href={`${pathname}/#actual_vs_average_2`}
+              onClick={() => handleChartClick('actual_vs_average_2')}
+              className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
+                selectedChart === 'actual_vs_average_2'
+                  ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
+                  : 'bg-gray-200 text-black hover:bg-[#72B9AC] hover:text-white'
+              }`}
+            >
+              comp márgenes
+            </Link>
+          )}
 
-          <Link
-            href={`${pathname}/#actual_vs_average_2`}
-            onClick={() => handleChartClick('actual_vs_average_2')}
-            className={`text flex items-center gap-2 rounded-lg p-2 font-medium capitalize transition-all ${
-              selectedChart === 'actual_vs_average_2'
-                ? 'bg-[#00AE8D] px-4 text-white hover:text-white'
-                : 'bg-gray-200 text-black hover:bg-[#72B9AC] hover:text-white'
-            }`}
-          >
-            <ArrowUpDownIcon width={18} height={18} className="rotate-90" />
-            márgenes
-          </Link>
           {reportLinks.map((data, index) => (
             <Link
               key={index}
