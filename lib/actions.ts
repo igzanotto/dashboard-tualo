@@ -951,9 +951,9 @@ export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> 
     // Revalidar la ruta especificada
     console.log({ data: { uploadData, pdfData } });
     revalidatePath(`/dashboard/movements/${business_id}`);
-    redirect(`/dashboard/movements/${business_id}/${id}`)
     
-    // return { data: { uploadData, pdfData }, error: null };
+    return { data: { uploadData, pdfData }, error: null };
+    
   } catch (error) {
     console.error('Error uploading pdf:', (error as Error).message);
     return { data: null, error: error as Error };
