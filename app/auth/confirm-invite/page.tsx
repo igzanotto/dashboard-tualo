@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 export default async function LoginPage({
   searchParams,
 }: {
-  searchParams: { message: string };
+  searchParams: { message: string, email: string};
 }) {
   const signIn = async (formData: FormData) => {
     'use server';
@@ -54,7 +54,8 @@ export default async function LoginPage({
                 id="email"
                 type="email"
                 name="email"
-                placeholder="Ingrese su dirección de email"
+                placeholder='Ingrese su email'
+                defaultValue={searchParams?.email}
                 required
               />
               <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
