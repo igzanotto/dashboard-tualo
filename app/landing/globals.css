@@ -12,8 +12,10 @@
   /* 90deg, #7E3AF2 0%, #39AEFF 100% WINDMILL DASHBOARD PURPLE */
   /* 90deg, #5D87FF 0%, #3DD9EB 100% MODERNIZE DASHBOARD */
 
-.bgMobileMenu{
-  background: linear-gradient(90deg, #0065A1 0%, #00AE8D 100%);
+@media(max-width:640px){
+  .bgMobileMenu{
+    background: linear-gradient(90deg, #0065A1 0%, #00AE8D 100%);
+  }
 }
 
 :root{

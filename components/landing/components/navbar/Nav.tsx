@@ -45,6 +45,10 @@ export default function Nav() {
     };
   }, []);
 
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <nav
       className={`fixed z-50 flex h-[90px] w-full items-center justify-between px-4 transition-colors ${
@@ -86,7 +90,7 @@ export default function Nav() {
       </div>
 
       <div className="min-[840px]:hidden">
-        <Sheet key={'right'}>
+        <Sheet key={'right'} open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <SheetTrigger>
             <Bars3Icon
               width={30}
@@ -94,31 +98,32 @@ export default function Nav() {
               color={isScrolled ? '#0065A1' : 'white'}
             />
           </SheetTrigger>
-          <SheetContent side={'right'} className="w-full">
-            <SheetHeader>
-              <LogoScrolled />
+          <SheetContent side={'top'} className="w-full bgMobileMenu border-b-0">
+            <SheetHeader className='flex mx-auto'>
+              <div className='flex mx-auto'>
+                <Logo/>
+              </div>
               <SheetDescription className="pt-10">
-                <div className="flex flex-col items-start gap-4">
+                <div className="flex flex-col items-center gap-4">
                   {navLinks.map((navlink, index) => (
                     <Link
                       key={`${navlink}-${index}`}
                       href={navlink.path}
-                      className="rounded-lg bg-gradient-to-r from-[#0065A1] to-[#00AE8D] p-1 px-2 text-center font-medium text-white"
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                      }}
+                      className="text-center font-semibold text-lg text-white"
+                      onClick={handleLinkClick}
                     >
                       {navlink.text}
                     </Link>
                   ))}
                 </div>
-                <div className="mt-8 flex flex-col gap-4">
+                <div className="mt-8 flex flex-col items-center gap-4">
                   <Link
                     target="_blank"
                     href={
                       'https://calendly.com/jorge-tualo/business-initial-interview'
                     }
-                    className="flex w-[150px] items-center justify-center gap-2 rounded-xl bg-[#ff6c0e] p-2 text-center font-medium text-white transition-all hover:bg-[#ff9655]"
+                    className="flex w-[150px] items-center justify-center gap-2 rounded-xl bg-[#ff6c0e] p-2 text-center font-semibold text-white transition-all hover:bg-[#ff9655]"
+                    onClick={handleLinkClick}
                   >
                     ¡ Quiero probarlo !
                   </Link>
