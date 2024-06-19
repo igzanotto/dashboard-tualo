@@ -190,7 +190,7 @@ export default async function ReportPage({
                         </h3>
 
                         <div className="whitespace-pre-wrap text-[#003E52]">
-                          {processText(chart.insights)}
+                          <MarkdownRenderer markdown={chart.insights} />
                         </div>
                       </div>
                     )}
@@ -211,7 +211,7 @@ export default async function ReportPage({
           />
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p> */}
           <div className="mt-16 rounded-xl bg-[#003E52]/10 p-3 text-[#003E52] max-md:mx-auto max-md:w-[96%]">
-            {renderTextFromDatabase(report.analysis)}
+            <MarkdownRenderer markdown={report.analysis} />
           </div>
         </div>
 
@@ -229,7 +229,7 @@ export default async function ReportPage({
                 className="flex flex-col rounded-xl bg-[#003E52]/10 p-4 text-[#003E52]"
               >
                 <div className="whitespace-pre-wrap">
-                  {processText(data.content)}
+                  <MarkdownRenderer markdown={data.content} />
                 </div>
               </div>
             ))}

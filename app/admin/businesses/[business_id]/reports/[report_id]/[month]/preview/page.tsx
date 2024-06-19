@@ -117,11 +117,11 @@ export default async function PreviewPage({
             </div>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
               {!report.business_resume ? (
-                <div className="">
+                <div>
                   <MarkdownRenderer markdown={report.operations_resume} />
                 </div>
               ) : (
-                <div className="">
+                <div>
                   <MarkdownRenderer markdown={report.business_resume} />
                 </div>
               )}
@@ -132,7 +132,7 @@ export default async function PreviewPage({
               Metas financieras
             </p>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
-              <div className="">
+              <div>
                 {' '}
                 <MarkdownRenderer markdown={report.goals} />
               </div>
@@ -226,7 +226,7 @@ export default async function PreviewPage({
           />
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p> */}
           <div className="mt-16 rounded-xl bg-[#003E52]/10 p-3 text-[#003E52] max-md:mx-auto max-md:w-[96%]">
-            <div className="">
+            <div>
               <MarkdownRenderer markdown={report.analysis} />
             </div>
           </div>
@@ -245,7 +245,7 @@ export default async function PreviewPage({
                 key={index}
                 className="flex flex-col rounded-xl bg-[#003E52]/10 p-4 text-[#003E52]"
               >
-                <div className=""><MarkdownRenderer markdown={data.content} /></div>
+                <div><MarkdownRenderer markdown={data.content} /></div>
               </div>
             ))}
           </div>
