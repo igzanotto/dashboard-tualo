@@ -270,6 +270,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                     {documents ? (
                       documents[account.id]?.map((doc) => (
                         <CarouselItem
+                          key={doc.bank_id}
                           className={`pl-1 ${
                             documents[account.id].length < 2
                               ? 'flex-1'
