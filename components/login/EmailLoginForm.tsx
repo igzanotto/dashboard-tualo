@@ -114,18 +114,17 @@ export default function EmailLoginForm({
         <div className='flex flex-col gap-6 mt-8'>
         <SubmitButton
           formAction={signIn}
-          className="w-full"
           pendingText="Iniciando sesión..."
         >
           Iniciar sesión
         </SubmitButton>
-        <SubmitButton
+        {/* <SubmitButton
           formAction={signUp}
           className="w-full bg-slate-500"
           pendingText="Registrando..."
         >
           Registrarse
-        </SubmitButton>
+        </SubmitButton> */}
         </div>
         {searchParams?.message && (
           <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
