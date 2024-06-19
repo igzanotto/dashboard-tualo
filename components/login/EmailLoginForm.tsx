@@ -28,7 +28,7 @@ export default function EmailLoginForm({
 
     if (error) {
       console.log("error login",error);
-      return redirect(`/login?message=${error}`);
+      return redirect(`/login?message=Email o contraseña incorrectos`);
     }
 
     return redirect('/admin');
@@ -45,9 +45,7 @@ export default function EmailLoginForm({
     const { error, data } = await supabase.auth.signUp({
       email,
       password,
-      // options: {
-      //   emailRedirectTo: `${origin}/auth/callback`,
-      // },
+      
     });
 
     if (error) {
