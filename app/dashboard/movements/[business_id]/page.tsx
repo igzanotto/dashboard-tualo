@@ -303,7 +303,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                 {documents[account.id].length === 0 ? (
                   <p>No hay movimientos creados para este banco.</p>
                 ) : (
-                  <div>
+                  <div className='max-md:hidden'>
                     <CarouselPrevious />
                     <CarouselNext />
                   </div>
