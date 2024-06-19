@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.gradient {
+    background: linear-gradient(90deg, #0065A1 0%, #00AE8D 100%);
+  }
+  /* #9333ea 0%, #6366f1 100% */
+  /* #06b6d4 0%, #2563eb 100% */
+  /* 90deg, #4C30C5 0%, #A6FEFE 100% HORIZON DASHBOARD */
+  /* 90deg, #00ae8d 0%, #0065a1 100% TUALO COLORS */
+  /* 90deg, #7E3AF2 0%, #39AEFF 100% WINDMILL DASHBOARD PURPLE */
+  /* 90deg, #5D87FF 0%, #3DD9EB 100% MODERNIZE DASHBOARD */
+
+@media(max-width:640px){
+  .bgMobileMenu{
+    background: linear-gradient(90deg, #0065A1 0%, #00AE8D 100%);
+  }
+}
+
+:root{
+  scroll-behavior: smooth;
+}
+
+.bgCard{
+  background-color: rgb(249, 249, 249);
+  border: 1px solid #00AE8D;
+
+}
+
+.bgFooter{
+  background: linear-gradient(90deg, #0065A1 0%, #00AE8D 100%);
+}
+
+.bgBeneficios{
+  background: linear-gradient(90deg, #0065A1 0%, #00AE8D 100%);
+}
+
+.bgBeneficio{
+  background: rgba(255,255,255,.05);
+  box-shadow: 0 0 10px rgba(0,0,0,0.25);
+  backdrop-filter: blur(10px);
+}
+
+
+.bgNumbers{
+  background-image: url(./como-funciona/circle.png);
+  width: 55px;
+  height: 55px;
+  border-radius: 100px;
+  background-size: contain;
+  background-repeat: no-repeat; 
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  position: absolute;
+}
+
+

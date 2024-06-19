@@ -1,6 +1,7 @@
 import { DM_Sans, Inter, Montserrat, Poppins, Libre_Baskerville } from "next/font/google";
 import { Metadata } from 'next';
 import "./globals.css";
+import Nav from "@/components/landing/components/navbar/Nav";
 
 
 const montserrat = Montserrat({subsets:["latin"], weight:["100", "200", "300", "400", "500"]})
@@ -24,6 +25,7 @@ export default function RootLayout({
       <link rel="shortcut icon" href="/favicon/favicon.ico" />
       <meta property="og:image" content="https://res.cloudinary.com/drsrva2kp/image/upload/v1715901071/logo_xk117r.png" />
       <body className={`antialiased`}>
+        <Nav/>
         {children}
       </body>
     </html>
