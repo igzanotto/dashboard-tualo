@@ -122,7 +122,7 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
 
     const result = await response.json();
     console.log('message creado con exito', result);
-    setStatusMessage('recomendaciones generadas con exito!');
+    setStatusMessage('mensajes generados con exito!');
   };
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
