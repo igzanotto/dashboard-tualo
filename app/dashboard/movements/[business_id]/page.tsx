@@ -26,6 +26,7 @@ import { toast } from 'sonner';
 import PdfIcon from '@/components/icons/PdfIcon';
 import AddIcon from '@/components/icons/AddIcon';
 import Link from 'next/link';
+import SelectBank from '@/components/select-bank';
 
 type MovementsPageProps = {
   params: {
@@ -63,6 +64,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
   }>({});
   const formRef = useRef<HTMLFormElement>(null);
   const [selectedFileName, setSelectedFileName] = useState('');
+  const [selectedBankName, setSelectedBankName] = useState("")
 
   useEffect(() => {
     const fetchData = async () => {
@@ -154,6 +156,10 @@ export default function MovementsPage({ params }: MovementsPageProps) {
       toast.error((error as Error).message);
     }
   };
+
+  const handleSelectBank = (name:string) => {
+    setSelectedBankName(name)
+  }
 
   return (
     <div>
@@ -301,7 +307,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                     )}
                   </>
                 </CarouselContent>
-                {documents[account.id].length === 0 ? (
+                {documents[account.id]?.length == 0 ? (
                   <p>No hay movimientos creados para este banco.</p>
                 ) : (
                   <div className='max-md:hidden'>
@@ -423,13 +429,15 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                   name="business_id"
                   value={params.business_id}
                 />
-                <input
+                <SelectBank onSelect={handleSelectBank}/>
+                <input type="hidden" name="name" value={selectedBankName} />
+                {/* <input
                   required
                   className="w-full rounded-xl bg-[#151515]/10 p-2"
                   placeholder="Santander río"
                   type="text"
                   name="name"
-                />
+                /> */}
                 <Button
                   type="submit"
                   className="mt-4 w-full rounded-xl bg-[#003E52]"
