@@ -24,6 +24,7 @@ import MarginsTooltip from '@/components/tooltips/margins';
 import ExpensesTooltip from '@/components/tooltips/detailed-expenses';
 import CompareResultsTooltip from '@/components/tooltips/compare-results';
 import CompareMarginsTooltip from '@/components/tooltips/compare-margins';
+import MarkdownRenderer from '@/components/markdownRendered';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -57,61 +58,6 @@ export default async function ReportPage({
   console.log(report.id);
 
   const orderedCharts = reorderCharts(report.charts);
-
-  const renderTextFromDatabase = (text: string | undefined) => {
-    if (!text) {
-      return <p>Vacío</p>;
-    }
-
-    const applyStyles = (text: string) => {
-      return <span className="font-bold text-[#003E52]">{text}</span>;
-    };
-
-    const paragraphs = text.split('\n');
-    const formattedParagraphs = paragraphs.map((paragraph, index) => {
-      const lines = paragraph.split('\n');
-      const formattedLines = lines.map((line, lineIndex) => {
-        const [firstPart, ...rest] = line.split(':');
-        const secondPart = rest.join(':').trim();
-
-        return (
-          <span key={lineIndex}>
-            {applyStyles(firstPart)}
-            {secondPart && `: ${secondPart}`} <br />
-          </span>
-        );
-      });
-
-      return <span key={index}>{formattedLines}</span>;
-    });
-
-    return <>{formattedParagraphs}</>;
-  };
-
-  const processText = (text: string) => {
-    const regex = /(\#\#\#\# .+? (.*))|(\*\*[^*]+\*\*)|([^\*#]+)/g;
-    const matches = text.match(regex);
-
-    return matches?.map((match, index) => {
-      if (match.startsWith('####')) {
-        return (
-          <p key={index} className="mb-4 text-2xl font-medium">
-            {match.replace('#### ', '')}
-          </p>
-        );
-      } else if (match.startsWith('**')) {
-        return (
-          <span key={index} className="font-semibold">
-            {match.replace(/\*\*/g, '')}
-          </span>
-        );
-      } else if (match.includes(':')) {
-        return <span key={index}>{match}</span>;
-      } else {
-        return <span key={index}>{match}</span>;
-      }
-    });
-  };
 
   return (
     <div className="flex flex-col gap-3 xl:px-2">
@@ -162,10 +108,10 @@ export default async function ReportPage({
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
               {!report.business_resume ? (
                 <div className="whitespace-pre-wrap">
-                  {processText(report.operations_resume)}
+                  <MarkdownRenderer markdown={report.operations_resume} />
                 </div>
               ) : (
-                <div>{renderTextFromDatabase(report.business_resume)}</div>
+                <div><MarkdownRenderer markdown={report.business_resume} /></div>
               )}
             </div>
           </div>
@@ -174,7 +120,7 @@ export default async function ReportPage({
               Metas financieras
             </p>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
-              {renderTextFromDatabase(report.goals)}
+              <MarkdownRenderer markdown={report.goals} />
             </div>
           </div>
         </div>

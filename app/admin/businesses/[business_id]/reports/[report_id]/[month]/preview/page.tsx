@@ -117,11 +117,11 @@ export default async function PreviewPage({
             </div>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
               {!report.business_resume ? (
-                <div className="whitespace-pre-wrap">
+                <div className="">
                   <MarkdownRenderer markdown={report.operations_resume} />
                 </div>
               ) : (
-                <div className="whitespace-pre-wrap">
+                <div className="">
                   <MarkdownRenderer markdown={report.business_resume} />
                 </div>
               )}
@@ -132,7 +132,7 @@ export default async function PreviewPage({
               Metas financieras
             </p>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
-              <div className="whitespace-pre-wrap">
+              <div className="">
                 {' '}
                 <MarkdownRenderer markdown={report.goals} />
               </div>
@@ -178,22 +178,24 @@ export default async function PreviewPage({
               <div className="flex items-center gap-10 max-xl:flex-col">
                 <Dialog>
                   <DialogTrigger>
-                    <img
+                  {chart.graphy_url && (<Image
                       src={chart.graphy_url}
                       alt={chart.type}
                       width={1000}
                       height={1000}
                       className="mx-auto my-5 h-[100%] rounded-xl max-xl:w-full xl:w-[1000px]"
                     />
+                    )}
                   </DialogTrigger>
                   <DialogContent>
-                    <img
+                  {chart.graphy_url && (<Image
                       src={chart.graphy_url}
                       alt={chart.type}
                       width={2000}
                       height={1000}
                       className="mx-auto h-full w-full rounded-xl"
                     />
+                  )}
                   </DialogContent>
                 </Dialog>
                 <div className="w-full rounded-lg bg-white px-3 py-5 max-md:h-[400px] max-md:overflow-y-auto xl:h-[450px] xl:w-[50%] xl:overflow-y-auto 2xl:h-full 2xl:w-[40%]">
@@ -203,7 +205,7 @@ export default async function PreviewPage({
                         Análisis
                       </h3>
 
-                      <div className="whitespace-pre-wrap text-[#003E52]">
+                      <div className=" text-[#003E52]">
                         <MarkdownRenderer markdown={chart.insights} />
                       </div>
                     </div>
@@ -224,7 +226,7 @@ export default async function PreviewPage({
           />
           {/* <p className="mb-4 text-2xl font-semibold text-[#003E52]">Conclusiones</p> */}
           <div className="mt-16 rounded-xl bg-[#003E52]/10 p-3 text-[#003E52] max-md:mx-auto max-md:w-[96%]">
-            <div className="whitespace-pre-wrap">
+            <div className="">
               <MarkdownRenderer markdown={report.analysis} />
             </div>
           </div>
@@ -243,7 +245,7 @@ export default async function PreviewPage({
                 key={index}
                 className="flex flex-col rounded-xl bg-[#003E52]/10 p-4 text-[#003E52]"
               >
-                <div className="whitespace-pre-wrap"><MarkdownRenderer markdown={data.content} /></div>
+                <div className=""><MarkdownRenderer markdown={data.content} /></div>
               </div>
             ))}
           </div>
