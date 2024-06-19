@@ -28,71 +28,124 @@ import IbursaIcon from "./icons/IbursaIcon"
 import BajioIcon from "./icons/BajioIcon"
 import AfirmeIcon from "./icons/AfirmeIcon"
 import AztecaIcon from "./icons/AztecaIcon"
+import AlboIcon from "./icons/AlboIcon"
+import AmexIcon from "./icons/AmexIcon"
+import BanRegioIcon from "./icons/BanRegioIcon"
+import BroxelIcon from "./icons/BroxelIcon"
+import BxIcon from "./icons/BxIcon"
+import ClaraIcon from "./icons/ClaraIcon"
+import FondeadoraIcon from "./icons/FondeadoraIcon"
+import HeyBancoIcon from "./icons/HeyBancoIcon"
+import IntercamIcon from "./icons/IntercamIcon"
+import RappiIcon from "./icons/RappiIcon"
 
-const frameworks = [
-  {
-    value: "bbva",
-    label: "BBVA Bancomer",
-    icon:<BbbvaIcon/>
-  },
-  {
-    value: "banamex",
-    label: "Banamex",
-    icon:<BanamexIcon/>
-  },
-  {
-    value: "banorte",
-    label: "Banorte",
-    icon:<BanorteIcon/>
-  },
-  {
-    value: "santander",
-    label: "Santander Río",
-    icon:<SantanderIcon/>
-  },
-  {
-    value: "scotia",
-    label: "Scotia",
-    icon:<ScotiaIcon/>
-  },
-  {
-    value: "hsbc",
-    label: "HSBC",
-    icon:<HsbcIcon/>
-  },
-  {
-    value: "inbursa",
-    label: "Inbursa",
-    icon:<IbursaIcon/>
-  },
-  {
-    value: "bajio",
-    label: "Bajío",
-    icon:<BajioIcon/>
-  },
-  {
-    value: "afirme",
-    label: "Afirme",
-    icon:<AfirmeIcon/>
-  },
-  {
-    value: "azteca",
-    label: "Azteca",
-    icon:<AztecaIcon/>
-  },
-]
+const banks = [
+    {
+      value: "afirme",
+      label: "Afirme",
+      icon:<AfirmeIcon/>
+    },
+    {
+      value: "albo",
+      label: "Albo",
+      icon:<AlboIcon/>
+    },
+    {
+      value: "amex",
+      label: "Amex",
+      icon:<AmexIcon/>
+    },
+    {
+      value: "azteca",
+      label: "Azteca",
+      icon:<AztecaIcon/>
+    },
+    {
+      value: "BanBajío",
+      label: "BanBajío",
+      icon:<BajioIcon/>
+    },
+    {
+      value: "banamex",
+      label: "Banamex",
+      icon:<BanamexIcon/>
+    },
+    {
+      value: "banorte",
+      label: "Banorte",
+      icon:<BanorteIcon/>
+    },
+    {
+      value: "BanRegio",
+      label: "BanRegio",
+      icon:<BanRegioIcon/>
+    },
+    {
+      value: "BBVA bancomer",
+      label: "BBVA Bancomer",
+      icon:<BbbvaIcon/>
+    },
+    {
+      value: "broxel",
+      label: "Broxel",
+      icon:<BroxelIcon/>
+    },
+    {
+      value: "bx+",
+      label: "BX+",
+      icon:<BxIcon/>
+    },
+    {
+      value: "clara",
+      label: "Clara",
+      icon:<ClaraIcon/>
+    },
+    {
+      value: "fondeadora",
+      label: "Fondeadora",
+      icon:<FondeadoraIcon/>
+    },
+    {
+      value: "heybanco",
+      label: "Hey Banco",
+      icon:<HeyBancoIcon/>
+    },
+    {
+      value: "HSBC",
+      label: "HSBC",
+      icon:<HsbcIcon/>
+    },
+    {
+      value: "inbursa",
+      label: "Inbursa",
+      icon:<IbursaIcon/>
+    },
+    {
+      value: "intercam",
+      label: "Intercam",
+      icon:<IntercamIcon/>
+    },
+    {
+      value: "rappi",
+      label: "Rappi",
+      icon:<RappiIcon/>
+    },
+    {
+      value: "santander",
+      label: "Santander Río",
+      icon:<SantanderIcon/>
+    },
+    {
+      value: "scotia",
+      label: "Scotia",
+      icon:<ScotiaIcon/>
+    }
+  ]
 
 export default function SelectBank({ onSelect }:any) {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
 
-  const handleSelect = (currentValue:string) => {
-    const selectedFramework = frameworks.find((framework) => framework.value === currentValue)
-    const newValue = selectedFramework ? selectedFramework.label : ""
-    setValue(newValue)
-    setOpen(false)
-    onSelect(newValue) // Llamar la función onSelect con el nombre del banco seleccionado
-  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -104,7 +157,7 @@ export default function SelectBank({ onSelect }:any) {
           className="w-full justify-between"
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
+            ? banks.find((bank) => bank.value === value)?.label
             : "Selecciona un banco"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -114,19 +167,19 @@ export default function SelectBank({ onSelect }:any) {
           <CommandInput placeholder="Buscar banco" />
           <CommandList>
             <CommandEmpty>No se encuentra este banco.</CommandEmpty>
-            <CommandGroup>
-              {frameworks.map((framework) => (
+            <CommandGroup className="overflow-y-scroll">
+              {banks.map((bank) => (
                 <CommandItem
-                  key={framework.value}
-                  value={framework.value}
+                  key={bank.value}
+                  value={bank.value}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue)
                     setOpen(false)
                     }}
                   className="flex items-center gap-2"
                 >
-                  {framework.icon}
-                  {framework.label}
+                  {bank.icon}
+                  {bank.label}
                 </CommandItem>
               ))}
             </CommandGroup>
