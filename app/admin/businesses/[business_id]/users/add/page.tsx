@@ -1,5 +1,6 @@
 "use client"
 
+import { SubmitButton } from "@/components/login/submit-button";
 import { createUser } from "@/lib/actions";
 import { useParams } from "next/navigation";
 
@@ -34,7 +35,7 @@ export default function CreateUserPage() {
         <input type="text" name="name-3" placeholder='Nombre' className='rounded-xl bg-slate-100 px-2 py-1'/>
         <input type="email" name="email-3" placeholder='Email' className='rounded-xl bg-slate-100 px-2 py-1'/>
       </div>
-      <button type="submit" className='p-3 rounded-xl bg-blue-500 text-white mt-4'>Invitar usuarios a negocio</button>
+      <SubmitButton type="submit" className='p-3 rounded-xl bg-blue-500 text-white mt-4' pendingText="Agregando usuarios...">Invitar usuarios a negocio</SubmitButton>
     </form>
   );
 }

@@ -23,6 +23,9 @@ import ProfitMarginsTooltip from '@/components/tooltips/profit-margins';
 import MarginsTooltip from '@/components/tooltips/margins';
 import ExpensesTooltip from '@/components/tooltips/detailed-expenses';
 import ReportsIndexNavbar from '@/components/reports-index-navbar';
+import CompareResultsTooltip from '@/components/tooltips/compare-results';
+import CompareMarginsTooltip from '@/components/tooltips/compare-margins';
+
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -31,6 +34,8 @@ const libreBaskerville = Libre_Baskerville({
 
 const chartOrder = [
   'waterfall',
+  'actual_vs_average',
+  'actual_vs_average_2',
   'sales',
   'costs_and_expenses',
   'net_profit_and_margins',
@@ -88,11 +93,11 @@ export default async function ReportPage({
   const processText = (text: string) => {
     const regex = /(\#\#\#\# .+? (.*))|(\*\*[^*]+\*\*)|([^\*#]+)/g;
     const matches = text.match(regex);
-  
+
     return matches?.map((match, index) => {
       if (match.startsWith('####')) {
         return (
-          <p key={index} className="font-medium text-2xl mb-4">
+          <p key={index} className="mb-4 text-2xl font-medium">
             {match.replace('#### ', '')}
           </p>
         );
@@ -103,18 +108,12 @@ export default async function ReportPage({
           </span>
         );
       } else if (match.includes(':')) {
-        return (
-          <span key={index}>
-            {match}
-          </span>
-        );
+        return <span key={index}>{match}</span>;
       } else {
         return <span key={index}>{match}</span>;
       }
     });
   };
-  
-
 
   return (
     <div className="flex flex-col gap-3 xl:px-2">
@@ -166,7 +165,9 @@ export default async function ReportPage({
             </div>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
               {!report.business_resume ? (
-                <div className='whitespace-pre-wrap'>{processText(report.operations_resume)}</div>
+                <div className="whitespace-pre-wrap">
+                  {processText(report.operations_resume)}
+                </div>
               ) : (
                 <div>{renderTextFromDatabase(report.business_resume)}</div>
               )}
@@ -184,74 +185,79 @@ export default async function ReportPage({
       </div>
 
       <BannerSection text="Resumen financiero" />
-      <div className='px-3'>
-      <div className="mt-10 flex flex-col gap-36">
-        {orderedCharts.map((chart: any) => (
-          <div
-            className={`section-margin flex items-center justify-between rounded-xl bg-[#003E52]/10 px-3 py-4 max-xl:flex-col 2xl:px-7`}
-            id={chart.type}
-            key={chart.id}
-          >
-            <div className="max-xl:w-full">
-              <div className="flex items-center gap-2">
-                <p className="text-xl font-semibold text-[#003E52] xl:text-2xl">
-                  {' '}
-                  Gráfica de <span>{translateChartType(chart.type)}</span>
-                </p>
-                {chart.type === 'waterfall' ? (
-                  <WaterfallTooltip />
-                ) : chart.type === 'sales' ? (
-                  <SalesTooltip />
-                ) : chart.type === 'costs_and_expenses' ? (
-                  <CostsExpensesTooltip />
-                ) : chart.type === 'net_profit_and_margins' ? (
-                  <ProfitMarginsTooltip />
-                ) : chart.type === 'margins' ? (
-                  <MarginsTooltip />
-                ) : chart.type === 'detailed_expenses' ? (
-                  <ExpensesTooltip />
-                ) : (
-                  <p>Este grafico no tiene tooltip</p>
-                )}
-              </div>
-              <div className="flex items-center gap-10 max-xl:flex-col">
-                <Dialog>
-                  <DialogTrigger>
-                    <img
-                      src={chart.graphy_url}
-                      alt={chart.type}
-                      width={1000}
-                      height={1000}
-                      className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px] max-xl:w-full"
-                    />
-                  </DialogTrigger>
-                  <DialogContent>
-                    <img
-                      src={chart.graphy_url}
-                      alt={chart.type}
-                      width={2000}
-                      height={1000}
-                      className="mx-auto h-full w-full rounded-xl"
-                    />
-                  </DialogContent>
-                </Dialog>
-                <div className="w-full rounded-lg bg-white px-3 py-5 xl:h-[450px] 2xl:h-full xl:w-[50%] xl:overflow-y-auto 2xl:w-[40%] max-md:h-[400px] max-md:overflow-y-auto">
-                  {chart.insights && (
-                    <div className="flex flex-col justify-between">
-                      <h3 className="mb-5 text-center text-2xl font-medium">
-                        Análisis
-                      </h3>
-                      <p className="text-lg">
-                        {renderTextFromDatabase(chart.insights)}
-                      </p>
-                    </div>
+      <div className="px-3">
+        <div className="mt-10 flex flex-col gap-36">
+          {orderedCharts.map((chart: any) => (
+            <div
+              className={`section-margin flex items-center justify-between rounded-xl bg-[#003E52]/10 px-3 py-4 max-xl:flex-col 2xl:px-7`}
+              id={chart.type}
+              key={chart.id}
+            >
+              <div className="max-xl:w-full">
+                <div className="flex items-center gap-2">
+                  <p className="text-xl font-semibold text-[#003E52] xl:text-2xl">
+                    {' '}
+                    Gráfica de <span>{translateChartType(chart.type)}</span>
+                  </p>
+                  {chart.type === 'waterfall' ? (
+                    <WaterfallTooltip />
+                  ) : chart.type === 'actual_vs_average' ? (
+                    <CompareResultsTooltip />
+                  ) : chart.type === 'actual_vs_average_2' ? (
+                    <CompareMarginsTooltip />
+                  ) : chart.type === 'sales' ? (
+                    <SalesTooltip />
+                  ) : chart.type === 'costs_and_expenses' ? (
+                    <CostsExpensesTooltip />
+                  ) : chart.type === 'net_profit_and_margins' ? (
+                    <ProfitMarginsTooltip />
+                  ) : chart.type === 'margins' ? (
+                    <MarginsTooltip />
+                  ) : chart.type === 'detailed_expenses' ? (
+                    <ExpensesTooltip />
+                  ) : (
+                    <p>Este grafico no tiene tooltip</p>
                   )}
+                </div>
+                <div className="flex items-center gap-10 max-xl:flex-col">
+                  <Dialog>
+                    <DialogTrigger>
+                      <Image
+                        src={chart.graphy_url}
+                        alt={chart.type}
+                        width={1000}
+                        height={1000}
+                        className="mx-auto my-5 h-[100%] rounded-xl max-xl:w-full xl:w-[1000px]"
+                      />
+                    </DialogTrigger>
+                    <DialogContent>
+                      <Image
+                        src={chart.graphy_url}
+                        alt={chart.type}
+                        width={2000}
+                        height={1000}
+                        className="mx-auto h-full w-full rounded-xl"
+                      />
+                    </DialogContent>
+                  </Dialog>
+                  <div className="w-full rounded-lg bg-white px-3 py-5 max-md:h-[400px] max-md:overflow-y-auto xl:h-[450px] xl:w-[50%] xl:overflow-y-auto 2xl:h-full 2xl:w-[40%]">
+                    {chart.insights && (
+                      <div className="flex flex-col justify-between">
+                        <h3 className="mb-5 text-center text-2xl font-medium">
+                          Análisis
+                        </h3>
+
+                        <div className="whitespace-pre-wrap text-[#003E52]">
+                          {processText(chart.insights)}
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
       </div>
 
       <div className="my-28 flex flex-col gap-28">
@@ -280,7 +286,7 @@ export default async function ReportPage({
                 key={index}
                 className="flex flex-col rounded-xl bg-[#003E52]/10 p-4 text-[#003E52]"
               >
-                <div className='whitespace-pre-wrap'>
+                <div className="whitespace-pre-wrap">
                   {processText(data.content)}
                 </div>
               </div>
@@ -288,6 +294,7 @@ export default async function ReportPage({
           </div>
         </div>
 
+        {report.additional_info && (
         <div className="section-margin mx-auto  xl:w-[80%]">
           <BannerSection
             text="Información adicional"
@@ -302,6 +309,8 @@ export default async function ReportPage({
             className="mx-auto my-5 h-[100%] rounded-xl xl:w-[1000px]"
           />
         </div>
+        )}
+
       </div>
       <div className="mx-auto flex flex-col gap-6 max-lg:w-[98%] max-lg:text-center xl:w-[80%]">
         <p className="font-medium text-[#00AE8D]">

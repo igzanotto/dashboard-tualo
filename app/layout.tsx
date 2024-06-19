@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner"
 
 
+
 const montserrat = Montserrat({subsets:["latin"], weight:["100", "200", "300", "400", "500"]})
 const libreBaskerville = Libre_Baskerville({subsets:["latin"], weight:["400", "700"]})
 
@@ -25,6 +26,7 @@ export default function RootLayout({
       <link rel="shortcut icon" href="/favicon/favicon.ico" />
       <meta property="og:image" content="https://res.cloudinary.com/drsrva2kp/image/upload/v1715901071/logo_xk117r.png" />
       <body className={`antialiased`}>
+       
         {children}
         <Toaster />
       </body>
