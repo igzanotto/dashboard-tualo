@@ -15,6 +15,7 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
   const business_id = useParams().business_id as string;
 
   const [statusMessage, setStatusMessage] = useState('');
+  const [analysis, setAnalysis] = useState('');
   const [formData, setFormData] = useState<FormData>({
     analysis_prompt
   });
@@ -55,7 +56,6 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
     e.preventDefault();
-    const analysis = document.getElementById('analysis');
 
     const response = await fetch(`/api/thread/retrieve?threadId=${threadId}`, {
       method: 'GET',
@@ -75,12 +75,8 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
 
     const messagesData = result.messagesData;
     const responseContent = messagesData[messagesData.length - 1]?.content;
-
-    if (!analysis) {
-      return;
-    }
-
-    analysis.innerHTML = responseContent;
+    
+    setAnalysis(responseContent);
   };
 
   return (
@@ -117,6 +113,7 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
           id="analysis"
           name="analysis"
           className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          value={analysis}
         />
         <div className="my-2 flex justify-end">
           <button className="rounded-md bg-blue-600 px-3 py-2 text-white  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:opacity-50">
