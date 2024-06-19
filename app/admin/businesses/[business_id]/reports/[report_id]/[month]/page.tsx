@@ -37,6 +37,8 @@ import ProfitMarginsTooltip from '@/components/tooltips/profit-margins';
 import MarginsTooltip from '@/components/tooltips/margins';
 import ExpensesTooltip from '@/components/tooltips/detailed-expenses';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import CompareResultsTooltip from '@/components/tooltips/compare-results';
+import CompareMarginsTooltip from '@/components/tooltips/compare-margins';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -45,13 +47,13 @@ const libreBaskerville = Libre_Baskerville({
 
 const chartOrder = [
   'waterfall',
+  'actual_vs_average',
+  'actual_vs_average_2',
   'sales',
   'costs_and_expenses',
   'net_profit_and_margins',
   'margins',
   'detailed_expenses',
-  'actual_vs_average',
-  'actual_vs_average_2',
 ];
 
 const reorderCharts = (charts: any) => {
@@ -66,7 +68,7 @@ export default async function ReportPage({
   params: { report_id: string; id: string; business_id: string; month: string };
 }) {
   const report = await fetchReportById(params.report_id);
-  console.log(report.recomendations.map((data:any) => data));
+  console.log(report.recomendations.map((data: any) => data));
 
   const { business_id } = params;
 
@@ -259,6 +261,10 @@ export default async function ReportPage({
                               </p>
                               {chart.type === 'waterfall' ? (
                                 <WaterfallTooltip />
+                              ) : chart.type === 'actual_vs_average' ? (
+                                <CompareResultsTooltip />
+                              ) : chart.type === 'actual_vs_average_2' ? (
+                                <CompareMarginsTooltip />
                               ) : chart.type === 'sales' ? (
                                 <SalesTooltip />
                               ) : chart.type === 'costs_and_expenses' ? (
@@ -293,7 +299,7 @@ export default async function ReportPage({
                                 />
                               </DialogContent>
                             </Dialog>
-                            
+
                             <p>Actualizar imagen</p>
                             <form
                               action={uploadImageChart}
@@ -463,17 +469,13 @@ export default async function ReportPage({
                 action={updateReportRecommendations}
                 className="flex flex-col gap-4"
               >
-                <input
-                  type="hidden"
-                  name="id"
-                  value={data.id}
-                />
+                <input type="hidden" name="id" value={data.id} />
                 <textarea
                   name="content"
                   defaultValue={data.content}
                   className="h-[500px] w-full rounded-lg border-2 border-zinc-300 p-4 text-[#003E52] shadow-xl"
                 />
-                
+
                 <button
                   type="submit"
                   className="mt-4 rounded-lg bg-[#003E52] p-2 text-white"
