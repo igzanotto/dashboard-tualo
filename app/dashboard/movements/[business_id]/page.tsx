@@ -27,6 +27,26 @@ import PdfIcon from '@/components/icons/PdfIcon';
 import AddIcon from '@/components/icons/AddIcon';
 import Link from 'next/link';
 import SelectBank from '@/components/select-bank';
+import AfirmeIcon from '@/components/icons/AfirmeIcon';
+import AlboIcon from '@/components/icons/AlboIcon';
+import AztecaIcon from '@/components/icons/AztecaIcon';
+import BajioIcon from '@/components/icons/BajioIcon';
+import BanamexIcon from '@/components/icons/BanamexIcon';
+import BanorteIcon from '@/components/icons/BanorteIcon';
+import BxIcon from '@/components/icons/BxIcon';
+import BroxelIcon from '@/components/icons/BroxelIcon';
+import ClaraIcon from '@/components/icons/ClaraIcon';
+import FondeadoraIcon from '@/components/icons/FondeadoraIcon';
+import HeyBancoIcon from '@/components/icons/HeyBancoIcon';
+import HsbcIcon from '@/components/icons/HsbcIcon';
+import IbursaIcon from '@/components/icons/IbursaIcon';
+import IntercamIcon from '@/components/icons/IntercamIcon';
+import RappiIcon from '@/components/icons/RappiIcon';
+import SantanderIcon from '@/components/icons/SantanderIcon';
+import ScotiaIcon from '@/components/icons/ScotiaIcon';
+import AmexIcon from '@/components/icons/AmexIcon';
+import BanRegioIcon from '@/components/icons/BanRegioIcon';
+import BbbvaIcon from '@/components/icons/BbbvaIcon';
 
 type MovementsPageProps = {
   params: {
@@ -178,10 +198,53 @@ export default function MovementsPage({ params }: MovementsPageProps) {
             className="flex items-center justify-between lg:gap-10 max-lg:flex-col max-lg:justify-center gap-5"
           >
             <div className="flex h-[180px] w-[250px] max-lg:w-[90%] flex-col justify-center gap-5 rounded-xl bg-[#252525]/10 p-2">
-              <Link href={`/dashboard/movements/${business?.id}/${account.id}`}>
-                <h3 className="text-center text-lg font-medium">
+              <Link href={`/dashboard/movements/${business?.id}/${account.id}`} className='flex items-center gap-2 justify-center'>
+              {account.name === "afirme" ? (
+                <AfirmeIcon/>
+              ) : account.name === "amex" ? (
+                <AmexIcon/>
+              ) : account.name === "albo" ? (
+                <AlboIcon/>
+              ) : account.name === "azteca" ? (
+                <AztecaIcon/>
+              ) : account.name === "BanBajío" ? (
+                <BajioIcon/>
+              ) : account.name === "banamex" ? (
+                <BanamexIcon/>
+              ) : account.name === "banorte" ? (
+                <BanorteIcon/>
+              ) : account.name === "BanRegio" ? (
+                <BanRegioIcon/>
+              ) : account.name === "BBVA bancomer" ? (
+                <BbbvaIcon/>
+              ) : account.name === "broxel" ? (
+                <BroxelIcon/>
+              ) : account.name === "bx+" ? (
+                <BxIcon/>
+              ) : account.name === "clara" ? (
+                <ClaraIcon/>
+              ) : account.name === "fondeadora" ? (
+                <FondeadoraIcon/>
+              ) : account.name === "hey banco" ? (
+                <HeyBancoIcon/>
+              ) : account.name === "HSBC" ? (
+                <HsbcIcon/>
+              ) : account.name === "inbursa" ? (
+                <IbursaIcon/>
+              ) : account.name === "intercam" ? (
+                <IntercamIcon/>
+              ) : account.name === "rappi" ? (
+                <RappiIcon/>
+              ) : account.name === "santander" ? (
+                <SantanderIcon/>
+              ) : account.name === "scotia" ? (
+                <ScotiaIcon/>
+              ) : null
+              
+            }
+                <p className="text-center text-lg font-semibold capitalize">
                   {account.name}
-                </h3>
+                </p>
               </Link>
               <div className="lg:hidden flex justify-center">
                 <Dialog

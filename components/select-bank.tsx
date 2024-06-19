@@ -106,7 +106,7 @@ const banks = [
       icon:<FondeadoraIcon/>
     },
     {
-      value: "heybanco",
+      value: "hey banco",
       label: "Hey Banco",
       icon:<HeyBancoIcon/>
     },
