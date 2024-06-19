@@ -9,30 +9,34 @@ import BeneficiosPage from "./landing/beneficios/page";
 import ResenasPage from "./landing/resenas/page";
 import FormPage from "./landing/form/page";
 import Footer from "./landing/footer/page";
+import Nav from "@/components/landing/components/navbar/Nav";
 
 
 
 export default function HomePage() {
   return (
-    <div className="gradient">
-      <div className="h-full w-full">
-        <Banner/>
+    <>
+    <Nav/>
+      <div className="gradient">
+        <div className="h-full w-full">
+          <Banner/>
+        </div>
+        <Waves />
+        <QueEsTualoPage/>
+        <div className="rotate-180">
+            <Waves/>
+        </div>
+        <ComoFuncionaPage/>
+        <Waves/>
+        <BeneficiosPage/>
+        <NegociosQueHemosAyudadoPage/>
+        <ResenasPage/>
+        <FormPage/>
+        <div className="rotate-180">
+            <Waves/>
+        </div>
+        <Footer/>
       </div>
-      <Waves />
-      <QueEsTualoPage/>
-      <div className="rotate-180">
-          <Waves/>
-      </div>
-      <ComoFuncionaPage/>
-      <Waves/>
-      <BeneficiosPage/>
-      <NegociosQueHemosAyudadoPage/>
-      <ResenasPage/>
-      <FormPage/>
-      <div className="rotate-180">
-          <Waves/>
-      </div>
-      <Footer/>
-    </div>
+    </>
   );
 }
