@@ -132,6 +132,7 @@ export default function ChartsGenerator({ threadId }: { threadId: any }) {
               name="chartsResponse"
               className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               value={chartsResponse}
+              onChange={(e) => setChartsResponse(e.target.value)}
             />
           </div>
 

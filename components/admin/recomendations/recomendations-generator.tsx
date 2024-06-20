@@ -299,6 +299,7 @@ export default function RecomendationsGenerator({
               className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               placeholder=">>> recomendaciones <<<"
               value={recomendations}
+              onChange={(e) => setRecomendations(e.target.value)}
             />
           </div>
 

@@ -136,6 +136,7 @@ export default function PLGenerator({ threadId }: { threadId: any }) {
           name="PL"
           className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
           value={PL}
+          onChange={(e) => setPL(e.target.value)}
         />
         <input type="text" name="report_id" defaultValue={report_id} hidden />
 

@@ -31,6 +31,7 @@ export default function FollowupRecomendationsGenerator({
   const business_id = useParams().business_id as string;
 
   const [statusMessage, setStatusMessage] = useState('');
+  const [recomendations, setRecomendations] = useState('');
   const [formData, setFormData] = useState<FormData>({
     followup_recomendations_bullets_prompt,
     followup_recomendations_ideas_prompt,
@@ -135,9 +136,14 @@ export default function FollowupRecomendationsGenerator({
 
     if (!response_input) {
       return;
+    } else if (elementToTarget == 'followup_recomendations_generation_response') {
+      setRecomendations(responseContent);
+      return
     }
 
+    console.log('responseContent:', response_input);
     response_input.innerHTML = responseContent;
+
   };
 
 
@@ -384,6 +390,8 @@ export default function FollowupRecomendationsGenerator({
                 name="followup_recomendations_generation_response"
                 className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
                 placeholder=">>> recomendaciones <<<"
+                value={recomendations}
+                onChange={(e) => setRecomendations(e.target.value)}
               />
             </div>
 

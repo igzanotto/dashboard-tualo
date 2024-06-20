@@ -114,6 +114,7 @@ export default function AnalysisGenerator({ threadId }: { threadId: any }) {
           name="analysis"
           className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
           value={analysis}
+          onChange={(e) => setAnalysis(e.target.value)}
         />
         <div className="my-2 flex justify-end">
           <button className="rounded-md bg-blue-600 px-3 py-2 text-white  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none disabled:opacity-50">
