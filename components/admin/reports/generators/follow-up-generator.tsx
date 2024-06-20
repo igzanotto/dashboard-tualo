@@ -43,6 +43,9 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
   const business_id = useParams().business_id as string;
 
   const [statusMessage, setStatusMessage] = useState('');
+
+  const [QA_highlgts, setQA_highlgts] = useState('');
+
   const [formData, setFormData] = useState<FormData>({
     previous_resume_prompt,
     QA_start: `primero te mando el Q&A de la informacion del mes:
@@ -165,6 +168,8 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
         ...formData,
         QA_highlgts: responseContent,
       });
+
+      setQA_highlgts(responseContent);
     } else {
       response_input.innerHTML = responseContent;
     }
@@ -409,8 +414,8 @@ export default function FollowUpGenerator({ threadId }: { threadId: any }) {
           rows={9}
           id="highlights_and_PL_analysis_response"
           name="highlights_and_PL_analysis_response"
-          value={formData.QA_highlgts}
-          onChange={handleChange}
+          value={QA_highlgts}
+          onChange={(e) => setQA_highlgts(e.target.value)}
           className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
         />
         <h1>metas del mes</h1>
