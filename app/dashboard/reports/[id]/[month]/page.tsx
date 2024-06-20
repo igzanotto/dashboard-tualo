@@ -107,7 +107,7 @@ export default async function ReportPage({
             </div>
             <div className="rounded-xl bg-[#003E52]/10 p-3 text-[#003E52]">
               {!report.business_resume ? (
-                <div className="whitespace-pre-wrap">
+                <div>
                   <MarkdownRenderer markdown={report.operations_resume} />
                 </div>
               ) : (
@@ -228,7 +228,7 @@ export default async function ReportPage({
                 key={index}
                 className="flex flex-col rounded-xl bg-[#003E52]/10 p-4 text-[#003E52]"
               >
-                <div className="whitespace-pre-wrap">
+                <div>
                   <MarkdownRenderer markdown={data.content} />
                 </div>
               </div>

@@ -3,7 +3,7 @@ import { fetchReportById } from '@/lib/data';
 import { Libre_Baskerville } from 'next/font/google';
 import Image from 'next/image';
 import reporte from '../../../../../../../../components/images/header-reporte.png';
-import { InfoIcon } from 'lucide-react';
+
 
 import {
   Tooltip,
@@ -11,7 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import ChartEmbed from '@/components/charts/ChartEmbed';
+
 import Logo from '@/components/icons/Logo';
 import { translateChartType } from '@/lib/utils';
 import MonthButtonsAdmin from '@/components/admin/monthButton';
@@ -63,13 +63,15 @@ export default async function PreviewPage({
   const orderedCharts = reorderCharts(report.charts);
 
   return (
-    <div className="flex flex-col gap-3 xl:px-2">
-      <nav className="sticky top-0 z-50 mb-10 flex items-center rounded-b-xl bg-white p-2 shadow-lg md:gap-10 md:p-4">
+    <>
+    
+    <nav className="sticky top-0 z-50 mb-10 flex items-center rounded-b-xl bg-white p-2 shadow-lg md:gap-10 md:p-4">
         <MonthButtonsAdmin business_id={business_id} />
         <div className="mx-auto justify-center self-center">
           <ChartNavigation />
         </div>
       </nav>
+      <div className="flex flex-col gap-3 xl:px-2">
 
       <Image
         width={3000}
@@ -318,5 +320,6 @@ export default async function PreviewPage({
       </div>
       <p className="pb-2 text-center font-medium text-[#0065A1]">tualo.mx</p>
     </div>
+    </>
   );
 }
