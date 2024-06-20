@@ -872,14 +872,14 @@ export async function uploadImageChart(formData: FormData): Promise<UploadImageR
   }
 }
 
-export async function addBank(business_id: string, name: string) {
+export async function addBank(business_id: string, name: string, type:string, closing_type:string) {
 
   const supabase = createClient();
 
   const { data, error } = await supabase
     .from('bank_accounts')
     .insert(
-      { business_id, name }
+      { business_id, name, type, closing_type }
     );
 
   if (error) {

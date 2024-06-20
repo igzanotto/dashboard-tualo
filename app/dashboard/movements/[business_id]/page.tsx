@@ -47,6 +47,8 @@ import ScotiaIcon from '@/components/icons/ScotiaIcon';
 import AmexIcon from '@/components/icons/AmexIcon';
 import BanRegioIcon from '@/components/icons/BanRegioIcon';
 import BbbvaIcon from '@/components/icons/BbbvaIcon';
+import SelectAccount from '@/components/select-account';
+import SelectClosingType from '@/components/select-closing-type';
 
 type MovementsPageProps = {
   params: {
@@ -63,6 +65,8 @@ type BankAccount = {
   id: string;
   business_id: string;
   name: string;
+  type: string;
+  closing_type:string;
 };
 
 type Document = {
@@ -85,6 +89,8 @@ export default function MovementsPage({ params }: MovementsPageProps) {
   const formRef = useRef<HTMLFormElement>(null);
   const [selectedFileName, setSelectedFileName] = useState('');
   const [selectedBankName, setSelectedBankName] = useState("")
+  const [selectedAccount, setSelectedAccount] = useState("")
+  const [selectedClosingType, setSelectedClosingType] = useState("")
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,9 +130,11 @@ export default function MovementsPage({ params }: MovementsPageProps) {
 
     const formData = new FormData(event.currentTarget);
     const bank_account = formData.get('name') as string;
+    const type = formData.get('type') as string;
+    const closing_type = formData.get('closing_type') as string;
 
     try {
-      await addBank(params.business_id, bank_account);
+      await addBank(params.business_id, bank_account , type, closing_type);
       toast.success('Banco creado exitosamente');
       setDialogOpen(false); // Cierra el diálogo al enviar correctamente
       if (formRef.current) {
@@ -181,6 +189,14 @@ export default function MovementsPage({ params }: MovementsPageProps) {
     setSelectedBankName(name)
   }
 
+  const handleSelectAccount = (type:string) => {
+    setSelectedAccount(type)
+  }
+  
+  const handleSelectClosingType = (closing_type:string) => {
+    setSelectedAccount(closing_type)
+  }
+
   return (
     <div>
       {business && (
@@ -198,7 +214,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
             className="flex items-center justify-between lg:gap-10 max-lg:flex-col max-lg:justify-center gap-5"
           >
             <div className="flex h-[180px] w-[250px] max-lg:w-[90%] flex-col justify-center gap-5 rounded-xl bg-[#252525]/10 p-2">
-              <Link href={`/dashboard/movements/${business?.id}/${account.id}`} className='flex items-center gap-2 justify-center'>
+              <div className='flex items-center gap-2 justify-center'>
               {account.name === "afirme" ? (
                 <AfirmeIcon/>
               ) : account.name === "amex" ? (
@@ -245,7 +261,14 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                 <p className="text-center text-lg font-semibold capitalize">
                   {account.name}
                 </p>
-              </Link>
+              </div>
+              <div className='flex justify-center'>
+                {account.type === "credit" ? (
+                  <p>Crédito</p>
+                ) : <p>Débito</p>
+              
+              }
+              </div>
               <div className="lg:hidden flex justify-center">
                 <Dialog
                   open={pdfDialogOpen[account.id] || false}
@@ -481,26 +504,35 @@ export default function MovementsPage({ params }: MovementsPageProps) {
               Añadir banco
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[450px]">
             <DialogHeader className="mb-5">
               <DialogTitle>Añadir banco</DialogTitle>
             </DialogHeader>
             <div>
-              <form onSubmit={handleSubmit} ref={formRef}>
+              <form onSubmit={handleSubmit} ref={formRef} className='flex flex-col gap-8'>
                 <input
                   type="hidden"
                   name="business_id"
                   value={params.business_id}
                 />
-                <SelectBank onSelect={handleSelectBank}/>
-                <input type="hidden" name="name" value={selectedBankName} />
-                {/* <input
-                  required
-                  className="w-full rounded-xl bg-[#151515]/10 p-2"
-                  placeholder="Santander río"
-                  type="text"
-                  name="name"
-                /> */}
+                <div className='flex flex-col gap-2'>
+                  <label className='text-sm'>¿El período que contabiliza tu banco ocupa todo el mes?</label>
+                  <SelectClosingType onSelect={handleSelectClosingType}/>
+                  <input type="hidden" name="closing_type" value={selectedAccount} />
+                </div>
+                
+                <div className='flex flex-col gap-2'>
+                  <label>Selecciona un tipo de cuenta</label>
+                  <SelectAccount onSelect={handleSelectAccount}/>
+                  <input type="hidden" name="type" value={selectedAccount} />
+                </div>
+                  
+                <div className='flex flex-col gap-2'>
+                  <label>Selecciona un banco</label>
+                  <SelectBank onSelect={handleSelectBank}/>
+                  <input type="hidden" name="name" value={selectedBankName} />
+                </div>
+      
                 <Button
                   type="submit"
                   className="mt-4 w-full rounded-xl bg-[#003E52]"
