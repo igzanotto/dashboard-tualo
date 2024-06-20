@@ -2,7 +2,7 @@
 export const initial_QA_prompt =
 'primero te daré el transcript de la sesión de Q&A que tuve con el emprendedor:';
 
-export const initial_QA_transcript = 
+export const initial_QA_transcript = '';
 `1. ¿Cómo te llamas y cuál es tu posición en la empresa?
 Ana Carolina Salcedo, dueña
 2. ¿Cuál es el nombre de tu empresa y en qué industria o sector opera?
@@ -81,7 +81,7 @@ export const goals_close =
 export const initial_PL_prompt =
 'A continuación una tabla con su P&L:';
 
-export const initial_PL_transcript =
+export const initial_PL_transcript = '';
 `Estado de Resultados, moneda: MXN, año: 2023-2024																													
     Categoria principal	sub categoria		ene 2023	feb 2023	mar 2023	abr 2023	may 2023	jun 2023	jul 2023	ago 2023	sep 2023	oct 2023	nov 2023	dic 2023	ene 2024	feb 2024	mar 2024	abr 2024	may 2024	jun 2024	jul 2024	ago 2024	sep 2024	oct 2024	nov 2024	dic 2024		 Año completo 2023	 % ventas
     Venta Total	Venta Total		 $ 315,066 	 $ 260,997 	 $ 286,362 	 $ 321,005 	 $ 394,868 	 $ 386,656 	 $ 278,755 	 $ 338,363 	 $ 262,182 	 $ 412,303 	 $ 558,354 	 $ 500,800 	 $ 366,833 	 $ 426,633 	 $ 450,989 	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -	 $ -		 $ 5,560,166 	 $ 10,805,267 
@@ -214,7 +214,7 @@ export const recomendations_feedback_close =
 `
 si te quedó claro, no necesito un resumen y solo pídeme el P&L de este mes`;
 
-export const QA_transcript = 
+export const QA_transcript = '';
 `
 *Operaciones y Ventas*
 
@@ -268,7 +268,7 @@ export const followup_goals_start =
 Por otro lado, te recuerdo que la meta financiera de la empresa era:
 `;
 
-export const followup_goals_transcript = `Necesitar vender más o gastar menos`;
+export const followup_goals_transcript = ``;
 
 export const observations_prompt = `
 ____
@@ -284,7 +284,7 @@ export const followup_PL_prompt =
 
 ———`
 
-export const PL_transcript = 
+export const PL_transcript = '';
 `Venta Total	Venta tarjeta	248994.05
 Venta Total	Venta efectivo	110368.97
 Venta Total	Franquicia	0
