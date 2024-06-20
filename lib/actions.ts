@@ -901,15 +901,15 @@ export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> 
   const business_id = formData.get('business_id') as string;
   const id = formData.get('id') as string;
   const pdf = formData.get('pdf') as File | null;
-  const closing = formData.get('closing') as Date | null;
+  const closing_month = formData?.get('closing_month') as string | null;
+  const period_start = formData?.get('period_start') as Date | null;
+  const period_end = formData?.get('period_end') as Date | null;
 
   if (!pdf) {
     throw new Error('No PDF file provided');
   }
 
-  if (!closing) {
-    throw new Error('No closing date provided');
-  }
+  
 
   const supabase = createClient();
 
@@ -935,11 +935,11 @@ export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> 
     // Guardar la URL en la columna graphy_url de la tabla charts
     const { data: pdfData, error: chartError } = await supabase
       .from('documents')
-      .insert({ pdf: pdfUrl, bank_id: id, closing: closing })
+      .insert({ pdf: pdfUrl, bank_id: id, closing_month: closing_month, period_start:period_start, period_end:period_end })
       .eq('id', id);
 
     console.log('bussines ID:', business_id);
-    console.log('CLOSING:', closing);
+    console.log('CLOSING:', closing_month);
     console.log('Bank ID:', id);
     console.log('PDF URL:', pdfUrl);
     console.log('PDF Data:', pdfData);
