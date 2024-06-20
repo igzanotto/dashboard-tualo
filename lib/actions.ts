@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { z } from 'zod';
 import { createAdmin } from '@/utils/supabase/admin';
+import { report } from 'process';
 
 const BusinessFormSchema = z.object({
   id: z.number(),
@@ -503,10 +504,22 @@ export async function buildRecomendations(formData:FormData) {
     console.log("recomendaciones generadas correctamente");
   }
 
-  
-  report_type === "followup" ? 
-  redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`) :
-  redirect(`/admin/businesses/${business_id}`);
+  if (report_type === "followup") {
+    redirect(`/admin/businesses/${business_id}/reports/${report_id}/followup-charts`);
+  } else {
+    const { data: reportData, error: reportError } = await supabase
+    .from('reports')
+    .select('month')
+    .eq('id', report_id)
+    .single();
+
+  if (reportError) {
+    console.error('Error fetching report data:', reportError);
+    return;
+  }
+
+  redirect(`/admin/businesses/${business_id}/reports/${report_id}/${reportData.month}`);
+  }
 }
 
 const ReportUpdateSchema = z.object({

@@ -21,6 +21,7 @@ export default function RecomendationsGenerator({
   const business_id = useParams().business_id as string;
 
   const [statusMessage, setStatusMessage] = useState('');
+  const [recomendations, setRecomendations] = useState('');
   const [formData, setFormData] = useState<FormData>({
     bullets_prompt,
     evaluation_prompt,
@@ -117,7 +118,6 @@ export default function RecomendationsGenerator({
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
     e.preventDefault();
-    const recomendations = document.getElementById('recomendations');
 
     const response = await fetch(`/api/thread/retrieve?threadId=${threadId}`, {
       method: 'GET',
@@ -138,11 +138,7 @@ export default function RecomendationsGenerator({
     const messagesData = result.messagesData;
     const responseContent = messagesData[messagesData.length - 1]?.content;
 
-    if (!recomendations) {
-      return;
-    }
-
-    recomendations.innerHTML = responseContent;
+    setRecomendations(responseContent);
   };
 
   const handleRetrieveThreadMessagesBullet = async (e: React.FormEvent) => {
@@ -302,6 +298,8 @@ export default function RecomendationsGenerator({
               name="recomendations"
               className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
               placeholder=">>> recomendaciones <<<"
+              value={recomendations}
+              onChange={(e) => setRecomendations(e.target.value)}
             />
           </div>
 

@@ -16,6 +16,7 @@ export default function FollowupChartsGenerator({ threadId }: { threadId: any })
   const business_id = useParams().business_id as string;
 
   const [statusMessage, setStatusMessage] = useState('');
+  const [chartsResponse, setChartsResponse] = useState('');
   const [formData, setFormData] = useState<FormData>({
    history_charts_prompt,
   });
@@ -59,7 +60,6 @@ export default function FollowupChartsGenerator({ threadId }: { threadId: any })
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
     e.preventDefault();
-    const chartsResponse = document.getElementById('chartsResponse');
 
     const response = await fetch(`/api/thread/retrieve?threadId=${threadId}`, {
       method: 'GET',
@@ -81,11 +81,7 @@ export default function FollowupChartsGenerator({ threadId }: { threadId: any })
     const responseContent = messagesData[messagesData.length - 1]?.content;
     
 
-    if (!chartsResponse) {
-      return;
-    }
-
-    chartsResponse.innerHTML = responseContent;
+    setChartsResponse(responseContent);
   };
 
   return (
@@ -141,6 +137,8 @@ export default function FollowupChartsGenerator({ threadId }: { threadId: any })
               id="chartsResponse"
               name="chartsResponse"
               className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+              value={chartsResponse}
+              onChange={(e) => setChartsResponse(e.target.value)}
             />
           </div>
 

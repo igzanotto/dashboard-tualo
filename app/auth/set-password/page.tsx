@@ -40,16 +40,13 @@ const SetPassword = () => {
       <div className="flex justify-center">
         <LogoScrolled />
       </div>
-      {error && <p className="text-red-600">{error}</p>}
-      {success && <p className="text-green-600">{success}</p>}
-
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="w-full">
           <div>
             <label
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="new-password"
-            >
+              >
               Establezca su contraseña
             </label>
             <div className="relative">
@@ -61,7 +58,7 @@ const SetPassword = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Ingrese una contraseña"
                 required
-              />
+                />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
@@ -69,7 +66,7 @@ const SetPassword = () => {
             <label
               className="mb-3 mt-5 block text-xs font-medium text-gray-900"
               htmlFor="confirm-password"
-            >
+              >
               Confirmar Contraseña
             </label>
             <div className="relative">
@@ -81,11 +78,13 @@ const SetPassword = () => {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Confirme su contraseña"
                 required
-              />
+                />
               <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
             </div>
           </div>
         </div>
+        {error && <p className="text-red-600">{error}</p>}
+        {success && <p className="text-green-600">{success}</p>}
         <div className="mt-8 flex flex-col gap-6">
           <SubmitButton type="submit" className="w-full">
             Establecer Contraseña

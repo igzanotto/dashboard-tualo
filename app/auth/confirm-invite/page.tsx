@@ -27,7 +27,7 @@ export default async function LoginPage({
 
     if (error) {
       console.log('error login', error);
-      return redirect(`/auth/confirm-invite?message=${error}`);
+      return redirect(`/auth/confirm-invite?message=credenciales incorrectas`);
     }
 
     return redirect('/auth/set-password');

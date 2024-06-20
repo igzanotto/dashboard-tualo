@@ -16,6 +16,8 @@ export default function GoalsGenerator({ threadId }: { threadId: any }) {
   const report_id = useParams().report_id as string;
 
   const [statusMessage, setStatusMessage] = useState('');
+
+  const [goals, setGoals] = useState('');
   
   const [formData, setFormData] = useState<FormData>({
     goals_prompt,
@@ -62,7 +64,6 @@ export default function GoalsGenerator({ threadId }: { threadId: any }) {
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
     e.preventDefault();
-    const goals = document.getElementById('goals');
 
     const response = await fetch(`/api/thread/retrieve?threadId=${threadId}`, {
       method: 'GET',
@@ -82,14 +83,10 @@ export default function GoalsGenerator({ threadId }: { threadId: any }) {
 
     
     const messagesData = result.messagesData;
-    const responseBusinessResume = messagesData[messagesData.length - 1]?.content;
+    const responseGoalsResume = messagesData[messagesData.length - 1]?.content;
     
 
-    if (!goals) {
-      return;
-    }
-
-    goals.innerHTML = responseBusinessResume;
+    setGoals(responseGoalsResume);
   };
 
   return (
@@ -140,6 +137,8 @@ export default function GoalsGenerator({ threadId }: { threadId: any }) {
           id="goals"
           name="goals"
           className="w-full rounded-md px-3 py-2 text-black  border-2 border-blue-400 focus:ring-2 focus:ring-blue-600 focus:outline-none"
+          value={goals}
+          onChange={(e) => setGoals(e.target.value)}
         />
         <input type="text" name="report_id" defaultValue={report_id} hidden />
 

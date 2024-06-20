@@ -22,12 +22,13 @@ export default function CreateReportPage({ params }: { params: any }) {
   const [selectedMonth, setSelectedMonth] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
   const [threadId, setThreadId] = useState('');
+  const [businessResume, setBusinessResume] = useState('');
 
 
   const [formData, setFormData] = useState<FormData>({
     initial_QA_prompt,
     initial_QA_transcript,
-    initial_QA_close
+    initial_QA_close,
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -92,7 +93,6 @@ export default function CreateReportPage({ params }: { params: any }) {
 
   const handleRetrieveThreadMessages = async (e: React.FormEvent) => {
     e.preventDefault();
-    const business_resume = document.getElementById('business_resume');
 
     const response = await fetch(`/api/thread/retrieve?threadId=${threadId}`, {
       method: 'GET',
@@ -113,11 +113,7 @@ export default function CreateReportPage({ params }: { params: any }) {
     const messagesData = result.messagesData;
     const responseBusinessResume = messagesData[messagesData.length - 1]?.content;
 
-    if (!business_resume) {
-      return;
-    }
-
-    business_resume.innerHTML = responseBusinessResume;
+    setBusinessResume(responseBusinessResume);
   };
 
   return (
@@ -173,6 +169,8 @@ export default function CreateReportPage({ params }: { params: any }) {
             id="business_resume"
             name="business_resume"
             className="w-full rounded-md border-2 border-blue-400 px-3  py-2 text-black focus:outline-none focus:ring-2 focus:ring-blue-600"
+            value={businessResume}
+            onChange={(e) => setBusinessResume(e.target.value)}
           />
 
           <input

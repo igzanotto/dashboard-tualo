@@ -95,3 +95,17 @@
       display: none;
     }
   }
+
+  .markdown-content p {
+    margin-bottom: 1rem; /* Ajusta el espaciado entre párrafos */
+  }
+  
+  .markdown-content ul {
+    list-style-type: disc;
+    margin-left: 1.5rem; /* Ajusta la sangría de las listas */
+    margin-bottom: 1rem; /* Ajusta el espaciado después de las listas */
+  }
+  
+  .markdown-content li {
+    margin-bottom: 0.5rem; /* Ajusta el espaciado entre los elementos de la lista */
+  }
