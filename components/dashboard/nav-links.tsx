@@ -18,24 +18,24 @@ interface ReportData {
 }
 
 export default function NavLinks() {
-  const [latestReport, setLatestReport] = useState<ReportData | null>(null);
+  // const [latestReport, setLatestReport] = useState<ReportData | null>(null);
 
-  useEffect(() => {
-    const fetchLastReport = async () => {
-      try {
-        const report = await getLastReport();
-        setLatestReport(report);
-      } catch (error) {
-        console.error('Error fetching last report:', error);
-        // Puedes manejar el error de alguna manera, por ejemplo, redireccionando a una página de error.
-      }
-    };
-    fetchLastReport();
-  }, []);
+  // useEffect(() => {
+  //   const fetchLastReport = async () => {
+  //     try {
+  //       const report = await getLastReport();
+  //       setLatestReport(report);
+  //     } catch (error) {
+  //       console.error('Error fetching last report:', error);
+  //       // Puedes manejar el error de alguna manera, por ejemplo, redireccionando a una página de error.
+  //     }
+  //   };
+  //   fetchLastReport();
+  // }, []);
 
   return (
     <>
-      <Link
+      {/* <Link
         href={`/dashboard/reports/${latestReport?.id}/${latestReport?.month}`}
         className={clsx(
           'flex h-[48px] grow items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-[#00AE8D]/20 hover:text-[#0065A1] md:flex-none md:justify-center  md:p-2 md:px-3',
@@ -57,6 +57,14 @@ export default function NavLinks() {
           <DocumentChartBarIcon width={30} height={30} />
         </div>
         <p className="text-lg font-medium md:hidden">Resumen</p>
+      </Link> */}
+      <Link
+        href="/dashboard/payments"
+        className={clsx(
+          'flex h-[48px] grow items-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-[#00AE8D]/20 hover:text-[#0065A1] md:flex-none md:justify-center  md:p-2 md:px-3',
+        )}
+      >
+        payments
       </Link>
     </>
   );
