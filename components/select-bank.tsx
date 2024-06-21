@@ -132,12 +132,12 @@ const banks = [
     },
     {
       value: "santander",
-      label: "Santander Río",
+      label: "Santander",
       icon:<SantanderIcon/>
     },
     {
       value: "scotia",
-      label: "Scotia",
+      label: "Scotia Bank",
       icon:<ScotiaIcon/>
     }
   ]

@@ -50,6 +50,10 @@ import BbbvaIcon from '@/components/icons/BbbvaIcon';
 import SelectAccount from '@/components/select-account';
 import SelectClosingType from '@/components/select-closing-type';
 import SelectClosingMonth from '@/components/select-closing-month';
+import { translateMonths } from '@/lib/utils';
+import { Skeleton } from '@/components/ui/skeleton';
+import SkeletonMovementsMobile from '@/components/skeleton-movements-mobile';
+import SkeletonMovements from '@/components/skeleton-movement';
 
 type MovementsPageProps = {
   params: {
@@ -128,7 +132,14 @@ export default function MovementsPage({ params }: MovementsPageProps) {
     fetchData();
   }, [params.business_id]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return(
+    <div>
+      <SkeletonMovements/>
+      <SkeletonMovementsMobile/>
+    </div>
+  ) 
+;
+
   if (error) return <div>{error}</div>;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -211,10 +222,10 @@ export default function MovementsPage({ params }: MovementsPageProps) {
   };
 
   return (
-    <div>
+    <div className="my-10 px-4">
       {business && (
-        <div className="flex justify-between">
-          <h1 className="text-2xl font-medium text-[#003E52]">
+        <div className="flex max-md:justify-center">
+          <h1 className="text-2xl font-semibold text-[#003E52]">
             {business.name}
           </h1>
         </div>
@@ -224,9 +235,9 @@ export default function MovementsPage({ params }: MovementsPageProps) {
         {bankAccounts.map((account) => (
           <div
             key={account.id}
-            className="flex items-center justify-between gap-5 max-lg:flex-col max-lg:justify-center lg:gap-10 max-lg:bg-[#252525]/10 max-lg:py-4 max-lg:rounded-xl max-lg:w-[95%] max-lg:mx-auto"
+            className="flex items-center justify-between gap-3 max-lg:mx-auto max-lg:w-[95%] max-lg:flex-col max-lg:justify-center max-lg:rounded-xl max-lg:bg-[#252525]/10 max-lg:py-4 lg:gap-10"
           >
-            <div className="flex h-[180px] w-[250px] min-w-[160px] flex-col justify-center gap-5 rounded-xl bg-[#252525]/10 p-2 max-lg:w-[90%]">
+            <div className="flex max-lg:h-[100px] lg:h-[180px] min-w-[200px] flex-col justify-center gap-5 rounded-xl max-lg:w-[90%] lg:bg-[#252525]/10">
               <div className="flex items-center justify-center gap-2">
                 {account.name === 'afirme' ? (
                   <AfirmeIcon />
@@ -274,284 +285,178 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                 </p>
               </div>
               <div className="flex justify-center">
-                {account.type === 'credit' ? <p>Crédito</p> : <p>Débito</p>}
-              </div>
-              <div className="flex justify-center lg:hidden">
-                <Dialog
-                  open={pdfDialogOpen[account.id] || false}
-                  onOpenChange={(isOpen) =>
-                    setPdfDialogOpen((prevOpen) => ({
-                      ...prevOpen,
-                      [account.id]: isOpen,
-                    }))
-                  }
-                >
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="flex gap-2 bg-[#ec7700] text-base font-medium text-white hover:bg-[#ec7700]/80 hover:text-white"
-                      onClick={() =>
-                        setPdfDialogOpen((prevOpen) => ({
-                          ...prevOpen,
-                          [account.id]: true,
-                        }))
-                      }
-                    >
-                      <AddIcon />
-                      Agregar movimiento
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader className="mb-5">
-                      <DialogTitle>
-                        Agregar movimiento en {account.name}
-                      </DialogTitle>
-                    </DialogHeader>
-                    <div>
-                      <form
-                        onSubmit={handleUploadPDF}
-                        className="flex flex-col justify-between gap-4"
-                      >
-                        <input
-                          type="hidden"
-                          name="business_id"
-                          value={params.business_id}
-                        />
-                        <input type="hidden" name="id" value={account.id} />
-                        {account.closing_type === 'monthly' ? (
-                          <div className="flex flex-col gap-2">
-                            <label>Fecha de cierre</label>
-                            <SelectClosingMonth
-                              onSelect={handleSelectClosingMonth}
-                            />
-                            <input
-                              type="hidden"
-                              name="closing_month"
-                              value={selectedClosingMonth}
-                            />
-                          </div>
-                        ) : (
-                          <div className="flex flex-col gap-2">
-                            <label>Fecha de inicio</label>
-                            <input
-                              type="date"
-                              name="period_start"
-                              className="rounded-lg bg-[#252525]/10 p-2"
-                            />
-
-                            <label>Fecha de cierre</label>
-                            <input
-                              type="date"
-                              name="period_end"
-                              className="rounded-lg bg-[#252525]/10 p-2"
-                            />
-                          </div>
-                        )}
-                        <div className="flex flex-col gap-2">
-                          <label>Movimiento</label>
-                          <label
-                            htmlFor="pdfUpload"
-                            className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#252525]/10 p-2"
-                          >
-                            <PdfIcon />
-                            {/* <span>Seleccionar archivo PDF</span> */}
-                            <input
-                              id="pdfUpload"
-                              type="file"
-                              name="pdf"
-                              accept="application/pdf"
-                              onChange={handleFileChange}
-                              required
-                            />
-                          </label>
-                          {selectedFileName && (
-                            <div className="my-2 text-center text-sm text-gray-600">
-                              {selectedFileName}
-                            </div>
-                          )}
-                        </div>
-                        <Button
-                          type="submit"
-                          className="mt-4 w-full rounded-xl bg-[#003E52]"
-                        >
-                          Guardar archivo
-                        </Button>
-                      </form>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                {account.type === 'credit' ? (
+                  <p className="font-bold">Crédito</p>
+                ) : (
+                  <p className="font-bold">Débito</p>
+                )}
               </div>
             </div>
-            <div className="ml-[5%] flex items-center max-lg:mx-auto max-lg:w-[90%] max-md:w-[70%]">
+            <div className="mx-auto ml-[5%] flex w-[90%] items-center max-md:mx-auto max-md:w-[70%]">
               <Carousel className="w-full">
                 <CarouselContent className="-ml-1">
                   <>
-                    {documents ? (
-                      documents[account.id]?.map((doc) => (
-                        <CarouselItem
-                          key={doc.bank_id}
-                          className={`basis-1/3 pl-1 max-md:basis-1/2 `}
+                    
+                    {documents[account.id]?.length > 0 ? documents[account.id]?.map((doc) => (
+                      <CarouselItem
+                        key={doc.bank_id}
+                        className={`basis-1/3 pl-1 max-md:basis-1/2`}
+                      >
+                        <div
+                          key={doc.id}
+                          className="flex flex-col items-center justify-center gap-2 rounded-lg bg-[#252525]/10 p-3 lg:h-[180px]"
                         >
-                          <div
-                            key={doc.id}
-                            className="flex lg:w-[180px] flex-col items-center justify-center gap-2 rounded-lg bg-[#252525]/10 p-3"
-                          >
-                            {account.closing_type === 'monthly' ? (
-                              <div className="flex flex-col items-center text-center gap-2 font-medium">
-                                <p>Fecha de cierre</p>
-                                {doc.closing_month}
+                          {account.closing_type === 'monthly' ? (
+                            <div className="flex flex-col items-center gap-2 text-center font-medium">
+                              <p className="font-bold">Fecha de cierre</p>
+                              <p className="font-medium capitalize">
+                                {translateMonths(doc.closing_month)}
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="flex flex-col items-center gap-2 text-center font-medium">
+                              <div>
+                                <p className="font-bold">Fecha de inicio</p>
+                                {new Date(
+                                  doc.period_start,
+                                ).toLocaleDateString()}
                               </div>
-                            ) : (
-                              <div className="flex flex-col items-center gap-2 text-center font-medium">
-                                <div>
-                                  <p>
-                                    Fecha de inicio:{' '}
-                                    {new Date(
-                                      doc.period_start,
-                                    ).toLocaleDateString()}
-                                  </p>
-                                </div>
-                                <div>
-                                  <p>
-                                    Fecha de cierre:{' '}
-                                    {new Date(
-                                      doc.period_end,
-                                    ).toLocaleDateString()}
-                                  </p>
-                                </div>
+                              <div>
+                                <p className="font-bold">Fecha de cierre</p>
+                                {new Date(doc.period_end).toLocaleDateString()}
                               </div>
-                            )}
+                            </div>
+                          )}
 
-                            <Link
-                              href={doc.pdf}
-                              target="_blank"
-                              className="rounded-xl bg-[#003E52] px-2 font-medium text-white mt-4 text-sm"
+                          <Link
+                            href={doc.pdf}
+                            target="_blank"
+                            className="mt-4 rounded-xl bg-[#003E52] px-2 text-sm font-medium text-white"
+                          >
+                            Ver PDF
+                          </Link>
+                        </div>
+                      </CarouselItem>
+                    )) : 
+                      <div className='max-lg:hidden flex mx-auto'>
+                        <p className='font-bold'>No hay movimientos creados para este banco.</p>
+                      </div>
+                    }
+                <CarouselItem className={`basis-1/3 pl-1 max-md:basis-1/2`}>
+                      <Dialog
+                        open={pdfDialogOpen[account.id] || false}
+                        onOpenChange={(isOpen) =>
+                          setPdfDialogOpen((prevOpen) => ({
+                            ...prevOpen,
+                            [account.id]: isOpen,
+                          }))
+                        }
+                      >
+                        <DialogTrigger asChild>
+                          <button
+                            className="h-full w-full flex flex-col items-center justify-center gap-2 rounded-lg bg-[#ec7700]/80 hover:bg-[#ec7700]/60 text-white font-medium text-base p-3 lg:h-[180px]"
+                            onClick={() =>
+                              setPdfDialogOpen((prevOpen) => ({
+                                ...prevOpen,
+                                [account.id]: true,
+                              }))
+                            }
+                          >
+                            <AddIcon />
+                            Agregar <br /> movimiento
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <DialogHeader className="mb-5">
+                            <DialogTitle>
+                              Agregar movimiento en {account.name}
+                            </DialogTitle>
+                          </DialogHeader>
+                          <div>
+                            <form
+                              onSubmit={handleUploadPDF}
+                              className="flex flex-col justify-between gap-4"
                             >
-                              Ver PDF
-                            </Link>
+                              <input
+                                type="hidden"
+                                name="business_id"
+                                value={params.business_id}
+                              />
+                              <input
+                                type="hidden"
+                                name="id"
+                                value={account.id}
+                              />
+                              {account.closing_type === 'monthly' ? (
+                                <div className="flex flex-col gap-2">
+                                  <label>Fecha de cierre</label>
+                                  <SelectClosingMonth
+                                    onSelect={handleSelectClosingMonth}
+                                  />
+                                  <input
+                                    type="hidden"
+                                    name="closing_month"
+                                    value={selectedClosingMonth}
+                                  />
+                                </div>
+                              ) : (
+                                <div className="flex flex-col gap-2">
+                                  <label>Fecha de inicio</label>
+                                  <input
+                                    type="date"
+                                    name="period_start"
+                                    className="rounded-lg bg-[#252525]/10 p-2"
+                                  />
+
+                                  <label>Fecha de cierre</label>
+                                  <input
+                                    type="date"
+                                    name="period_end"
+                                    className="rounded-lg bg-[#252525]/10 p-2"
+                                  />
+                                </div>
+                              )}
+                              <div className="flex flex-col gap-2">
+                                <label>Movimiento</label>
+                                <label
+                                  htmlFor="pdfUpload"
+                                  className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#252525]/10 p-2"
+                                >
+                                  <PdfIcon />
+                                  {/* <span>Seleccionar archivo PDF</span> */}
+                                  <input
+                                    id="pdfUpload"
+                                    type="file"
+                                    name="pdf"
+                                    accept="application/pdf"
+                                    onChange={handleFileChange}
+                                    required
+                                  />
+                                </label>
+                                {selectedFileName && (
+                                  <div className="my-2 text-center text-sm text-gray-600">
+                                    {selectedFileName}
+                                  </div>
+                                )}
+                              </div>
+                              <Button
+                                type="submit"
+                                className="mt-4 w-full rounded-xl bg-[#003E52]"
+                              >
+                                Guardar archivo
+                              </Button>
+                            </form>
                           </div>
-                        </CarouselItem>
-                      ))
-                    ) : (
-                      <p>No hay movimientos en este banco.</p>
-                    )}
+                        </DialogContent>
+                      </Dialog>
+                    </CarouselItem>
                   </>
                 </CarouselContent>
-                {documents[account.id]?.length == 0 ? (
-                  <p>No hay movimientos creados para este banco.</p>
-                ) : (
-                  <div>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                  </div>
-                )}
+                <CarouselPrevious />
+                <CarouselNext />
               </Carousel>
             </div>
-            <div className="ml-[5%] max-lg:hidden">
-              <Dialog
-                open={pdfDialogOpen[account.id] || false}
-                onOpenChange={(isOpen) =>
-                  setPdfDialogOpen((prevOpen) => ({
-                    ...prevOpen,
-                    [account.id]: isOpen,
-                  }))
-                }
-              >
-                <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="flex gap-2 bg-[#ec7700] text-base font-medium text-white hover:bg-[#ec7700]/80 hover:text-white"
-                    onClick={() =>
-                      setPdfDialogOpen((prevOpen) => ({
-                        ...prevOpen,
-                        [account.id]: true,
-                      }))
-                    }
-                  >
-                    <AddIcon />
-                    Agregar
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader className="mb-5">
-                    <DialogTitle>
-                      Agregar movimiento en {account.name}
-                    </DialogTitle>
-                  </DialogHeader>
-                  <div>
-                    <form
-                      onSubmit={handleUploadPDF}
-                      className="flex flex-col justify-between gap-4"
-                    >
-                      <input
-                        type="hidden"
-                        name="business_id"
-                        value={params.business_id}
-                      />
-                      <input type="hidden" name="id" value={account.id} />
-                      {account.closing_type === 'monthly' ? (
-                        <div className="flex flex-col gap-2">
-                          <label>Fecha de cierre</label>
-                          <SelectClosingMonth
-                            onSelect={handleSelectClosingMonth}
-                          />
-                          <input
-                            type="hidden"
-                            name="closing_month"
-                            value={selectedClosingMonth}
-                          />
-                        </div>
-                      ) : (
-                        <div className="flex flex-col gap-2">
-                          <label>Fecha de inicio</label>
-                          <input
-                            type="date"
-                            name="period_start"
-                            className="rounded-lg bg-[#252525]/10 p-2"
-                          />
-
-                          <label>Fecha de cierre</label>
-                          <input
-                            type="date"
-                            name="period_end"
-                            className="rounded-lg bg-[#252525]/10 p-2"
-                          />
-                        </div>
-                      )}
-                      <div className="flex flex-col gap-2">
-                        <label>Movimiento</label>
-                        <label
-                          htmlFor="pdfUpload"
-                          className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#252525]/10 p-2"
-                        >
-                          <PdfIcon />
-                          {/* <span>Seleccionar archivo PDF</span> */}
-                          <input
-                            id="pdfUpload"
-                            type="file"
-                            name="pdf"
-                            accept="application/pdf"
-                            onChange={handleFileChange}
-                            required
-                          />
-                        </label>
-                        {selectedFileName && (
-                          <div className="my-2 text-center text-sm text-gray-600">
-                            {selectedFileName}
-                          </div>
-                        )}
-                      </div>
-                      <Button
-                        type="submit"
-                        className="mt-4 w-full rounded-xl bg-[#003E52]"
-                      >
-                        Guardar archivo
-                      </Button>
-                    </form>
-                  </div>
-                </DialogContent>
-              </Dialog>
-            </div>
+            
           </div>
         ))}
       </div>
@@ -561,7 +466,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
           <DialogTrigger asChild>
             <button
               onClick={() => setDialogOpen(true)}
-              className="flex h-[180px] w-[250px] justify-center gap-2 items-center rounded-xl bg-[#ec7700] p-2 max-lg:w-[95%] text-white font-medium text-lg max-lg:mx-auto max-lg:h-[80px]"
+              className="flex h-[180px] min-w-[200px] items-center justify-center gap-2 rounded-xl bg-[#ec7700] p-2 text-lg font-medium text-white max-lg:mx-auto max-lg:h-[80px] max-lg:w-[95%]"
             >
               <AddIcon />
               Añadir banco

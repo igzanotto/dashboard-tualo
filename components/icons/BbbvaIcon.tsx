@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const BbbvaIcon = () => {
   return (
-    <Image src={bbva} alt="BBVA" width={30} height={30}/>
+    <Image src={bbva} alt="BBVA" width={35} height={35}/>
   );
 };
 

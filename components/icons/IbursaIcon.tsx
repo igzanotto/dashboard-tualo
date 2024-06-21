@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const IbursaIcon = () => {
   return (
-    <Image src={inbursa} alt="inbursa" width={30} height={30}/>
+    <Image src={inbursa} alt="inbursa" width={35} height={35}/>
 
   )
 }

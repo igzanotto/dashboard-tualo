@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const IntercamIcon = () => {
   return (
-    <Image src={intercam} alt="intercam" width={30} height={30}/>
+    <Image src={intercam} alt="intercam" width={35} height={35}/>
 
   )
 }

@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const AztecaIcon = () => {
   return (
-    <Image src={azteca} alt="azteca" width={30} height={30}/>
+    <Image src={azteca} alt="azteca" width={35} height={35}/>
 
   )
 }

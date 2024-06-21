@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const BajioIcon = () => {
   return (
-    <Image src={bajio} alt="bajio" width={30} height={30}/>
+    <Image src={bajio} alt="bajio" width={35} height={35}/>
 
   )
 }

@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 const ClaraIcon = () => {
   return (
-    <Image src={clara} alt="clara" width={30} height={30}/>
+    <Image src={clara} alt="clara" width={35} height={35}/>
 
   )
 }

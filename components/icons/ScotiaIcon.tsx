@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const ScotiaIcon = () => {
   return (
-    <Image src={scotia} alt="scotia" width={30} height={30}/>
+    <Image src={scotia} alt="scotia" width={35} height={35}/>
 
   )
 }

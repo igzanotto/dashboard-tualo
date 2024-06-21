@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 const SantanderIcon = () => {
   return (
-    <Image src={santander} alt="santander" width={30} height={30}/>
+    <Image src={santander} alt="santander" width={35} height={35}/>
 
   )
 }

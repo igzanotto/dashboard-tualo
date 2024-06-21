@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 const HeyBancoIcon = () => {
   return (
-    <Image src={heybanco} alt="heybanco" width={30} height={30}/>
+    <Image src={heybanco} alt="heybanco" width={35} height={35}/>
 
   )
 }

@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const BanorteIcon = () => {
   return (
-    <Image src={banorte} alt="banorte" width={30} height={30}/>
+    <Image src={banorte} alt="banorte" width={35} height={35}/>
   )
 }
 

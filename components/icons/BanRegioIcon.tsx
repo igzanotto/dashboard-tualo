@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const BanRegioIcon = () => {
   return (
-    <Image src={banregio} alt="banregio" width={30} height={30}/>
+    <Image src={banregio} alt="banregio" width={35} height={35}/>
 
   )
 }

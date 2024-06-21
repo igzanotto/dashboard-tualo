@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const FondeadoraIcon = () => {
   return (
-    <Image src={fondeadora} alt="fondeadora" width={30} height={30}/>
+    <Image src={fondeadora} alt="fondeadora" width={35} height={35}/>
 
   )
 }

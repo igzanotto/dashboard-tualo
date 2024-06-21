@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const BanamexIcon = () => {
   return (
-    <Image src={banamex} alt="banamex" width={30} height={30}/>
+    <Image src={banamex} alt="banamex" width={35} height={35}/>
 
   )
 }

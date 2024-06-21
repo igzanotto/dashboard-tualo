@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 const AlboIcon = () => {
   return (
-    <Image src={albo} alt="albo" width={30} height={30}/>
+    <Image src={albo} alt="albo" width={35} height={35}/>
 
   )
 }

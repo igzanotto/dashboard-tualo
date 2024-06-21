@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const BroxelIcon = () => {
   return (
-    <Image src={broxel} alt="broxel" width={30} height={30}/>
+    <Image src={broxel} alt="broxel" width={35} height={35}/>
 
   )
 }

@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 const RappiIcon = () => {
   return (
-    <Image src={rappi} alt="rappi" width={30} height={30}/>
+    <Image src={rappi} alt="rappi" width={35} height={35}/>
 
   )
 }
