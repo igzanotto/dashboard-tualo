@@ -73,7 +73,7 @@ type BankAccount = {
 type Document = {
   id: string;
   closing_month: string;
-  period_start:Date;
+  period_start: Date;
   period_end: Date;
   bank_id: string;
   pdf: string;
@@ -112,7 +112,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
             ...doc,
             closing_month: doc.closing_month,
             period_start: new Date(doc.period_start),
-            period_end: new Date(doc.period_end)
+            period_end: new Date(doc.period_end),
           }));
         }
 
@@ -224,9 +224,9 @@ export default function MovementsPage({ params }: MovementsPageProps) {
         {bankAccounts.map((account) => (
           <div
             key={account.id}
-            className="flex items-center justify-between gap-5 max-lg:flex-col max-lg:justify-center lg:gap-10"
+            className="flex items-center justify-between gap-5 max-lg:flex-col max-lg:justify-center lg:gap-10 max-lg:bg-[#252525]/10 max-lg:py-4 max-lg:rounded-xl max-lg:w-[95%] max-lg:mx-auto"
           >
-            <div className="flex h-[180px] w-[250px] flex-col justify-center gap-5 rounded-xl bg-[#252525]/10 p-2 max-lg:w-[90%]">
+            <div className="flex h-[180px] w-[250px] min-w-[160px] flex-col justify-center gap-5 rounded-xl bg-[#252525]/10 p-2 max-lg:w-[90%]">
               <div className="flex items-center justify-center gap-2">
                 {account.name === 'afirme' ? (
                   <AfirmeIcon />
@@ -321,8 +321,14 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                         {account.closing_type === 'monthly' ? (
                           <div className="flex flex-col gap-2">
                             <label>Fecha de cierre</label>
-                            <SelectClosingMonth onSelect={handleSelectClosingMonth}/>
-                            <input type="hidden" name="closing_month" value={selectedClosingMonth}/>
+                            <SelectClosingMonth
+                              onSelect={handleSelectClosingMonth}
+                            />
+                            <input
+                              type="hidden"
+                              name="closing_month"
+                              value={selectedClosingMonth}
+                            />
                           </div>
                         ) : (
                           <div className="flex flex-col gap-2">
@@ -376,7 +382,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                 </Dialog>
               </div>
             </div>
-            <div className="ml-[5%] flex items-center gap-3 max-lg:mx-auto max-lg:w-[90%]">
+            <div className="ml-[5%] flex items-center max-lg:mx-auto max-lg:w-[90%] max-md:w-[70%]">
               <Carousel className="w-full">
                 <CarouselContent className="-ml-1">
                   <>
@@ -384,42 +390,44 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                       documents[account.id]?.map((doc) => (
                         <CarouselItem
                           key={doc.bank_id}
-                          className={`pl-1 ${
-                            documents[account.id].length < 2
-                              ? 'flex-1'
-                              : 'md:basis-1/2 lg:basis-1/3'
-                          }`}
+                          className={`basis-1/3 pl-1 max-md:basis-1/2 `}
                         >
                           <div
                             key={doc.id}
-                            className="flex flex-col gap-2 rounded-lg bg-[#252525]/10 p-3"
+                            className="flex lg:w-[180px] flex-col items-center justify-center gap-2 rounded-lg bg-[#252525]/10 p-3"
                           >
-                            <div>
-                              {account.closing_type === "monthly" ? (
-                                <div className='flex flex-col gap-2 font-medium'>
-                                  <p>Fecha de cierre</p>
-                                  {doc.closing_month}
+                            {account.closing_type === 'monthly' ? (
+                              <div className="flex flex-col items-center text-center gap-2 font-medium">
+                                <p>Fecha de cierre</p>
+                                {doc.closing_month}
+                              </div>
+                            ) : (
+                              <div className="flex flex-col items-center gap-2 text-center font-medium">
+                                <div>
+                                  <p>
+                                    Fecha de inicio:{' '}
+                                    {new Date(
+                                      doc.period_start,
+                                    ).toLocaleDateString()}
+                                  </p>
                                 </div>
-                              ) : (
-                                <div className='flex flex-col gap-2 font-medium'>
-                                  <div>
-                                    <p>Fecha de inicio: {new Date(doc.period_start).toLocaleDateString()}</p>
-                                  </div>
-                                  <div>
-                                    <p>Fecha de cierre: {new Date(doc.period_end).toLocaleDateString()}</p>
-                                  </div>
+                                <div>
+                                  <p>
+                                    Fecha de cierre:{' '}
+                                    {new Date(
+                                      doc.period_end,
+                                    ).toLocaleDateString()}
+                                  </p>
                                 </div>
-                              )
-                            
-                            }
-                            </div>
-                            <Link href={doc.pdf} target="_blank">
-                              <Button
-                                variant="link"
-                                className="text-blue-600 underline"
-                              >
-                                Ver PDF
-                              </Button>
+                              </div>
+                            )}
+
+                            <Link
+                              href={doc.pdf}
+                              target="_blank"
+                              className="rounded-xl bg-[#003E52] px-2 font-medium text-white mt-4 text-sm"
+                            >
+                              Ver PDF
                             </Link>
                           </div>
                         </CarouselItem>
@@ -432,7 +440,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                 {documents[account.id]?.length == 0 ? (
                   <p>No hay movimientos creados para este banco.</p>
                 ) : (
-                  <div className="max-md:hidden">
+                  <div>
                     <CarouselPrevious />
                     <CarouselNext />
                   </div>
@@ -482,28 +490,34 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                       />
                       <input type="hidden" name="id" value={account.id} />
                       {account.closing_type === 'monthly' ? (
-                          <div className="flex flex-col gap-2">
-                            <label>Fecha de cierre</label>
-                            <SelectClosingMonth onSelect={handleSelectClosingMonth}/>
-                            <input type="hidden" name="closing_month" value={selectedClosingMonth}/>
-                          </div>
-                        ) : (
-                          <div className="flex flex-col gap-2">
-                            <label>Fecha de inicio</label>
-                            <input
-                              type="date"
-                              name="period_start"
-                              className="rounded-lg bg-[#252525]/10 p-2"
-                            />
+                        <div className="flex flex-col gap-2">
+                          <label>Fecha de cierre</label>
+                          <SelectClosingMonth
+                            onSelect={handleSelectClosingMonth}
+                          />
+                          <input
+                            type="hidden"
+                            name="closing_month"
+                            value={selectedClosingMonth}
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex flex-col gap-2">
+                          <label>Fecha de inicio</label>
+                          <input
+                            type="date"
+                            name="period_start"
+                            className="rounded-lg bg-[#252525]/10 p-2"
+                          />
 
-                            <label>Fecha de cierre</label>
-                            <input
-                              type="date"
-                              name="period_end"
-                              className="rounded-lg bg-[#252525]/10 p-2"
-                            />
-                          </div>
-                        )}
+                          <label>Fecha de cierre</label>
+                          <input
+                            type="date"
+                            name="period_end"
+                            className="rounded-lg bg-[#252525]/10 p-2"
+                          />
+                        </div>
+                      )}
                       <div className="flex flex-col gap-2">
                         <label>Movimiento</label>
                         <label
@@ -545,14 +559,13 @@ export default function MovementsPage({ params }: MovementsPageProps) {
       <div className="mt-[3%]">
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button
-              variant="outline"
+            <button
               onClick={() => setDialogOpen(true)}
-              className="flex h-[60px] w-[300px] items-center gap-2 bg-[#ec7700] text-base font-medium text-white hover:bg-[#ec7700]/80 hover:text-white"
+              className="flex h-[180px] w-[250px] justify-center gap-2 items-center rounded-xl bg-[#ec7700] p-2 max-lg:w-[95%] text-white font-medium text-lg max-lg:mx-auto max-lg:h-[80px]"
             >
               <AddIcon />
               Añadir banco
-            </Button>
+            </button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[450px]">
             <DialogHeader className="mb-5">
