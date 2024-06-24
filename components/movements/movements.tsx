@@ -22,7 +22,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { addBank, uploadPDF } from '@/lib/actions';
+import { addBank, updateBank, uploadPDF } from '@/lib/actions';
 import { toast } from 'sonner';
 import PdfIcon from '@/components/icons/PdfIcon';
 import AddIcon from '@/components/icons/AddIcon';
@@ -56,7 +56,11 @@ import { Skeleton } from '@/components/ui/skeleton';
 import SkeletonMovementsMobile from '@/components/skeleton-movements-mobile';
 import SkeletonMovements from '@/components/skeleton-movement';
 import OtroBankIcon from '@/components/icons/OtroBankIcon';
-import { BuildingLibraryIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import {
+  BuildingLibraryIcon,
+  CurrencyDollarIcon,
+  PencilSquareIcon,
+} from '@heroicons/react/24/outline';
 import Attachment from '@/components/icons/Attachment';
 import { useParams } from 'next/navigation';
 
@@ -107,17 +111,15 @@ export default function Movements({ params }: MovementsPageProps) {
   const [selectedClosingMonth, setSelectedClosingMonth] = useState('');
 
   const url = new URL(window.location.href);
-const pathname = url.pathname;
+  const pathname = url.pathname;
 
-// Divide el pathname en segmentos
-const segments = pathname.split('/');
+  // Divide el pathname en segmentos
+  const segments = pathname.split('/');
 
-// Filtra y une los segmentos que te interesan
-const filteredPath = `/${segments[1]}/${segments[2]}`;
+  // Filtra y une los segmentos que te interesan
+  const filteredPath = `/${segments[1]}/${segments[2]}`;
 
-console.log(filteredPath);
-  
-  
+  console.log(filteredPath);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -192,6 +194,32 @@ console.log(filteredPath);
     }
   };
 
+  const handleUpdateBank = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const bank_account = formData.get('name') as string;
+    const type = formData.get('type') as string;
+    const closing_type = formData.get('closing_type') as string;
+    const details = formData.get('details') as string;
+    const id = formData.get('id') as string;
+
+    try {
+      await updateBank(id, bank_account, type, closing_type, details);
+      toast.success('Banco actualizado exitosamente');
+      setDialogOpen(false); // Cierra el diálogo al enviar correctamente
+      if (formRef.current) {
+        formRef.current.reset(); // Resetea el formulario
+      }
+      const updatedBankAccounts = await fetchBankAccountsByBusinessId(
+        params.business_id,
+      );
+      setBankAccounts(updatedBankAccounts);
+    } catch (error) {
+      toast.error(error as string);
+    }
+  };
+
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -243,22 +271,27 @@ console.log(filteredPath);
     setSelectedClosingType(closing_type);
   };
 
-  const handleSelectClosingMonth = (closing_month:any) => {
+  const handleSelectClosingMonth = (closing_month: any) => {
     setSelectedClosingMonth(closing_month);
   };
 
-
   function formatDate(closing_month: any): string {
     const date = new Date(closing_month);
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long' };
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+    };
     return date.toLocaleDateString('es-ES', options);
   }
-
 
   return (
     <div className="my-10 px-4 lg:w-[95%]">
       {business && (
-        <div className={`flex max-md:justify-center ${filteredPath === "/admin/businesses" ? "hidden" : ""}`}>
+        <div
+          className={`flex max-md:justify-center ${
+            filteredPath === '/admin/businesses' ? 'hidden' : ''
+          }`}
+        >
           <h1 className="text-2xl font-semibold text-[#003E52]">
             {business.name}
           </h1>
@@ -314,8 +347,12 @@ console.log(filteredPath);
                 ) : account.name === 'scotia' ? (
                   <ScotiaIcon />
                 ) : account.type === 'other' ? (
-                  <CurrencyDollarIcon width={35} height={35} className='bg-[#F4F6FC] rounded-full'/>
-                ): (
+                  <CurrencyDollarIcon
+                    width={35}
+                    height={35}
+                    className="rounded-full bg-[#F4F6FC]"
+                  />
+                ) : (
                   <OtroBankIcon />
                 )}
                 <p className="text-center text-lg font-semibold capitalize">
@@ -327,25 +364,129 @@ console.log(filteredPath);
                   <p className="font-bold">Crédito</p>
                 ) : account.type === 'debit' ? (
                   <p className="font-bold">Débito</p>
-                ) : account.details ? (
-                  <div>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <button className='p-1 rounded-full bg-[#003E52] text-white text-sm px-2'>Descripción</button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader className="mb-5">
-                          <DialogTitle className='text-[#003E52]'>
-                            Descripción de {account.name}
-                          </DialogTitle>
-                        </DialogHeader>
-                          <p>
-                            {account.details}
-                          </p>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
                 ) : null}
+              </div>
+              <div>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button className="flex items-center mx-auto gap-1 rounded-full bg-[#003E52] p-1 px-2 text-sm text-white">
+                      <PencilSquareIcon width={16} height={16} />
+                      Editar
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader className="mb-5">
+                      <DialogTitle className="text-[#003E52]">
+                        Editar {account.name}
+                      </DialogTitle>
+                    </DialogHeader>
+                    {account.type === 'other' ? (
+                      <form
+                        onSubmit={handleSubmit}
+                        ref={formRef}
+                        className="flex flex-col gap-8"
+                      >
+                        <input
+                          type="hidden"
+                          name="business_id"
+                          value={params.business_id}
+                        />
+
+                        <input
+                          type="hidden"
+                          name="closing_type"
+                          value="monthly"
+                        />
+                        <input type="hidden" name="type" value="other" />
+
+                        <div className="flex flex-col gap-8">
+                          <div className="flex flex-col gap-2">
+                            <label>Ingrese un tipo de origen</label>
+                            <input
+                              type="text"
+                              name="name"
+                              placeholder="ej. efectivo, cuentas internas, export de Stripe, etc."
+                              defaultValue={account.name}
+                              className="w-full rounded-lg border p-2"
+                            />
+                          </div>
+
+                          <div className="flex flex-col gap-2">
+                            <label>Descripción</label>
+                            <textarea
+                              name="details"
+                              placeholder="Descripción..."
+                              defaultValue={account.details}
+                              className="w-full rounded-lg border p-2"
+                            />
+                          </div>
+                        </div>
+
+                        <Button
+                          type="submit"
+                          className="mt-4 w-full rounded-xl bg-[#003E52]"
+                        >
+                          Actualizar origen
+                        </Button>
+                      </form>
+                    ) : (
+                      <form
+                        onSubmit={handleUpdateBank}
+                        ref={formRef}
+                        className="flex flex-col gap-8"
+                      >
+                        <input type="hidden" name="id" value={account.id} />
+                        <div className="flex flex-col gap-2">
+                          <label>Selecciona un banco</label>
+                          <SelectBank
+                            onSelect={handleSelectBank}
+                            defaultValue={account.name}
+                          />
+                          <input
+                            type="hidden"
+                            name="name"
+                            defaultValue={account.name}
+                            value={selectedBankName}
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <label>Selecciona un tipo de cuenta</label>
+                          <SelectAccount onSelect={handleSelectAccount} defaultValue={account.type}/>
+                          <input
+                            type="hidden"
+                            name="type"
+                            defaultValue={account.type}
+                            value={selectedAccount}
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <label className="text-sm">
+                            ¿El período que contabiliza tu banco ocupa todo el
+                            mes?
+                          </label>
+                          <SelectClosingType
+                            onSelect={handleSelectClosingType}
+                            defaultValue={account.closing_type}
+                          />
+                          <input
+                            type="hidden"
+                            name="closing_type"
+                            value={selectedClosingType}
+                          />
+                        </div>
+
+                        <Button
+                          type="submit"
+                          className="mt-4 w-full rounded-xl bg-[#003E52]"
+                        >
+                          Actualizar banco
+                        </Button>
+                      </form>
+                    )}
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
             <div className="mx-auto ml-[5%] flex w-[90%] items-center max-lg:mx-auto max-lg:w-[70%]">
@@ -389,7 +530,7 @@ console.log(filteredPath);
                               <Link
                                 href={doc.pdf}
                                 target="_blank"
-                                className="mt-4 rounded-xl bg-[#003E52] text-sm font-medium text-white py-1 px-3"
+                                className="mt-4 rounded-xl bg-[#003E52] px-3 py-1 text-sm font-medium text-white"
                               >
                                 Ver resumen
                               </Link>
@@ -477,8 +618,8 @@ console.log(filteredPath);
                                   htmlFor="pdfUpload"
                                   className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#252525]/10 p-2"
                                 >
-                                  <Attachment/>
-                                 
+                                  <Attachment />
+
                                   <input
                                     id="pdfUpload"
                                     type="file"
@@ -574,13 +715,13 @@ console.log(filteredPath);
               </form>
             </div> */}
             <Tabs defaultValue="banco">
-              <TabsList className='mb-5 self-center'>
-                <TabsTrigger value="banco" className='flex items-center gap-1'>
-                  <BuildingLibraryIcon width={20} height={20}/>
+              <TabsList className="mb-5 self-center">
+                <TabsTrigger value="banco" className="flex items-center gap-1">
+                  <BuildingLibraryIcon width={20} height={20} />
                   Banco
                 </TabsTrigger>
-                <TabsTrigger value="otro" className='flex items-center gap-1'>
-                  <CurrencyDollarIcon width={20} height={20}/>
+                <TabsTrigger value="otro" className="flex items-center gap-1">
+                  <CurrencyDollarIcon width={20} height={20} />
                   Otro
                 </TabsTrigger>
               </TabsList>
@@ -643,7 +784,7 @@ console.log(filteredPath);
                   <input type="hidden" name="type" value="other" />
 
                   <div className="flex flex-col gap-8">
-                    <div className='flex flex-col gap-2'>
+                    <div className="flex flex-col gap-2">
                       <label>Ingrese un tipo de origen</label>
                       <input
                         type="text"
@@ -653,7 +794,7 @@ console.log(filteredPath);
                       />
                     </div>
 
-                    <div className='flex flex-col gap-2'>
+                    <div className="flex flex-col gap-2">
                       <label>Descripción</label>
                       <textarea
                         name="details"

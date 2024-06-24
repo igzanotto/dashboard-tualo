@@ -30,9 +30,9 @@ const accounts = [
     },
   ]
 
-export default function SelectClosingType({ onSelect }:any) {
+export default function SelectClosingType({ onSelect, defaultValue }:any) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  const [value, setValue] = React.useState(defaultValue || "");
 
 
   return (
@@ -45,7 +45,7 @@ export default function SelectClosingType({ onSelect }:any) {
           className="w-full justify-between"
         >
           {value
-            ? accounts.find((bank) => bank.value === value)?.label
+            ? accounts.find((bank) => bank.value === value)?.label || value
             : "Selecciona una opción"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
