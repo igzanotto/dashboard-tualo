@@ -131,19 +131,19 @@ export async function fetchBusinesses() {
     }
 }
 
-export async function fetchBusinessById(companyId: string) {
-try {
-  const supabase = createClient();
-  const { data: company, error } = await supabase.from("businesses").select().eq('id', companyId).single();
-  
-  if (error) {
-    throw new Error('Failed to fetch company.');
+export async function fetchBusinessById(businessId: string) {
+  try {
+    const supabase = createClient();
+    const { data: business, error } = await supabase.from("businesses").select().eq('id', businessId).single();
+    
+    if (error) {
+      throw new Error('Failed to fetch business.');
+    }
+    console.log ("business",business);
+    return business;
+  } catch (error) {
+    console.error('Failed to fetch business:', error);
   }
-  
-  return company;
-} catch (error) {
-  console.error('Failed to fetch company:', error);
-}
 }
 
 export async function fetchFilteredBusiness(
