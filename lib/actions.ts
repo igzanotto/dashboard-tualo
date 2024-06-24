@@ -901,7 +901,7 @@ export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> 
   const business_id = formData.get('business_id') as string;
   const id = formData.get('id') as string;
   const pdf = formData.get('pdf') as File | null;
-  const closing_month = formData?.get('closing_month') as string | null;
+  const closing_month = formData?.get('closing_month') as Date | null;
   const period_start = formData?.get('period_start') as Date | null;
   const period_end = formData?.get('period_end') as Date | null;
 
@@ -918,9 +918,7 @@ export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> 
     const filePath = `${id}/${pdf.name}`;
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('pdf_banks')
-      .upload(filePath, pdf, {
-        contentType: 'application/pdf' 
-      });
+      .upload(filePath, pdf);
 
     if (uploadError) {
       throw uploadError;

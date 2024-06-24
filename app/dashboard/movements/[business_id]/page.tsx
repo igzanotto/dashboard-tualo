@@ -56,6 +56,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import SkeletonMovementsMobile from '@/components/skeleton-movements-mobile';
 import SkeletonMovements from '@/components/skeleton-movement';
 import OtroBankIcon from '@/components/icons/OtroBankIcon';
+import { BuildingLibraryIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import Attachment from '@/components/icons/Attachment';
 
 type MovementsPageProps = {
   params: {
@@ -79,7 +81,7 @@ type BankAccount = {
 
 type Document = {
   id: string;
-  closing_month: string;
+  closing_month: Date;
   period_start: Date;
   period_end: Date;
   bank_id: string;
@@ -227,9 +229,17 @@ export default function MovementsPage({ params }: MovementsPageProps) {
     setSelectedClosingType(closing_type);
   };
 
-  const handleSelectClosingMonth = (closing_month: string) => {
+  const handleSelectClosingMonth = (closing_month:any) => {
     setSelectedClosingMonth(closing_month);
   };
+
+
+  function formatDate(closing_month: any): string {
+    const date = new Date(closing_month);
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long' };
+    return date.toLocaleDateString('es-ES', options);
+  }
+
 
   return (
     <div className="my-10 px-4">
@@ -289,7 +299,9 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                   <SantanderIcon />
                 ) : account.name === 'scotia' ? (
                   <ScotiaIcon />
-                ) : (
+                ) : account.type === 'other' ? (
+                  <CurrencyDollarIcon width={35} height={35} className='bg-[#F4F6FC] rounded-full'/>
+                ): (
                   <OtroBankIcon />
                 )}
                 <p className="text-center text-lg font-semibold capitalize">
@@ -340,7 +352,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                                 <div className="flex flex-col items-center gap-2 text-center font-medium">
                                   <p className="font-bold">Fecha de cierre</p>
                                   <p className="font-medium capitalize">
-                                    {translateMonths(doc.closing_month)}
+                                    {formatDate(doc.closing_month)}
                                   </p>
                                 </div>
                               ) : (
@@ -363,9 +375,9 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                               <Link
                                 href={doc.pdf}
                                 target="_blank"
-                                className="mt-4 rounded-xl bg-[#003E52] px-2 text-sm font-medium text-white"
+                                className="mt-4 rounded-xl bg-[#003E52] text-sm font-medium text-white py-1 px-3"
                               >
-                                Ver PDF
+                                Ver resumen
                               </Link>
                             </div>
                           </CarouselItem>
@@ -451,13 +463,13 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                                   htmlFor="pdfUpload"
                                   className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#252525]/10 p-2"
                                 >
-                                  <PdfIcon />
+                                  <Attachment/>
                                  
                                   <input
                                     id="pdfUpload"
                                     type="file"
                                     name="pdf"
-                                    accept="application/pdf"
+                                    // accept="application/pdf"
                                     onChange={handleFileChange}
                                     required
                                   />
@@ -549,8 +561,14 @@ export default function MovementsPage({ params }: MovementsPageProps) {
             </div> */}
             <Tabs defaultValue="banco">
               <TabsList className='mb-5 self-center'>
-                <TabsTrigger value="banco">Banco</TabsTrigger>
-                <TabsTrigger value="otro">Otro</TabsTrigger>
+                <TabsTrigger value="banco" className='flex items-center gap-1'>
+                  <BuildingLibraryIcon width={20} height={20}/>
+                  Banco
+                </TabsTrigger>
+                <TabsTrigger value="otro" className='flex items-center gap-1'>
+                  <CurrencyDollarIcon width={20} height={20}/>
+                  Otro
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="banco">
                 <form
