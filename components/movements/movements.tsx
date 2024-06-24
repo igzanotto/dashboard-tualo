@@ -58,6 +58,7 @@ import SkeletonMovements from '@/components/skeleton-movement';
 import OtroBankIcon from '@/components/icons/OtroBankIcon';
 import { BuildingLibraryIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import Attachment from '@/components/icons/Attachment';
+import { useParams } from 'next/navigation';
 
 type MovementsPageProps = {
   params: {
@@ -104,6 +105,19 @@ export default function Movements({ params }: MovementsPageProps) {
   const [selectedAccount, setSelectedAccount] = useState('');
   const [selectedClosingType, setSelectedClosingType] = useState('');
   const [selectedClosingMonth, setSelectedClosingMonth] = useState('');
+
+  const url = new URL(window.location.href);
+const pathname = url.pathname;
+
+// Divide el pathname en segmentos
+const segments = pathname.split('/');
+
+// Filtra y une los segmentos que te interesan
+const filteredPath = `/${segments[1]}/${segments[2]}`;
+
+console.log(filteredPath);
+  
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -243,6 +257,13 @@ export default function Movements({ params }: MovementsPageProps) {
 
   return (
     <div className="my-10 px-4">
+      {business && (
+        <div className={`flex max-md:justify-center ${filteredPath === "/admin/businesses" ? "hidden" : ""}`}>
+          <h1 className="text-2xl font-semibold text-[#003E52]">
+            {business.name}
+          </h1>
+        </div>
+      )}
 
       <div className="mt-12 flex flex-col gap-10">
         {bankAccounts.map((account) => (
