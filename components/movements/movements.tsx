@@ -259,6 +259,7 @@ export default function Movements({ params }: MovementsPageProps) {
     }
   };
 
+
   const handleSelectBank = (name: string) => {
     setSelectedBankName(name);
   };
@@ -282,6 +283,14 @@ export default function Movements({ params }: MovementsPageProps) {
       month: 'long',
     };
     return date.toLocaleDateString('es-ES', options);
+  }
+
+  function formatDateForInput(date:any) {
+    if (!date) return '';
+    const d = new Date(date);
+    const month = `${d.getMonth() + 1}`.padStart(2, '0');
+    const day = `${d.getDate()}`.padStart(2, '0');
+    return `${d.getFullYear()}-${month}-${day}`;
   }
 
   return (
@@ -369,7 +378,7 @@ export default function Movements({ params }: MovementsPageProps) {
               <div>
                 <Dialog>
                   <DialogTrigger asChild>
-                    <button className="flex items-center mx-auto gap-1 rounded-full bg-[#003E52] p-1 px-2 text-sm text-white">
+                    <button className="mx-auto flex items-center gap-1 rounded-full bg-[#003E52] p-1 px-2 text-sm text-white">
                       <PencilSquareIcon width={16} height={16} />
                       Editar
                     </button>
@@ -452,7 +461,10 @@ export default function Movements({ params }: MovementsPageProps) {
 
                         <div className="flex flex-col gap-2">
                           <label>Selecciona un tipo de cuenta</label>
-                          <SelectAccount onSelect={handleSelectAccount} defaultValue={account.type}/>
+                          <SelectAccount
+                            onSelect={handleSelectAccount}
+                            defaultValue={account.type}
+                          />
                           <input
                             type="hidden"
                             name="type"
@@ -501,8 +513,98 @@ export default function Movements({ params }: MovementsPageProps) {
                           >
                             <div
                               key={doc.id}
-                              className="flex flex-col items-center justify-center gap-2 rounded-lg bg-[#252525]/10 p-3 lg:h-[180px]"
+                              className="flex flex-col items-center gap-2 rounded-lg bg-[#252525]/10 lg:h-[200px]"
                             >
+                              <div className="self-end">
+                                <Dialog>
+                                  <DialogTrigger className='flex items-center gap-1 px-2 py-1 bg-teal-600 rounded-lg text-white m-1'>
+                                    Editar
+                                    <PencilSquareIcon width={16} height={16} />
+                                  </DialogTrigger>
+                                  <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader className="mb-5">
+                                      <DialogTitle>
+                                        Editar movimiento de {account.name}
+                                      </DialogTitle>
+                                    </DialogHeader>
+                                    <div>
+                                      <form
+                                        // onSubmit={""}
+                                        className="flex flex-col justify-between gap-4"
+                                      >
+                                        <input
+                                          type="hidden"
+                                          name="business_id"
+                                          value={params.business_id}
+                                        />
+                                        <input
+                                          type="hidden"
+                                          name="id"
+                                          value={account.id}
+                                        />
+                                        {account.closing_type === 'monthly' ? (
+                                          <div className="flex flex-col gap-2">
+                                            <label>Fecha de cierre</label>
+                                            <SelectClosingMonth onSelect={handleSelectClosingMonth} defaultValue={formatDate(doc.closing_month)}/>
+                                            <input
+                                              type="hidden"
+                                              name="closing_month"
+                                              value={selectedClosingMonth}
+                                            />
+                                          </div>
+                                        ) : (
+                                          <div className="flex flex-col gap-2">
+                                            <label>Fecha de inicio</label>
+                                            <input
+                                              defaultValue={formatDateForInput(doc.period_start)}
+                                              type="date"
+                                              name="period_start"
+                                              className="rounded-lg bg-[#252525]/10 p-2"
+                                            />
+
+                                            <label>Fecha de cierre</label>
+                                            <input
+                                              type="date"
+                                              name="period_end"
+                                              defaultValue={formatDateForInput(doc.period_end)}
+                                              className="rounded-lg bg-[#252525]/10 p-2"
+                                            />
+                                          </div>
+                                        )}
+                                        <div className="flex flex-col gap-2">
+                                          <label>Movimiento</label>
+                                          <label
+                                            htmlFor="pdfUpload"
+                                            className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#252525]/10 p-2"
+                                          >
+                                            <Attachment />
+
+                                            <input
+                                              id="pdfUpload"
+                                              type="file"
+                                              name="pdf"
+                                              // accept="application/pdf"
+                                              onChange={handleFileChange}
+                                              // required
+                                            />
+                                          </label>
+                                          {selectedFileName && (
+                                            <div className="my-2 text-center text-sm text-gray-600">
+                                              {selectedFileName}
+                                            </div>
+                                          )}
+                                        </div>
+                                        <Button
+                                          type="submit"
+                                          className="mt-4 w-full rounded-xl bg-[#003E52]"
+                                        >
+                                          Actualizar archivo
+                                        </Button>
+                                      </form>
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                              </div>
                               {account.closing_type === 'monthly' ? (
                                 <div className="flex flex-col items-center gap-2 text-center font-medium">
                                   <p className="font-bold">Fecha de cierre</p>
@@ -530,7 +632,7 @@ export default function Movements({ params }: MovementsPageProps) {
                               <Link
                                 href={doc.pdf}
                                 target="_blank"
-                                className="mt-4 rounded-xl bg-[#003E52] px-3 py-1 text-sm font-medium text-white"
+                                className="rounded-xl bg-[#003E52] px-3 py-1 text-sm font-medium text-white"
                               >
                                 Ver resumen
                               </Link>
@@ -550,7 +652,7 @@ export default function Movements({ params }: MovementsPageProps) {
                       >
                         <DialogTrigger asChild>
                           <button
-                            className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-lg bg-[#ec7700]/80 p-3 text-base font-medium text-white hover:bg-[#ec7700]/60 lg:h-[180px]"
+                            className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-lg bg-[#ec7700]/80 p-3 text-base font-medium text-white hover:bg-[#ec7700]/60 lg:h-[200px]"
                             onClick={() =>
                               setPdfDialogOpen((prevOpen) => ({
                                 ...prevOpen,
@@ -588,6 +690,7 @@ export default function Movements({ params }: MovementsPageProps) {
                                   <label>Fecha de cierre</label>
                                   <SelectClosingMonth
                                     onSelect={handleSelectClosingMonth}
+                                    
                                   />
                                   <input
                                     type="hidden"
