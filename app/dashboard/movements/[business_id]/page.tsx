@@ -21,6 +21,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { addBank, uploadPDF } from '@/lib/actions';
 import { toast } from 'sonner';
 import PdfIcon from '@/components/icons/PdfIcon';
@@ -54,6 +55,7 @@ import { translateMonths } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import SkeletonMovementsMobile from '@/components/skeleton-movements-mobile';
 import SkeletonMovements from '@/components/skeleton-movement';
+import OtroBankIcon from '@/components/icons/OtroBankIcon';
 
 type MovementsPageProps = {
   params: {
@@ -132,13 +134,13 @@ export default function MovementsPage({ params }: MovementsPageProps) {
     fetchData();
   }, [params.business_id]);
 
-  if (loading) return(
-    <div>
-      <SkeletonMovements/>
-      <SkeletonMovementsMobile/>
-    </div>
-  ) 
-;
+  if (loading)
+    return (
+      <div>
+        <SkeletonMovements />
+        <SkeletonMovementsMobile />
+      </div>
+    );
 
   if (error) return <div>{error}</div>;
 
@@ -149,9 +151,10 @@ export default function MovementsPage({ params }: MovementsPageProps) {
     const bank_account = formData.get('name') as string;
     const type = formData.get('type') as string;
     const closing_type = formData.get('closing_type') as string;
+    const details = formData.get('details') as string;
 
     try {
-      await addBank(params.business_id, bank_account, type, closing_type);
+      await addBank(params.business_id, bank_account, type, closing_type, details);
       toast.success('Banco creado exitosamente');
       setDialogOpen(false); // Cierra el diálogo al enviar correctamente
       if (formRef.current) {
@@ -237,7 +240,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
             key={account.id}
             className="flex items-center justify-between gap-3 max-lg:mx-auto max-lg:w-[95%] max-lg:flex-col max-lg:justify-center max-lg:rounded-xl max-lg:bg-[#252525]/10 max-lg:py-4 lg:gap-10"
           >
-            <div className="flex max-lg:h-[100px] lg:h-[180px] min-w-[200px] flex-col justify-center gap-5 rounded-xl max-lg:w-[90%] lg:bg-[#252525]/10">
+            <div className="flex min-w-[200px] flex-col justify-center gap-5 rounded-xl max-lg:h-[100px] max-lg:w-[90%] lg:h-[180px] lg:bg-[#252525]/10">
               <div className="flex items-center justify-center gap-2">
                 {account.name === 'afirme' ? (
                   <AfirmeIcon />
@@ -279,7 +282,9 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                   <SantanderIcon />
                 ) : account.name === 'scotia' ? (
                   <ScotiaIcon />
-                ) : null}
+                ) : (
+                  <OtroBankIcon />
+                )}
                 <p className="text-center text-lg font-semibold capitalize">
                   {account.name}
                 </p>
@@ -287,60 +292,61 @@ export default function MovementsPage({ params }: MovementsPageProps) {
               <div className="flex justify-center">
                 {account.type === 'credit' ? (
                   <p className="font-bold">Crédito</p>
-                ) : (
+                ) : account.type === 'debit' ? (
                   <p className="font-bold">Débito</p>
-                )}
+                ) : null}
               </div>
             </div>
             <div className="mx-auto ml-[5%] flex w-[90%] items-center max-md:mx-auto max-md:w-[70%]">
               <Carousel className="w-full">
                 <CarouselContent className="-ml-1">
                   <>
-                    
-                    {documents[account.id]?.length > 0 ? documents[account.id]?.map((doc) => (
-                      <CarouselItem
-                        key={doc.bank_id}
-                        className={`basis-1/3 pl-1 max-md:basis-1/2`}
-                      >
-                        <div
-                          key={doc.id}
-                          className="flex flex-col items-center justify-center gap-2 rounded-lg bg-[#252525]/10 p-3 lg:h-[180px]"
-                        >
-                          {account.closing_type === 'monthly' ? (
-                            <div className="flex flex-col items-center gap-2 text-center font-medium">
-                              <p className="font-bold">Fecha de cierre</p>
-                              <p className="font-medium capitalize">
-                                {translateMonths(doc.closing_month)}
-                              </p>
-                            </div>
-                          ) : (
-                            <div className="flex flex-col items-center gap-2 text-center font-medium">
-                              <div>
-                                <p className="font-bold">Fecha de inicio</p>
-                                {new Date(
-                                  doc.period_start,
-                                ).toLocaleDateString()}
-                              </div>
-                              <div>
-                                <p className="font-bold">Fecha de cierre</p>
-                                {new Date(doc.period_end).toLocaleDateString()}
-                              </div>
-                            </div>
-                          )}
-
-                          <Link
-                            href={doc.pdf}
-                            target="_blank"
-                            className="mt-4 rounded-xl bg-[#003E52] px-2 text-sm font-medium text-white"
+                    {documents[account.id]?.length > 0
+                      ? documents[account.id]?.map((doc) => (
+                          <CarouselItem
+                            key={doc.bank_id}
+                            className={`basis-1/3 pl-1 max-md:basis-1/2`}
                           >
-                            Ver PDF
-                          </Link>
-                        </div>
-                      </CarouselItem>
-                    )) : 
-                      null
-                    }
-                <CarouselItem className={`basis-1/3 pl-1 max-md:basis-1/2`}>
+                            <div
+                              key={doc.id}
+                              className="flex flex-col items-center justify-center gap-2 rounded-lg bg-[#252525]/10 p-3 lg:h-[180px]"
+                            >
+                              {account.closing_type === 'monthly' ? (
+                                <div className="flex flex-col items-center gap-2 text-center font-medium">
+                                  <p className="font-bold">Fecha de cierre</p>
+                                  <p className="font-medium capitalize">
+                                    {translateMonths(doc.closing_month)}
+                                  </p>
+                                </div>
+                              ) : (
+                                <div className="flex flex-col items-center gap-2 text-center font-medium">
+                                  <div>
+                                    <p className="font-bold">Fecha de inicio</p>
+                                    {new Date(
+                                      doc.period_start,
+                                    ).toLocaleDateString()}
+                                  </div>
+                                  <div>
+                                    <p className="font-bold">Fecha de cierre</p>
+                                    {new Date(
+                                      doc.period_end,
+                                    ).toLocaleDateString()}
+                                  </div>
+                                </div>
+                              )}
+
+                              <Link
+                                href={doc.pdf}
+                                target="_blank"
+                                className="mt-4 rounded-xl bg-[#003E52] px-2 text-sm font-medium text-white"
+                              >
+                                Ver PDF
+                              </Link>
+                            </div>
+                          </CarouselItem>
+                        ))
+                      : null}
+                    <CarouselItem className={`basis-1/3 pl-1 max-md:basis-1/2`}>
                       <Dialog
                         open={pdfDialogOpen[account.id] || false}
                         onOpenChange={(isOpen) =>
@@ -352,7 +358,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                       >
                         <DialogTrigger asChild>
                           <button
-                            className="h-full w-full flex flex-col items-center justify-center gap-2 rounded-lg bg-[#ec7700]/80 hover:bg-[#ec7700]/60 text-white font-medium text-base p-3 lg:h-[180px]"
+                            className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-lg bg-[#ec7700]/80 p-3 text-base font-medium text-white hover:bg-[#ec7700]/60 lg:h-[180px]"
                             onClick={() =>
                               setPdfDialogOpen((prevOpen) => ({
                                 ...prevOpen,
@@ -454,7 +460,6 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                 <CarouselNext />
               </Carousel>
             </div>
-            
           </div>
         ))}
       </div>
@@ -467,11 +472,11 @@ export default function MovementsPage({ params }: MovementsPageProps) {
               className="flex h-[180px] min-w-[200px] items-center justify-center gap-2 rounded-xl bg-[#ec7700] p-2 text-lg font-medium text-white max-lg:mx-auto max-lg:h-[80px] max-lg:w-[95%]"
             >
               <AddIcon />
-              Añadir banco
+              Añadir origen
             </button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[450px]">
-            <DialogHeader className="mb-5">
+            {/* <DialogHeader className="mb-5">
               <DialogTitle>Añadir banco</DialogTitle>
             </DialogHeader>
             <div>
@@ -486,6 +491,18 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                   value={params.business_id}
                 />
                 <div className="flex flex-col gap-2">
+                  <label>Selecciona un banco</label>
+                  <SelectBank onSelect={handleSelectBank} />
+                  <input type="hidden" name="name" value={selectedBankName} />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <label>Selecciona un tipo de cuenta</label>
+                  <SelectAccount onSelect={handleSelectAccount} />
+                  <input type="hidden" name="type" value={selectedAccount} />
+                </div>
+
+                <div className="flex flex-col gap-2">
                   <label className="text-sm">
                     ¿El período que contabiliza tu banco ocupa todo el mes?
                   </label>
@@ -497,18 +514,6 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                   />
                 </div>
 
-                <div className="flex flex-col gap-2">
-                  <label>Selecciona un tipo de cuenta</label>
-                  <SelectAccount onSelect={handleSelectAccount} />
-                  <input type="hidden" name="type" value={selectedAccount} />
-                </div>
-
-                <div className="flex flex-col gap-2">
-                  <label>Selecciona un banco</label>
-                  <SelectBank onSelect={handleSelectBank} />
-                  <input type="hidden" name="name" value={selectedBankName} />
-                </div>
-
                 <Button
                   type="submit"
                   className="mt-4 w-full rounded-xl bg-[#003E52]"
@@ -516,7 +521,99 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                   Guardar banco
                 </Button>
               </form>
-            </div>
+            </div> */}
+            <Tabs defaultValue="banco" className="w-[400px]">
+              <TabsList>
+                <TabsTrigger value="banco">Banco</TabsTrigger>
+                <TabsTrigger value="otro">Otro</TabsTrigger>
+              </TabsList>
+              <TabsContent value="banco">
+                <form
+                  onSubmit={handleSubmit}
+                  ref={formRef}
+                  className="flex flex-col gap-8"
+                >
+                  <input
+                    type="hidden"
+                    name="business_id"
+                    value={params.business_id}
+                  />
+                  <div className="flex flex-col gap-2">
+                    <label>Selecciona un banco</label>
+                    <SelectBank onSelect={handleSelectBank} />
+                    <input type="hidden" name="name" value={selectedBankName} />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label>Selecciona un tipo de cuenta</label>
+                    <SelectAccount onSelect={handleSelectAccount} />
+                    <input type="hidden" name="type" value={selectedAccount} />
+                  </div>
+
+                  <div className="flex flex-col gap-2">
+                    <label className="text-sm">
+                      ¿El período que contabiliza tu banco ocupa todo el mes?
+                    </label>
+                    <SelectClosingType onSelect={handleSelectClosingType} />
+                    <input
+                      type="hidden"
+                      name="closing_type"
+                      value={selectedClosingType}
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="mt-4 w-full rounded-xl bg-[#003E52]"
+                  >
+                    Guardar banco
+                  </Button>
+                </form>
+              </TabsContent>
+              <TabsContent value="otro">
+                <form
+                  onSubmit={handleSubmit}
+                  ref={formRef}
+                  className="flex flex-col gap-8"
+                >
+                  <input
+                    type="hidden"
+                    name="business_id"
+                    value={params.business_id}
+                  />
+
+                  <input
+                    type="hidden"
+                    name="closing_type"
+                    value="monthly"
+                  />
+
+                  <div className="flex flex-col gap-2">
+                    <div>
+                      <label>Ingrese un tipo de origen</label>
+                      <input
+                        type="text"
+                        name="name"
+                        placeholder="Efectivo..."
+                        className="w-full rounded-lg border p-2"
+                      />
+                    </div>
+
+                    <div>
+                      <label>Descripción</label>
+                      <textarea name="details" placeholder='Descripción...' className="w-full rounded-lg border p-2"/>
+                    </div>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="mt-4 w-full rounded-xl bg-[#003E52]"
+                  >
+                    Guardar origen
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
           </DialogContent>
         </Dialog>
       </div>

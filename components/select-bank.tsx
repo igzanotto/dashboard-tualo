@@ -145,7 +145,20 @@ const banks = [
 export default function SelectBank({ onSelect }:any) {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
+  const [customBank, setCustomBank] = React.useState("")
 
+  const handleSelect = (currentValue: string) => {
+    setValue(currentValue)
+    setOpen(false)
+    setCustomBank("") // Clear custom bank input if selecting from the list
+  }
+
+  const handleCustomBankSelect = () => {
+    if (customBank.trim() !== "") {
+      setValue(customBank)
+      setOpen(false)
+    }
+  }
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -157,7 +170,7 @@ export default function SelectBank({ onSelect }:any) {
           className="w-full justify-between"
         >
           {value
-            ? banks.find((bank) => bank.value === value)?.label
+            ? banks.find((bank) => bank.value === value)?.label || value
             : "Selecciona un banco"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -168,14 +181,21 @@ export default function SelectBank({ onSelect }:any) {
           <CommandList>
             <CommandEmpty>No se encuentra este banco.</CommandEmpty>
             <CommandGroup className="overflow-y-scroll">
+              <CommandItem className="flex items-center gap-2">
+                <input
+                  type="text"
+                  placeholder="Otro..."
+                  value={customBank}
+                  onChange={(e) => setCustomBank(e.target.value)}
+                  onBlur={handleCustomBankSelect}
+                  className="border p-2 w-full rounded-lg"
+                />
+              </CommandItem>
               {banks.map((bank) => (
                 <CommandItem
                   key={bank.value}
                   value={bank.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
-                    setOpen(false)
-                    }}
+                  onSelect={() => handleSelect(bank.value)}
                   className="flex items-center gap-2"
                 >
                   {bank.icon}
