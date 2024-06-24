@@ -74,6 +74,7 @@ type BankAccount = {
   name: string;
   type: string;
   closing_type: string;
+  details: string;
 };
 
 type Document = {
@@ -154,7 +155,13 @@ export default function MovementsPage({ params }: MovementsPageProps) {
     const details = formData.get('details') as string;
 
     try {
-      await addBank(params.business_id, bank_account, type, closing_type, details);
+      await addBank(
+        params.business_id,
+        bank_account,
+        type,
+        closing_type,
+        details,
+      );
       toast.success('Banco creado exitosamente');
       setDialogOpen(false); // Cierra el diálogo al enviar correctamente
       if (formRef.current) {
@@ -294,6 +301,24 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                   <p className="font-bold">Crédito</p>
                 ) : account.type === 'debit' ? (
                   <p className="font-bold">Débito</p>
+                ) : account.details ? (
+                  <div>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button className='p-1 rounded-full bg-[#003E52] text-white text-sm px-2'>Descripción</button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[425px]">
+                        <DialogHeader className="mb-5">
+                          <DialogTitle className='text-[#003E52]'>
+                            Descripción de {account.name}
+                          </DialogTitle>
+                        </DialogHeader>
+                          <p>
+                            {account.details}
+                          </p>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 ) : null}
               </div>
             </div>
@@ -427,7 +452,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                                   className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#252525]/10 p-2"
                                 >
                                   <PdfIcon />
-                                  {/* <span>Seleccionar archivo PDF</span> */}
+                                 
                                   <input
                                     id="pdfUpload"
                                     type="file"
@@ -522,8 +547,8 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                 </Button>
               </form>
             </div> */}
-            <Tabs defaultValue="banco" className="w-[400px]">
-              <TabsList>
+            <Tabs defaultValue="banco">
+              <TabsList className='mb-5 self-center'>
                 <TabsTrigger value="banco">Banco</TabsTrigger>
                 <TabsTrigger value="otro">Otro</TabsTrigger>
               </TabsList>
@@ -582,14 +607,11 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                     value={params.business_id}
                   />
 
-                  <input
-                    type="hidden"
-                    name="closing_type"
-                    value="monthly"
-                  />
+                  <input type="hidden" name="closing_type" value="monthly" />
+                  <input type="hidden" name="type" value="other" />
 
-                  <div className="flex flex-col gap-2">
-                    <div>
+                  <div className="flex flex-col gap-8">
+                    <div className='flex flex-col gap-2'>
                       <label>Ingrese un tipo de origen</label>
                       <input
                         type="text"
@@ -599,9 +621,13 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                       />
                     </div>
 
-                    <div>
+                    <div className='flex flex-col gap-2'>
                       <label>Descripción</label>
-                      <textarea name="details" placeholder='Descripción...' className="w-full rounded-lg border p-2"/>
+                      <textarea
+                        name="details"
+                        placeholder="Descripción..."
+                        className="w-full rounded-lg border p-2"
+                      />
                     </div>
                   </div>
 
