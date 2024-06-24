@@ -243,13 +243,6 @@ export default function Movements({ params }: MovementsPageProps) {
 
   return (
     <div className="my-10 px-4">
-      {business && (
-        <div className="flex max-md:justify-center">
-          <h1 className="text-2xl font-semibold text-[#003E52]">
-            {business.name}
-          </h1>
-        </div>
-      )}
 
       <div className="mt-12 flex flex-col gap-10">
         {bankAccounts.map((account) => (
