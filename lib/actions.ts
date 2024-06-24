@@ -891,6 +891,23 @@ export async function addBank(business_id: string, name: string, type:string, cl
   return data;
 }
 
+export async function updateBank(id: string, name?: string, type?: string, closing_type?: string, details?: string) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('bank_accounts')
+    .update({name, type, closing_type, details })
+    .eq('id', id);
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath(`/dashboard/movements`);
+
+  return data;
+}
+
 
 interface UploadPDFResponse {
   data: any;
