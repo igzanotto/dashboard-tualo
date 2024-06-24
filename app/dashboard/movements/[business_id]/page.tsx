@@ -338,9 +338,7 @@ export default function MovementsPage({ params }: MovementsPageProps) {
                         </div>
                       </CarouselItem>
                     )) : 
-                      <div className='max-lg:hidden flex mx-auto'>
-                        <p className='font-bold'>No hay movimientos creados para este banco.</p>
-                      </div>
+                      null
                     }
                 <CarouselItem className={`basis-1/3 pl-1 max-md:basis-1/2`}>
                       <Dialog
