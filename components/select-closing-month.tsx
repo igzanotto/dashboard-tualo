@@ -41,11 +41,12 @@ function getLastDateOfMonth(monthIndex: number): Date {
 
 interface SelectClosingMonthProps {
     onSelect: (date: Date | null) => void;
+    defaultValue?:any
 }
 
-export default function SelectClosingMonth({ onSelect }: SelectClosingMonthProps) {
+export default function SelectClosingMonth({ onSelect, defaultValue }: SelectClosingMonthProps) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState<string>("")
+  const [value, setValue] = React.useState(defaultValue || "");
   const [dateValue, setDateValue] = React.useState<Date | null>(null)
 
   const handleSelect = (currentValue: string) => {
@@ -73,7 +74,7 @@ export default function SelectClosingMonth({ onSelect }: SelectClosingMonthProps
           className="w-full justify-between"
         >
           {value
-            ? months.find((month) => month.value === value)?.label
+            ? months.find((month) => month.value === value)?.label || value
             : "Selecciona un mes"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
