@@ -885,3 +885,88 @@ export async function uploadImageChart(formData: FormData): Promise<UploadImageR
   }
 }
 
+export async function addBank(business_id: string, name: string, type:string, closing_type:string, details?:string) {
+
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from('bank_accounts')
+    .insert(
+      { business_id, name, type, closing_type, details }
+    );
+
+  if (error) {
+    throw error;
+  }
+
+  revalidatePath(`/dashboard/movements`)
+
+  return data;
+}
+
+
+interface UploadPDFResponse {
+  data: any;
+  error: Error | null;
+}
+
+export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> {
+  const business_id = formData.get('business_id') as string;
+  const id = formData.get('id') as string;
+  const pdf = formData.get('pdf') as File | null;
+  const closing_month = formData?.get('closing_month') as Date | null;
+  const period_start = formData?.get('period_start') as Date | null;
+  const period_end = formData?.get('period_end') as Date | null;
+
+  if (!pdf) {
+    throw new Error('No PDF file provided');
+  }
+
+  
+
+  const supabase = createClient();
+
+  try {
+    // Subir la imagen al bucket 'charts_images'
+    const filePath = `${id}/${pdf.name}`;
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('pdf_banks')
+      .upload(filePath, pdf);
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    console.log('PDF uploaded successfully:', uploadData);
+
+    // Generar la URL de la imagen
+    const pdfUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/pdf_banks/${filePath}`;
+    console.log('Generated PDF URL:', pdfUrl);
+
+    // Guardar la URL en la columna graphy_url de la tabla charts
+    const { data: pdfData, error: chartError } = await supabase
+      .from('documents')
+      .insert({ pdf: pdfUrl, bank_id: id, closing_month: closing_month, period_start:period_start, period_end:period_end })
+      .eq('id', id);
+
+    console.log('bussines ID:', business_id);
+    console.log('CLOSING:', closing_month);
+    console.log('Bank ID:', id);
+    console.log('PDF URL:', pdfUrl);
+    console.log('PDF Data:', pdfData);
+
+    if (chartError) {
+      throw chartError;
+    }
+
+    // Revalidar la ruta especificada
+    console.log({ data: { uploadData, pdfData } });
+    revalidatePath(`/dashboard/movements/${business_id}`);
+    
+    return { data: { uploadData, pdfData }, error: null };
+    
+  } catch (error) {
+    console.error('Error uploading pdf:', (error as Error).message);
+    return { data: null, error: error as Error };
+  }
+}

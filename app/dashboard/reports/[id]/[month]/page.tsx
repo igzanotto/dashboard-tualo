@@ -22,9 +22,11 @@ import CostsExpensesTooltip from '@/components/tooltips/costs-expenses';
 import ProfitMarginsTooltip from '@/components/tooltips/profit-margins';
 import MarginsTooltip from '@/components/tooltips/margins';
 import ExpensesTooltip from '@/components/tooltips/detailed-expenses';
+import ReportsIndexNavbar from '@/components/reports-index-navbar';
 import CompareResultsTooltip from '@/components/tooltips/compare-results';
 import CompareMarginsTooltip from '@/components/tooltips/compare-margins';
 import MarkdownRenderer from '@/components/markdownRendered';
+
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -55,12 +57,14 @@ export default async function ReportPage({
 }) {
   const id = params.id;
   const report = await fetchReportById(id);
-  console.log(report.id);
+  console.log(report);
 
   const orderedCharts = reorderCharts(report.charts);
 
   return (
     <div className="flex flex-col gap-3 xl:px-2">
+      <ReportsIndexNavbar business_id={report.business_id} />
+
       <Image
         width={3000}
         height={3000}

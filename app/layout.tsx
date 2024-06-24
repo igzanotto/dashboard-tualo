@@ -1,6 +1,7 @@
 import { DM_Sans, Inter, Montserrat, Poppins, Libre_Baskerville } from "next/font/google";
 import { Metadata } from 'next';
 import "./globals.css";
+import { Toaster } from "@/components/ui/sonner"
 
 
 
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className={`antialiased`}>
        
         {children}
+        <Toaster />
       </body>
     </html>
   );

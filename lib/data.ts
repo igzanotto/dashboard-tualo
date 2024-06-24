@@ -325,3 +325,51 @@ export async function fetchChartById(chartId: string) {
       console.error('Failed to fetch business users:', error);
     }
   }
+
+  export async function fetchBankAccountsByBusinessId(business_id: string) {
+    const supabase = createClient();
+  
+    const { data, error } = await supabase
+      .from('bank_accounts')
+      .select('*')
+      .eq('business_id', business_id);
+  
+    if (error) {
+      console.error('Error fetching bank accounts:', error);
+      throw error;
+    }
+  
+    return data;
+  }
+
+  export async function fetchDocumentsByBankId(bank_id: string) {
+    const supabase = createClient();
+  
+    const { data, error } = await supabase
+      .from('documents')
+      .select('*')
+      .eq('bank_id', bank_id);
+  
+    if (error) {
+      console.error('Error fetching bank documents:', error);
+      throw error;
+    }
+  
+    return data;
+  }
+
+  export async function fetchBankAccountById (id:string){
+    const supabase = createClient();
+  
+    const { data, error } = await supabase
+      .from('bank_accounts')
+      .select('*')
+      .eq('id', id);
+  
+    if (error) {
+      console.error('Error fetching bank documents:', error);
+      throw error;
+    }
+  
+    return data;
+  }

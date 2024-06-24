@@ -53,3 +53,24 @@ export function translateChartType(type: string) {
 
   return chartTypeTranslations[type] || type;
 }
+
+
+
+export function translateMonths(type: string) {
+  const chartMonthTranslations: { [key: string]: string } = {
+    'january': 'enero',
+    'february': 'febrero',
+    'march': 'marzo',
+    'april': 'abril',
+    'may': 'mayo',
+    'june': 'junio',
+    'july': 'julio',
+    'august': 'agosto',
+    'september': 'septiembre',
+    'october': 'octubre',
+    'november': 'noviembre',
+    'december': 'diciembre',
+  };
+
+  return chartMonthTranslations[type] || type;
+}
