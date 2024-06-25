@@ -373,3 +373,74 @@ export async function fetchChartById(chartId: string) {
   
     return data;
   }
+
+  interface Report {
+    month: string;
+  }
+  
+  // Mapa de nombres de meses a números
+  const monthMap: { [key: string]: number } = {
+    'Enero': 1,
+    'Febrero': 2,
+    'Marzo': 3,
+    'Abril': 4,
+    'Mayo': 5,
+    'Junio': 6,
+    'Julio': 7,
+    'Agosto': 8,
+    'Septiembre': 9,
+    'Octubre': 10,
+    'Noviembre': 11,
+    'Diciembre': 12
+  };
+
+  const monthNames: string[] = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+  
+  export default async function getReportsByLastMovements(business_id:string) {
+    const supabase = createClient()
+    try {
+      // Consulta para obtener todos los reportes
+      const { data, error } = await supabase
+        .from('reports')
+        .select('month')
+        .eq("business_id", business_id)
+  
+      if (error) {
+        throw error;
+      }
+  
+      if (!data || data.length === 0) {
+        return 'No hay reportes disponibles.';
+      }
+  
+      // Convertir los nombres de meses a números
+    const reportsWithMonthNumbers = data.map(report => ({
+      ...report,
+      monthNumber: monthMap[report.month]
+    }));
+
+    // Ordenar los reportes por el número de mes en orden descendente
+    reportsWithMonthNumbers.sort((a, b) => b.monthNumber - a.monthNumber);
+
+    // Obtener el último reporte basado en el valor de `monthNumber`
+    const lastReport = reportsWithMonthNumbers[0];
+    const currentMonthNumber = lastReport.monthNumber;
+    const currentMonthName = lastReport.month;
+
+    console.log("CURRENT MONTH", currentMonthName);
+
+    // Calcular el próximo mes
+    const nextMonthNumber = currentMonthNumber === 12 ? 1 : currentMonthNumber + 1;
+    const nextMonthName = monthNames[nextMonthNumber - 1]; // -1 porque los índices del arreglo comienzan en 0
+
+    console.log("NEXT MONTH", nextMonthName);
+
+    return `El mes actual para el reporte es: ${currentMonthName}, y el próximo mes es: ${nextMonthName}`;
+  } catch (error) {
+    console.error('Error obteniendo el último reporte:', error);
+    return 'Hubo un error obteniendo el último reporte.';
+  }
+}

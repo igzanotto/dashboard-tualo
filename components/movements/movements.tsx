@@ -1,6 +1,6 @@
 'use client';
 
-import {
+import getReportsByLastMovements, {
   fetchBankAccountsByBusinessId,
   fetchBusinessById,
   fetchDocumentsByBankId,
@@ -58,6 +58,7 @@ import SkeletonMovements from '@/components/skeleton-movement';
 import OtroBankIcon from '@/components/icons/OtroBankIcon';
 import {
   BuildingLibraryIcon,
+  ClockIcon,
   CurrencyDollarIcon,
   PencilSquareIcon,
 } from '@heroicons/react/24/outline';
@@ -133,9 +134,10 @@ export default function Movements({ params }: MovementsPageProps) {
       try {
         setLoading(true);
         const business = await fetchBusinessById(params.business_id);
-        const bankAccounts = await fetchBankAccountsByBusinessId(
-          params.business_id,
-        );
+        const bankAccounts = await fetchBankAccountsByBusinessId(params.business_id,);
+        const lastReport = await getReportsByLastMovements(params.business_id)
+        console.log(lastReport);
+        
 
         const documentsByBankId: { [key: string]: Document[] } = {};
         for (const account of bankAccounts) {
@@ -333,18 +335,38 @@ export default function Movements({ params }: MovementsPageProps) {
     return `${d.getFullYear()}-${month}-${day}`;
   }
 
-
   return (
     <div className="my-10 px-4 lg:w-[95%]">
       {business && (
         <div
-          className={`flex max-md:justify-center ${
+          className={`flex items-center justify-between max-md:justify-center ${
             filteredPath === '/admin/businesses' ? 'hidden' : ''
           }`}
         >
           <h1 className="text-2xl font-semibold text-[#003E52]">
             {business.name}
           </h1>
+
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2 rounded-full bg-yellow-500 p-1 px-2">
+              <ClockIcon width={16} height={16} />
+              pendiente
+            </div>
+            <div>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <button className="rounded-xl bg-[#003E52] p-2 text-white">
+                    Enviar de documentos de mes para revisión
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[450px]">
+                  <DialogHeader className="mb-5">
+                    <DialogTitle className="text-[#003E52]">Editar</DialogTitle>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
         </div>
       )}
 
@@ -427,7 +449,7 @@ export default function Movements({ params }: MovementsPageProps) {
                   }
                 >
                   <DialogTrigger asChild>
-                    <button className="mx-auto rounded-xl flex items-center gap-2 bg-transparent px-3 py-1 text-sm font-medium text-[#003E52] border-2 border-[#003E52]">
+                    <button className="mx-auto flex items-center gap-2 rounded-xl border-2 border-[#003E52] bg-transparent px-3 py-1 text-sm font-medium text-[#003E52]">
                       <PencilSquareIcon width={16} height={16} />
                       Editar
                     </button>
@@ -562,9 +584,8 @@ export default function Movements({ params }: MovementsPageProps) {
                           >
                             <div
                               key={doc.id}
-                              className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg bg-[#252525]/10 lg:h-[200px]"
+                              className="flex flex-col items-center justify-center gap-2 rounded-lg bg-[#252525]/10 p-3 lg:h-[200px]"
                             >
-                              
                               {doc.closing_month !== null ? (
                                 <div className="flex flex-col items-center gap-2 text-center font-medium">
                                   <p className="font-bold">Fecha de cierre</p>
@@ -576,22 +597,26 @@ export default function Movements({ params }: MovementsPageProps) {
                                 <div className="flex flex-col items-center gap-2 text-center font-medium">
                                   <div>
                                     <p className="font-bold">Fecha de inicio</p>
-                                    {new Date(doc.period_start,).toLocaleDateString()}
+                                    {new Date(
+                                      doc.period_start,
+                                    ).toLocaleDateString()}
                                   </div>
                                   <div>
                                     <p className="font-bold">Fecha de cierre</p>
-                                    {new Date(doc.period_end,).toLocaleDateString()}
+                                    {new Date(
+                                      doc.period_end,
+                                    ).toLocaleDateString()}
                                   </div>
                                 </div>
                               )}
-                              <div className='flex items-center justify-center gap-2 max-xl:flex-col'>
-                              <Link
-                                href={doc.pdf}
-                                target="_blank"
-                                className="rounded-xl bg-[#003E52] px-3 py-1 text-sm font-medium text-white text-center"
-                              >
-                                Ver resumen
-                              </Link>
+                              <div className="flex items-center justify-center gap-2 max-xl:flex-col">
+                                <Link
+                                  href={doc.pdf}
+                                  target="_blank"
+                                  className="rounded-xl bg-[#003E52] px-3 py-1 text-center text-sm font-medium text-white"
+                                >
+                                  Ver resumen
+                                </Link>
                                 <Dialog
                                   open={movementDialogOpen[doc.id] || false}
                                   onOpenChange={(isOpen) =>
@@ -601,7 +626,7 @@ export default function Movements({ params }: MovementsPageProps) {
                                     }))
                                   }
                                 >
-                                  <DialogTrigger className="rounded-xl flex items-center gap-2 bg-transparent px-3 py-1 text-sm font-medium text-[#003E52] border-2 border-[#003E52]">
+                                  <DialogTrigger className="flex items-center gap-2 rounded-xl border-2 border-[#003E52] bg-transparent px-3 py-1 text-sm font-medium text-[#003E52]">
                                     Editar
                                     <PencilSquareIcon width={16} height={16} />
                                   </DialogTrigger>
@@ -647,7 +672,9 @@ export default function Movements({ params }: MovementsPageProps) {
                                           <div className="flex flex-col gap-2">
                                             <label>Fecha de inicio</label>
                                             <input
-                                              defaultValue={formatDateForInput(doc.period_start,)}
+                                              defaultValue={formatDateForInput(
+                                                doc.period_start,
+                                              )}
                                               type="date"
                                               name="period_start"
                                               className="rounded-lg bg-[#252525]/10 p-2"
@@ -696,7 +723,6 @@ export default function Movements({ params }: MovementsPageProps) {
                                   </DialogContent>
                                 </Dialog>
                               </div>
-                              
                             </div>
                           </CarouselItem>
                         ))
