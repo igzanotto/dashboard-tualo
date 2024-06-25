@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { fetchBusinessById } from '@/lib/data';
-import SubscriptionButton from '@/components/dashboard/subscription-button';
 import MercadoPagoSubscriptionButton from '@/components/dashboard/mp-button';
 
 // Define the type for the business object
@@ -39,8 +38,6 @@ export default function MyBusinessPage({
     <div>
       <h1>{business.name}</h1>
       <p>{business.description}</p>
-      {/* <SubscriptionButton /> */}
-      <br />
       <br />
       <MercadoPagoSubscriptionButton planId={planId} />
     </div>
