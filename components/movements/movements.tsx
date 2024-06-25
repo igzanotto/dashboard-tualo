@@ -421,7 +421,7 @@ export default function Movements({ params }: MovementsPageProps) {
                       Editar
                     </button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
+                  <DialogContent className="sm:max-w-[450px]">
                     <DialogHeader className="mb-5">
                       <DialogTitle className="text-[#003E52]">
                         Editar {account.name}
