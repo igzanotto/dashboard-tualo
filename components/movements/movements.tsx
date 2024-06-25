@@ -217,8 +217,8 @@ export default function Movements({ params }: MovementsPageProps) {
       }
 
       toast.success('Movimiento actualizado exitosamente');
-      window.location.reload()
-      
+      window.location.reload();
+
       if (formRef.current) {
         formRef.current.reset(); // Resetea el formulario
       }
@@ -227,7 +227,6 @@ export default function Movements({ params }: MovementsPageProps) {
         ...prevOpen,
         [id]: false,
       }));
-      
     } catch (error) {
       toast.error(error as string);
     }
@@ -246,7 +245,10 @@ export default function Movements({ params }: MovementsPageProps) {
     try {
       await updateBank(id, bank_account, type, closing_type, details);
       toast.success('Banco actualizado exitosamente');
-      setDialogOpen(false); // Cierra el diálogo al enviar correctamente
+      setDialogBankOpen((prevOpen) => ({
+        ...prevOpen,
+        [id]: false,
+      }));
       if (formRef.current) {
         formRef.current.reset(); // Resetea el formulario
       }
@@ -331,6 +333,7 @@ export default function Movements({ params }: MovementsPageProps) {
     return `${d.getFullYear()}-${month}-${day}`;
   }
 
+
   return (
     <div className="my-10 px-4 lg:w-[95%]">
       {business && (
@@ -351,8 +354,8 @@ export default function Movements({ params }: MovementsPageProps) {
             key={account.id}
             className="flex items-center justify-between gap-3 max-lg:mx-auto max-lg:w-[95%] max-lg:flex-col max-lg:justify-center max-lg:rounded-xl max-lg:bg-[#252525]/10 max-lg:py-4 lg:gap-10"
           >
-            <div className="flex min-w-[200px] flex-col justify-center gap-5 rounded-xl max-lg:h-[100px] max-lg:w-[90%] lg:h-[180px] lg:bg-[#252525]/10">
-              <div className="flex items-center justify-center gap-2">
+            <div className="flex min-w-[200px] flex-col justify-center gap-5 rounded-xl max-lg:h-[100px] max-lg:w-[90%] lg:h-[200px] lg:bg-[#252525]/10">
+              <div className="flex items-center justify-center gap-2 max-lg:mt-5">
                 {account.name === 'afirme' ? (
                   <AfirmeIcon />
                 ) : account.name === 'amex' ? (
@@ -414,9 +417,17 @@ export default function Movements({ params }: MovementsPageProps) {
                 ) : null}
               </div>
               <div>
-                <Dialog>
+                <Dialog
+                  open={bankDialogOpen[account.id] || false}
+                  onOpenChange={(isOpen) =>
+                    setDialogBankOpen((prevOpen) => ({
+                      ...prevOpen,
+                      [account.id]: isOpen,
+                    }))
+                  }
+                >
                   <DialogTrigger asChild>
-                    <button className="mx-auto flex items-center gap-1 rounded-full bg-[#003E52] p-1 px-2 text-sm text-white">
+                    <button className="mx-auto rounded-xl flex items-center gap-2 bg-transparent px-3 py-1 text-sm font-medium text-[#003E52] border-2 border-[#003E52]">
                       <PencilSquareIcon width={16} height={16} />
                       Editar
                     </button>
@@ -540,7 +551,7 @@ export default function Movements({ params }: MovementsPageProps) {
               </div>
             </div>
             <div className="mx-auto ml-[5%] flex w-[90%] items-center max-lg:mx-auto max-lg:w-[70%]">
-              <Carousel className="w-full">
+              <Carousel className="w-full max-lg:mt-10">
                 <CarouselContent className="-ml-1">
                   <>
                     {documents[account.id]?.length > 0
@@ -551,9 +562,36 @@ export default function Movements({ params }: MovementsPageProps) {
                           >
                             <div
                               key={doc.id}
-                              className="flex flex-col items-center gap-2 rounded-lg bg-[#252525]/10 lg:h-[200px]"
+                              className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg bg-[#252525]/10 lg:h-[200px]"
                             >
-                              <div className="self-end">
+                              
+                              {account.closing_type === 'monthly' ? (
+                                <div className="flex flex-col items-center gap-2 text-center font-medium">
+                                  <p className="font-bold">Fecha de cierre</p>
+                                  <p className="font-medium capitalize">
+                                    {formatDate(doc.closing_month)}
+                                  </p>
+                                </div>
+                              ) : (
+                                <div className="flex flex-col items-center gap-2 text-center font-medium">
+                                  <div>
+                                    <p className="font-bold">Fecha de inicio</p>
+                                    {new Date(doc.period_start,).toLocaleDateString()}
+                                  </div>
+                                  <div>
+                                    <p className="font-bold">Fecha de cierre</p>
+                                    {new Date(doc.period_end,).toLocaleDateString()}
+                                  </div>
+                                </div>
+                              )}
+                              <div className='flex items-center justify-center gap-2 max-xl:flex-col'>
+                              <Link
+                                href={doc.pdf}
+                                target="_blank"
+                                className="rounded-xl bg-[#003E52] px-3 py-1 text-sm font-medium text-white text-center"
+                              >
+                                Ver resumen
+                              </Link>
                                 <Dialog
                                   open={movementDialogOpen[doc.id] || false}
                                   onOpenChange={(isOpen) =>
@@ -563,7 +601,7 @@ export default function Movements({ params }: MovementsPageProps) {
                                     }))
                                   }
                                 >
-                                  <DialogTrigger className="m-1 flex items-center gap-1 rounded-lg bg-teal-600 px-2 py-1 text-white">
+                                  <DialogTrigger className="rounded-xl flex items-center gap-2 bg-transparent px-3 py-1 text-sm font-medium text-[#003E52] border-2 border-[#003E52]">
                                     Editar
                                     <PencilSquareIcon width={16} height={16} />
                                   </DialogTrigger>
@@ -609,9 +647,7 @@ export default function Movements({ params }: MovementsPageProps) {
                                           <div className="flex flex-col gap-2">
                                             <label>Fecha de inicio</label>
                                             <input
-                                              defaultValue={formatDateForInput(
-                                                doc.period_start,
-                                              )}
+                                              defaultValue={formatDateForInput(doc.period_start,)}
                                               type="date"
                                               name="period_start"
                                               className="rounded-lg bg-[#252525]/10 p-2"
@@ -639,7 +675,7 @@ export default function Movements({ params }: MovementsPageProps) {
                                             <input
                                               id="pdfUpload"
                                               type="file"
-                                              name="pdf" 
+                                              name="pdf"
                                               onChange={handleFileChange}
                                             />
                                           </label>
@@ -660,37 +696,7 @@ export default function Movements({ params }: MovementsPageProps) {
                                   </DialogContent>
                                 </Dialog>
                               </div>
-                              {account.closing_type === 'monthly' ? (
-                                <div className="flex flex-col items-center gap-2 text-center font-medium">
-                                  <p className="font-bold">Fecha de cierre</p>
-                                  <p className="font-medium capitalize">
-                                    {formatDate(doc.closing_month)}
-                                  </p>
-                                </div>
-                              ) : (
-                                <div className="flex flex-col items-center gap-2 text-center font-medium">
-                                  <div>
-                                    <p className="font-bold">Fecha de inicio</p>
-                                    {new Date(
-                                      doc.period_start,
-                                    ).toLocaleDateString()}
-                                  </div>
-                                  <div>
-                                    <p className="font-bold">Fecha de cierre</p>
-                                    {new Date(
-                                      doc.period_end,
-                                    ).toLocaleDateString()}
-                                  </div>
-                                </div>
-                              )}
-
-                              <Link
-                                href={doc.pdf}
-                                target="_blank"
-                                className="rounded-xl bg-[#003E52] px-3 py-1 text-sm font-medium text-white"
-                              >
-                                Ver resumen
-                              </Link>
+                              
                             </div>
                           </CarouselItem>
                         ))
