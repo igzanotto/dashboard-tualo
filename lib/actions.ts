@@ -974,3 +974,69 @@ export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> 
     return { data: null, error: error as Error };
   }
 }
+
+
+
+
+export async function updateMovement(formData: FormData): Promise<UploadPDFResponse> {
+  const business_id = formData.get('business_id') as string;
+  const id = formData.get('id') as string;
+  const closing_month = formData.get('closing_month') as Date | null;
+  const period_start = formData.get('period_start') as Date | null;
+  const period_end = formData.get('period_end') as Date | null;
+  const pdf = formData.get('pdf') as File | null;
+
+const supabase = createClient()
+
+if (pdf) {
+  // Subir el PDF al almacenamiento
+  const filePath = `${id}/${pdf.name}`;
+  const { data: uploadData, error: uploadError } = await supabase.storage
+    .from('pdf_banks')
+    .upload(filePath, pdf);
+
+  console.log('File uploaded successfully:', uploadData);
+
+  
+  // Generar la URL del PDF subido
+  const pdfUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/pdf_banks/${filePath}`;
+  console.log('Generated file URL:', pdfUrl);
+  
+  
+  // Actualizar la base de datos con la URL del PDF y las fechas
+  const { data: pdfData, error } = await supabase
+  .from('documents')
+  .update({ pdf: pdfUrl, closing_month, period_start, period_end })
+  .eq('id', id);
+  
+  if (error) {
+    console.error('Error updating document:', error.message);
+    throw error;
+  }
+  
+
+  console.log('PDF Data:', pdfData);
+
+  // Revalidar la ruta especificada
+  revalidatePath(`/dashboard/movements/${business_id}`);
+
+  return { data: { pdfData }, error: null };
+} else {
+  // Si no se subió un PDF, solo actualiza las fechas en la base de datos
+  const { data: pdfData, error } = await supabase
+    .from('documents')
+    .update({ closing_month, period_start, period_end })
+    .eq('id', id);
+
+  if (error) {
+    console.error('Error updating document:', error.message);
+  }
+
+  console.log('PDF Data:', pdfData);
+
+  // Revalidar la ruta especificada
+  revalidatePath(`/dashboard/movements/${business_id}`);
+
+  return { data: { pdfData }, error: null };
+  }
+}

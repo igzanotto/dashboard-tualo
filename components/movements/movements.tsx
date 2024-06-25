@@ -22,7 +22,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { addBank, updateBank, uploadPDF } from '@/lib/actions';
+import { addBank, updateBank, updateMovement, uploadPDF } from '@/lib/actions';
 import { toast } from 'sonner';
 import PdfIcon from '@/components/icons/PdfIcon';
 import AddIcon from '@/components/icons/AddIcon';
@@ -63,6 +63,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Attachment from '@/components/icons/Attachment';
 import { useParams } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 type MovementsPageProps = {
   params: {
@@ -101,6 +102,12 @@ export default function Movements({ params }: MovementsPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [pdfDialogOpen, setPdfDialogOpen] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [bankDialogOpen, setDialogBankOpen] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [movementDialogOpen, setDialogMovementOpen] = useState<{
     [key: string]: boolean;
   }>({});
   const formRef = useRef<HTMLFormElement>(null);
@@ -194,6 +201,38 @@ export default function Movements({ params }: MovementsPageProps) {
     }
   };
 
+  const handleUploadMovement = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const id = formData.get('id') as string;
+
+    try {
+      const response = await updateMovement(formData);
+
+      if (response.error) {
+        throw new Error(response.error.message); // Lanza el error para manejarlo más abajo
+      }
+
+      toast.success('Movimiento actualizado exitosamente');
+      window.location.reload()
+      
+      if (formRef.current) {
+        formRef.current.reset(); // Resetea el formulario
+      }
+
+      setDialogMovementOpen((prevOpen) => ({
+        ...prevOpen,
+        [id]: false,
+      }));
+      
+    } catch (error) {
+      toast.error(error as string);
+    }
+  };
+
   const handleUpdateBank = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -259,7 +298,6 @@ export default function Movements({ params }: MovementsPageProps) {
     }
   };
 
-
   const handleSelectBank = (name: string) => {
     setSelectedBankName(name);
   };
@@ -285,7 +323,7 @@ export default function Movements({ params }: MovementsPageProps) {
     return date.toLocaleDateString('es-ES', options);
   }
 
-  function formatDateForInput(date:any) {
+  function formatDateForInput(date: any) {
     if (!date) return '';
     const d = new Date(date);
     const month = `${d.getMonth() + 1}`.padStart(2, '0');
@@ -516,8 +554,16 @@ export default function Movements({ params }: MovementsPageProps) {
                               className="flex flex-col items-center gap-2 rounded-lg bg-[#252525]/10 lg:h-[200px]"
                             >
                               <div className="self-end">
-                                <Dialog>
-                                  <DialogTrigger className='flex items-center gap-1 px-2 py-1 bg-teal-600 rounded-lg text-white m-1'>
+                                <Dialog
+                                  open={movementDialogOpen[doc.id] || false}
+                                  onOpenChange={(isOpen) =>
+                                    setDialogMovementOpen((prevOpen) => ({
+                                      ...prevOpen,
+                                      [doc.id]: isOpen,
+                                    }))
+                                  }
+                                >
+                                  <DialogTrigger className="m-1 flex items-center gap-1 rounded-lg bg-teal-600 px-2 py-1 text-white">
                                     Editar
                                     <PencilSquareIcon width={16} height={16} />
                                   </DialogTrigger>
@@ -529,7 +575,7 @@ export default function Movements({ params }: MovementsPageProps) {
                                     </DialogHeader>
                                     <div>
                                       <form
-                                        // onSubmit={""}
+                                        onSubmit={handleUploadMovement}
                                         className="flex flex-col justify-between gap-4"
                                       >
                                         <input
@@ -540,12 +586,19 @@ export default function Movements({ params }: MovementsPageProps) {
                                         <input
                                           type="hidden"
                                           name="id"
-                                          value={account.id}
+                                          value={doc.id}
                                         />
                                         {account.closing_type === 'monthly' ? (
                                           <div className="flex flex-col gap-2">
                                             <label>Fecha de cierre</label>
-                                            <SelectClosingMonth onSelect={handleSelectClosingMonth} defaultValue={formatDate(doc.closing_month)}/>
+                                            <SelectClosingMonth
+                                              onSelect={
+                                                handleSelectClosingMonth
+                                              }
+                                              defaultValue={formatDate(
+                                                doc.closing_month,
+                                              )}
+                                            />
                                             <input
                                               type="hidden"
                                               name="closing_month"
@@ -556,7 +609,9 @@ export default function Movements({ params }: MovementsPageProps) {
                                           <div className="flex flex-col gap-2">
                                             <label>Fecha de inicio</label>
                                             <input
-                                              defaultValue={formatDateForInput(doc.period_start)}
+                                              defaultValue={formatDateForInput(
+                                                doc.period_start,
+                                              )}
                                               type="date"
                                               name="period_start"
                                               className="rounded-lg bg-[#252525]/10 p-2"
@@ -566,7 +621,9 @@ export default function Movements({ params }: MovementsPageProps) {
                                             <input
                                               type="date"
                                               name="period_end"
-                                              defaultValue={formatDateForInput(doc.period_end)}
+                                              defaultValue={formatDateForInput(
+                                                doc.period_end,
+                                              )}
                                               className="rounded-lg bg-[#252525]/10 p-2"
                                             />
                                           </div>
@@ -582,10 +639,8 @@ export default function Movements({ params }: MovementsPageProps) {
                                             <input
                                               id="pdfUpload"
                                               type="file"
-                                              name="pdf"
-                                              // accept="application/pdf"
+                                              name="pdf" 
                                               onChange={handleFileChange}
-                                              // required
                                             />
                                           </label>
                                           {selectedFileName && (
@@ -690,7 +745,6 @@ export default function Movements({ params }: MovementsPageProps) {
                                   <label>Fecha de cierre</label>
                                   <SelectClosingMonth
                                     onSelect={handleSelectClosingMonth}
-                                    
                                   />
                                   <input
                                     type="hidden"
