@@ -8,7 +8,7 @@ export default function SubscriptionButton() {
   const handleSubscription = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/mercadopago/create-subscription-plan', {
+      const response = await fetch('/api/mercadopago/create-subscription', {
         method: 'POST',
       });
       if (!response.ok) {

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchBusinessById } from '@/lib/data';
 import SubscriptionButton from '@/components/dashboard/subscription-button';
+import MercadoPagoSubscriptionButton from '@/components/dashboard/mp-button';
 
 // Define the type for the business object
 interface Business {
@@ -10,7 +11,7 @@ interface Business {
   description: string;
 }
 
-export default function MovementsPage({
+export default function MyBusinessPage({
   params,
 }: {
   params: { business_id: string };
@@ -32,11 +33,16 @@ export default function MovementsPage({
     return <div>Cargando...</div>; // Display a loading state while fetching
   }
 
+  const planId = '2c9380849007284d01904a45f77c10e8'; 
+
   return (
     <div>
       <h1>{business.name}</h1>
       <p>{business.description}</p>
-      <SubscriptionButton />
+      {/* <SubscriptionButton /> */}
+      <br />
+      <br />
+      <MercadoPagoSubscriptionButton planId={planId} />
     </div>
   );
 }

@@ -29,7 +29,7 @@ export  async function POST(req: Request) {
               payment_types: [{}],
               payment_methods: [{}]
             },
-            back_url: "https://www.tualo.mx"
+            back_url: "https://tualo.mx/api/mercadopago/webhooks"
           })
         });
   
