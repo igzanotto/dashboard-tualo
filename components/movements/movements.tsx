@@ -22,7 +22,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { addBank, uploadPDF } from '@/lib/actions';
+import { addBank, updateBank, updateMovement, uploadPDF } from '@/lib/actions';
 import { toast } from 'sonner';
 import PdfIcon from '@/components/icons/PdfIcon';
 import AddIcon from '@/components/icons/AddIcon';
@@ -56,9 +56,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import SkeletonMovementsMobile from '@/components/skeleton-movements-mobile';
 import SkeletonMovements from '@/components/skeleton-movement';
 import OtroBankIcon from '@/components/icons/OtroBankIcon';
-import { BuildingLibraryIcon, CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import {
+  BuildingLibraryIcon,
+  CurrencyDollarIcon,
+  PencilSquareIcon,
+} from '@heroicons/react/24/outline';
 import Attachment from '@/components/icons/Attachment';
 import { useParams } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 type MovementsPageProps = {
   params: {
@@ -99,6 +104,12 @@ export default function Movements({ params }: MovementsPageProps) {
   const [pdfDialogOpen, setPdfDialogOpen] = useState<{
     [key: string]: boolean;
   }>({});
+  const [bankDialogOpen, setDialogBankOpen] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [movementDialogOpen, setDialogMovementOpen] = useState<{
+    [key: string]: boolean;
+  }>({});
   const formRef = useRef<HTMLFormElement>(null);
   const [selectedFileName, setSelectedFileName] = useState('');
   const [selectedBankName, setSelectedBankName] = useState('');
@@ -107,17 +118,15 @@ export default function Movements({ params }: MovementsPageProps) {
   const [selectedClosingMonth, setSelectedClosingMonth] = useState('');
 
   const url = new URL(window.location.href);
-const pathname = url.pathname;
+  const pathname = url.pathname;
 
-// Divide el pathname en segmentos
-const segments = pathname.split('/');
+  // Divide el pathname en segmentos
+  const segments = pathname.split('/');
 
-// Filtra y une los segmentos que te interesan
-const filteredPath = `/${segments[1]}/${segments[2]}`;
+  // Filtra y une los segmentos que te interesan
+  const filteredPath = `/${segments[1]}/${segments[2]}`;
 
-console.log(filteredPath);
-  
-  
+  console.log(filteredPath);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -192,6 +201,66 @@ console.log(filteredPath);
     }
   };
 
+  const handleUploadMovement = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const id = formData.get('id') as string;
+
+    try {
+      const response = await updateMovement(formData);
+
+      if (response.error) {
+        throw new Error(response.error.message); // Lanza el error para manejarlo más abajo
+      }
+
+      toast.success('Movimiento actualizado exitosamente');
+      window.location.reload();
+
+      if (formRef.current) {
+        formRef.current.reset(); // Resetea el formulario
+      }
+
+      setDialogMovementOpen((prevOpen) => ({
+        ...prevOpen,
+        [id]: false,
+      }));
+    } catch (error) {
+      toast.error(error as string);
+    }
+  };
+
+  const handleUpdateBank = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const bank_account = formData.get('name') as string;
+    const type = formData.get('type') as string;
+    const closing_type = formData.get('closing_type') as string;
+    const details = formData.get('details') as string;
+    const id = formData.get('id') as string;
+
+    try {
+      await updateBank(id, bank_account, type, closing_type, details);
+      toast.success('Banco actualizado exitosamente');
+      setDialogBankOpen((prevOpen) => ({
+        ...prevOpen,
+        [id]: false,
+      }));
+      if (formRef.current) {
+        formRef.current.reset(); // Resetea el formulario
+      }
+      const updatedBankAccounts = await fetchBankAccountsByBusinessId(
+        params.business_id,
+      );
+      setBankAccounts(updatedBankAccounts);
+    } catch (error) {
+      toast.error(error as string);
+    }
+  };
+
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
     if (file) {
@@ -243,22 +312,36 @@ console.log(filteredPath);
     setSelectedClosingType(closing_type);
   };
 
-  const handleSelectClosingMonth = (closing_month:any) => {
+  const handleSelectClosingMonth = (closing_month: any) => {
     setSelectedClosingMonth(closing_month);
   };
 
-
   function formatDate(closing_month: any): string {
     const date = new Date(closing_month);
-    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long' };
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+    };
     return date.toLocaleDateString('es-ES', options);
+  }
+
+  function formatDateForInput(date: any) {
+    if (!date) return '';
+    const d = new Date(date);
+    const month = `${d.getMonth() + 1}`.padStart(2, '0');
+    const day = `${d.getDate()}`.padStart(2, '0');
+    return `${d.getFullYear()}-${month}-${day}`;
   }
 
 
   return (
     <div className="my-10 px-4 lg:w-[95%]">
       {business && (
-        <div className={`flex max-md:justify-center ${filteredPath === "/admin/businesses" ? "hidden" : ""}`}>
+        <div
+          className={`flex max-md:justify-center ${
+            filteredPath === '/admin/businesses' ? 'hidden' : ''
+          }`}
+        >
           <h1 className="text-2xl font-semibold text-[#003E52]">
             {business.name}
           </h1>
@@ -271,8 +354,8 @@ console.log(filteredPath);
             key={account.id}
             className="flex items-center justify-between gap-3 max-lg:mx-auto max-lg:w-[95%] max-lg:flex-col max-lg:justify-center max-lg:rounded-xl max-lg:bg-[#252525]/10 max-lg:py-4 lg:gap-10"
           >
-            <div className="flex min-w-[200px] flex-col justify-center gap-5 rounded-xl max-lg:h-[100px] max-lg:w-[90%] lg:h-[180px] lg:bg-[#252525]/10">
-              <div className="flex items-center justify-center gap-2">
+            <div className="flex min-w-[200px] flex-col justify-center gap-5 rounded-xl max-lg:h-[100px] max-lg:w-[90%] lg:h-[200px] lg:bg-[#252525]/10">
+              <div className="flex items-center justify-center gap-2 max-lg:mt-5">
                 {account.name === 'afirme' ? (
                   <AfirmeIcon />
                 ) : account.name === 'amex' ? (
@@ -314,8 +397,12 @@ console.log(filteredPath);
                 ) : account.name === 'scotia' ? (
                   <ScotiaIcon />
                 ) : account.type === 'other' ? (
-                  <CurrencyDollarIcon width={35} height={35} className='bg-[#F4F6FC] rounded-full'/>
-                ): (
+                  <CurrencyDollarIcon
+                    width={35}
+                    height={35}
+                    className="rounded-full bg-[#F4F6FC]"
+                  />
+                ) : (
                   <OtroBankIcon />
                 )}
                 <p className="text-center text-lg font-semibold capitalize">
@@ -327,29 +414,144 @@ console.log(filteredPath);
                   <p className="font-bold">Crédito</p>
                 ) : account.type === 'debit' ? (
                   <p className="font-bold">Débito</p>
-                ) : account.details ? (
-                  <div>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <button className='p-1 rounded-full bg-[#003E52] text-white text-sm px-2'>Descripción</button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader className="mb-5">
-                          <DialogTitle className='text-[#003E52]'>
-                            Descripción de {account.name}
-                          </DialogTitle>
-                        </DialogHeader>
-                          <p>
-                            {account.details}
-                          </p>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
                 ) : null}
+              </div>
+              <div>
+                <Dialog
+                  open={bankDialogOpen[account.id] || false}
+                  onOpenChange={(isOpen) =>
+                    setDialogBankOpen((prevOpen) => ({
+                      ...prevOpen,
+                      [account.id]: isOpen,
+                    }))
+                  }
+                >
+                  <DialogTrigger asChild>
+                    <button className="mx-auto rounded-xl flex items-center gap-2 bg-transparent px-3 py-1 text-sm font-medium text-[#003E52] border-2 border-[#003E52]">
+                      <PencilSquareIcon width={16} height={16} />
+                      Editar
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[450px]">
+                    <DialogHeader className="mb-5">
+                      <DialogTitle className="text-[#003E52]">
+                        Editar {account.name}
+                      </DialogTitle>
+                    </DialogHeader>
+                    {account.type === 'other' ? (
+                      <form
+                        onSubmit={handleSubmit}
+                        ref={formRef}
+                        className="flex flex-col gap-8"
+                      >
+                        <input
+                          type="hidden"
+                          name="business_id"
+                          value={params.business_id}
+                        />
+
+                        <input
+                          type="hidden"
+                          name="closing_type"
+                          value="monthly"
+                        />
+                        <input type="hidden" name="type" value="other" />
+
+                        <div className="flex flex-col gap-8">
+                          <div className="flex flex-col gap-2">
+                            <label>Ingrese un tipo de origen</label>
+                            <input
+                              type="text"
+                              name="name"
+                              placeholder="ej. efectivo, cuentas internas, export de Stripe, etc."
+                              defaultValue={account.name}
+                              className="w-full rounded-lg border p-2"
+                            />
+                          </div>
+
+                          <div className="flex flex-col gap-2">
+                            <label>Descripción</label>
+                            <textarea
+                              name="details"
+                              placeholder="Descripción..."
+                              defaultValue={account.details}
+                              className="w-full rounded-lg border p-2"
+                            />
+                          </div>
+                        </div>
+
+                        <Button
+                          type="submit"
+                          className="mt-4 w-full rounded-xl bg-[#003E52]"
+                        >
+                          Actualizar origen
+                        </Button>
+                      </form>
+                    ) : (
+                      <form
+                        onSubmit={handleUpdateBank}
+                        ref={formRef}
+                        className="flex flex-col gap-8"
+                      >
+                        <input type="hidden" name="id" value={account.id} />
+                        <div className="flex flex-col gap-2">
+                          <label>Selecciona un banco</label>
+                          <SelectBank
+                            onSelect={handleSelectBank}
+                            defaultValue={account.name}
+                          />
+                          <input
+                            type="hidden"
+                            name="name"
+                            defaultValue={account.name}
+                            value={selectedBankName}
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <label>Selecciona un tipo de cuenta</label>
+                          <SelectAccount
+                            onSelect={handleSelectAccount}
+                            defaultValue={account.type}
+                          />
+                          <input
+                            type="hidden"
+                            name="type"
+                            defaultValue={account.type}
+                            value={selectedAccount}
+                          />
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <label className="text-sm">
+                            ¿El período que contabiliza tu banco ocupa todo el
+                            mes?
+                          </label>
+                          <SelectClosingType
+                            onSelect={handleSelectClosingType}
+                            defaultValue={account.closing_type}
+                          />
+                          <input
+                            type="hidden"
+                            name="closing_type"
+                            value={selectedClosingType}
+                          />
+                        </div>
+
+                        <Button
+                          type="submit"
+                          className="mt-4 w-full rounded-xl bg-[#003E52]"
+                        >
+                          Actualizar banco
+                        </Button>
+                      </form>
+                    )}
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
             <div className="mx-auto ml-[5%] flex w-[90%] items-center max-lg:mx-auto max-lg:w-[70%]">
-              <Carousel className="w-full">
+              <Carousel className="w-full max-lg:mt-10">
                 <CarouselContent className="-ml-1">
                   <>
                     {documents[account.id]?.length > 0
@@ -360,9 +562,10 @@ console.log(filteredPath);
                           >
                             <div
                               key={doc.id}
-                              className="flex flex-col items-center justify-center gap-2 rounded-lg bg-[#252525]/10 p-3 lg:h-[180px]"
+                              className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg bg-[#252525]/10 lg:h-[200px]"
                             >
-                              {account.closing_type === 'monthly' ? (
+                              
+                              {doc.closing_month !== null ? (
                                 <div className="flex flex-col items-center gap-2 text-center font-medium">
                                   <p className="font-bold">Fecha de cierre</p>
                                   <p className="font-medium capitalize">
@@ -373,26 +576,127 @@ console.log(filteredPath);
                                 <div className="flex flex-col items-center gap-2 text-center font-medium">
                                   <div>
                                     <p className="font-bold">Fecha de inicio</p>
-                                    {new Date(
-                                      doc.period_start,
-                                    ).toLocaleDateString()}
+                                    {new Date(doc.period_start,).toLocaleDateString()}
                                   </div>
                                   <div>
                                     <p className="font-bold">Fecha de cierre</p>
-                                    {new Date(
-                                      doc.period_end,
-                                    ).toLocaleDateString()}
+                                    {new Date(doc.period_end,).toLocaleDateString()}
                                   </div>
                                 </div>
                               )}
-
+                              <div className='flex items-center justify-center gap-2 max-xl:flex-col'>
                               <Link
                                 href={doc.pdf}
                                 target="_blank"
-                                className="mt-4 rounded-xl bg-[#003E52] text-sm font-medium text-white py-1 px-3"
+                                className="rounded-xl bg-[#003E52] px-3 py-1 text-sm font-medium text-white text-center"
                               >
                                 Ver resumen
                               </Link>
+                                <Dialog
+                                  open={movementDialogOpen[doc.id] || false}
+                                  onOpenChange={(isOpen) =>
+                                    setDialogMovementOpen((prevOpen) => ({
+                                      ...prevOpen,
+                                      [doc.id]: isOpen,
+                                    }))
+                                  }
+                                >
+                                  <DialogTrigger className="rounded-xl flex items-center gap-2 bg-transparent px-3 py-1 text-sm font-medium text-[#003E52] border-2 border-[#003E52]">
+                                    Editar
+                                    <PencilSquareIcon width={16} height={16} />
+                                  </DialogTrigger>
+                                  <DialogContent className="sm:max-w-[425px]">
+                                    <DialogHeader className="mb-5">
+                                      <DialogTitle>
+                                        Editar movimiento de {account.name}
+                                      </DialogTitle>
+                                    </DialogHeader>
+                                    <div>
+                                      <form
+                                        onSubmit={handleUploadMovement}
+                                        className="flex flex-col justify-between gap-4"
+                                      >
+                                        <input
+                                          type="hidden"
+                                          name="business_id"
+                                          value={params.business_id}
+                                        />
+                                        <input
+                                          type="hidden"
+                                          name="id"
+                                          value={doc.id}
+                                        />
+                                        {account.closing_type === 'monthly' ? (
+                                          <div className="flex flex-col gap-2">
+                                            <label>Fecha de cierre</label>
+                                            <SelectClosingMonth
+                                              onSelect={
+                                                handleSelectClosingMonth
+                                              }
+                                              defaultValue={formatDate(
+                                                doc.closing_month,
+                                              )}
+                                            />
+                                            <input
+                                              type="hidden"
+                                              name="closing_month"
+                                              value={selectedClosingMonth}
+                                            />
+                                          </div>
+                                        ) : (
+                                          <div className="flex flex-col gap-2">
+                                            <label>Fecha de inicio</label>
+                                            <input
+                                              defaultValue={formatDateForInput(doc.period_start,)}
+                                              type="date"
+                                              name="period_start"
+                                              className="rounded-lg bg-[#252525]/10 p-2"
+                                            />
+
+                                            <label>Fecha de cierre</label>
+                                            <input
+                                              type="date"
+                                              name="period_end"
+                                              defaultValue={formatDateForInput(
+                                                doc.period_end,
+                                              )}
+                                              className="rounded-lg bg-[#252525]/10 p-2"
+                                            />
+                                          </div>
+                                        )}
+                                        <div className="flex flex-col gap-2">
+                                          <label>Movimiento</label>
+                                          <label
+                                            htmlFor="pdfUpload"
+                                            className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#252525]/10 p-2"
+                                          >
+                                            <Attachment />
+
+                                            <input
+                                              id="pdfUpload"
+                                              type="file"
+                                              name="pdf"
+                                              onChange={handleFileChange}
+                                            />
+                                          </label>
+                                          {selectedFileName && (
+                                            <div className="my-2 text-center text-sm text-gray-600">
+                                              {selectedFileName}
+                                            </div>
+                                          )}
+                                        </div>
+                                        <Button
+                                          type="submit"
+                                          className="mt-4 w-full rounded-xl bg-[#003E52]"
+                                        >
+                                          Actualizar archivo
+                                        </Button>
+                                      </form>
+                                    </div>
+                                  </DialogContent>
+                                </Dialog>
+                              </div>
+                              
                             </div>
                           </CarouselItem>
                         ))
@@ -409,7 +713,7 @@ console.log(filteredPath);
                       >
                         <DialogTrigger asChild>
                           <button
-                            className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-lg bg-[#ec7700]/80 p-3 text-base font-medium text-white hover:bg-[#ec7700]/60 lg:h-[180px]"
+                            className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-lg bg-[#ec7700]/80 p-3 text-base font-medium text-white hover:bg-[#ec7700]/60 lg:h-[200px]"
                             onClick={() =>
                               setPdfDialogOpen((prevOpen) => ({
                                 ...prevOpen,
@@ -477,8 +781,8 @@ console.log(filteredPath);
                                   htmlFor="pdfUpload"
                                   className="flex cursor-pointer items-center gap-2 rounded-lg bg-[#252525]/10 p-2"
                                 >
-                                  <Attachment/>
-                                 
+                                  <Attachment />
+
                                   <input
                                     id="pdfUpload"
                                     type="file"
@@ -574,13 +878,13 @@ console.log(filteredPath);
               </form>
             </div> */}
             <Tabs defaultValue="banco">
-              <TabsList className='mb-5 self-center'>
-                <TabsTrigger value="banco" className='flex items-center gap-1'>
-                  <BuildingLibraryIcon width={20} height={20}/>
+              <TabsList className="mb-5 self-center">
+                <TabsTrigger value="banco" className="flex items-center gap-1">
+                  <BuildingLibraryIcon width={20} height={20} />
                   Banco
                 </TabsTrigger>
-                <TabsTrigger value="otro" className='flex items-center gap-1'>
-                  <CurrencyDollarIcon width={20} height={20}/>
+                <TabsTrigger value="otro" className="flex items-center gap-1">
+                  <CurrencyDollarIcon width={20} height={20} />
                   Otro
                 </TabsTrigger>
               </TabsList>
@@ -643,7 +947,7 @@ console.log(filteredPath);
                   <input type="hidden" name="type" value="other" />
 
                   <div className="flex flex-col gap-8">
-                    <div className='flex flex-col gap-2'>
+                    <div className="flex flex-col gap-2">
                       <label>Ingrese un tipo de origen</label>
                       <input
                         type="text"
@@ -653,7 +957,7 @@ console.log(filteredPath);
                       />
                     </div>
 
-                    <div className='flex flex-col gap-2'>
+                    <div className="flex flex-col gap-2">
                       <label>Descripción</label>
                       <textarea
                         name="details"
