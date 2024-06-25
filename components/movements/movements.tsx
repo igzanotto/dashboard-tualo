@@ -256,7 +256,7 @@ console.log(filteredPath);
 
 
   return (
-    <div className="my-10 px-4">
+    <div className="my-10 px-4 lg:w-[95%]">
       {business && (
         <div className={`flex max-md:justify-center ${filteredPath === "/admin/businesses" ? "hidden" : ""}`}>
           <h1 className="text-2xl font-semibold text-[#003E52]">
@@ -348,7 +348,7 @@ console.log(filteredPath);
                 ) : null}
               </div>
             </div>
-            <div className="mx-auto ml-[5%] flex w-[90%] items-center max-md:mx-auto max-md:w-[70%]">
+            <div className="mx-auto ml-[5%] flex w-[90%] items-center max-lg:mx-auto max-lg:w-[70%]">
               <Carousel className="w-full">
                 <CarouselContent className="-ml-1">
                   <>
