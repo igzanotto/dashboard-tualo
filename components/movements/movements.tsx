@@ -565,7 +565,7 @@ export default function Movements({ params }: MovementsPageProps) {
                               className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg bg-[#252525]/10 lg:h-[200px]"
                             >
                               
-                              {account.closing_type === 'monthly' ? (
+                              {doc.closing_month !== null ? (
                                 <div className="flex flex-col items-center gap-2 text-center font-medium">
                                   <p className="font-bold">Fecha de cierre</p>
                                   <p className="font-medium capitalize">
