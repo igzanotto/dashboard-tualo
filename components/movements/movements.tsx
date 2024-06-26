@@ -4,7 +4,8 @@ import getReportsByLastMovements, {
   fetchBankAccountsByBusinessId,
   fetchBusinessById,
   fetchDocumentsByBankId,
-  getDocumentsByBusinessId,
+  // getDocumentsByBusinessId,
+  getDocumentsByBusinessIdAndMonth,
 } from '@/lib/data';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -52,7 +53,7 @@ import BbbvaIcon from '@/components/icons/BbbvaIcon';
 import SelectAccount from '@/components/select-account';
 import SelectClosingType from '@/components/select-closing-type';
 import SelectClosingMonth from '@/components/select-closing-month';
-import { translateMonths } from '@/lib/utils';
+import { translateMonths, translateMonthsNumber } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import SkeletonMovementsMobile from '@/components/skeleton-movements-mobile';
 import SkeletonMovements from '@/components/skeleton-movement';
@@ -118,7 +119,8 @@ export default function Movements({ params }: MovementsPageProps) {
   const [selectedAccount, setSelectedAccount] = useState('');
   const [selectedClosingType, setSelectedClosingType] = useState('');
   const [selectedClosingMonth, setSelectedClosingMonth] = useState('');
-  const [nextReport, setNextReport] = useState<any | undefined[]>([]);
+  const [nextReport, setNextReport] = useState<any>([]);
+  const [nextMonth, setNextMonth] = useState<any>();
 
   const url = new URL(window.location.href);
   const pathname = url.pathname;
@@ -138,7 +140,8 @@ export default function Movements({ params }: MovementsPageProps) {
         const business = await fetchBusinessById(params.business_id);
         const bankAccounts = await fetchBankAccountsByBusinessId(params.business_id,);
         const lastReport = await getReportsByLastMovements(params.business_id)
-        const allDocuments = await getDocumentsByBusinessId(params.business_id)
+        // const allDocuments = await getDocumentsByBusinessId(params.business_id)
+        const allDocuments = await getDocumentsByBusinessIdAndMonth(params.business_id, lastReport?.nextMonth.month)
        
 
         console.log(lastReport?.nextMonth.month); 
@@ -152,6 +155,7 @@ export default function Movements({ params }: MovementsPageProps) {
         
         console.log(filteredDocuments);
         setNextReport(filteredDocuments)
+        setNextMonth(lastReport?.nextMonth.month)
 
 
         const documentsByBankId: { [key: string]: Document[] } = {};
@@ -376,8 +380,18 @@ export default function Movements({ params }: MovementsPageProps) {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[450px]">
                   <DialogHeader className="mb-5">
-                    <DialogTitle className="text-[#003E52]">Editar</DialogTitle>
+                    <DialogTitle className="text-[#003E52]">El reporte de <span className='capitalize'>{translateMonthsNumber(nextMonth)}</span> se creara en base a los siguientes movimientos</DialogTitle>
                   </DialogHeader>
+
+                  {/* <ul>
+                    {
+                      nextReport.map((data:any) => (
+                        <li>
+                          <p className='text-[#003E52] font-medium'>{data.bank_accounts.name} - {data.clos}</p>
+                        </li>
+                      ))
+                    }
+                  </ul> */}
                 </DialogContent>
               </Dialog>
             </div>
