@@ -214,7 +214,7 @@ export const recomendations_feedback_close =
 `
 si te quedó claro, no necesito un resumen y solo pídeme el P&L de este mes`;
 
-export const QA_transcript = '';
+export const QA_transcript = 
 `
 *Operaciones y Ventas*
 
