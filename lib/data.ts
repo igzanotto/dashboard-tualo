@@ -412,9 +412,6 @@ export async function fetchChartById(chartId: string) {
         throw error;
       }
   
-      if (!data || data.length === 0) {
-        return 'No hay reportes disponibles.';
-      }
   
       // Convertir los nombres de meses a números
     const reportsWithMonthNumbers = data.map(report => ({
@@ -430,17 +427,71 @@ export async function fetchChartById(chartId: string) {
     const currentMonthNumber = lastReport.monthNumber;
     const currentMonthName = lastReport.month;
 
-    console.log("CURRENT MONTH", currentMonthName);
-
     // Calcular el próximo mes
     const nextMonthNumber = currentMonthNumber === 12 ? 1 : currentMonthNumber + 1;
     const nextMonthName = monthNames[nextMonthNumber - 1]; // -1 porque los índices del arreglo comienzan en 0
 
-    console.log("NEXT MONTH", nextMonthName);
+    
 
-    return `El mes actual para el reporte es: ${currentMonthName}, y el próximo mes es: ${nextMonthName}`;
+    return {
+      currentMonth: {
+        // name: currentMonthName,
+        month: currentMonthNumber
+      },
+      nextMonth: {
+        // name: nextMonthName,
+        month: nextMonthNumber
+      }
+    };
   } catch (error) {
     console.error('Error obteniendo el último reporte:', error);
-    return 'Hubo un error obteniendo el último reporte.';
+  }
+}
+
+export async function getDocumentsByBusinessId(business_id: string) {
+  const supabase = createClient();
+
+  try {
+    const { data: documents, error } = await supabase
+      .from('documents')
+      .select('*, bank_accounts(name)')
+      .eq("business_id", business_id)
+
+    if (error) {
+      throw error;
+    }
+    console.log(documents);
+    
+
+    // if (!documents || documents.length === 0) {
+    //   return 'No hay documentos disponibles.';
+    // }
+
+    // Mapear las fechas de cierre a números de mes
+    const documentsWithMonthNumbers = documents.map(doc => {
+      let closingMonthNumber = null;
+      let periodEndMonthNumber = null;
+
+      if (doc.closing_month) {
+        closingMonthNumber = new Date(doc.closing_month).getMonth() + 1; // Obtener el número de mes de closing_month
+      }
+
+      if (doc.period_end) {
+        periodEndMonthNumber = new Date(doc.period_end).getMonth() + 1; // Obtener el número de mes de period_end
+      }
+
+      return {
+        ...doc,
+        closing_month: closingMonthNumber,
+        period_end: periodEndMonthNumber
+      };
+    });
+
+    console.log("Documentos con números de mes:", documentsWithMonthNumbers);
+
+    return documentsWithMonthNumbers;
+
+  } catch (error) {
+    console.error('Error obteniendo documentos:', error);
   }
 }

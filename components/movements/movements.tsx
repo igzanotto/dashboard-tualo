@@ -4,6 +4,7 @@ import getReportsByLastMovements, {
   fetchBankAccountsByBusinessId,
   fetchBusinessById,
   fetchDocumentsByBankId,
+  getDocumentsByBusinessId,
 } from '@/lib/data';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -117,6 +118,7 @@ export default function Movements({ params }: MovementsPageProps) {
   const [selectedAccount, setSelectedAccount] = useState('');
   const [selectedClosingType, setSelectedClosingType] = useState('');
   const [selectedClosingMonth, setSelectedClosingMonth] = useState('');
+  const [nextReport, setNextReport] = useState<any | undefined[]>([]);
 
   const url = new URL(window.location.href);
   const pathname = url.pathname;
@@ -136,8 +138,21 @@ export default function Movements({ params }: MovementsPageProps) {
         const business = await fetchBusinessById(params.business_id);
         const bankAccounts = await fetchBankAccountsByBusinessId(params.business_id,);
         const lastReport = await getReportsByLastMovements(params.business_id)
-        console.log(lastReport);
+        const allDocuments = await getDocumentsByBusinessId(params.business_id)
+       
+
+        console.log(lastReport?.nextMonth.month); 
+        console.log(allDocuments);
         
+
+        const filteredDocuments = allDocuments?.filter(data => 
+          data.closing_month === lastReport?.nextMonth.month || 
+          data.period_end === lastReport?.nextMonth.month
+        );
+        
+        console.log(filteredDocuments);
+        setNextReport(filteredDocuments)
+
 
         const documentsByBankId: { [key: string]: Document[] } = {};
         for (const account of bankAccounts) {
@@ -149,7 +164,6 @@ export default function Movements({ params }: MovementsPageProps) {
             period_end: new Date(doc.period_end),
           }));
         }
-
         setBusiness({ ...business });
         setBankAccounts([...bankAccounts]);
         setDocuments({ ...documentsByBankId });
@@ -161,6 +175,7 @@ export default function Movements({ params }: MovementsPageProps) {
     };
     fetchData();
   }, [params.business_id]);
+
 
   if (loading)
     return (
