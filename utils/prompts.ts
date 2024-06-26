@@ -2,7 +2,7 @@
 export const initial_QA_prompt =
 'primero te daré el transcript de la sesión de Q&A que tuve con el emprendedor:';
 
-export const initial_QA_transcript = '';
+export const initial_QA_transcript = 
 `1. ¿Cómo te llamas y cuál es tu posición en la empresa?
 Ana Carolina Salcedo, dueña
 2. ¿Cuál es el nombre de tu empresa y en qué industria o sector opera?
