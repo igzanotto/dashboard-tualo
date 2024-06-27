@@ -4,7 +4,7 @@ import getReportsByLastMovements, {
   fetchBankAccountsByBusinessId,
   fetchBusinessById,
   fetchDocumentsByBankId,
-  getDocumentsByBusinessId,
+  getAllDocuments,
   // getDocumentsByBusinessId,
 } from '@/lib/data';
 import { useEffect, useRef, useState } from 'react';
@@ -26,7 +26,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { addBank, updateBank, updateMovement, uploadPDF } from '@/lib/actions';
 import { toast } from 'sonner';
-import PdfIcon from '@/components/icons/PdfIcon';
 import AddIcon from '@/components/icons/AddIcon';
 import Link from 'next/link';
 import SelectBank from '@/components/select-bank';
@@ -53,20 +52,19 @@ import BbbvaIcon from '@/components/icons/BbbvaIcon';
 import SelectAccount from '@/components/select-account';
 import SelectClosingType from '@/components/select-closing-type';
 import SelectClosingMonth from '@/components/select-closing-month';
-import { translateMonths, translateMonthsNumber } from '@/lib/utils';
-import { Skeleton } from '@/components/ui/skeleton';
 import SkeletonMovementsMobile from '@/components/skeleton-movements-mobile';
 import SkeletonMovements from '@/components/skeleton-movement';
 import OtroBankIcon from '@/components/icons/OtroBankIcon';
 import {
   BuildingLibraryIcon,
+  CheckCircleIcon,
   ClockIcon,
   CurrencyDollarIcon,
   PencilSquareIcon,
 } from '@heroicons/react/24/outline';
 import Attachment from '@/components/icons/Attachment';
-import { useParams } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
+import { translateAccountType, translateMonthsNumber } from '@/lib/utils';
+import Image from 'next/image';
 
 type MovementsPageProps = {
   params: {
@@ -121,7 +119,7 @@ export default function Movements({ params }: MovementsPageProps) {
   const [selectedClosingMonth, setSelectedClosingMonth] = useState('');
   const [nextReport, setNextReport] = useState<any>([]);
   const [nextMonth, setNextMonth] = useState<any>();
-  
+  const [lastReportMonth, setLastReportMonth] = useState<any>();
 
   const url = new URL(window.location.href);
   const pathname = url.pathname;
@@ -139,23 +137,20 @@ export default function Movements({ params }: MovementsPageProps) {
       try {
         setLoading(true);
         const business = await fetchBusinessById(params.business_id);
-        const bankAccounts = await fetchBankAccountsByBusinessId(params.business_id,);
-        const lastReport = await getReportsByLastMovements(params.business_id)
-        const allDocuments = await getDocumentsByBusinessId(params.business_id)
-       
+        const bankAccounts = await fetchBankAccountsByBusinessId(
+          params.business_id,
+        );
+        const lastReport = await getReportsByLastMovements(params.business_id);
+        const allDocuments = await getAllDocuments(params.business_id);
+        setLastReportMonth(lastReport?.nextMonth.month);
+        setNextReport(allDocuments);
 
-        console.log(lastReport?.nextMonth.month); 
-        console.log(allDocuments);
-        
-
-        const filteredDocuments = allDocuments?.filter(data => 
+        /* const filteredDocuments = allDocuments?.filter(data => 
           data.closing_month === lastReport?.nextMonth.month || 
           data.period_end === lastReport?.nextMonth.month
         );
         
-        console.log(filteredDocuments);
-        setNextReport(filteredDocuments)
-
+        console.log(filteredDocuments); */
 
         const documentsByBankId: { [key: string]: Document[] } = {};
         for (const account of bankAccounts) {
@@ -179,7 +174,6 @@ export default function Movements({ params }: MovementsPageProps) {
     fetchData();
   }, [params.business_id]);
 
-
   if (loading)
     return (
       <div>
@@ -189,6 +183,182 @@ export default function Movements({ params }: MovementsPageProps) {
     );
 
   if (error) return <div>{error}</div>;
+
+  const translateMonthNumber = (dateString: string | null): string => {
+    if (!dateString) return '';
+
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return '';
+      }
+      const month = date.getMonth();
+      const months = [
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Septiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre',
+      ];
+      return months[month];
+    } catch (error) {
+      console.error('Error al convertir la fecha:', error);
+      return '';
+    }
+  };
+  const banksWithMatches = new Map<string, boolean>(); // Usamos un Map para mantener un registro único de bancos con coincidencias
+
+  nextReport?.forEach((doc: any) => {
+    const bankId = doc.bank_id.toString(); // Convertimos bank_id a string para usarlo como clave en el Map
+
+    const closingMonth = doc.closing_month
+      ? new Date(doc.closing_month).getMonth() + 1
+      : null;
+    const periodStart = doc.period_start
+      ? new Date(doc.period_start).getMonth() + 1
+      : null;
+    const periodEnd = doc.period_end
+      ? new Date(doc.period_end).getMonth() + 1
+      : null;
+
+    const hasMatchingMonth = [closingMonth, periodStart, periodEnd].some(
+      (month) => month === lastReportMonth,
+    );
+
+    // Si encontramos al menos un movimiento coincidente para este banco, lo marcamos como 'true' en el Map
+    if (hasMatchingMonth) {
+      banksWithMatches.set(bankId, true);
+    } else {
+      // Si no hay coincidencias y el banco no está registrado aún en el Map, lo registramos como 'false'
+      if (!banksWithMatches.has(bankId)) {
+        banksWithMatches.set(bankId, false);
+      }
+    }
+  });
+
+  // Renderizado de la lista de bancos
+  const bankList = Array.from(banksWithMatches).map(([bankId, hasMatches]) => {
+    const bankData = nextReport.find(
+      (doc: any) => doc.bank_id.toString() === bankId,
+    );
+    const bankName = bankData ? bankData.bank_accounts.name : '';
+    const closingMonth = bankData ? bankData.closing_month : '';
+    const periodStart = bankData ? bankData.period_start : '';
+    const periodEnd = bankData ? bankData.period_end : '';
+    const type = bankData ? bankData.bank_accounts.type : '';
+    const resume = bankData ? bankData.pdf : '';
+    console.log(bankData);
+    
+    
+
+    return (
+      <li key={bankId}>
+      <div
+        className={`my-2 flex items-center justify-between rounded-full px-2 py-1 font-medium ${
+          hasMatches
+            ? 'bg-green-500/20'
+            : 'bg-orange-600/20'
+        }`}
+      >
+        <div className="flex items-center gap-2 font-semibold text-[#003E52]">
+          {bankName === 'afirme' ? (
+            <AfirmeIcon />
+          ) : bankName === 'amex' ? (
+            <AmexIcon />
+          ) : bankName === 'albo' ? (
+            <AlboIcon />
+          ) : bankName === 'azteca' ? (
+            <AztecaIcon />
+          ) : bankName === 'BanBajío' ? (
+            <BajioIcon />
+          ) : bankName === 'banamex' ? (
+            <BanamexIcon />
+          ) : bankName === 'banorte' ? (
+            <BanorteIcon />
+          ) : bankName === 'BanRegio' ? (
+            <BanRegioIcon />
+          ) : bankName === 'BBVA bancomer' ? (
+            <BbbvaIcon />
+          ) : bankName === 'broxel' ? (
+            <BroxelIcon />
+          ) : bankName === 'bx+' ? (
+            <BxIcon />
+          ) : bankName === 'clara' ? (
+            <ClaraIcon />
+          ) : bankName === 'fondeadora' ? (
+            <FondeadoraIcon />
+          ) : bankName === 'hey banco' ? (
+            <HeyBancoIcon />
+          ) : bankName === 'HSBC' ? (
+            <HsbcIcon />
+          ) : bankName === 'inbursa' ? (
+            <IbursaIcon />
+          ) : bankName === 'intercam' ? (
+            <IntercamIcon />
+          ) : bankName === 'rappi' ? (
+            <RappiIcon />
+          ) : bankName === 'santander' ? (
+            <SantanderIcon />
+          ) : bankName === 'scotia' ? (
+            <ScotiaIcon />
+          ) : bankName === 'other' ? (
+            <CurrencyDollarIcon
+              width={35}
+              height={35}
+              className="rounded-full bg-[#F4F6FC]"
+            />
+          ) : (
+            <OtroBankIcon />
+          )}
+          <div className='flex flex-col'>
+            <div className='flex items-center gap-2'>
+              <p className="capitalize">
+                {bankName}{' '}
+                {hasMatches && <span> - </span>}
+              </p>
+              <p className="capitalize">
+                {hasMatches &&
+                  translateMonthNumber(
+                    closingMonth || periodEnd,
+                  )}<span> - </span>
+                  <span className='text-xs'>{translateAccountType(type)}</span>
+              </p>
+              
+            
+            </div>
+          <div>
+            <Link href={resume} className='text-xs underline' target='_blank'>Resumen</Link>
+          </div>
+          </div>
+        </div>
+        <div
+          className={`rounded-full px-2 py-1 text-center text-white ${
+            hasMatches ? 'bg-green-500' : 'bg-orange-600'
+          }`}
+        >
+          {!hasMatches && (
+            <div className="flex items-center gap-1">
+              <ClockIcon width={20} height={20} /> pendiente
+            </div>
+          )}
+          {hasMatches && (
+            <div className="flex items-center gap-1">
+              <CheckCircleIcon width={20} height={20} /> listo
+            </div>
+          )}
+        </div>
+      </div>
+
+    </li>
+    );
+  });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -366,8 +536,8 @@ export default function Movements({ params }: MovementsPageProps) {
           </h1>
 
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 rounded-full bg-yellow-500 p-1 px-2">
-              <ClockIcon width={16} height={16} />
+            <div className="flex items-center gap-2 rounded-full bg-orange-600 p-1 px-2 font-medium text-white">
+              <ClockIcon width={20} height={20} />
               pendiente
             </div>
             <div>
@@ -379,18 +549,114 @@ export default function Movements({ params }: MovementsPageProps) {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[450px]">
                   <DialogHeader className="mb-5">
-                    <DialogTitle className="text-[#003E52]">El reporte de <span className='capitalize'>{translateMonthsNumber(nextMonth)}</span> se creara en base a los siguientes movimientos</DialogTitle>
+                    <DialogTitle className="text-[#003E52]">
+                      El reporte de{' '}
+                      <span className="capitalize">
+                        {translateMonthsNumber(lastReportMonth)}
+                      </span>{' '}
+                      se creara en base a los siguientes movimientos
+                    </DialogTitle>
                   </DialogHeader>
 
-                  <ul>
-                    {
-                      nextReport.map((data:any) => (
-                        <li>
-                          <p className='text-[#003E52] font-medium'>{data.bank_accounts.name} - {translateMonthsNumber(data.closing_month ? data.closing_month : data.period_end || data.period_end ? data.period_end : data.closing_month)}</p>
-                        </li>
-                      ))
-                    }
-                  </ul>
+                  {/* <ul>
+                    {nextReports.map((data: any) => (
+                      <li key={data.id}>
+                        <div
+                          className={`my-2 flex items-center justify-between rounded-full px-2 py-1 font-medium ${
+                            data.matches
+                              ? 'bg-green-500/20'
+                              : 'bg-orange-600/20'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2 font-semibold text-[#003E52]">
+                            {data.bank_accounts.name === 'afirme' ? (
+                              <AfirmeIcon />
+                            ) : data.bank_accounts.name === 'amex' ? (
+                              <AmexIcon />
+                            ) : data.bank_accounts.name === 'albo' ? (
+                              <AlboIcon />
+                            ) : data.bank_accounts.name === 'azteca' ? (
+                              <AztecaIcon />
+                            ) : data.bank_accounts.name === 'BanBajío' ? (
+                              <BajioIcon />
+                            ) : data.bank_accounts.name === 'banamex' ? (
+                              <BanamexIcon />
+                            ) : data.bank_accounts.name === 'banorte' ? (
+                              <BanorteIcon />
+                            ) : data.bank_accounts.name === 'BanRegio' ? (
+                              <BanRegioIcon />
+                            ) : data.bank_accounts.name === 'BBVA bancomer' ? (
+                              <BbbvaIcon />
+                            ) : data.bank_accounts.name === 'broxel' ? (
+                              <BroxelIcon />
+                            ) : data.bank_accounts.name === 'bx+' ? (
+                              <BxIcon />
+                            ) : data.bank_accounts.name === 'clara' ? (
+                              <ClaraIcon />
+                            ) : data.bank_accounts.name === 'fondeadora' ? (
+                              <FondeadoraIcon />
+                            ) : data.bank_accounts.name === 'hey banco' ? (
+                              <HeyBancoIcon />
+                            ) : data.bank_accounts.name === 'HSBC' ? (
+                              <HsbcIcon />
+                            ) : data.bank_accounts.name === 'inbursa' ? (
+                              <IbursaIcon />
+                            ) : data.bank_accounts.name === 'intercam' ? (
+                              <IntercamIcon />
+                            ) : data.bank_accounts.name === 'rappi' ? (
+                              <RappiIcon />
+                            ) : data.bank_accounts.name === 'santander' ? (
+                              <SantanderIcon />
+                            ) : data.bank_accounts.name === 'scotia' ? (
+                              <ScotiaIcon />
+                            ) : data.bank_accounts.type === 'other' ? (
+                              <CurrencyDollarIcon
+                                width={35}
+                                height={35}
+                                className="rounded-full bg-[#F4F6FC]"
+                              />
+                            ) : (
+                              <OtroBankIcon />
+                            )}
+                            <p className="capitalize">
+                              {data.bank_accounts.name}{' '}
+                              {data.matches && <span>- </span>}
+                            </p>
+                            <p className="capitalize">
+                              {data.matches &&
+                                translateMonthNumber(
+                                  data.closing_month || data.period_end,
+                                )}
+                            </p>
+                          </div>
+
+                          <div
+                            className={`rounded-full px-2 py-1 text-center text-white ${
+                              data.matches ? 'bg-green-500' : 'bg-orange-600'
+                            }`}
+                          >
+                            {!data.matches && (
+                              <div className="flex items-center gap-1">
+                                <ClockIcon width={20} height={20} /> pendiente
+                              </div>
+                            )}
+                            {data.matches && (
+                              <div className="flex items-center gap-1">
+                                <CheckCircleIcon width={20} height={20} /> listo
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                      </li>
+                    ))}
+                  </ul> */}
+                  <ul>{bankList}</ul>
+                  <div className="mt-5 flex justify-center">
+                    <button className="w-[100px] rounded-xl bg-[#003E52] p-2 text-center font-semibold text-white">
+                      Enviar
+                    </button>
+                  </div>
                 </DialogContent>
               </Dialog>
             </div>
