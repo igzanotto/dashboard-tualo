@@ -9,7 +9,6 @@ interface MovementsPageProps {
 
 export default function MovementsPage({ params }: MovementsPageProps) {
   const { business_id } = params;
-  console.log(business_id);
 
   return (
     <Movements params={{business_id}}/>
