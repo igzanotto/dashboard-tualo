@@ -950,7 +950,7 @@ export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> 
     // Guardar la URL en la columna graphy_url de la tabla charts
     const { data: pdfData, error: chartError } = await supabase
       .from('documents')
-      .insert({ pdf: pdfUrl, bank_id: id, closing_month: closing_month, period_start:period_start, period_end:period_end })
+      .insert({ pdf: pdfUrl, bank_id: id, business_id: business_id, closing_month: closing_month, period_start:period_start, period_end:period_end })
       .eq('id', id);
 
     console.log('bussines ID:', business_id);

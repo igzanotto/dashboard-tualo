@@ -4,8 +4,8 @@ import getReportsByLastMovements, {
   fetchBankAccountsByBusinessId,
   fetchBusinessById,
   fetchDocumentsByBankId,
+  getDocumentsByBusinessId,
   // getDocumentsByBusinessId,
-  getDocumentsByBusinessIdAndMonth,
 } from '@/lib/data';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -121,6 +121,7 @@ export default function Movements({ params }: MovementsPageProps) {
   const [selectedClosingMonth, setSelectedClosingMonth] = useState('');
   const [nextReport, setNextReport] = useState<any>([]);
   const [nextMonth, setNextMonth] = useState<any>();
+  
 
   const url = new URL(window.location.href);
   const pathname = url.pathname;
@@ -140,8 +141,7 @@ export default function Movements({ params }: MovementsPageProps) {
         const business = await fetchBusinessById(params.business_id);
         const bankAccounts = await fetchBankAccountsByBusinessId(params.business_id,);
         const lastReport = await getReportsByLastMovements(params.business_id)
-        // const allDocuments = await getDocumentsByBusinessId(params.business_id)
-        const allDocuments = await getDocumentsByBusinessIdAndMonth(params.business_id, lastReport?.nextMonth.month)
+        const allDocuments = await getDocumentsByBusinessId(params.business_id)
        
 
         console.log(lastReport?.nextMonth.month); 
@@ -155,7 +155,6 @@ export default function Movements({ params }: MovementsPageProps) {
         
         console.log(filteredDocuments);
         setNextReport(filteredDocuments)
-        setNextMonth(lastReport?.nextMonth.month)
 
 
         const documentsByBankId: { [key: string]: Document[] } = {};
@@ -383,15 +382,15 @@ export default function Movements({ params }: MovementsPageProps) {
                     <DialogTitle className="text-[#003E52]">El reporte de <span className='capitalize'>{translateMonthsNumber(nextMonth)}</span> se creara en base a los siguientes movimientos</DialogTitle>
                   </DialogHeader>
 
-                  {/* <ul>
+                  <ul>
                     {
                       nextReport.map((data:any) => (
                         <li>
-                          <p className='text-[#003E52] font-medium'>{data.bank_accounts.name} - {data.clos}</p>
+                          <p className='text-[#003E52] font-medium'>{data.bank_accounts.name} - {translateMonthsNumber(data.closing_month ? data.closing_month : data.period_end || data.period_end ? data.period_end : data.closing_month)}</p>
                         </li>
                       ))
                     }
-                  </ul> */}
+                  </ul>
                 </DialogContent>
               </Dialog>
             </div>

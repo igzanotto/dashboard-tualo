@@ -448,31 +448,79 @@ export async function fetchChartById(chartId: string) {
   }
 }
 
-export async function getDocumentsByBusinessIdAndMonth(business_id: string, month:any) {
 
+export async function getDocumentsByBusinessId(business_id: string) {
   const supabase = createClient();
 
-  //Encontrar el document donde el closing_month === month o period_end === month o period_start === month
-
   try {
-    const { data, error } = await supabase
-  .from('documents')
-  .select('*')
-  .or('closing_month.eq.2023-05-01,and(period_end.gt.2024-04-01,period_end.lt.2024-05-01),and(period_start.gt.2024-04-01,period_start.lt.2024-05-01)')
-  .eq('business_id', business_id)
-  // .or('closing_month.eq.2024-03-31,period_end.lt.2024-05-01')
-  // .filter('closing_month', 'eq', '2024-03-31')
+    const { data: documents, error } = await supabase
+      .from('documents')
+      .select('*, bank_accounts(name)')
+      .eq("business_id", business_id)
+
     if (error) {
       throw error;
     }
-
-    console.log(data);
-
-    return data
+    console.log(documents);
     
+    const documentsWithMonthNumbers = documents.map(doc => {
+      let closingMonthNumber = null;
+      let periodEndMonthNumber = null;
+      let periodStartMonthNumber = null;
+
+      if (doc.closing_month) {
+        closingMonthNumber = new Date(doc.closing_month).getMonth() + 1; // Obtener el número de mes de closing_month
+      }
+
+      if (doc.period_end) {
+        periodEndMonthNumber = new Date(doc.period_end).getMonth() + 1; // Obtener el número de mes de period_end
+      }
+
+      if (doc.period_start) {
+        periodStartMonthNumber = new Date(doc.period_start).getMonth() + 1; // Obtener el número de mes de period_end
+      }
+
+      return {
+        ...doc,
+        closing_month: closingMonthNumber,
+        period_end: periodEndMonthNumber,
+        period_start: periodStartMonthNumber
+      };
+    });
+
+    console.log("Documentos con números de mes:", documentsWithMonthNumbers);
+
+    return documentsWithMonthNumbers;
 
   } catch (error) {
     console.error('Error obteniendo documentos:', error);
   }
 }
+
+ export async function getAllDocuments(business_id: string) {
+
+   const supabase = createClient();
+
+   //Encontrar el document donde el closing_month === month o period_end === month o period_start === month
+
+   try {
+     const { data, error } = await supabase
+   .from('documents')
+   .select('*, bank_accounts(name)')
+   // .or('closing_month.eq.2023-05-01,and(period_end.gt.2024-04-01,period_end.lt.2024-05-01),and(period_start.gt.2024-04-01,period_start.lt.2024-05-01)')
+   .eq('business_id', business_id)
+   // .or('closing_month.eq.2024-03-31,period_end.lt.2024-05-01')
+   // .filter('closing_month', 'eq', '2024-03-31')
+     if (error) {
+       throw error;
+     }
+
+     console.log(data);
+
+     return data
+    
+   } catch (error) {
+     console.error('Error obteniendo documentos:', error);
+   }
+ }
 
