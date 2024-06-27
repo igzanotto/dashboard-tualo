@@ -94,3 +94,13 @@ export function translateMonthsNumber(type: string) {
 
   return chartMonthTranslations[type] || type;
 }
+
+export function translateAccountType(type: string) {
+  const typesTranslations: { [key: string]: string } = {
+    'debit': 'débito',
+    'credit': 'crédito',
+    
+  };
+
+  return typesTranslations[type] || type;
+}
