@@ -74,3 +74,44 @@ export function translateMonths(type: string) {
 
   return chartMonthTranslations[type] || type;
 }
+
+
+export function translateMonthsNumber(type: string) {
+  const chartMonthTranslations: { [key: string]: string } = {
+    1: 'enero',
+    2: 'febrero',
+    3: 'marzo',
+    4: 'abril',
+    5: 'mayo',
+    6: 'junio',
+    7: 'julio',
+    8: 'agosto',
+    9: 'septiembre',
+    10: 'octubre',
+    11: 'noviembre',
+    12: 'diciembre',
+  };
+
+  return chartMonthTranslations[type] || type;
+}
+
+export function translateAccountType(type: string) {
+  const typesTranslations: { [key: string]: string } = {
+    'debit': 'débito',
+    'credit': 'crédito',
+    
+  };
+
+  return typesTranslations[type] || type;
+}
+
+
+export function translateSatusType(type: string) {
+  const statusTranslations: { [key: string]: string } = {
+    'pending': 'pendiente',
+    'sent to revision': 'enviado a revisión',
+    
+  };
+
+  return statusTranslations[type] || type;
+}

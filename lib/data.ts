@@ -373,3 +373,155 @@ export async function fetchChartById(chartId: string) {
   
     return data;
   }
+
+  interface Report {
+    month: string;
+  }
+  
+  // Mapa de nombres de meses a números
+  const monthMap: { [key: string]: number } = {
+    'Enero': 1,
+    'Febrero': 2,
+    'Marzo': 3,
+    'Abril': 4,
+    'Mayo': 5,
+    'Junio': 6,
+    'Julio': 7,
+    'Agosto': 8,
+    'Septiembre': 9,
+    'Octubre': 10,
+    'Noviembre': 11,
+    'Diciembre': 12
+  };
+
+  const monthNames: string[] = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+  
+  export default async function getReportsByLastMovements(business_id:string) {
+    const supabase = createClient()
+    try {
+      // Consulta para obtener todos los reportes
+      const { data, error } = await supabase
+        .from('reports')
+        .select('month')
+        .eq("business_id", business_id)
+  
+      if (error) {
+        throw error;
+      }
+  
+  
+      // Convertir los nombres de meses a números
+    const reportsWithMonthNumbers = data.map(report => ({
+      ...report,
+      monthNumber: monthMap[report.month]
+    }));
+
+    // Ordenar los reportes por el número de mes en orden descendente
+    reportsWithMonthNumbers.sort((a, b) => b.monthNumber - a.monthNumber);
+
+    // Obtener el último reporte basado en el valor de `monthNumber`
+    const lastReport = reportsWithMonthNumbers[0];
+    const currentMonthNumber = lastReport.monthNumber;
+    const currentMonthName = lastReport.month;
+
+    // Calcular el próximo mes
+    const nextMonthNumber = currentMonthNumber === 12 ? 1 : currentMonthNumber + 1;
+    const nextMonthName = monthNames[nextMonthNumber - 1]; // -1 porque los índices del arreglo comienzan en 0
+
+    
+
+    return {
+      currentMonth: {
+        // name: currentMonthName,
+        month: currentMonthNumber
+      },
+      nextMonth: {
+        // name: nextMonthName,
+        month: nextMonthNumber
+      }
+    };
+  } catch (error) {
+    console.error('Error obteniendo el último reporte:', error);
+  }
+}
+
+
+export async function getDocumentsByBusinessId(business_id: string) {
+  const supabase = createClient();
+
+  try {
+    const { data: documents, error } = await supabase
+      .from('documents')
+      .select('*, bank_accounts(name)')
+      .eq("business_id", business_id)
+
+    if (error) {
+      throw error;
+    }
+    console.log(documents);
+    
+    const documentsWithMonthNumbers = documents.map(doc => {
+      let closingMonthNumber = null;
+      let periodEndMonthNumber = null;
+      let periodStartMonthNumber = null;
+
+      if (doc.closing_month) {
+        closingMonthNumber = new Date(doc.closing_month).getMonth() + 1; // Obtener el número de mes de closing_month
+      }
+
+      if (doc.period_end) {
+        periodEndMonthNumber = new Date(doc.period_end).getMonth() + 1; // Obtener el número de mes de period_end
+      }
+
+      if (doc.period_start) {
+        periodStartMonthNumber = new Date(doc.period_start).getMonth() + 1; // Obtener el número de mes de period_end
+      }
+
+      return {
+        ...doc,
+        closing_month: closingMonthNumber,
+        period_end: periodEndMonthNumber,
+        period_start: periodStartMonthNumber
+      };
+    });
+
+    console.log("Documentos con números de mes:", documentsWithMonthNumbers);
+
+    return documentsWithMonthNumbers;
+
+  } catch (error) {
+    console.error('Error obteniendo documentos:', error);
+  }
+}
+
+ export async function getAllDocuments(business_id: string) {
+
+   const supabase = createClient();
+
+   //Encontrar el document donde el closing_month === month o period_end === month o period_start === month
+
+   try {
+     const { data, error } = await supabase
+   .from('documents')
+   .select('*, bank_accounts(name, type)')
+   // .or('closing_month.eq.2023-05-01,and(period_end.gt.2024-04-01,period_end.lt.2024-05-01),and(period_start.gt.2024-04-01,period_start.lt.2024-05-01)')
+   .eq('business_id', business_id)
+   // .or('closing_month.eq.2024-03-31,period_end.lt.2024-05-01')
+   // .filter('closing_month', 'eq', '2024-03-31')
+     if (error) {
+       throw error;
+     }
+
+     console.log(data);
+
+     return data
+    
+   } catch (error) {
+     console.error('Error obteniendo documentos:', error);
+   }
+ }
+
+ 

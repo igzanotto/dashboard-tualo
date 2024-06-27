@@ -1,5 +1,5 @@
 'use server';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { z } from 'zod';
@@ -963,7 +963,7 @@ export async function uploadPDF(formData: FormData): Promise<UploadPDFResponse> 
     // Guardar la URL en la columna graphy_url de la tabla charts
     const { data: pdfData, error: chartError } = await supabase
       .from('documents')
-      .insert({ pdf: pdfUrl, bank_id: id, closing_month: closing_month, period_start:period_start, period_end:period_end })
+      .insert({ pdf: pdfUrl, bank_id: id, business_id: business_id, closing_month: closing_month, period_start:period_start, period_end:period_end })
       .eq('id', id);
 
     console.log('bussines ID:', business_id);
@@ -1053,3 +1053,32 @@ if (pdf) {
   return { data: { pdfData }, error: null };
   }
 }
+
+
+export async function updateStatusBusiness(business_id:string, status:string){
+
+  const supabase = createClient();
+
+  try {
+    const {data, error} = await supabase
+  .from("businesses")
+  .update({status})
+  .eq("id", business_id)
+
+  if (error) {
+    throw error;
+  }
+
+  console.log(status);
+  
+  revalidatePath(`/dashboard/movements/${business_id}`);
+  revalidateTag("status")
+  
+  return status
+
+  } catch (error) {
+    console.log(error);
+    
+  }
+
+ }

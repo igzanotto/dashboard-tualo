@@ -1,9 +1,12 @@
 'use client';
 
-import {
+import getReportsByLastMovements, {
   fetchBankAccountsByBusinessId,
   fetchBusinessById,
   fetchDocumentsByBankId,
+  getAllDocuments,
+  /* statusBusiness, */
+  // getDocumentsByBusinessId,
 } from '@/lib/data';
 import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -22,9 +25,8 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { addBank, updateBank, updateMovement, uploadPDF } from '@/lib/actions';
+import { addBank, updateBank, updateMovement, updateStatusBusiness, uploadPDF } from '@/lib/actions';
 import { toast } from 'sonner';
-import PdfIcon from '@/components/icons/PdfIcon';
 import AddIcon from '@/components/icons/AddIcon';
 import Link from 'next/link';
 import SelectBank from '@/components/select-bank';
@@ -51,18 +53,19 @@ import BbbvaIcon from '@/components/icons/BbbvaIcon';
 import SelectAccount from '@/components/select-account';
 import SelectClosingType from '@/components/select-closing-type';
 import SelectClosingMonth from '@/components/select-closing-month';
-import { translateMonths } from '@/lib/utils';
-import { Skeleton } from '@/components/ui/skeleton';
 import SkeletonMovementsMobile from '@/components/skeleton-movements-mobile';
 import SkeletonMovements from '@/components/skeleton-movement';
 import OtroBankIcon from '@/components/icons/OtroBankIcon';
 import {
   BuildingLibraryIcon,
+  CheckCircleIcon,
+  ClockIcon,
   CurrencyDollarIcon,
   PencilSquareIcon,
 } from '@heroicons/react/24/outline';
 import Attachment from '@/components/icons/Attachment';
-import { useParams } from 'next/navigation';
+import { translateAccountType, translateMonthsNumber, translateSatusType } from '@/lib/utils';
+import Image from 'next/image';
 import { revalidatePath } from 'next/cache';
 
 type MovementsPageProps = {
@@ -101,41 +104,41 @@ export default function Movements({ params }: MovementsPageProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [pdfDialogOpen, setPdfDialogOpen] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const [bankDialogOpen, setDialogBankOpen] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const [movementDialogOpen, setDialogMovementOpen] = useState<{
-    [key: string]: boolean;
-  }>({});
+  const [pdfDialogOpen, setPdfDialogOpen] = useState<{[key: string]: boolean;}>({});
+  const [bankDialogOpen, setDialogBankOpen] = useState<{[key: string]: boolean;}>({});
+  const [movementDialogOpen, setDialogMovementOpen] = useState<{[key: string]: boolean;}>({});
+  const [movementsStatusOpen, setMovementsStatusOpen] = useState<{[key: string]: boolean;}>({});
   const formRef = useRef<HTMLFormElement>(null);
   const [selectedFileName, setSelectedFileName] = useState('');
   const [selectedBankName, setSelectedBankName] = useState('');
   const [selectedAccount, setSelectedAccount] = useState('');
   const [selectedClosingType, setSelectedClosingType] = useState('');
   const [selectedClosingMonth, setSelectedClosingMonth] = useState('');
+  const [nextReport, setNextReport] = useState<any>([]);
+  const [lastReportMonth, setLastReportMonth] = useState<any>();
+  const [status, setStatus] = useState<any| null>();
 
   const url = new URL(window.location.href);
   const pathname = url.pathname;
 
-  // Divide el pathname en segmentos
   const segments = pathname.split('/');
-
-  // Filtra y une los segmentos que te interesan
   const filteredPath = `/${segments[1]}/${segments[2]}`;
 
-  console.log(filteredPath);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const business = await fetchBusinessById(params.business_id);
-        const bankAccounts = await fetchBankAccountsByBusinessId(
-          params.business_id,
-        );
+        const bankAccounts = await fetchBankAccountsByBusinessId(params.business_id,);
+        const lastReport = await getReportsByLastMovements(params.business_id);
+        const allDocuments = await getAllDocuments(params.business_id);
+        
+        setStatus(business.status)
+        setLastReportMonth(lastReport?.nextMonth.month);
+        setNextReport(allDocuments);
+
+    
 
         const documentsByBankId: { [key: string]: Document[] } = {};
         for (const account of bankAccounts) {
@@ -147,7 +150,6 @@ export default function Movements({ params }: MovementsPageProps) {
             period_end: new Date(doc.period_end),
           }));
         }
-
         setBusiness({ ...business });
         setBankAccounts([...bankAccounts]);
         setDocuments({ ...documentsByBankId });
@@ -169,6 +171,181 @@ export default function Movements({ params }: MovementsPageProps) {
     );
 
   if (error) return <div>{error}</div>;
+
+  const translateMonthNumber = (dateString: string | null): string => {
+    if (!dateString) return '';
+
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return '';
+      }
+      const month = date.getMonth();
+      const months = [
+        'Enero',
+        'Febrero',
+        'Marzo',
+        'Abril',
+        'Mayo',
+        'Junio',
+        'Julio',
+        'Agosto',
+        'Septiembre',
+        'Octubre',
+        'Noviembre',
+        'Diciembre',
+      ];
+      return months[month];
+    } catch (error) {
+      console.error('Error al convertir la fecha:', error);
+      return '';
+    }
+  };
+  const banksWithMatches = new Map<string, boolean>(); // Usamos un Map para mantener un registro único de bancos con coincidencias
+
+  nextReport?.forEach((doc: any) => {
+    const bankId = doc.bank_id.toString(); // Convertimos bank_id a string para usarlo como clave en el Map
+
+    const closingMonth = doc.closing_month
+      ? new Date(doc.closing_month).getMonth() + 1
+      : null;
+    const periodStart = doc.period_start
+      ? new Date(doc.period_start).getMonth() + 1
+      : null;
+    const periodEnd = doc.period_end
+      ? new Date(doc.period_end).getMonth() + 1
+      : null;
+
+    const hasMatchingMonth = [closingMonth, periodStart, periodEnd].some(
+      (month) => month === lastReportMonth,
+    );
+
+    // Si encontramos al menos un movimiento coincidente para este banco, lo marcamos como 'true' en el Map
+    if (hasMatchingMonth) {
+      banksWithMatches.set(bankId, true);
+    } else {
+      // Si no hay coincidencias y el banco no está registrado aún en el Map, lo registramos como 'false'
+      if (!banksWithMatches.has(bankId)) {
+        banksWithMatches.set(bankId, false);
+      }
+    }
+  });
+
+  // Renderizado de la lista de bancos
+  const bankList = Array.from(banksWithMatches).map(([bankId, hasMatches]) => {
+    const bankData = nextReport.find(
+      (doc: any) => doc.bank_id.toString() === bankId,
+    );
+    const bankName = bankData ? bankData.bank_accounts.name : '';
+    const closingMonth = bankData ? bankData.closing_month : '';
+    // const periodStart = bankData ? bankData.period_start : '';
+    const periodEnd = bankData ? bankData.period_end : '';
+    const type = bankData ? bankData.bank_accounts.type : '';
+    const resume = bankData ? bankData.pdf : '';
+    
+    
+
+    return (
+      <li key={bankId}>
+      <div
+        className={`my-2 flex items-center justify-between rounded-full px-2 py-1 font-medium ${
+          hasMatches
+            ? 'bg-green-500/20'
+            : 'bg-orange-600/20'
+        }`}
+      >
+        <div className="flex items-center gap-2 font-semibold text-[#003E52]">
+          {bankName === 'afirme' ? (
+            <AfirmeIcon />
+          ) : bankName === 'amex' ? (
+            <AmexIcon />
+          ) : bankName === 'albo' ? (
+            <AlboIcon />
+          ) : bankName === 'azteca' ? (
+            <AztecaIcon />
+          ) : bankName === 'BanBajío' ? (
+            <BajioIcon />
+          ) : bankName === 'banamex' ? (
+            <BanamexIcon />
+          ) : bankName === 'banorte' ? (
+            <BanorteIcon />
+          ) : bankName === 'BanRegio' ? (
+            <BanRegioIcon />
+          ) : bankName === 'BBVA bancomer' ? (
+            <BbbvaIcon />
+          ) : bankName === 'broxel' ? (
+            <BroxelIcon />
+          ) : bankName === 'bx+' ? (
+            <BxIcon />
+          ) : bankName === 'clara' ? (
+            <ClaraIcon />
+          ) : bankName === 'fondeadora' ? (
+            <FondeadoraIcon />
+          ) : bankName === 'hey banco' ? (
+            <HeyBancoIcon />
+          ) : bankName === 'HSBC' ? (
+            <HsbcIcon />
+          ) : bankName === 'inbursa' ? (
+            <IbursaIcon />
+          ) : bankName === 'intercam' ? (
+            <IntercamIcon />
+          ) : bankName === 'rappi' ? (
+            <RappiIcon />
+          ) : bankName === 'santander' ? (
+            <SantanderIcon />
+          ) : bankName === 'scotia' ? (
+            <ScotiaIcon />
+          ) : bankName === 'other' ? (
+            <CurrencyDollarIcon
+              width={35}
+              height={35}
+              className="rounded-full bg-[#F4F6FC]"
+            />
+          ) : (
+            <OtroBankIcon />
+          )}
+          <div className='flex flex-col'>
+            <div className='flex items-center gap-2'>
+              <p className="capitalize">
+                {bankName}{' '}
+                {hasMatches && <span> - </span>}
+              </p>
+              <p className="capitalize">
+                {hasMatches &&
+                  translateMonthNumber(
+                    closingMonth || periodEnd,
+                  )}<span> - </span>
+                  <span className='text-xs'>{translateAccountType(type)}</span>
+              </p>
+              
+            
+            </div>
+          <div>
+            <Link href={resume} className='text-xs underline' target='_blank'>Resumen</Link>
+          </div>
+          </div>
+        </div>
+        <div
+          className={`rounded-full px-2 py-1 text-center text-white ${
+            hasMatches ? 'bg-green-500' : 'bg-orange-600'
+          }`}
+        >
+          {!hasMatches && (
+            <div className="flex items-center gap-1">
+              <ClockIcon width={20} height={20} /> pendiente
+            </div>
+          )}
+          {hasMatches && (
+            <div className="flex items-center gap-1">
+              <CheckCircleIcon width={20} height={20} /> listo
+            </div>
+          )}
+        </div>
+      </div>
+
+    </li>
+    );
+  });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -217,7 +394,7 @@ export default function Movements({ params }: MovementsPageProps) {
       }
 
       toast.success('Movimiento actualizado exitosamente');
-      window.location.reload();
+      // window.location.reload();
 
       if (formRef.current) {
         formRef.current.reset(); // Resetea el formulario
@@ -260,6 +437,31 @@ export default function Movements({ params }: MovementsPageProps) {
       toast.error(error as string);
     }
   };
+
+  const handleUpdateStatus = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const business_id = formData.get('business_id') as string;
+    const status = formData.get('status') as string;
+
+    try {
+      await updateStatusBusiness(business_id, status);
+      setStatus(status);
+
+      toast.success('Movimentos enviados a revisión');
+      // window.location.reload()
+      setMovementsStatusOpen((prevOpen) => ({
+        ...prevOpen,
+        [business_id]: false,
+      }));
+    } catch (error) {
+      toast.error(error as string);
+    }
+  };
+
+
+
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
@@ -333,18 +535,64 @@ export default function Movements({ params }: MovementsPageProps) {
     return `${d.getFullYear()}-${month}-${day}`;
   }
 
-
   return (
     <div className="my-10 px-4 lg:w-[95%]">
       {business && (
         <div
-          className={`flex max-md:justify-center ${
+          className={`flex items-center justify-between max-md:justify-center ${
             filteredPath === '/admin/businesses' ? 'hidden' : ''
           }`}
         >
           <h1 className="text-2xl font-semibold text-[#003E52]">
             {business.name}
           </h1>
+
+          <div className="flex items-center gap-6">
+            <div className={`flex items-center gap-2 rounded-full p-1 px-2 font-medium text-white ${status === 'pending' ? 'bg-orange-600' : 'bg-green-500'}`}>
+              {status === "pending" ? 
+                <ClockIcon width={20} height={20} />
+              :
+                <CheckCircleIcon width={20} height={20} />
+              }
+              <p>{translateSatusType(status)}</p>
+            </div>
+            <div>
+              <Dialog open={movementsStatusOpen[business.id] || false}
+                  onOpenChange={(isOpen) =>
+                    setMovementsStatusOpen((prevOpen) => ({
+                      ...prevOpen,
+                      [business.id]: isOpen,
+                    }))
+                  }>
+                <DialogTrigger asChild>
+                  <button className="rounded-xl bg-[#003E52] p-2 text-white font-medium">
+                    Enviar documentos de <span className='capitalize'>{translateMonthsNumber(lastReportMonth)}</span> a revisión
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-[450px]">
+                  <DialogHeader className="mb-5">
+                    <DialogTitle className="text-[#003E52]">
+                      El reporte de{' '}
+                      <span className="capitalize">
+                        {translateMonthsNumber(lastReportMonth)}
+                      </span>{' '}
+                      se creara en base a los siguientes movimientos
+                    </DialogTitle>
+                  </DialogHeader>
+                  <ul>{bankList}</ul>
+                  <div className="mt-5 flex justify-center">
+                    <form onSubmit={handleUpdateStatus}>
+                      <input type="hidden" name='business_id' value={params.business_id} />
+                      <input type="hidden" name='status' value="sent to revision" />
+                      <button className="w-[100px] rounded-xl bg-[#003E52] p-2 text-center font-semibold text-white">
+                        Enviar
+                      </button>
+                    </form>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
         </div>
       )}
 
@@ -427,7 +675,7 @@ export default function Movements({ params }: MovementsPageProps) {
                   }
                 >
                   <DialogTrigger asChild>
-                    <button className="mx-auto rounded-xl flex items-center gap-2 bg-transparent px-3 py-1 text-sm font-medium text-[#003E52] border-2 border-[#003E52]">
+                    <button className="mx-auto flex items-center gap-2 rounded-xl border-2 border-[#003E52] bg-transparent px-3 py-1 text-sm font-medium text-[#003E52]">
                       <PencilSquareIcon width={16} height={16} />
                       Editar
                     </button>
@@ -562,9 +810,8 @@ export default function Movements({ params }: MovementsPageProps) {
                           >
                             <div
                               key={doc.id}
-                              className="flex flex-col items-center justify-center gap-2 p-3 rounded-lg bg-[#252525]/10 lg:h-[200px]"
+                              className="flex flex-col items-center justify-center gap-2 rounded-lg bg-[#252525]/10 p-3 lg:h-[200px]"
                             >
-                              
                               {doc.closing_month !== null ? (
                                 <div className="flex flex-col items-center gap-2 text-center font-medium">
                                   <p className="font-bold">Fecha de cierre</p>
@@ -576,22 +823,26 @@ export default function Movements({ params }: MovementsPageProps) {
                                 <div className="flex flex-col items-center gap-2 text-center font-medium">
                                   <div>
                                     <p className="font-bold">Fecha de inicio</p>
-                                    {new Date(doc.period_start,).toLocaleDateString()}
+                                    {new Date(
+                                      doc.period_start,
+                                    ).toLocaleDateString()}
                                   </div>
                                   <div>
                                     <p className="font-bold">Fecha de cierre</p>
-                                    {new Date(doc.period_end,).toLocaleDateString()}
+                                    {new Date(
+                                      doc.period_end,
+                                    ).toLocaleDateString()}
                                   </div>
                                 </div>
                               )}
-                              <div className='flex items-center justify-center gap-2 max-xl:flex-col'>
-                              <Link
-                                href={doc.pdf}
-                                target="_blank"
-                                className="rounded-xl bg-[#003E52] px-3 py-1 text-sm font-medium text-white text-center"
-                              >
-                                Ver resumen
-                              </Link>
+                              <div className="flex items-center justify-center gap-2 max-xl:flex-col">
+                                <Link
+                                  href={doc.pdf}
+                                  target="_blank"
+                                  className="rounded-xl bg-[#003E52] px-3 py-1 text-center text-sm font-medium text-white"
+                                >
+                                  Ver resumen
+                                </Link>
                                 <Dialog
                                   open={movementDialogOpen[doc.id] || false}
                                   onOpenChange={(isOpen) =>
@@ -601,7 +852,7 @@ export default function Movements({ params }: MovementsPageProps) {
                                     }))
                                   }
                                 >
-                                  <DialogTrigger className="rounded-xl flex items-center gap-2 bg-transparent px-3 py-1 text-sm font-medium text-[#003E52] border-2 border-[#003E52]">
+                                  <DialogTrigger className="flex items-center gap-2 rounded-xl border-2 border-[#003E52] bg-transparent px-3 py-1 text-sm font-medium text-[#003E52]">
                                     Editar
                                     <PencilSquareIcon width={16} height={16} />
                                   </DialogTrigger>
@@ -647,7 +898,9 @@ export default function Movements({ params }: MovementsPageProps) {
                                           <div className="flex flex-col gap-2">
                                             <label>Fecha de inicio</label>
                                             <input
-                                              defaultValue={formatDateForInput(doc.period_start,)}
+                                              defaultValue={formatDateForInput(
+                                                doc.period_start,
+                                              )}
                                               type="date"
                                               name="period_start"
                                               className="rounded-lg bg-[#252525]/10 p-2"
@@ -696,7 +949,6 @@ export default function Movements({ params }: MovementsPageProps) {
                                   </DialogContent>
                                 </Dialog>
                               </div>
-                              
                             </div>
                           </CarouselItem>
                         ))
