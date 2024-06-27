@@ -1,10 +1,6 @@
-import BusinessesPage from "./businesses/page";
+import { redirect } from "next/navigation";
 
 
-export default function DashboardPage(){
-    return(
-        <div>
-            <BusinessesPage/>
-        </div>
-    )
+export default function AdminPage(){
+    return redirect('/admin/businesses');
 }
