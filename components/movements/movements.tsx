@@ -5,6 +5,7 @@ import getReportsByLastMovements, {
   fetchBusinessById,
   fetchDocumentsByBankId,
   getAllDocuments,
+  /* statusBusiness, */
   // getDocumentsByBusinessId,
 } from '@/lib/data';
 import { useEffect, useRef, useState } from 'react';
@@ -24,7 +25,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { addBank, updateBank, updateMovement, uploadPDF } from '@/lib/actions';
+import { addBank, updateBank, updateMovement, updateStatusBusiness, uploadPDF } from '@/lib/actions';
 import { toast } from 'sonner';
 import AddIcon from '@/components/icons/AddIcon';
 import Link from 'next/link';
@@ -63,8 +64,9 @@ import {
   PencilSquareIcon,
 } from '@heroicons/react/24/outline';
 import Attachment from '@/components/icons/Attachment';
-import { translateAccountType, translateMonthsNumber } from '@/lib/utils';
+import { translateAccountType, translateMonthsNumber, translateSatusType } from '@/lib/utils';
 import Image from 'next/image';
+import { revalidatePath } from 'next/cache';
 
 type MovementsPageProps = {
   params: {
@@ -102,15 +104,10 @@ export default function Movements({ params }: MovementsPageProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [pdfDialogOpen, setPdfDialogOpen] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const [bankDialogOpen, setDialogBankOpen] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const [movementDialogOpen, setDialogMovementOpen] = useState<{
-    [key: string]: boolean;
-  }>({});
+  const [pdfDialogOpen, setPdfDialogOpen] = useState<{[key: string]: boolean;}>({});
+  const [bankDialogOpen, setDialogBankOpen] = useState<{[key: string]: boolean;}>({});
+  const [movementDialogOpen, setDialogMovementOpen] = useState<{[key: string]: boolean;}>({});
+  const [movementsStatusOpen, setMovementsStatusOpen] = useState<{[key: string]: boolean;}>({});
   const formRef = useRef<HTMLFormElement>(null);
   const [selectedFileName, setSelectedFileName] = useState('');
   const [selectedBankName, setSelectedBankName] = useState('');
@@ -118,39 +115,30 @@ export default function Movements({ params }: MovementsPageProps) {
   const [selectedClosingType, setSelectedClosingType] = useState('');
   const [selectedClosingMonth, setSelectedClosingMonth] = useState('');
   const [nextReport, setNextReport] = useState<any>([]);
-  const [nextMonth, setNextMonth] = useState<any>();
   const [lastReportMonth, setLastReportMonth] = useState<any>();
+  const [status, setStatus] = useState<any| null>();
 
   const url = new URL(window.location.href);
   const pathname = url.pathname;
 
-  // Divide el pathname en segmentos
   const segments = pathname.split('/');
-
-  // Filtra y une los segmentos que te interesan
   const filteredPath = `/${segments[1]}/${segments[2]}`;
 
-  console.log(filteredPath);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const business = await fetchBusinessById(params.business_id);
-        const bankAccounts = await fetchBankAccountsByBusinessId(
-          params.business_id,
-        );
+        const bankAccounts = await fetchBankAccountsByBusinessId(params.business_id,);
         const lastReport = await getReportsByLastMovements(params.business_id);
         const allDocuments = await getAllDocuments(params.business_id);
+        
+        setStatus(business.status)
         setLastReportMonth(lastReport?.nextMonth.month);
         setNextReport(allDocuments);
 
-        /* const filteredDocuments = allDocuments?.filter(data => 
-          data.closing_month === lastReport?.nextMonth.month || 
-          data.period_end === lastReport?.nextMonth.month
-        );
-        
-        console.log(filteredDocuments); */
+    
 
         const documentsByBankId: { [key: string]: Document[] } = {};
         for (const account of bankAccounts) {
@@ -250,11 +238,10 @@ export default function Movements({ params }: MovementsPageProps) {
     );
     const bankName = bankData ? bankData.bank_accounts.name : '';
     const closingMonth = bankData ? bankData.closing_month : '';
-    const periodStart = bankData ? bankData.period_start : '';
+    // const periodStart = bankData ? bankData.period_start : '';
     const periodEnd = bankData ? bankData.period_end : '';
     const type = bankData ? bankData.bank_accounts.type : '';
     const resume = bankData ? bankData.pdf : '';
-    console.log(bankData);
     
     
 
@@ -407,7 +394,7 @@ export default function Movements({ params }: MovementsPageProps) {
       }
 
       toast.success('Movimiento actualizado exitosamente');
-      window.location.reload();
+      // window.location.reload();
 
       if (formRef.current) {
         formRef.current.reset(); // Resetea el formulario
@@ -450,6 +437,31 @@ export default function Movements({ params }: MovementsPageProps) {
       toast.error(error as string);
     }
   };
+
+  const handleUpdateStatus = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+    const business_id = formData.get('business_id') as string;
+    const status = formData.get('status') as string;
+
+    try {
+      await updateStatusBusiness(business_id, status);
+      setStatus(status);
+
+      toast.success('Movimentos enviados a revisión');
+      // window.location.reload()
+      setMovementsStatusOpen((prevOpen) => ({
+        ...prevOpen,
+        [business_id]: false,
+      }));
+    } catch (error) {
+      toast.error(error as string);
+    }
+  };
+
+
+
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
@@ -536,15 +548,25 @@ export default function Movements({ params }: MovementsPageProps) {
           </h1>
 
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 rounded-full bg-orange-600 p-1 px-2 font-medium text-white">
-              <ClockIcon width={20} height={20} />
-              pendiente
+            <div className={`flex items-center gap-2 rounded-full p-1 px-2 font-medium text-white ${status === 'pending' ? 'bg-orange-600' : 'bg-green-500'}`}>
+              {status === "pending" ? 
+                <ClockIcon width={20} height={20} />
+              :
+                <CheckCircleIcon width={20} height={20} />
+              }
+              <p>{translateSatusType(status)}</p>
             </div>
             <div>
-              <Dialog>
+              <Dialog open={movementsStatusOpen[business.id] || false}
+                  onOpenChange={(isOpen) =>
+                    setMovementsStatusOpen((prevOpen) => ({
+                      ...prevOpen,
+                      [business.id]: isOpen,
+                    }))
+                  }>
                 <DialogTrigger asChild>
-                  <button className="rounded-xl bg-[#003E52] p-2 text-white">
-                    Enviar de documentos de mes para revisión
+                  <button className="rounded-xl bg-[#003E52] p-2 text-white font-medium">
+                    Enviar documentos de <span className='capitalize'>{translateMonthsNumber(lastReportMonth)}</span> a revisión
                   </button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[450px]">
@@ -557,105 +579,15 @@ export default function Movements({ params }: MovementsPageProps) {
                       se creara en base a los siguientes movimientos
                     </DialogTitle>
                   </DialogHeader>
-
-                  {/* <ul>
-                    {nextReports.map((data: any) => (
-                      <li key={data.id}>
-                        <div
-                          className={`my-2 flex items-center justify-between rounded-full px-2 py-1 font-medium ${
-                            data.matches
-                              ? 'bg-green-500/20'
-                              : 'bg-orange-600/20'
-                          }`}
-                        >
-                          <div className="flex items-center gap-2 font-semibold text-[#003E52]">
-                            {data.bank_accounts.name === 'afirme' ? (
-                              <AfirmeIcon />
-                            ) : data.bank_accounts.name === 'amex' ? (
-                              <AmexIcon />
-                            ) : data.bank_accounts.name === 'albo' ? (
-                              <AlboIcon />
-                            ) : data.bank_accounts.name === 'azteca' ? (
-                              <AztecaIcon />
-                            ) : data.bank_accounts.name === 'BanBajío' ? (
-                              <BajioIcon />
-                            ) : data.bank_accounts.name === 'banamex' ? (
-                              <BanamexIcon />
-                            ) : data.bank_accounts.name === 'banorte' ? (
-                              <BanorteIcon />
-                            ) : data.bank_accounts.name === 'BanRegio' ? (
-                              <BanRegioIcon />
-                            ) : data.bank_accounts.name === 'BBVA bancomer' ? (
-                              <BbbvaIcon />
-                            ) : data.bank_accounts.name === 'broxel' ? (
-                              <BroxelIcon />
-                            ) : data.bank_accounts.name === 'bx+' ? (
-                              <BxIcon />
-                            ) : data.bank_accounts.name === 'clara' ? (
-                              <ClaraIcon />
-                            ) : data.bank_accounts.name === 'fondeadora' ? (
-                              <FondeadoraIcon />
-                            ) : data.bank_accounts.name === 'hey banco' ? (
-                              <HeyBancoIcon />
-                            ) : data.bank_accounts.name === 'HSBC' ? (
-                              <HsbcIcon />
-                            ) : data.bank_accounts.name === 'inbursa' ? (
-                              <IbursaIcon />
-                            ) : data.bank_accounts.name === 'intercam' ? (
-                              <IntercamIcon />
-                            ) : data.bank_accounts.name === 'rappi' ? (
-                              <RappiIcon />
-                            ) : data.bank_accounts.name === 'santander' ? (
-                              <SantanderIcon />
-                            ) : data.bank_accounts.name === 'scotia' ? (
-                              <ScotiaIcon />
-                            ) : data.bank_accounts.type === 'other' ? (
-                              <CurrencyDollarIcon
-                                width={35}
-                                height={35}
-                                className="rounded-full bg-[#F4F6FC]"
-                              />
-                            ) : (
-                              <OtroBankIcon />
-                            )}
-                            <p className="capitalize">
-                              {data.bank_accounts.name}{' '}
-                              {data.matches && <span>- </span>}
-                            </p>
-                            <p className="capitalize">
-                              {data.matches &&
-                                translateMonthNumber(
-                                  data.closing_month || data.period_end,
-                                )}
-                            </p>
-                          </div>
-
-                          <div
-                            className={`rounded-full px-2 py-1 text-center text-white ${
-                              data.matches ? 'bg-green-500' : 'bg-orange-600'
-                            }`}
-                          >
-                            {!data.matches && (
-                              <div className="flex items-center gap-1">
-                                <ClockIcon width={20} height={20} /> pendiente
-                              </div>
-                            )}
-                            {data.matches && (
-                              <div className="flex items-center gap-1">
-                                <CheckCircleIcon width={20} height={20} /> listo
-                              </div>
-                            )}
-                          </div>
-                        </div>
-
-                      </li>
-                    ))}
-                  </ul> */}
                   <ul>{bankList}</ul>
                   <div className="mt-5 flex justify-center">
-                    <button className="w-[100px] rounded-xl bg-[#003E52] p-2 text-center font-semibold text-white">
-                      Enviar
-                    </button>
+                    <form onSubmit={handleUpdateStatus}>
+                      <input type="hidden" name='business_id' value={params.business_id} />
+                      <input type="hidden" name='status' value="sent to revision" />
+                      <button className="w-[100px] rounded-xl bg-[#003E52] p-2 text-center font-semibold text-white">
+                        Enviar
+                      </button>
+                    </form>
                   </div>
                 </DialogContent>
               </Dialog>
