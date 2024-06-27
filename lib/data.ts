@@ -506,7 +506,7 @@ export async function getDocumentsByBusinessId(business_id: string) {
    try {
      const { data, error } = await supabase
    .from('documents')
-   .select('*, bank_accounts(name)')
+   .select('*, bank_accounts(name, type)')
    // .or('closing_month.eq.2023-05-01,and(period_end.gt.2024-04-01,period_end.lt.2024-05-01),and(period_start.gt.2024-04-01,period_start.lt.2024-05-01)')
    .eq('business_id', business_id)
    // .or('closing_month.eq.2024-03-31,period_end.lt.2024-05-01')
