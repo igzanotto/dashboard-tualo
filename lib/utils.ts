@@ -104,3 +104,14 @@ export function translateAccountType(type: string) {
 
   return typesTranslations[type] || type;
 }
+
+
+export function translateSatusType(type: string) {
+  const statusTranslations: { [key: string]: string } = {
+    'pending': 'pendiente',
+    'sent to revision': 'enviado a revisión',
+    
+  };
+
+  return statusTranslations[type] || type;
+}
