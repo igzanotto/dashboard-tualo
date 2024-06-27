@@ -1,5 +1,5 @@
 'use server';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { z } from 'zod';
@@ -1040,3 +1040,32 @@ if (pdf) {
   return { data: { pdfData }, error: null };
   }
 }
+
+
+export async function updateStatusBusiness(business_id:string, status:string){
+
+  const supabase = createClient();
+
+  try {
+    const {data, error} = await supabase
+  .from("businesses")
+  .update({status})
+  .eq("id", business_id)
+
+  if (error) {
+    throw error;
+  }
+
+  console.log(status);
+  
+  revalidatePath(`/dashboard/movements/${business_id}`);
+  revalidateTag("status")
+  
+  return status
+
+  } catch (error) {
+    console.log(error);
+    
+  }
+
+ }
