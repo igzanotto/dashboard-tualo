@@ -67,6 +67,7 @@ import Attachment from '@/components/icons/Attachment';
 import { translateAccountType, translateMonthsNumber, translateSatusType } from '@/lib/utils';
 import Image from 'next/image';
 import { revalidatePath } from 'next/cache';
+import SelectMonthMovementsToRevision from '../select-movements-to-revision';
 
 type MovementsPageProps = {
   params: {
@@ -114,6 +115,7 @@ export default function Movements({ params }: MovementsPageProps) {
   const [selectedAccount, setSelectedAccount] = useState('');
   const [selectedClosingType, setSelectedClosingType] = useState('');
   const [selectedClosingMonth, setSelectedClosingMonth] = useState('');
+  const [selectedMovementMonth, setSelectedMovementMonth] = useState('');
   const [nextReport, setNextReport] = useState<any>([]);
   const [lastReportMonth, setLastReportMonth] = useState<any>();
   const [status, setStatus] = useState<any| null>();
@@ -201,47 +203,57 @@ export default function Movements({ params }: MovementsPageProps) {
       return '';
     }
   };
-  const banksWithMatches = new Map<string, boolean>(); // Usamos un Map para mantener un registro único de bancos con coincidencias
+  const banksWithMatches = new Map<string, boolean | string>(); // Use un Map para mantener un registro único de bancos con coincidencias
 
-  nextReport?.forEach((doc: any) => {
-    const bankId = doc.bank_id.toString(); // Convertimos bank_id a string para usarlo como clave en el Map
+nextReport?.forEach((doc: any) => {
+  const bankId = doc.bank_id.toString();
 
-    const closingMonth = doc.closing_month
-      ? new Date(doc.closing_month).getMonth() + 1
-      : null;
-    const periodStart = doc.period_start
-      ? new Date(doc.period_start).getMonth() + 1
-      : null;
-    const periodEnd = doc.period_end
-      ? new Date(doc.period_end).getMonth() + 1
-      : null;
+  const closingMonth = doc.closing_month
+    ? new Date(doc.closing_month).getMonth() + 1
+    : null;
+  const periodStart = doc.period_start
+    ? new Date(doc.period_start).getMonth() + 1
+    : null;
+  const periodEnd = doc.period_end
+    ? new Date(doc.period_end).getMonth() + 1
+    : null;
 
-    const hasMatchingMonth = [closingMonth, periodStart, periodEnd].some(
-      (month) => month === lastReportMonth,
-    );
+  const hasMatchingMonth = [closingMonth, periodStart, periodEnd].some(
+    (month) => month === lastReportMonth,
+  );
 
-    // Si encontramos al menos un movimiento coincidente para este banco, lo marcamos como 'true' en el Map
-    if (hasMatchingMonth) {
+  if (periodStart && periodEnd) {
+    if (periodStart === lastReportMonth && periodEnd === lastReportMonth) {
       banksWithMatches.set(bankId, true);
+    } else if (periodEnd === lastReportMonth) {
+      banksWithMatches.set(bankId, 'pending_with_message');
     } else {
-      // Si no hay coincidencias y el banco no está registrado aún en el Map, lo registramos como 'false'
       if (!banksWithMatches.has(bankId)) {
         banksWithMatches.set(bankId, false);
       }
     }
-  });
+  } else {
+    if (hasMatchingMonth) {
+      banksWithMatches.set(bankId, true);
+    } else {
+      if (!banksWithMatches.has(bankId)) {
+        banksWithMatches.set(bankId, false);
+      }
+    }
+  }
+});
 
-  // Renderizado de la lista de bancos
-  const bankList = Array.from(banksWithMatches).map(([bankId, hasMatches]) => {
-    const bankData = nextReport.find(
-      (doc: any) => doc.bank_id.toString() === bankId,
-    );
-    const bankName = bankData ? bankData.bank_accounts.name : '';
-    const closingMonth = bankData ? bankData.closing_month : '';
-    // const periodStart = bankData ? bankData.period_start : '';
-    const periodEnd = bankData ? bankData.period_end : '';
-    const type = bankData ? bankData.bank_accounts.type : '';
-    const resume = bankData ? bankData.pdf : '';
+// Renderizado de la lista de bancos
+const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
+  const bankData = nextReport.find(
+    (doc: any) => doc.bank_id.toString() === bankId,
+  );
+  const bankName = bankData ? bankData.bank_accounts.name : '';
+  const closingMonth = bankData ? bankData.closing_month : '';
+  const periodStart = bankData ? bankData.period_start : '';
+  const periodEnd = bankData ? bankData.period_end : '';
+  const type = bankData ? bankData.bank_accounts.type : '';
+  const resume = bankData ? bankData.pdf : '';
     
     
 
@@ -249,9 +261,7 @@ export default function Movements({ params }: MovementsPageProps) {
       <li key={bankId}>
       <div
         className={`my-2 flex items-center justify-between rounded-full px-2 py-1 font-medium ${
-          hasMatches
-            ? 'bg-green-500/20'
-            : 'bg-orange-600/20'
+          matchStatus === true ? 'bg-green-500/20' : matchStatus === 'pending_with_message' ? 'bg-[#FBD127]/20' : 'bg-orange-600/20'
         }`}
       >
         <div className="flex items-center gap-2 font-semibold text-[#003E52]">
@@ -308,10 +318,10 @@ export default function Movements({ params }: MovementsPageProps) {
             <div className='flex items-center gap-2'>
               <p className="capitalize">
                 {bankName}{' '}
-                {hasMatches && <span> - </span>}
+                {matchStatus && <span> - </span>}
               </p>
               <p className="capitalize">
-                {hasMatches &&
+                {matchStatus &&
                   translateMonthNumber(
                     closingMonth || periodEnd,
                   )}<span> - </span>
@@ -327,15 +337,20 @@ export default function Movements({ params }: MovementsPageProps) {
         </div>
         <div
           className={`rounded-full px-2 py-1 text-center text-white ${
-            hasMatches ? 'bg-green-500' : 'bg-orange-600'
+            matchStatus === true ? 'bg-green-500' : matchStatus === 'pending_with_message' ? 'bg-[#fbd127e1]' : 'bg-orange-600'
           }`}
         >
-          {!hasMatches && (
+          {matchStatus === false && (
             <div className="flex items-center gap-1">
               <ClockIcon width={20} height={20} /> pendiente
             </div>
           )}
-          {hasMatches && (
+          {matchStatus === 'pending_with_message' && (
+            <div className="flex items-center gap-1">
+              <ClockIcon width={20} height={20} /> falta un movimiento
+            </div>
+          )}
+          {matchStatus === true && (
             <div className="flex items-center gap-1">
               <CheckCircleIcon width={20} height={20} /> listo
             </div>
@@ -518,6 +533,10 @@ export default function Movements({ params }: MovementsPageProps) {
     setSelectedClosingMonth(closing_month);
   };
 
+  const handleSelectMonthMovements = (month:any) => {
+    setSelectedMovementMonth(month)
+  }
+
   function formatDate(closing_month: any): string {
     const date = new Date(closing_month);
     const options: Intl.DateTimeFormatOptions = {
@@ -557,7 +576,8 @@ export default function Movements({ params }: MovementsPageProps) {
               <p>{translateSatusType(status)}</p>
             </div>
             <div>
-              <Dialog open={movementsStatusOpen[business.id] || false}
+              <Dialog 
+                open={movementsStatusOpen[business.id] || false}
                   onOpenChange={(isOpen) =>
                     setMovementsStatusOpen((prevOpen) => ({
                       ...prevOpen,
@@ -569,7 +589,7 @@ export default function Movements({ params }: MovementsPageProps) {
                     Enviar documentos de <span className='capitalize'>{translateMonthsNumber(lastReportMonth)}</span> a revisión
                   </button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[450px]">
+                <DialogContent className="xl:w-[40%]">
                   <DialogHeader className="mb-5">
                     <DialogTitle className="text-[#003E52]">
                       El reporte de{' '}
@@ -579,6 +599,9 @@ export default function Movements({ params }: MovementsPageProps) {
                       se creara en base a los siguientes movimientos
                     </DialogTitle>
                   </DialogHeader>
+                  <div className='my-5'>
+                    <SelectMonthMovementsToRevision onSelect={handleSelectMonthMovements}/>
+                  </div>
                   <ul>{bankList}</ul>
                   <div className="mt-5 flex justify-center">
                     <form onSubmit={handleUpdateStatus}>
