@@ -1,5 +1,7 @@
 import {fetchReportsByBusiness} from '@/lib/data';
 import Link from 'next/link';
+import AddIcon from '@/components/icons/AddIcon';
+
 
 type ReportsTableProps = {
     query: string;
@@ -23,6 +25,12 @@ export default async function ReportsTable({ business_id}:ReportsTableProps) {
             </Link>
           </div>
         ))}
+        <div className='border-2 border-slate-200 p-2 rounded-xl bg-teal-600 p-2 text-white'>
+            <Link href={`/admin/businesses/${business_id}/askDocs`} className='flex items-center gap-2'>
+              <AddIcon />
+              <p>Solicitar documentacion</p>
+            </Link>
+          </div>
       </div>
     </div>
   );

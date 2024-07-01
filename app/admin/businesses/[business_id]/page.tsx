@@ -7,8 +7,13 @@ import Link from 'next/link';
 import { Suspense } from 'react';
 import { Libre_Baskerville } from 'next/font/google';
 import { FileIcon } from 'lucide-react';
-import { ArrowsRightLeftIcon, DocumentChartBarIcon, DocumentIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowsRightLeftIcon,
+  DocumentChartBarIcon,
+  DocumentIcon,
+} from '@heroicons/react/24/outline';
 import Movements from '@/components/movements/movements';
+import { Button } from '@/components/button';
 
 const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
@@ -43,19 +48,22 @@ export default async function BusinessPage({
         >
           {business.name}
         </h1>
-        <Tabs defaultValue="reportes" className='w-[95%]'>
-          <div className='flex justify-center'>
-          <TabsList className="mb-5">
-            <TabsTrigger value="reportes" className="flex items-center gap-1">
-              <DocumentChartBarIcon width={20} height={20}/>
-              Reportes
-            </TabsTrigger>
-            <TabsTrigger value="movimientos" className="flex items-center gap-1"
-            >
-              <ArrowsRightLeftIcon width={20} height={20}/>
-              Movimientos
-            </TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="reportes" className="w-[95%]">
+          <div className="flex justify-center">
+            <TabsList className="mb-5">
+              <TabsTrigger value="reportes" className="flex items-center gap-1">
+                <DocumentChartBarIcon width={20} height={20} />
+                Reportes
+              </TabsTrigger>
+              <TabsTrigger
+                value="movimientos"
+                className="flex items-center gap-1"
+              >
+                <ArrowsRightLeftIcon width={20} height={20} />
+                Movimientos
+              </TabsTrigger>
+            </TabsList>
+            
           </div>
           <TabsContent value="reportes">
             <div className="mt-10 flex flex-col">
@@ -95,7 +103,7 @@ export default async function BusinessPage({
             </div>
           </TabsContent>
           <TabsContent value="movimientos">
-            <Movements params={{business_id}}/>
+            <Movements params={{ business_id }} />
           </TabsContent>
         </Tabs>
       </div>
