@@ -24,6 +24,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   addBank,
@@ -72,13 +85,11 @@ import {
 import Attachment from '@/components/icons/Attachment';
 import {
   translateAccountType,
-  translateMonthsNumber,
+  translateMonths,
   translateSatusType,
 } from '@/lib/utils';
-import Image from 'next/image';
-import { revalidatePath } from 'next/cache';
-import SelectMonthMovementsToRevision from '../select-movements-to-revision';
-import MovementsList from './movements-list';
+import { ChevronsUpDown, Divide } from 'lucide-react';
+import style from './styles.module.css';
 
 type MovementsPageProps = {
   params: {
@@ -109,10 +120,32 @@ type Document = {
   pdf: string;
 };
 
-interface MovementsListProps {
-  movements: any[]; // Define la interfaz correcta para tus movimientos
-  selectedMonth: number;
-}
+const getLastReportMonth = (nextReport: Document[]): number | null => {
+  const dates = nextReport
+    .flatMap((doc) => [doc.closing_month, doc.period_start, doc.period_end])
+    .filter(Boolean) // Filtra valores nulos o indefinidos
+    .map((date) => new Date(date!).getMonth() + 1); // Obtén el mes como número
+
+  return dates.length > 0 ? Math.max(...dates) : null; // Devuelve el mes más reciente
+};
+
+const translateMonthsNumbers = (monthNumber: number): string => {
+  const months = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
+  ];
+  return months[monthNumber - 1];
+};
 
 export default function Movements({ params }: MovementsPageProps) {
   const [business, setBusiness] = useState<Business | null>(null);
@@ -143,8 +176,8 @@ export default function Movements({ params }: MovementsPageProps) {
   const [nextReport, setNextReport] = useState<any>([]);
   const [lastReportMonth, setLastReportMonth] = useState<any>();
   const [status, setStatus] = useState<any | null>();
-  const [movements, setMovements] = useState<any[]>([]);
-  const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth() + 1);
+  const [selectedMonth, setSelectedMonth] = useState<any | null>(null);
+  const [open, setOpen] = useState(false);
 
   const url = new URL(window.location.href);
   const pathname = url.pathname;
@@ -189,6 +222,11 @@ export default function Movements({ params }: MovementsPageProps) {
     fetchData();
   }, [params.business_id]);
 
+  useEffect(() => {
+    const defaultMonth = getLastReportMonth(nextReport);
+    setSelectedMonth(defaultMonth);
+  }, [nextReport]);
+
   if (loading)
     return (
       <div>
@@ -199,40 +237,15 @@ export default function Movements({ params }: MovementsPageProps) {
 
   if (error) return <div>{error}</div>;
 
-  const translateMonthNumber = (dateString: string | null): string => {
-    if (!dateString) return '';
-
-    try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) {
-        return '';
-      }
-      const month = date.getMonth();
-      const months = [
-        'Enero',
-        'Febrero',
-        'Marzo',
-        'Abril',
-        'Mayo',
-        'Junio',
-        'Julio',
-        'Agosto',
-        'Septiembre',
-        'Octubre',
-        'Noviembre',
-        'Diciembre',
-      ];
-      return months[month];
-    } catch (error) {
-      console.error('Error al convertir la fecha:', error);
-      return '';
-    }
+  const handleMonthChange = (month: number) => {
+    setSelectedMonth(month);
+    setOpen(false);
   };
-  const banksWithMatches = new Map<string, boolean | string>(); // Use un Map para mantener un registro único de bancos con coincidencias
 
-  nextReport?.forEach((doc: any) => {
+  const banksWithMatches = new Map<string, boolean | string>();
+
+  nextReport?.forEach((doc: Document) => {
     const bankId = doc.bank_id.toString();
-
     const closingMonth = doc.closing_month
       ? new Date(doc.closing_month).getMonth() + 1
       : null;
@@ -244,13 +257,13 @@ export default function Movements({ params }: MovementsPageProps) {
       : null;
 
     const hasMatchingMonth = [closingMonth, periodStart, periodEnd].some(
-      (month) => month === lastReportMonth,
+      (month) => month === selectedMonth,
     );
 
     if (periodStart && periodEnd) {
-      if (periodStart === lastReportMonth && periodEnd === lastReportMonth) {
+      if (periodStart === selectedMonth && periodEnd === selectedMonth) {
         banksWithMatches.set(bankId, true);
-      } else if (periodEnd === lastReportMonth) {
+      } else if (periodEnd === selectedMonth) {
         banksWithMatches.set(bankId, 'pending_with_message');
       } else {
         if (!banksWithMatches.has(bankId)) {
@@ -268,10 +281,9 @@ export default function Movements({ params }: MovementsPageProps) {
     }
   });
 
-  // Renderizado de la lista de bancos
   const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
     const bankData = nextReport.find(
-      (doc: any) => doc.bank_id.toString() === bankId,
+      (doc: Document) => doc.bank_id.toString() === bankId,
     );
     const bankName = bankData ? bankData.bank_accounts.name : '';
     const closingMonth = bankData ? bankData.closing_month : '';
@@ -347,8 +359,7 @@ export default function Movements({ params }: MovementsPageProps) {
                   {bankName} {matchStatus && <span> - </span>}
                 </p>
                 <p className="capitalize">
-                  {matchStatus &&
-                    translateMonthNumber(closingMonth || periodEnd)}
+                  {selectedMonth && translateMonthsNumbers(selectedMonth)}
                   <span> - </span>
                   <span className="text-xs">{translateAccountType(type)}</span>
                 </p>
@@ -499,7 +510,6 @@ export default function Movements({ params }: MovementsPageProps) {
       setStatus(status);
 
       toast.success('Movimentos enviados a revisión');
-      // window.location.reload()
       setMovementsStatusOpen((prevOpen) => ({
         ...prevOpen,
         [business_id]: false,
@@ -564,28 +574,8 @@ export default function Movements({ params }: MovementsPageProps) {
     setSelectedClosingMonth(closing_month);
   };
 
-  const handleSelectMonthMovements = (month: number) => {
-    setSelectedMonth(month);
-
-    // Filtrar los movimientos según el mes seleccionado
-    const filteredMovements = nextReport.filter((doc:any) => {
-      const closingMonth = doc.closing_month
-        ? new Date(doc.closing_month).getMonth() + 1
-        : null;
-      const periodStart = doc.period_start
-        ? new Date(doc.period_start).getMonth() + 1
-        : null;
-      const periodEnd = doc.period_end
-        ? new Date(doc.period_end).getMonth() + 1
-        : null;
-
-      return (
-        closingMonth === month ||
-        periodStart === month ||
-        periodEnd === month
-      );
-    });
-    setMovements(filteredMovements);
+  const handleSelectMonthMovements = (month: any) => {
+    setSelectedMovementMonth(month);
   };
 
   function formatDate(closing_month: any): string {
@@ -642,13 +632,21 @@ export default function Movements({ params }: MovementsPageProps) {
                   }))
                 }
               >
-                <DialogTrigger asChild>
-                  <button className="rounded-xl bg-[#003E52] p-2 font-medium text-white">
-                    Enviar documentos de{' '}
-                    <span className="capitalize">
-                      {translateMonthsNumber(lastReportMonth)}
-                    </span>{' '}
-                    a revisión
+                <DialogTrigger
+                  asChild
+                  className={`${status === 'sent to revision' ? 'hidden' : ''}`}
+                >
+                  <button
+                    disabled={status === 'sent to revision'}
+                    className="rounded-xl bg-[#003E52] p-2 font-medium text-white"
+                  >
+                    <div>
+                      Enviar documentos de{' '}
+                      <span className="capitalize">
+                        {translateMonthsNumbers(lastReportMonth)}
+                      </span>{' '}
+                      a revisión
+                    </div>
                   </button>
                 </DialogTrigger>
                 <DialogContent className="xl:w-[40%]">
@@ -656,14 +654,48 @@ export default function Movements({ params }: MovementsPageProps) {
                     <DialogTitle className="text-[#003E52]">
                       El reporte de{' '}
                       <span className="capitalize">
-                        {translateMonthsNumber(lastReportMonth)}
+                        {translateMonthsNumbers(selectedMonth)}
                       </span>{' '}
                       se creara en base a los siguientes movimientos
                     </DialogTitle>
                   </DialogHeader>
-                  <div className='my-5'>
-                  <SelectMonthMovementsToRevision onSelect={handleSelectMonthMovements} defaultMonth={lastReportMonth}/>
-                  <MovementsList movements={movements} selectedMonth={lastReportMonth} />
+
+                  <div className="my-5">
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={open}
+                          className="w-full justify-between"
+                        >
+                          {selectedMonth
+                            ? translateMonthsNumbers(selectedMonth)
+                            : 'Selecciona un mes'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[350px] p-0">
+                        <Command>
+                          <CommandInput placeholder="Buscar mes" />
+                          <CommandList>
+                            <CommandEmpty>
+                              No se encuentra este mes.
+                            </CommandEmpty>
+                            <CommandGroup className="overflow-y-scroll">
+                              {[...Array(12)].map((_, index) => (
+                                <CommandItem
+                                  key={index}
+                                  onSelect={() => handleMonthChange(index + 1)}
+                                >
+                                  {translateMonthsNumbers(index + 1)}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                   {/* <div>
                     <ul>{bankList}</ul>
@@ -692,14 +724,21 @@ export default function Movements({ params }: MovementsPageProps) {
         </div>
       )}
 
-      <div className="mt-12 flex flex-col gap-10">
+      <div className={`mt-12 flex flex-col gap-10`}>
+        <div className={`${status === 'sent to revision' ? "flex mx-auto translate-y-[250px] fixed self-center z-10 rounded-xl bg-[#003E52] p-2 font-medium text-white rouded-xl" : "hidden"}`}>
+          <p>Nuestro equipo estará revisando la documentación.</p>
+        </div>
         {bankAccounts.map((account) => (
           <div
             key={account.id}
-            className="flex items-center justify-between gap-3 max-lg:mx-auto max-lg:w-[95%] max-lg:flex-col max-lg:justify-center max-lg:rounded-xl max-lg:bg-[#252525]/10 max-lg:py-4 lg:gap-10"
+            className={`${status === 'sent to revision' ? 'blur-md bg-[rgba(0,0,0,0.05)]' : ''} flex items-center justify-between gap-3 max-lg:mx-auto max-lg:w-[95%] max-lg:flex-col max-lg:justify-center max-lg:rounded-xl max-lg:bg-[#252525]/10 max-lg:py-4 lg:gap-10`}
           >
-            <div className="flex min-w-[200px] flex-col justify-center gap-5 rounded-xl max-lg:h-[100px] max-lg:w-[90%] lg:h-[200px] lg:bg-[#252525]/10">
-              <div className="flex items-center justify-center gap-2 max-lg:mt-5">
+            <div
+              className={`${status === 'sent to revision' ? '' : ''} flex min-w-[200px] flex-col justify-center gap-5 rounded-xl max-lg:h-[100px] max-lg:w-[90%] lg:h-[200px] lg:bg-[#252525]/10`}
+            >
+              <div
+                className={`${status === 'sent to revision' ? '' : ''} flex items-center justify-center gap-2 max-lg:mt-5`}
+              >
                 {account.name === 'afirme' ? (
                   <AfirmeIcon />
                 ) : account.name === 'amex' ? (
@@ -771,7 +810,10 @@ export default function Movements({ params }: MovementsPageProps) {
                   }
                 >
                   <DialogTrigger asChild>
-                    <button className="mx-auto flex items-center gap-2 rounded-xl border-2 border-[#003E52] bg-transparent px-3 py-1 text-sm font-medium text-[#003E52]">
+                    <button
+                      disabled={status === 'sent to revision'}
+                      className="mx-auto flex items-center gap-2 rounded-xl border-2 border-[#003E52] bg-transparent px-3 py-1 text-sm font-medium text-[#003E52]"
+                    >
                       <PencilSquareIcon width={16} height={16} />
                       Editar
                     </button>
@@ -948,7 +990,10 @@ export default function Movements({ params }: MovementsPageProps) {
                                     }))
                                   }
                                 >
-                                  <DialogTrigger className="flex items-center gap-2 rounded-xl border-2 border-[#003E52] bg-transparent px-3 py-1 text-sm font-medium text-[#003E52]">
+                                  <DialogTrigger
+                                    disabled={status === 'sent to revision'}
+                                    className="flex items-center gap-2 rounded-xl border-2 border-[#003E52] bg-transparent px-3 py-1 text-sm font-medium text-[#003E52]"
+                                  >
                                     Editar
                                     <PencilSquareIcon width={16} height={16} />
                                   </DialogTrigger>
@@ -1061,6 +1106,7 @@ export default function Movements({ params }: MovementsPageProps) {
                       >
                         <DialogTrigger asChild>
                           <button
+                            disabled={status === 'sent to revision'}
                             className="flex h-full w-full flex-col items-center justify-center gap-2 rounded-lg bg-[#ec7700]/80 p-3 text-base font-medium text-white hover:bg-[#ec7700]/60 lg:h-[200px]"
                             onClick={() =>
                               setPdfDialogOpen((prevOpen) => ({

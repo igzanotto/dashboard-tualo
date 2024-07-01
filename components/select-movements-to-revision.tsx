@@ -1,41 +1,46 @@
-import React, { useState } from "react";
-import { ChevronsUpDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+"use client"
+
+import * as React from "react"
+import { Check, ChevronsUpDown } from "lucide-react"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 const months = [
-  { value: 1, label: "Enero" },
-  { value: 2, label: "Febrero" },
-  { value: 3, label: "Marzo" },
-  { value: 4, label: "Abril" },
-  { value: 5, label: "Mayo" },
-  { value: 6, label: "Junio" },
-  { value: 7, label: "Julio" },
-  { value: 8, label: "Agosto" },
-  { value: 9, label: "Septiembre" },
-  { value: 10, label: "Octubre" },
-  { value: 11, label: "Noviembre" },
-  { value: 12, label: "Diciembre" },
+    { value: "1", label: "Enero" },
+    { value: "2", label: "Febrero" },
+    { value: "3", label: "Marzo" },
+    { value: "4", label: "Abril" },
+    { value: "5", label: "Mayo" },
+    { value: "6", label: "Junio" },
+    { value: "7", label: "Julio" },
+    { value: "8", label: "Agosto" },
+    { value: "9", label: "Septiembre" },
+    { value: "10", label: "Octubre" },
+    { value: "11", label: "Noviembre" },
+    { value: "12", label: "Diciembre" },
 ];
 
-interface SelectMonthMovementsToRevisionProps {
-  onSelect: (month: number) => void;
-  defaultMonth?: number;
-}
 
-const SelectMonthMovementsToRevision: React.FC<SelectMonthMovementsToRevisionProps> = ({
-  onSelect,
-  defaultMonth = new Date().getMonth() + 1,
-}) => {
-  const [open, setOpen] = useState(false);
-  const [selectedMonth, setSelectedMonth] = useState(defaultMonth);
+export default function SelectMonthMovementsToRevision({ selectedMonth }:any) {
+  const [open, setOpen] = React.useState(false)
 
-  const handleSelect = (month: number) => {
-    setSelectedMonth(month);
-    onSelect(month);
-    setOpen(false);
-  };
+
+
+  
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -46,9 +51,7 @@ const SelectMonthMovementsToRevision: React.FC<SelectMonthMovementsToRevisionPro
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {selectedMonth
-            ? months.find((month) => month.value === selectedMonth)?.label || selectedMonth
-            : "Selecciona un mes"}
+          
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -58,22 +61,15 @@ const SelectMonthMovementsToRevision: React.FC<SelectMonthMovementsToRevisionPro
           <CommandList>
             <CommandEmpty>No se encuentra este mes.</CommandEmpty>
             <CommandGroup className="overflow-y-scroll">
-              {months.map((month) => (
-                <CommandItem
-                  key={month.value}
-                  value={month.value.toString()}
-                  onSelect={() => handleSelect(month.value)}
-                  className="flex items-center gap-2"
-                >
-                  {month.label}
+              
+                <CommandItem>
+                  
                 </CommandItem>
-              ))}
+            
             </CommandGroup>
           </CommandList>
         </Command>
       </PopoverContent>
     </Popover>
-  );
-};
-
-export default SelectMonthMovementsToRevision;
+  )
+}
