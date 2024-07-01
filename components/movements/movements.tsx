@@ -25,7 +25,13 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { addBank, updateBank, updateMovement, updateStatusBusiness, uploadPDF } from '@/lib/actions';
+import {
+  addBank,
+  updateBank,
+  updateMovement,
+  updateStatusBusiness,
+  uploadPDF,
+} from '@/lib/actions';
 import { toast } from 'sonner';
 import AddIcon from '@/components/icons/AddIcon';
 import Link from 'next/link';
@@ -64,10 +70,15 @@ import {
   PencilSquareIcon,
 } from '@heroicons/react/24/outline';
 import Attachment from '@/components/icons/Attachment';
-import { translateAccountType, translateMonthsNumber, translateSatusType } from '@/lib/utils';
+import {
+  translateAccountType,
+  translateMonthsNumber,
+  translateSatusType,
+} from '@/lib/utils';
 import Image from 'next/image';
 import { revalidatePath } from 'next/cache';
 import SelectMonthMovementsToRevision from '../select-movements-to-revision';
+import MovementsList from './movements-list';
 
 type MovementsPageProps = {
   params: {
@@ -98,6 +109,11 @@ type Document = {
   pdf: string;
 };
 
+interface MovementsListProps {
+  movements: any[]; // Define la interfaz correcta para tus movimientos
+  selectedMonth: number;
+}
+
 export default function Movements({ params }: MovementsPageProps) {
   const [business, setBusiness] = useState<Business | null>(null);
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
@@ -105,10 +121,18 @@ export default function Movements({ params }: MovementsPageProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
-  const [pdfDialogOpen, setPdfDialogOpen] = useState<{[key: string]: boolean;}>({});
-  const [bankDialogOpen, setDialogBankOpen] = useState<{[key: string]: boolean;}>({});
-  const [movementDialogOpen, setDialogMovementOpen] = useState<{[key: string]: boolean;}>({});
-  const [movementsStatusOpen, setMovementsStatusOpen] = useState<{[key: string]: boolean;}>({});
+  const [pdfDialogOpen, setPdfDialogOpen] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [bankDialogOpen, setDialogBankOpen] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [movementDialogOpen, setDialogMovementOpen] = useState<{
+    [key: string]: boolean;
+  }>({});
+  const [movementsStatusOpen, setMovementsStatusOpen] = useState<{
+    [key: string]: boolean;
+  }>({});
   const formRef = useRef<HTMLFormElement>(null);
   const [selectedFileName, setSelectedFileName] = useState('');
   const [selectedBankName, setSelectedBankName] = useState('');
@@ -118,7 +142,9 @@ export default function Movements({ params }: MovementsPageProps) {
   const [selectedMovementMonth, setSelectedMovementMonth] = useState('');
   const [nextReport, setNextReport] = useState<any>([]);
   const [lastReportMonth, setLastReportMonth] = useState<any>();
-  const [status, setStatus] = useState<any| null>();
+  const [status, setStatus] = useState<any | null>();
+  const [movements, setMovements] = useState<any[]>([]);
+  const [selectedMonth, setSelectedMonth] = useState<number>(new Date().getMonth() + 1);
 
   const url = new URL(window.location.href);
   const pathname = url.pathname;
@@ -126,21 +152,20 @@ export default function Movements({ params }: MovementsPageProps) {
   const segments = pathname.split('/');
   const filteredPath = `/${segments[1]}/${segments[2]}`;
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const business = await fetchBusinessById(params.business_id);
-        const bankAccounts = await fetchBankAccountsByBusinessId(params.business_id,);
+        const bankAccounts = await fetchBankAccountsByBusinessId(
+          params.business_id,
+        );
         const lastReport = await getReportsByLastMovements(params.business_id);
         const allDocuments = await getAllDocuments(params.business_id);
-        
-        setStatus(business.status)
+
+        setStatus(business.status);
         setLastReportMonth(lastReport?.nextMonth.month);
         setNextReport(allDocuments);
-
-    
 
         const documentsByBankId: { [key: string]: Document[] } = {};
         for (const account of bankAccounts) {
@@ -205,160 +230,167 @@ export default function Movements({ params }: MovementsPageProps) {
   };
   const banksWithMatches = new Map<string, boolean | string>(); // Use un Map para mantener un registro único de bancos con coincidencias
 
-nextReport?.forEach((doc: any) => {
-  const bankId = doc.bank_id.toString();
+  nextReport?.forEach((doc: any) => {
+    const bankId = doc.bank_id.toString();
 
-  const closingMonth = doc.closing_month
-    ? new Date(doc.closing_month).getMonth() + 1
-    : null;
-  const periodStart = doc.period_start
-    ? new Date(doc.period_start).getMonth() + 1
-    : null;
-  const periodEnd = doc.period_end
-    ? new Date(doc.period_end).getMonth() + 1
-    : null;
+    const closingMonth = doc.closing_month
+      ? new Date(doc.closing_month).getMonth() + 1
+      : null;
+    const periodStart = doc.period_start
+      ? new Date(doc.period_start).getMonth() + 1
+      : null;
+    const periodEnd = doc.period_end
+      ? new Date(doc.period_end).getMonth() + 1
+      : null;
 
-  const hasMatchingMonth = [closingMonth, periodStart, periodEnd].some(
-    (month) => month === lastReportMonth,
-  );
+    const hasMatchingMonth = [closingMonth, periodStart, periodEnd].some(
+      (month) => month === lastReportMonth,
+    );
 
-  if (periodStart && periodEnd) {
-    if (periodStart === lastReportMonth && periodEnd === lastReportMonth) {
-      banksWithMatches.set(bankId, true);
-    } else if (periodEnd === lastReportMonth) {
-      banksWithMatches.set(bankId, 'pending_with_message');
+    if (periodStart && periodEnd) {
+      if (periodStart === lastReportMonth && periodEnd === lastReportMonth) {
+        banksWithMatches.set(bankId, true);
+      } else if (periodEnd === lastReportMonth) {
+        banksWithMatches.set(bankId, 'pending_with_message');
+      } else {
+        if (!banksWithMatches.has(bankId)) {
+          banksWithMatches.set(bankId, false);
+        }
+      }
     } else {
-      if (!banksWithMatches.has(bankId)) {
-        banksWithMatches.set(bankId, false);
+      if (hasMatchingMonth) {
+        banksWithMatches.set(bankId, true);
+      } else {
+        if (!banksWithMatches.has(bankId)) {
+          banksWithMatches.set(bankId, false);
+        }
       }
     }
-  } else {
-    if (hasMatchingMonth) {
-      banksWithMatches.set(bankId, true);
-    } else {
-      if (!banksWithMatches.has(bankId)) {
-        banksWithMatches.set(bankId, false);
-      }
-    }
-  }
-});
+  });
 
-// Renderizado de la lista de bancos
-const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
-  const bankData = nextReport.find(
-    (doc: any) => doc.bank_id.toString() === bankId,
-  );
-  const bankName = bankData ? bankData.bank_accounts.name : '';
-  const closingMonth = bankData ? bankData.closing_month : '';
-  const periodStart = bankData ? bankData.period_start : '';
-  const periodEnd = bankData ? bankData.period_end : '';
-  const type = bankData ? bankData.bank_accounts.type : '';
-  const resume = bankData ? bankData.pdf : '';
-    
-    
+  // Renderizado de la lista de bancos
+  const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
+    const bankData = nextReport.find(
+      (doc: any) => doc.bank_id.toString() === bankId,
+    );
+    const bankName = bankData ? bankData.bank_accounts.name : '';
+    const closingMonth = bankData ? bankData.closing_month : '';
+    const periodStart = bankData ? bankData.period_start : '';
+    const periodEnd = bankData ? bankData.period_end : '';
+    const type = bankData ? bankData.bank_accounts.type : '';
+    const resume = bankData ? bankData.pdf : '';
 
     return (
       <li key={bankId}>
-      <div
-        className={`my-2 flex items-center justify-between rounded-full px-2 py-1 font-medium ${
-          matchStatus === true ? 'bg-green-500/20' : matchStatus === 'pending_with_message' ? 'bg-[#FBD127]/20' : 'bg-orange-600/20'
-        }`}
-      >
-        <div className="flex items-center gap-2 font-semibold text-[#003E52]">
-          {bankName === 'afirme' ? (
-            <AfirmeIcon />
-          ) : bankName === 'amex' ? (
-            <AmexIcon />
-          ) : bankName === 'albo' ? (
-            <AlboIcon />
-          ) : bankName === 'azteca' ? (
-            <AztecaIcon />
-          ) : bankName === 'BanBajío' ? (
-            <BajioIcon />
-          ) : bankName === 'banamex' ? (
-            <BanamexIcon />
-          ) : bankName === 'banorte' ? (
-            <BanorteIcon />
-          ) : bankName === 'BanRegio' ? (
-            <BanRegioIcon />
-          ) : bankName === 'BBVA bancomer' ? (
-            <BbbvaIcon />
-          ) : bankName === 'broxel' ? (
-            <BroxelIcon />
-          ) : bankName === 'bx+' ? (
-            <BxIcon />
-          ) : bankName === 'clara' ? (
-            <ClaraIcon />
-          ) : bankName === 'fondeadora' ? (
-            <FondeadoraIcon />
-          ) : bankName === 'hey banco' ? (
-            <HeyBancoIcon />
-          ) : bankName === 'HSBC' ? (
-            <HsbcIcon />
-          ) : bankName === 'inbursa' ? (
-            <IbursaIcon />
-          ) : bankName === 'intercam' ? (
-            <IntercamIcon />
-          ) : bankName === 'rappi' ? (
-            <RappiIcon />
-          ) : bankName === 'santander' ? (
-            <SantanderIcon />
-          ) : bankName === 'scotia' ? (
-            <ScotiaIcon />
-          ) : bankName === 'other' ? (
-            <CurrencyDollarIcon
-              width={35}
-              height={35}
-              className="rounded-full bg-[#F4F6FC]"
-            />
-          ) : (
-            <OtroBankIcon />
-          )}
-          <div className='flex flex-col'>
-            <div className='flex items-center gap-2'>
-              <p className="capitalize">
-                {bankName}{' '}
-                {matchStatus && <span> - </span>}
-              </p>
-              <p className="capitalize">
-                {matchStatus &&
-                  translateMonthNumber(
-                    closingMonth || periodEnd,
-                  )}<span> - </span>
-                  <span className='text-xs'>{translateAccountType(type)}</span>
-              </p>
-              
-            
-            </div>
-          <div>
-            <Link href={resume} className='text-xs underline' target='_blank'>Resumen</Link>
-          </div>
-          </div>
-        </div>
         <div
-          className={`rounded-full px-2 py-1 text-center text-white ${
-            matchStatus === true ? 'bg-green-500' : matchStatus === 'pending_with_message' ? 'bg-[#fbd127e1]' : 'bg-orange-600'
+          className={`my-2 flex items-center justify-between rounded-full px-2 py-1 font-medium ${
+            matchStatus === true
+              ? 'bg-green-500/20'
+              : matchStatus === 'pending_with_message'
+              ? 'bg-[#FBD127]/20'
+              : 'bg-orange-600/20'
           }`}
         >
-          {matchStatus === false && (
-            <div className="flex items-center gap-1">
-              <ClockIcon width={20} height={20} /> pendiente
+          <div className="flex items-center gap-2 font-semibold text-[#003E52]">
+            {bankName === 'afirme' ? (
+              <AfirmeIcon />
+            ) : bankName === 'amex' ? (
+              <AmexIcon />
+            ) : bankName === 'albo' ? (
+              <AlboIcon />
+            ) : bankName === 'azteca' ? (
+              <AztecaIcon />
+            ) : bankName === 'BanBajío' ? (
+              <BajioIcon />
+            ) : bankName === 'banamex' ? (
+              <BanamexIcon />
+            ) : bankName === 'banorte' ? (
+              <BanorteIcon />
+            ) : bankName === 'BanRegio' ? (
+              <BanRegioIcon />
+            ) : bankName === 'BBVA bancomer' ? (
+              <BbbvaIcon />
+            ) : bankName === 'broxel' ? (
+              <BroxelIcon />
+            ) : bankName === 'bx+' ? (
+              <BxIcon />
+            ) : bankName === 'clara' ? (
+              <ClaraIcon />
+            ) : bankName === 'fondeadora' ? (
+              <FondeadoraIcon />
+            ) : bankName === 'hey banco' ? (
+              <HeyBancoIcon />
+            ) : bankName === 'HSBC' ? (
+              <HsbcIcon />
+            ) : bankName === 'inbursa' ? (
+              <IbursaIcon />
+            ) : bankName === 'intercam' ? (
+              <IntercamIcon />
+            ) : bankName === 'rappi' ? (
+              <RappiIcon />
+            ) : bankName === 'santander' ? (
+              <SantanderIcon />
+            ) : bankName === 'scotia' ? (
+              <ScotiaIcon />
+            ) : bankName === 'other' ? (
+              <CurrencyDollarIcon
+                width={35}
+                height={35}
+                className="rounded-full bg-[#F4F6FC]"
+              />
+            ) : (
+              <OtroBankIcon />
+            )}
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <p className="capitalize">
+                  {bankName} {matchStatus && <span> - </span>}
+                </p>
+                <p className="capitalize">
+                  {matchStatus &&
+                    translateMonthNumber(closingMonth || periodEnd)}
+                  <span> - </span>
+                  <span className="text-xs">{translateAccountType(type)}</span>
+                </p>
+              </div>
+              <div>
+                <Link
+                  href={resume}
+                  className="text-xs underline"
+                  target="_blank"
+                >
+                  Resumen
+                </Link>
+              </div>
             </div>
-          )}
-          {matchStatus === 'pending_with_message' && (
-            <div className="flex items-center gap-1">
-              <ClockIcon width={20} height={20} /> falta un movimiento
-            </div>
-          )}
-          {matchStatus === true && (
-            <div className="flex items-center gap-1">
-              <CheckCircleIcon width={20} height={20} /> listo
-            </div>
-          )}
+          </div>
+          <div
+            className={`rounded-full px-2 py-1 text-center text-white ${
+              matchStatus === true
+                ? 'bg-green-500'
+                : matchStatus === 'pending_with_message'
+                ? 'bg-[#fbd127e1]'
+                : 'bg-orange-600'
+            }`}
+          >
+            {matchStatus === false && (
+              <div className="flex items-center gap-1">
+                <ClockIcon width={20} height={20} /> pendiente
+              </div>
+            )}
+            {matchStatus === 'pending_with_message' && (
+              <div className="flex items-center gap-1">
+                <ClockIcon width={20} height={20} /> falta un movimiento
+              </div>
+            )}
+            {matchStatus === true && (
+              <div className="flex items-center gap-1">
+                <CheckCircleIcon width={20} height={20} /> listo
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-
-    </li>
+      </li>
     );
   });
 
@@ -453,7 +485,9 @@ const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
     }
   };
 
-  const handleUpdateStatus = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleUpdateStatus = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
@@ -474,9 +508,6 @@ const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
       toast.error(error as string);
     }
   };
-
-
-
 
   const handleFileChange = (event: any) => {
     const file = event.target.files[0];
@@ -533,9 +564,29 @@ const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
     setSelectedClosingMonth(closing_month);
   };
 
-  const handleSelectMonthMovements = (month:any) => {
-    setSelectedMovementMonth(month)
-  }
+  const handleSelectMonthMovements = (month: number) => {
+    setSelectedMonth(month);
+
+    // Filtrar los movimientos según el mes seleccionado
+    const filteredMovements = nextReport.filter((doc:any) => {
+      const closingMonth = doc.closing_month
+        ? new Date(doc.closing_month).getMonth() + 1
+        : null;
+      const periodStart = doc.period_start
+        ? new Date(doc.period_start).getMonth() + 1
+        : null;
+      const periodEnd = doc.period_end
+        ? new Date(doc.period_end).getMonth() + 1
+        : null;
+
+      return (
+        closingMonth === month ||
+        periodStart === month ||
+        periodEnd === month
+      );
+    });
+    setMovements(filteredMovements);
+  };
 
   function formatDate(closing_month: any): string {
     const date = new Date(closing_month);
@@ -554,6 +605,8 @@ const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
     return `${d.getFullYear()}-${month}-${day}`;
   }
 
+  
+
   return (
     <div className="my-10 px-4 lg:w-[95%]">
       {business && (
@@ -567,26 +620,35 @@ const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
           </h1>
 
           <div className="flex items-center gap-6">
-            <div className={`flex items-center gap-2 rounded-full p-1 px-2 font-medium text-white ${status === 'pending' ? 'bg-orange-600' : 'bg-green-500'}`}>
-              {status === "pending" ? 
+            <div
+              className={`flex items-center gap-2 rounded-full p-1 px-2 font-medium text-white ${
+                status === 'pending' ? 'bg-orange-600' : 'bg-green-500'
+              }`}
+            >
+              {status === 'pending' ? (
                 <ClockIcon width={20} height={20} />
-              :
+              ) : (
                 <CheckCircleIcon width={20} height={20} />
-              }
+              )}
               <p>{translateSatusType(status)}</p>
             </div>
             <div>
-              <Dialog 
+              <Dialog
                 open={movementsStatusOpen[business.id] || false}
-                  onOpenChange={(isOpen) =>
-                    setMovementsStatusOpen((prevOpen) => ({
-                      ...prevOpen,
-                      [business.id]: isOpen,
-                    }))
-                  }>
+                onOpenChange={(isOpen) =>
+                  setMovementsStatusOpen((prevOpen) => ({
+                    ...prevOpen,
+                    [business.id]: isOpen,
+                  }))
+                }
+              >
                 <DialogTrigger asChild>
-                  <button className="rounded-xl bg-[#003E52] p-2 text-white font-medium">
-                    Enviar documentos de <span className='capitalize'>{translateMonthsNumber(lastReportMonth)}</span> a revisión
+                  <button className="rounded-xl bg-[#003E52] p-2 font-medium text-white">
+                    Enviar documentos de{' '}
+                    <span className="capitalize">
+                      {translateMonthsNumber(lastReportMonth)}
+                    </span>{' '}
+                    a revisión
                   </button>
                 </DialogTrigger>
                 <DialogContent className="xl:w-[40%]">
@@ -600,13 +662,24 @@ const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
                     </DialogTitle>
                   </DialogHeader>
                   <div className='my-5'>
-                    <SelectMonthMovementsToRevision onSelect={handleSelectMonthMovements}/>
+                  <SelectMonthMovementsToRevision onSelect={handleSelectMonthMovements} defaultMonth={lastReportMonth}/>
+                  <MovementsList movements={movements} selectedMonth={lastReportMonth} />
                   </div>
-                  <ul>{bankList}</ul>
+                  {/* <div>
+                    <ul>{bankList}</ul>
+                  </div> */}
                   <div className="mt-5 flex justify-center">
                     <form onSubmit={handleUpdateStatus}>
-                      <input type="hidden" name='business_id' value={params.business_id} />
-                      <input type="hidden" name='status' value="sent to revision" />
+                      <input
+                        type="hidden"
+                        name="business_id"
+                        value={params.business_id}
+                      />
+                      <input
+                        type="hidden"
+                        name="status"
+                        value="sent to revision"
+                      />
                       <button className="w-[100px] rounded-xl bg-[#003E52] p-2 text-center font-semibold text-white">
                         Enviar
                       </button>
