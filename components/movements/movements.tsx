@@ -64,10 +64,8 @@ import {
   PencilSquareIcon,
 } from '@heroicons/react/24/outline';
 import Attachment from '@/components/icons/Attachment';
-import { translateAccountType, translateMonthsNumber, translateSatusType } from '@/lib/utils';
-import Image from 'next/image';
-import { revalidatePath } from 'next/cache';
-import SelectMonthMovementsToRevision from '../select-movements-to-revision';
+import { translateAccountType, translateMonths, translateSatusType } from '@/lib/utils';
+
 
 type MovementsPageProps = {
   params: {
@@ -98,6 +96,21 @@ type Document = {
   pdf: string;
 };
 
+
+const getLastReportMonth = (nextReport: Document[]): number | null => {
+  const dates = nextReport
+    .flatMap(doc => [doc.closing_month, doc.period_start, doc.period_end])
+    .filter(Boolean) // Filtra valores nulos o indefinidos
+    .map(date => new Date(date!).getMonth() + 1); // Obtén el mes como número
+
+  return dates.length > 0 ? Math.max(...dates) : null; // Devuelve el mes más reciente
+};
+
+const translateMonthsNumbers = (monthNumber: number): string => {
+  const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  return months[monthNumber - 1];
+};
+
 export default function Movements({ params }: MovementsPageProps) {
   const [business, setBusiness] = useState<Business | null>(null);
   const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([]);
@@ -119,6 +132,7 @@ export default function Movements({ params }: MovementsPageProps) {
   const [nextReport, setNextReport] = useState<any>([]);
   const [lastReportMonth, setLastReportMonth] = useState<any>();
   const [status, setStatus] = useState<any| null>();
+  const [selectedMonth, setSelectedMonth] = useState<any | null>(null);
 
   const url = new URL(window.location.href);
   const pathname = url.pathname;
@@ -164,6 +178,11 @@ export default function Movements({ params }: MovementsPageProps) {
     fetchData();
   }, [params.business_id]);
 
+  useEffect(() => {
+    const defaultMonth = getLastReportMonth(nextReport);
+    setSelectedMonth(defaultMonth);
+  }, [nextReport])
+
   if (loading)
     return (
       <div>
@@ -174,191 +193,144 @@ export default function Movements({ params }: MovementsPageProps) {
 
   if (error) return <div>{error}</div>;
 
-  const translateMonthNumber = (dateString: string | null): string => {
-    if (!dateString) return '';
-
-    try {
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) {
-        return '';
-      }
-      const month = date.getMonth();
-      const months = [
-        'Enero',
-        'Febrero',
-        'Marzo',
-        'Abril',
-        'Mayo',
-        'Junio',
-        'Julio',
-        'Agosto',
-        'Septiembre',
-        'Octubre',
-        'Noviembre',
-        'Diciembre',
-      ];
-      return months[month];
-    } catch (error) {
-      console.error('Error al convertir la fecha:', error);
-      return '';
-    }
+  const handleMonthChange = (event:any) => {
+    setSelectedMonth(parseInt(event.target.value, 10));
   };
-  const banksWithMatches = new Map<string, boolean | string>(); // Use un Map para mantener un registro único de bancos con coincidencias
 
-nextReport?.forEach((doc: any) => {
-  const bankId = doc.bank_id.toString();
+  const banksWithMatches = new Map<string, boolean | string>();
 
-  const closingMonth = doc.closing_month
-    ? new Date(doc.closing_month).getMonth() + 1
-    : null;
-  const periodStart = doc.period_start
-    ? new Date(doc.period_start).getMonth() + 1
-    : null;
-  const periodEnd = doc.period_end
-    ? new Date(doc.period_end).getMonth() + 1
-    : null;
+  nextReport?.forEach((doc: Document) => {
+    const bankId = doc.bank_id.toString();
+    const closingMonth = doc.closing_month ? new Date(doc.closing_month).getMonth() + 1 : null;
+    const periodStart = doc.period_start ? new Date(doc.period_start).getMonth() + 1 : null;
+    const periodEnd = doc.period_end ? new Date(doc.period_end).getMonth() + 1 : null;
 
-  const hasMatchingMonth = [closingMonth, periodStart, periodEnd].some(
-    (month) => month === lastReportMonth,
-  );
+    const hasMatchingMonth = [closingMonth, periodStart, periodEnd].some((month) => month === selectedMonth);
 
-  if (periodStart && periodEnd) {
-    if (periodStart === lastReportMonth && periodEnd === lastReportMonth) {
-      banksWithMatches.set(bankId, true);
-    } else if (periodEnd === lastReportMonth) {
-      banksWithMatches.set(bankId, 'pending_with_message');
+    if (periodStart && periodEnd) {
+      if (periodStart === selectedMonth && periodEnd === selectedMonth) {
+        banksWithMatches.set(bankId, true);
+      } else if (periodEnd === selectedMonth) {
+        banksWithMatches.set(bankId, 'pending_with_message');
+      } else {
+        if (!banksWithMatches.has(bankId)) {
+          banksWithMatches.set(bankId, false);
+        }
+      }
     } else {
-      if (!banksWithMatches.has(bankId)) {
-        banksWithMatches.set(bankId, false);
+      if (hasMatchingMonth) {
+        banksWithMatches.set(bankId, true);
+      } else {
+        if (!banksWithMatches.has(bankId)) {
+          banksWithMatches.set(bankId, false);
+        }
       }
     }
-  } else {
-    if (hasMatchingMonth) {
-      banksWithMatches.set(bankId, true);
-    } else {
-      if (!banksWithMatches.has(bankId)) {
-        banksWithMatches.set(bankId, false);
-      }
-    }
-  }
-});
+  });
 
-// Renderizado de la lista de bancos
-const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
-  const bankData = nextReport.find(
-    (doc: any) => doc.bank_id.toString() === bankId,
-  );
-  const bankName = bankData ? bankData.bank_accounts.name : '';
-  const closingMonth = bankData ? bankData.closing_month : '';
-  const periodStart = bankData ? bankData.period_start : '';
-  const periodEnd = bankData ? bankData.period_end : '';
-  const type = bankData ? bankData.bank_accounts.type : '';
-  const resume = bankData ? bankData.pdf : '';
-    
-    
+  const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
+    const bankData = nextReport.find((doc: Document) => doc.bank_id.toString() === bankId);
+    const bankName = bankData ? bankData.bank_accounts.name : '';
+    const closingMonth = bankData ? bankData.closing_month : '';
+    const periodStart = bankData ? bankData.period_start : '';
+    const periodEnd = bankData ? bankData.period_end : '';
+    const type = bankData ? bankData.bank_accounts.type : '';
+    const resume = bankData ? bankData.pdf : '';
 
     return (
       <li key={bankId}>
-      <div
-        className={`my-2 flex items-center justify-between rounded-full px-2 py-1 font-medium ${
-          matchStatus === true ? 'bg-green-500/20' : matchStatus === 'pending_with_message' ? 'bg-[#FBD127]/20' : 'bg-orange-600/20'
-        }`}
-      >
-        <div className="flex items-center gap-2 font-semibold text-[#003E52]">
-          {bankName === 'afirme' ? (
-            <AfirmeIcon />
-          ) : bankName === 'amex' ? (
-            <AmexIcon />
-          ) : bankName === 'albo' ? (
-            <AlboIcon />
-          ) : bankName === 'azteca' ? (
-            <AztecaIcon />
-          ) : bankName === 'BanBajío' ? (
-            <BajioIcon />
-          ) : bankName === 'banamex' ? (
-            <BanamexIcon />
-          ) : bankName === 'banorte' ? (
-            <BanorteIcon />
-          ) : bankName === 'BanRegio' ? (
-            <BanRegioIcon />
-          ) : bankName === 'BBVA bancomer' ? (
-            <BbbvaIcon />
-          ) : bankName === 'broxel' ? (
-            <BroxelIcon />
-          ) : bankName === 'bx+' ? (
-            <BxIcon />
-          ) : bankName === 'clara' ? (
-            <ClaraIcon />
-          ) : bankName === 'fondeadora' ? (
-            <FondeadoraIcon />
-          ) : bankName === 'hey banco' ? (
-            <HeyBancoIcon />
-          ) : bankName === 'HSBC' ? (
-            <HsbcIcon />
-          ) : bankName === 'inbursa' ? (
-            <IbursaIcon />
-          ) : bankName === 'intercam' ? (
-            <IntercamIcon />
-          ) : bankName === 'rappi' ? (
-            <RappiIcon />
-          ) : bankName === 'santander' ? (
-            <SantanderIcon />
-          ) : bankName === 'scotia' ? (
-            <ScotiaIcon />
-          ) : bankName === 'other' ? (
-            <CurrencyDollarIcon
-              width={35}
-              height={35}
-              className="rounded-full bg-[#F4F6FC]"
-            />
-          ) : (
-            <OtroBankIcon />
-          )}
-          <div className='flex flex-col'>
-            <div className='flex items-center gap-2'>
-              <p className="capitalize">
-                {bankName}{' '}
-                {matchStatus && <span> - </span>}
-              </p>
-              <p className="capitalize">
-                {matchStatus &&
-                  translateMonthNumber(
-                    closingMonth || periodEnd,
-                  )}<span> - </span>
-                  <span className='text-xs'>{translateAccountType(type)}</span>
-              </p>
-              
-            
-            </div>
-          <div>
-            <Link href={resume} className='text-xs underline' target='_blank'>Resumen</Link>
-          </div>
-          </div>
-        </div>
         <div
-          className={`rounded-full px-2 py-1 text-center text-white ${
-            matchStatus === true ? 'bg-green-500' : matchStatus === 'pending_with_message' ? 'bg-[#fbd127e1]' : 'bg-orange-600'
+          className={`my-2 flex items-center justify-between rounded-full px-2 py-1 font-medium ${
+            matchStatus === true ? 'bg-green-500/20' : matchStatus === 'pending_with_message' ? 'bg-[#FBD127]/20' : 'bg-orange-600/20'
           }`}
         >
-          {matchStatus === false && (
-            <div className="flex items-center gap-1">
-              <ClockIcon width={20} height={20} /> pendiente
+          <div className="flex items-center gap-2 font-semibold text-[#003E52]">
+            {bankName === 'afirme' ? (
+              <AfirmeIcon />
+            ) : bankName === 'amex' ? (
+              <AmexIcon />
+            ) : bankName === 'albo' ? (
+              <AlboIcon />
+            ) : bankName === 'azteca' ? (
+              <AztecaIcon />
+            ) : bankName === 'BanBajío' ? (
+              <BajioIcon />
+            ) : bankName === 'banamex' ? (
+              <BanamexIcon />
+            ) : bankName === 'banorte' ? (
+              <BanorteIcon />
+            ) : bankName === 'BanRegio' ? (
+              <BanRegioIcon />
+            ) : bankName === 'BBVA bancomer' ? (
+              <BbbvaIcon />
+            ) : bankName === 'broxel' ? (
+              <BroxelIcon />
+            ) : bankName === 'bx+' ? (
+              <BxIcon />
+            ) : bankName === 'clara' ? (
+              <ClaraIcon />
+            ) : bankName === 'fondeadora' ? (
+              <FondeadoraIcon />
+            ) : bankName === 'hey banco' ? (
+              <HeyBancoIcon />
+            ) : bankName === 'HSBC' ? (
+              <HsbcIcon />
+            ) : bankName === 'inbursa' ? (
+              <IbursaIcon />
+            ) : bankName === 'intercam' ? (
+              <IntercamIcon />
+            ) : bankName === 'rappi' ? (
+              <RappiIcon />
+            ) : bankName === 'santander' ? (
+              <SantanderIcon />
+            ) : bankName === 'scotia' ? (
+              <ScotiaIcon />
+            ) : bankName === 'other' ? (
+              <CurrencyDollarIcon width={35} height={35} className="rounded-full bg-[#F4F6FC]" />
+            ) : (
+              <OtroBankIcon />
+            )}
+            <div className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <p className="capitalize">
+                  {bankName} {matchStatus && <span> - </span>}
+                </p>
+                <p className="capitalize">
+                  {selectedMonth && translateMonthsNumbers(selectedMonth)}
+                  <span> - </span>
+                  <span className="text-xs">{translateAccountType(type)}</span>
+                </p>
+              </div>
+              <div>
+                <Link href={resume} className="text-xs underline" target="_blank">
+                  Resumen
+                </Link>
+              </div>
             </div>
-          )}
-          {matchStatus === 'pending_with_message' && (
-            <div className="flex items-center gap-1">
-              <ClockIcon width={20} height={20} /> falta un movimiento
-            </div>
-          )}
-          {matchStatus === true && (
-            <div className="flex items-center gap-1">
-              <CheckCircleIcon width={20} height={20} /> listo
-            </div>
-          )}
+          </div>
+          <div
+            className={`rounded-full px-2 py-1 text-center text-white ${
+              matchStatus === true ? 'bg-green-500' : matchStatus === 'pending_with_message' ? 'bg-[#fbd127e1]' : 'bg-orange-600'
+            }`}
+          >
+            {matchStatus === false && (
+              <div className="flex items-center gap-1">
+                <ClockIcon width={20} height={20} /> pendiente
+              </div>
+            )}
+            {matchStatus === 'pending_with_message' && (
+              <div className="flex items-center gap-1">
+                <ClockIcon width={20} height={20} /> falta un movimiento
+              </div>
+            )}
+            {matchStatus === true && (
+              <div className="flex items-center gap-1">
+                <CheckCircleIcon width={20} height={20} /> listo
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-
-    </li>
+      </li>
     );
   });
 
@@ -586,7 +558,7 @@ const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
                   }>
                 <DialogTrigger asChild>
                   <button className="rounded-xl bg-[#003E52] p-2 text-white font-medium">
-                    Enviar documentos de <span className='capitalize'>{translateMonthsNumber(lastReportMonth)}</span> a revisión
+                    Enviar documentos de <span className='capitalize'>{translateMonthsNumbers(lastReportMonth)}</span> a revisión
                   </button>
                 </DialogTrigger>
                 <DialogContent className="xl:w-[40%]">
@@ -594,15 +566,30 @@ const bankList = Array.from(banksWithMatches).map(([bankId, matchStatus]) => {
                     <DialogTitle className="text-[#003E52]">
                       El reporte de{' '}
                       <span className="capitalize">
-                        {translateMonthsNumber(lastReportMonth)}
+                        {translateMonthsNumbers(selectedMonth)}
                       </span>{' '}
                       se creara en base a los siguientes movimientos
                     </DialogTitle>
                   </DialogHeader>
-                  <div className='my-5'>
+                  {/* <div className='my-5'>
                     <SelectMonthMovementsToRevision onSelect={handleSelectMonthMovements}/>
-                  </div>
-                  <ul>{bankList}</ul>
+                  </div> */}
+                  <select onChange={handleMonthChange} value={selectedMonth || ''}>
+        <option value="">Selecciona un mes</option>
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+      </select>
+      <ul>{bankList}</ul>
                   <div className="mt-5 flex justify-center">
                     <form onSubmit={handleUpdateStatus}>
                       <input type="hidden" name='business_id' value={params.business_id} />
