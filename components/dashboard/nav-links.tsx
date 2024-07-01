@@ -43,16 +43,16 @@ export default function NavLinks() {
       href: `/dashboard/reports/${latestReport?.id}/${latestReport?.month}`,
       icon: <DocumentChartBarIcon width={30} height={30} className='text-[#0065A1]'/>,
     },
-    // {
-    //   name: 'Movimientos',
-    //   href: `/dashboard/movements/${latestReport?.business_id}`,
-    //   icon: <MovementIcon />,
-    // },
-    // {
-    //   name: 'Mi negocio',
-    //   href: `/dashboard/myBusiness/${latestReport?.business_id}`,
-    //   icon: <BriefcaseIcon width={30} height={30} className='text-[#0065A1]'/>,
-    // },
+    {
+      name: 'Movimientos',
+      href: `/dashboard/movements/${latestReport?.business_id}`,
+      icon: <MovementIcon />,
+    },
+    {
+      name: 'Mi negocio',
+      href: `/dashboard/myBusiness/${latestReport?.business_id}`,
+      icon: <BriefcaseIcon width={30} height={30} className='text-[#0065A1]'/>,
+    },
   ];
 
   
