@@ -89,7 +89,7 @@ import {
   translateSatusType,
 } from '@/lib/utils';
 import { ChevronsUpDown, Divide } from 'lucide-react';
-import style from './styles.module.css';
+
 
 type MovementsPageProps = {
   params: {
@@ -724,14 +724,14 @@ export default function Movements({ params }: MovementsPageProps) {
         </div>
       )}
 
-      <div className={`mt-12 flex flex-col gap-10`}>
+      <div className={`mt-12 flex flex-col gap-10 ${status === 'sent to revision' ? 'bg-[rgba(0,0,0,0.06)] p-3 rounded-xl' : ''}`}>
         <div className={`${status === 'sent to revision' ? "flex mx-auto translate-y-[250px] fixed self-center z-10 rounded-xl bg-[#003E52] p-2 font-medium text-white rouded-xl" : "hidden"}`}>
           <p>Nuestro equipo estará revisando la documentación.</p>
         </div>
         {bankAccounts.map((account) => (
           <div
             key={account.id}
-            className={`${status === 'sent to revision' ? 'blur-md bg-[rgba(0,0,0,0.05)]' : ''} flex items-center justify-between gap-3 max-lg:mx-auto max-lg:w-[95%] max-lg:flex-col max-lg:justify-center max-lg:rounded-xl max-lg:bg-[#252525]/10 max-lg:py-4 lg:gap-10`}
+            className={`${status === 'sent to revision' ? 'blur-md' : ''} flex items-center justify-between gap-3 max-lg:mx-auto max-lg:w-[95%] max-lg:flex-col max-lg:justify-center max-lg:rounded-xl max-lg:bg-[#252525]/10 max-lg:py-4 lg:gap-10`}
           >
             <div
               className={`${status === 'sent to revision' ? '' : ''} flex min-w-[200px] flex-col justify-center gap-5 rounded-xl max-lg:h-[100px] max-lg:w-[90%] lg:h-[200px] lg:bg-[#252525]/10`}
