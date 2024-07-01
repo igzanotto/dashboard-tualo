@@ -119,6 +119,7 @@ export async function buildGoals(formData:FormData) {
   redirect(`/admin/businesses/${business_id}/reports/${report_id}/PL`);
 }
 
+
 const BuildAnalysis = ReportFormSchema.omit({id: true, business_id: true, goals: true, month: true, business_resume: true});
 
 export async function buildAnalysis(formData:FormData) {
@@ -196,7 +197,6 @@ interface ChartDataPayload {
   series: ChartData[];
   categories: string[];
 }
-
 export async function createStackedChart(data: ChartDataPayload){
   const supabase = createClient();
   try {
@@ -295,6 +295,7 @@ export async function createChartEmbed(formData:FormData){
     throw error;
   }
 }
+
 
 
 export async function addThreadToBusiness(thread_id: string, business_id: string) {
@@ -1051,23 +1052,4 @@ if (pdf) {
 
   return { data: { pdfData }, error: null };
   }
-}
-
-
-export async function updateSubscriptionStatus() {
-  const supabase = createClient();
-  // get the current user business_id from session
- 
-  
-  const { data, error } = await supabase
-    .from('businesses')
-    .update({ subscription: 'success' })
-    .eq('id', business_id)
-
-  if (error) {
-    console.error('Error updating subscriptions:', error);
-    return;
-  }
-
-  console.log('Subscriptions updated:', data);
 }

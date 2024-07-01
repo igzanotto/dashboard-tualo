@@ -4,11 +4,7 @@ import { Stripe } from "stripe";
 export async function POST(request: Request) {
   const { priceId } = await request.json();
 
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2024-06-20",
-  });
-  const successUrl = process.env.SUCCESS_URL;
-  const cancelUrl = process.env.CANCEL_URL;
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
   const session = await stripe.checkout.sessions.create({
     mode: "subscription",
     payment_method_types: ["card"],
@@ -18,8 +14,8 @@ export async function POST(request: Request) {
         quantity: 1,
       },
     ],
-    success_url: successUrl,
-    cancel_url: cancelUrl,
+    success_url: "http://localhost:3000/dashboard/success",
+    cancel_url: "http://localhost:3000/dashboard/myBusiness?message=error_",
   });
 
   return NextResponse.json({
