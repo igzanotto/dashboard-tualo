@@ -601,7 +601,7 @@ export default function Movements({ params }: MovementsPageProps) {
     <div className="my-10 px-4 lg:w-[95%]">
       {business && (
         <div
-          className={`flex items-center justify-between max-md:justify-center ${
+          className={`flex items-center justify-between max-md:justify-center max-md:flex-col max-md:gap-4 ${
             filteredPath === '/admin/businesses' ? 'hidden' : ''
           }`}
         >
