@@ -20,49 +20,27 @@ import {
 } from "@/components/ui/popover"
 
 const months = [
-    { value: "january", label: "Enero" },
-    { value: "february", label: "Febrero" },
-    { value: "march", label: "Marzo" },
-    { value: "april", label: "Abril" },
-    { value: "may", label: "Mayo" },
-    { value: "june", label: "Junio" },
-    { value: "july", label: "Julio" },
-    { value: "august", label: "Agosto" },
-    { value: "september", label: "Septiembre" },
-    { value: "october", label: "Octubre" },
-    { value: "november", label: "Noviembre" },
-    { value: "december", label: "Diciembre" },
+    { value: "1", label: "Enero" },
+    { value: "2", label: "Febrero" },
+    { value: "3", label: "Marzo" },
+    { value: "4", label: "Abril" },
+    { value: "5", label: "Mayo" },
+    { value: "6", label: "Junio" },
+    { value: "7", label: "Julio" },
+    { value: "8", label: "Agosto" },
+    { value: "9", label: "Septiembre" },
+    { value: "10", label: "Octubre" },
+    { value: "11", label: "Noviembre" },
+    { value: "12", label: "Diciembre" },
 ];
 
-function getLastDateOfMonth(monthIndex: number): Date {
-    const year = new Date().getFullYear();
-    return new Date(year, monthIndex + 1, 0);
-}
 
-interface SelectClosingMonthProps {
-    onSelect: (date: Date | null) => void;
-    defaultValue?:any
-}
-
-export default function SelectMonthMovementsToRevision({ onSelect, defaultValue }: SelectClosingMonthProps) {
+export default function SelectMonthMovementsToRevision({ selectedMonth }:any) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState(defaultValue || "");
-  const [dateValue, setDateValue] = React.useState<Date | null>(null)
 
-  const handleSelect = (currentValue: string) => {
-    if (currentValue === value) {
-        setValue("")
-        setDateValue(null)
-        onSelect(null) // Call onSelect with null when no month is selected
-    } else {
-        const monthIndex = months.findIndex(month => month.value === currentValue)
-        const lastDate = getLastDateOfMonth(monthIndex)
-        setValue(currentValue)
-        setDateValue(lastDate)
-        onSelect(lastDate) // Call onSelect with the Date object
-    }
-    setOpen(false)
-  }
+
+
+  
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -73,9 +51,7 @@ export default function SelectMonthMovementsToRevision({ onSelect, defaultValue 
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value
-            ? months.find((month) => month.value === value)?.label || value
-            : "Selecciona un mes"}
+          
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -85,21 +61,15 @@ export default function SelectMonthMovementsToRevision({ onSelect, defaultValue 
           <CommandList>
             <CommandEmpty>No se encuentra este mes.</CommandEmpty>
             <CommandGroup className="overflow-y-scroll">
-              {months.map((month) => (
-                <CommandItem
-                  key={month.value}
-                  value={month.value}
-                  onSelect={() => handleSelect(month.value)}
-                  className="flex items-center gap-2"
-                >
-                  {month.label}
+              
+                <CommandItem>
+                  
                 </CommandItem>
-              ))}
+            
             </CommandGroup>
           </CommandList>
         </Command>
       </PopoverContent>
-      <input type="hidden" name="month" />
     </Popover>
   )
 }
