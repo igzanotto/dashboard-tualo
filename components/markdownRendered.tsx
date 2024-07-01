@@ -6,6 +6,10 @@ interface MarkdownRendererProps {
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ markdown }) => {
   // Use the parse method to convert markdown to HTML
+  if (!markdown) {
+    return null;
+  }
+  
   const htmlContent = marked(markdown);
 
   return (
