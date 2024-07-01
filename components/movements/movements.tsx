@@ -697,9 +697,9 @@ export default function Movements({ params }: MovementsPageProps) {
                       </PopoverContent>
                     </Popover>
                   </div>
-                  {/* <div>
+                  <div>
                     <ul>{bankList}</ul>
-                  </div> */}
+                  </div>
                   <div className="mt-5 flex justify-center">
                     <form onSubmit={handleUpdateStatus}>
                       <input
